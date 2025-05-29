@@ -1,0 +1,334 @@
+\documentclass[11pt]{article}
+\pagestyle{empty}
+
+\setlength{\textheight}{8.5in}
+\setlength{\topmargin}{0.5in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+% %% \setlength{\footheight}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\usepackage{times}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{mathtools}
+\usepackage{mathptmx}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+
+\begin{document}
+\sloppy 
+\begin{center}
+\LARGE DS 722\\
+\Large Mathematical Foundations of DS and ML \\
+\Large\rm Fall 2025\\~\\
+\end{center}
+
+\centerline{
+\begin{tabular}{|l|r|}
+\hline
+  & Section A1  \\
+ \hline
+Meeting Place & CAS 224 \\
+  Time & MW 4:30-6:15PM  \\
+  Instructor & Prof. Scott Ladenheim  \\
+  Office & CDS 1545  \\
+  Email & \texttt{saladenh@bu.edu}  \\
+\hline
+\end{tabular}
+}
+~\\~\\
+See Piazza for office hours.
+
+~\\~\\
+ \begin{minipage}[t]{0.60\textwidth}
+ \noindent{\large\bf Teaching Fellows:}  TBD
+ \begin{itemize}
+ \item {\bf Office Hours:} See Piazza
+ \item {\bf Office Hours Location:} See Piazza
+ \end{itemize}
+ \end{minipage}
+~\\~\\~\\
+\textbf{Course Assistant (see Piazza for office hours):}  
+\begin{itemize}
+\item TBD
+\end{itemize}
+
+\section*{Overview of the Course}
+Mathematical Foundations of Data Science and Machine Learning equips you with the essential mathematical tools and concepts needed for future DS courses. This course is intended for first-year students who need to refresh or expand their mathematical knowledge.
+The course will guide you through topics on Linear Algebra, Optimization, as well as Probability and Statistics.
+
+\section*{Course Books}
+All course materials are available online or through the BU library.
+\begin{itemize}
+\item \href{https://www.stat.uchicago.edu/~lekheng/courses/309/books/Trefethen-Bau.pdf}{Numerical Linear Algebra}, Trefethen \& Bau 
+\item \href{https://mmids-textbook.github.io/index.html}{Mathematical Methods in Data Science (with Python)}, Roch
+\item \href{https://mml-book.github.io/book/mml-book.pdf}{Mathematics for Machine Learning}, Deisenroth, Faisal, Ong
+\item  \href{library.bu.edu}{All of Statistics: A concise course in statistical inference}, Wasserman
+\item \href{https://probml.github.io/pml-book/book1.html}{Probabilistic Machine Learning: An Introduction} Murphy
+\end{itemize}
+
+\section*{Getting Set Up}
+
+You will need to set up access to the following online materials.
+Instructions for how to do all of those setups are below.   
+
+\begin{description}
+\item[Required] Python on your laptop for homework, 
+\item[Required] Piazza for discussion of assignments and course material,
+\item[Required] Gradescope for assignment submission, 
+% \item[] the visualization app \texttt{DiagramAR,} for
+%   studying and interacting with figures via augmented reality.
+\end{description}
+
+\section*{Programming Environment}
+
+We will use Python as the language for teaching and for
+assignments that require coding. You are expected to know Python and
+to use it for all coding assignments.
+
+TBD: SCC?
+
+\section*{Piazza}
+
+We will use Piazza for class discussion. The system is well
+tuned to getting you help fast and efficiently from classmates, TAs,
+CAs, and myself. 
+
+Rather than emailing questions to the teaching staff, please post your questions on Piazza.  
+We will also use Piazza for distributing materials, such as, homeworks and helpful resources.
+
+When someone posts a question on Piazza, if you know the answer, please
+go ahead and post it. However, please \emph{don't} provide answers to homework
+questions on Piazza. It's OK to tell people \emph{where to look} to
+get answers, or to correct mistakes;  just don't provide actual solutions
+to homework questions.
+\\
+~\\\emph{\textbf{Setup:} Our class Piazza
+page is at \url{https://piazza.com/bu/spring2025/ds310}.  If you
+registered before the semester started, you should have been automatically enrolled. If you registered for the class after the semester started, go to the above Piazza link and enroll yourself. If you have any problems, please contact a TF.}
+
+\section*{Gradescope}
+
+Assignments are submitted and graded on Gradescope
+(\url{https://www.gradescope.com/}). If you have any questions
+about the grading you receive on Gradescope, please contact a TF.
+\\
+~\\\emph{\textbf{Setup:} If you registered before the semester started, you should have been automatically enrolled. If you registered for the course after the semester started, go to Gradescope at the link above, and enroll yourself using the entry code DKBN4K. If you have any problems, please contact a TF.}
+
+
+\section*{Lecture Slides and Code} 
+All lecture slides and sample codes will be made available on Piazza.
+
+\section*{Discussion Sections}
+
+Attendance will be taken in discussion sections. Receiving credit for
+attendance requires submitting discussion materials at the end of class.
+
+\section*{Course and Grading Administration}
+
+\emph{IMPORTANT:} Policy on late homework assignments: You have 5 late homework days to use throughout the semester with a maximum of 2 days allowed per assignment. All homework assignments are factored into your grade.
+
+Final grades are computed based on the following percentages:
+\begin{description}
+\item[30\%] Homework assignments.
+\item[10\%] Participation. Attending discussion sections will earn you participation credit.
+\item[25\%] Midterm exam.
+\item[35\%] Final exam (cumulative).
+\end{description}
+
+The exact cutoffs for final grades are determined after the class is completed.
+
+You need to consistently work on the problem sets each week in order to succeed in the course. Ensure that you set aside a regular time each week to do them. You will not be able to complete the homework if you start it the night before it is due.
+
+\section*{Office Hours}
+
+There are many office hours each week. The schedule for office hours is
+on Piazza.
+
+% \textbf{Wait and see who our graders/CAs are.  TFs do 2 hours, we do 2
+%  hours, that is 8 hours.   CAs can do 5 hours. }
+
+\newpage
+
+\section*{Generative AI}
+
+This course we will follow the \textbf{CDS Generative AI Assistance (GAIA) Policy}. The policy is here:
+\url{https://www.bu.edu/cds-faculty/culture-community/gaia-policy/}.
+Please read and familiarize yourself with the policy.  Among other
+things, it requires you to fully disclose how you used generative AI
+tools such as ChatGPT in your work. 
+
+\section*{Academic Honesty}
+
+You may discuss homework assignments with classmates, but you are 
+solely responsible for what you turn in. Collaboration in the form of
+discussion is allowed, but all forms of cheating (copying parts of a
+classmate's assignment, plagiarism from books or old posted solutions)
+are NOT allowed. We -- both teaching staff and students -- are expected
+to abide by the guidelines and rules of the Academic Code of Conduct
+(see
+\url{http://www.bu.edu/dos/policies/student-responsibilities/}).
+
+You can probably, if you try hard enough, find solutions for homework
+problems online. Given the nature of the Internet, this is
+inevitable. Let me make a couple of comments about that:
+\begin{enumerate}
+\item If you are looking online for an answer because you don't know how
+  to start thinking about a problem, talk to a TF or myself, who may be
+  able to give you pointers to get you started. Piazza is great for
+  this -- you can usually get an answer in an hour if not a few minutes.
+\item If you are looking online for an answer because you want to see if
+  your solution is correct, ask yourself if there is some way to verify
+  the solution yourself. Usually, there is. You will understand what you have done
+  \emph{much} better if you do that.
+\item If you are looking online for an answer because you don't have
+  enough time and are getting close to the assignment deadline, think about this:
+  \begin{enumerate}
+  \item what you are doing is intellectually dishonest,
+  \item you are going to have to solve problems like this on the midterm
+    and final, and
+  \item you can miss up to 1 homework without penalty.
+  \end{enumerate}
+So ... it would be better to simply submit what you have at the deadline
+(without going online to cheat) and plan to allocate more time for
+future assignments.
+\end{enumerate}
+
+\newpage
+\section*{Course Schedule}
+
+~\\
+\small
+\begin{centering}
+\begin{tabular}{||l|p{3in}|l|l||}
+\hline\hline
+Date & Topics  & Assigned & Due  \\
+\hline\hline
+9/3 & 1: Vectors and Matrices &   & \\
+%      &  Reading: Trefethen \& Bau Ch 1,3 &   & \\
+\hline
+9/8 & 2: Vector Spaces, Orthogonality, and Projections & HW1   & \\
+%      &  Reading: Ch 2,6 &   & \\
+9/10& 3: QR Factorization &   & \\
+%      &  Reading: Ch 7,8,10,20  &    & \\
+\hline
+9/15 &  4: Linear Systems of Equations: LU Factorization &  &  \\
+%      &  Reading: TBD &   & \\
+9/17& 5: Eigenvalues & HW2 & HW1  \\
+%      &  Reading: Ch 24, 25 &   & \\
+\hline
+9/22& 6: Singular Value Decomposition &   &   \\
+%      &  Reading:  Ch 4,5 &   & \\
+9/24 & 7: Least Squares  &  & \\
+%      &  Reading: Ch 11 &   & \\
+\hline
+9/29 & 8:  Derivatives 1: & HW3 & HW2  \\ 
+10/1 & 9: Derivatives 2 and Integration 1: & & \\
+\hline
+10/6 & 10: Integration 2: &  &  \\
+10/8& 11: Optimization 1: Overview & HW4  & HW3  \\  
+\hline 
+10/14& Review &  &   \\
+10/15 & Midterm& &\\
+\hline
+10/20 & 12: Optimization 2: 1st order methods   &  &\\
+10/22 & 13: Optimization 3: 2nd order methods  &HW5  & HW4 \\ 
+\hline
+  
+10/27 & 14: Optimization 4: Quasi Newton Methods & &  \\  
+10/29& 15:  Probability 1: Probability Introduction  & & \\
+\hline
+
+11/3 & 16: Probability 2: Random Variables  & HW6  & HW5  \\ 
+11/5 & 17: Probability 3: Distributions &  &  \\ 
+\hline
+
+11/10 & 18: Probability 4: Parameter Estimation and MLE &   & \\  
+11/12& 19: Probability 5:  Probability Inequalities and Limit theorems & HW7 & HW6   \\  
+\hline
+11/17 & 20: Probability 6: Bayesian Statistics 1 &   & \\  
+11/19& 21: Probability 7: Bayesian Statistics 2 &  &   \\  
+\hline
+11/24 & 22: Probability 8: Markov Chains  & HW8  & HW7 \\
+11/26 & Thanksgiving &   &  \\  
+\hline
+
+12/1 & 23: Probability 9: Hidden Markov Models &  &  \\
+12/3 & 24: Probability 10: Sampling Algorithms &   & HW8 \\ 
+\hline
+12/8& Review &  &  \\
+
+\hline\hline
+
+\end{tabular}\\
+\end{centering}
+
+\newpage
+\section*{Course Reading}
+
+~\\
+\small
+\begin{centering}
+\begin{tabular}{||l|p{3in}||}
+\hline\hline
+Lecture & Reading    \\
+\hline\hline
+1      &   Trefethen \& Bau Ch 1,3  \\
+\hline
+2     &  Trefethen \& Bau Ch 2,6  \\
+\hline
+3      &  Trefethen \& Bau Ch 7,8,10  \\
+\hline
+4 &  Trefethen \& Bau Ch 20,21 \\
+\hline
+5 &  Trefethen \& Bau 24, 26 \\
+\hline
+6 &  Trefethen \& Bau  Ch 4,5    \\
+\hline 
+7 & Trefethen \& Bau  Ch 11   \\
+\hline 
+8 & Deisentroth, Faisal \& Ong Ch 5.1-5.2   \\
+\hline 
+9 &   Deisentroth, Faisal \& Ong Ch 5.3-5.5  \\
+\hline 
+10 &  TBD (Stewart Calculus?)  \\
+\hline 
+11 &  Roch Ch 3   \\
+\hline 
+12 &  Murphy Ch 8.1-8.2  \\
+\hline 
+13 &   Murphy Ch 8.3.1 \\
+\hline 
+14 &   Murphy Ch 8.3.2  \\
+\hline 
+15 & Wasserman: Ch 1   \\
+\hline 
+16 &  Wasserman Ch 2  \\
+\hline 
+17 & Wasserman Ch 2   \\
+\hline 
+18 &  Wasserman Ch 9\\
+\hline 
+19 & Wasserman Ch 4-5 \\
+\hline 
+20 &    Wasserman Ch 11  \\
+\hline 
+21 &   Wasserman Ch 11   \\
+\hline 
+22 &    Wasserman Ch 23.2 \\
+\hline 
+23 &  TBD  \\
+\hline 
+24 &   Wasserman Ch 24 \\
+\hline
+\hline
+
+\end{tabular}\\
+\end{centering}
+
+\end{document}
+

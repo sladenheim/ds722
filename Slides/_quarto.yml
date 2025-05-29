@@ -1,0 +1,17 @@
+project:
+  title: "MathFoundationsDS"
+  output: _slides
+  render:
+    - Lec01-VectorMatrices.qmd
+
+format:
+  revealjs:
+    footer: "DS722 - Ladenheim"
+    scrollable: true
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    html-math-method: mathjax
+    echo: true
+    code-fold: true
+
