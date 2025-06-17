@@ -1,8 +1,31 @@
 project:
   title: "MathFoundationsDS"
-  output: _slides
+  output-dir: _slides
   render:
-    - Lec01-VectorMatrices.qmd
+    - MathFoundationsDS.qmd
+    - Lec01-VectorsMatrices.qmd
+    - Lec02-OrthogonalityProjections.qmd
+    - Lec03-QRFactorization.qmd
+    - Lec04-LinearSystems.qmd
+    - Lec05-Eigenvalues.qmd
+    - Lec06-SVD.qmd
+    - Lec07-LeastSquares.qmd
+    - Lec08-Derivatives.qmd
+    - Lec09-DerivativesIntegration.qmd
+    - Lec10-Integration.qmd
+    - Lec11-Optimization1.qmd
+    - Lec12-Optimization2.qmd
+    - Lec13-Optimization3.qmd
+    - Lec14-Optimization4.qmd
+    - Lec15-ProbabilityIntroduction.qmd
+    - Lec16.qmd
+    - Lec17.qmd
+    - Lec18.qmd
+    - Lec19.qmd
+    - Lec21.qmd
+    - Lec22.qmd
+    - Lec23.qmd
+    - Lec24.qmd
 
 format:
   revealjs:
