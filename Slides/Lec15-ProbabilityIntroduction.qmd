@@ -1,0 +1,240 @@
+---
+title: "Introduction to Probability"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Probability is the mathematical language of uncertainty.
+
+- **Quantify Uncertainty**: Probability helps data scientists reason about randomness and uncertainty in data.
+- **Statistical Inference**: Core to techniques like hypothesis testing, confidence intervals, and Bayesian inference.
+- **Machine Learning**: Many models (e.g., Naive Bayes, HMMs) are built on probabilistic foundations.
+- **Decision Making**: Supports risk assessment and informed choices under uncertainty (e.g., A/B testing).
+- **Bayesian Thinking**: Enables updating beliefs with new data, useful in dynamic systems like recommendations.
+
+## Lecture Objectives
+
+Understand:
+
+- sample spaces and events
+- basic axioms of probability
+- independent events
+- conditional probability
+- Bayes Theorem
+
+## Sample Spaces and Events
+
+The sample space $\Omega$ is the set of possible outcomes of an experiment. Points $\omega\in\Omega$ are called sample outcomes, realizations, or elements.
+
+Subsets, i.e., $A\subseteq\Omega$ are called events
+
+---
+
+What is $\Omega$ if we toss a coin twice? What is the event $A$ that the first toss is heads?
+
+---
+
+Let $\omega$ be the outcome of a measurement of temperature (in C). What is $\Omega$? What is the event that a measurement is strictly larger than 15 but less than or equal to 30?
+
+
+---
+
+If we toss a coin forever, what is $\Omega$? What is the event that the first head appears on the second toss?
+
+## Notation
+
+Given an event $A$, let $A^{c} = \{ w\in\Omega: \omega \notin A\}$ denote the complement of $A$. The complement of $A$ are all the elements that are not in $A$.
+
+The complement of the samples space $\Omega$ is the empty set $\emptyset$.
+
+---
+
+The union of events $A$ and $B$ is defined as  
+
+$$
+A\cup B = \{\omega\in\Omega: \omega\in A ~\text{or}~\omega\in B \}.
+$$
+
+If $A_1, A_2,\ldots$ is a sequence of sets then
+
+$$
+\bigcup_{i=1}^{\infty}A_{i}=\{\omega\in\Omega: \omega\in A_{i} ~\text{for at least one i}\}.
+$$
+
+---
+
+The intersection of $A$ and $B$ is
+$$A\cap B = \{\omega\in\Omega: \omega\in A ~\text{and}~\omega\in B \}.
+$$
+
+If $A_1, A_2,\ldots$ is a sequence of sets then
+
+$$
+\bigcap_{i=1}^{\infty}A_{i}=\{\omega\in\Omega: \omega\in A_{i} ~\text{for all i}\}.
+$$
+
+
+---
+
+The set difference is defined by
+
+$$
+A\setminus B = \{\omega\in\Omega: \omega\in A,~\omega\notin B \}.
+$$
+
+If every element of $A$ also belongs to $B$, then we write $A\subseteq B$. If $A$ is a finite set then $\vert A\vert$ denotes the number of elements in $A$.
+
+---
+
+A sequence of sets $A_1, A_2\ldots$ are disjoint (or mutually exclusive) if $A_i\cap A_j=\emptyset$ whenever $i\neq j$.
+
+A partition of $\Omega$ is a sequence of disjoint sets $A_1, A_2, \ldots$ such that $\cup_{i=1}^{\infty}A_{i}=\Omega$.
+
+A sequence of sets $A_1, A_2\ldots$ is monotone increasing if $A_1\subseteq A_2 \subseteq \ldots$ and we define $\lim_{n\rightarrow\infty} A_{n} = \cup_{i=1}^{\infty}A_{i}$.
+
+A sequence of sets $A_1, A_2\ldots$ is monotone decreasing if $A_1\supseteq A_2 \supseteq \ldots$ and we define $\lim_{n\rightarrow\infty} A_{n} = \cap_{i=1}^{\infty}A_{i}$.
+
+The indicator function of $A$ is defined as
+$$
+I_{A}(\omega) = I(\omega\in A) = 
+\begin{cases}
+1 & \text{if}~\omega\in A\\
+0 & \text{if}~\omega\notin A.
+\end{cases}
+$$
+
+## Probability
+
+We will assign a real number $\mathbb{P}(A)$ to every every $A$. This number is the probability (or probability measure) of $A$. 
+
+Such a function $\mathbb{P}$ is a probability measure if it satisfies the following three axioms.
+
+1. $\mathbb{P}(A)\geq 0$ for every $A$
+1. $\mathbb{P}(\Omega)=1$
+1. If $A_1, A_2,\ldots$ are disjoint then 
+$$
+\mathbb{P}\left(\bigcup_{i=1}^{\infty}A_{i}\right)= \sum_{i=1}^{\infty}\mathbb{P}(A_i).
+$$
+
+---
+
+For any events $A$ and $B$
+
+$$
+\mathbb{P}\left(A\cup B\right) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A\cap B).
+$$
+
+## Probability on Finite Sample Spaces
+
+If $\Omega$ is finite and if each outcome $\omega$ is equally likely, then
+
+$$
+\mathbb{P}(A) = \frac{\vert A\vert}{\vert\Omega\vert}.
+$$
+
+---
+
+The sample space of tossing a (6-sided) die twice consists of 36 elements: $\Omega = \{(i,j):~i,j\in\{1,2,3,4,5,6\} \}$.
+
+What is the probability that the sum of the dice is 7?
+
+## Independent Events
+
+Two events $A$ and $B$ are independent if 
+
+$$
+\mathbb{P}(A\cap B) = \mathbb{P}(A)\mathbb{P}(B).
+$$
+
+A set of events $\{A_{i}:~i\in I\}$ is independent if 
+
+$$
+\mathbb{P}\left(\bigcap_{i\in J}A_{i}\right) = \prod_{i\in J}\mathbb{P}(A_{i}),
+$$
+
+for every finite subset $J$ of $I$.
+
+---
+
+Independence can arise by:
+
+1. Explicit assumption
+1. Derivation via the previous formula
+
+**Disjoint events each with positive probability can never be independent.**
+
+## Conditional Probability
+
+If $\mathbb{P}(B)>0$ then the conditional probability of $A$ given $B$ is
+
+$$
+\mathbb{P}(A\vert B) = \frac{\mathbb{P}(A\cap B)}{\mathbb{P}(B)}.
+$$
+
+If $A$ and $B$ are independent events then $\mathbb{P}(A\vert B) = \mathbb{P}(A)$.
+
+In general $\mathbb{P}(A\vert B) \neq \mathbb{P}(B\vert A)$. 
+
+---
+
+A medical test for a disease $D$ has outcomes $+$ an $-$. The probabilities are
+
+
+|          | $D$      | $D^{c}$
+|----------|----------|----------
+| $+$      | 0.009    | 0.099
+| $-$      | 0.001    | .091
+
+Suppose you get a positive test result, what is the probability you have the disease?
+
+## Law of Total Probability
+
+Let $A_1, \ldots, A_k$ be a partition of $\Omega$, then for any event $B$
+
+$$
+\mathbb{P}(B) = \sum_{i=1}^{k}\mathbb{P}(B\vert A_{i})\mathbb{P}(A_i).
+$$
+
+---
+
+![Law of Total Probability](figures/LawOfTotalProbability.png){fig-align="center"}
+
+---
+
+*Proof*
+
+## Bayes' Theorem
+Let $A_1,\ldots, A_k$ be a partition of $\Omega$ such that $\mathbb{P}(A_{i})>0$ for each $i$. If $\mathbb{P}(B)>0$ then, for each $i=1,\ldots,k$
+
+$$
+\mathbb{P}(A_{i}) = \frac{\mathbb{P}(B\vert A_i)\mathbb{P}(A_i)}{\sum_{j} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}.
+$$
+
+---
+
+If we only consider a single event $A$, then we have 
+$$
+\mathbb{P}(A\vert B) = \frac{\mathbb{P}(B\vert A)\mathbb{P}(A)}{\mathbb{P}(B)}.
+$$
+
+:::: {.incremental}
+- $P(A)$ is the **prior probability** of $A$
+- $P(A|B)$ is the **posterior probability** of $A$
+::::
+
+---
+
+*Proof*
+
+## Summary
+
+We covered 
+
+- sample spaces and events
+- basic axioms of probability
+- independent events
+- conditional probability
+- Bayes Theorem
+
+Make sure you understand the notation and the concepts involved. The rest of the probability lectures build off this material.
