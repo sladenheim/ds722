@@ -1,0 +1,428 @@
+---
+title: "QR Factorization"
+jupyter: python3
+---
+
+## Lecture Overview
+
+The QR factorization is one of the most important ideas in all of numerical linear algebra.
+
+It underpins the stable computation of least squares problems.
+
+This lecture will provide an understanding of how to compute the QR factorization.
+
+
+## Lecture Objectives
+
+- Reduced and Full QR factorization
+- Classical and modified Gram-Schmidt algorithms
+- Computational complexity of QR factorization
+
+## Reduced QR Factorization
+
+For many applications we are interested in the successive column spaces of a matrix $A$, i.e.,
+
+$$
+\langle \mathbf{a}_1 \rangle \subseteq \langle \mathbf{a}_1, \mathbf{a}_2 \rangle, \subseteq \langle \mathbf{a}_1, \mathbf{a}_2, \mathbf{a}_3 \rangle \subseteq \ldots,
+$$
+
+where $\langle \cdots \rangle$ denotes the subspace spanned by the vectors within the bracket.
+
+The idea behind the QR factorization is to construct a sequence of orthogonal vectors such tat
+
+$$
+\langle \mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_j \rangle = \langle \mathbf{a}_1, \mathbf{a}_2, \ldots, \mathbf{a}_j \rangle,~\text{for}~j=1,\ldots n.
+$$
+
+---
+
+Let $A\in\mathbb{R}&{m\times n}$ and $Q$ denote the matrix whose columns are $\mathbf{q}_{j}$.
+In order for $Q$ to span the successive columns spaces of $A$, we must have
+
+$$
+\scriptsize
+\begin{bmatrix}
+ & & & \\
+ & & & \\
+ \mathbf{a}_{1} & \mathbf{a}_2 & \cdots & \mathbf{a}_{n} \\
+ & & & \\
+  & & &
+\end{bmatrix}
+=
+\begin{bmatrix}
+ & & & \\
+ & & &\\
+ \mathbf{q}_{1} & \mathbf{q}_2 & \cdots & \mathbf{q}_{n} \\
+ & & & \\
+& & & \\
+\end{bmatrix}
+\begin{bmatrix}
+ r_{11}& r_{12} &\cdots & r_{1n}  \\
+ & r_{22} & \ & \vdots \\
+ & & \ddots & \\
+ & & & r_{nn}
+\end{bmatrix}
+$$
+
+---
+
+The previous slide says
+
+$$
+\begin{align}
+\mathbf{a}_{1} &= r_{11}\mathbf{q}_1 \\
+\mathbf{a}_{2} &= r_{12}\mathbf{q}_1 + r_{22}\mathbf{q}_2  \\
+\mathbf{a}_{3} &= r_{13}\mathbf{q}_1 + r_{23}\mathbf{q}_2 + r_{33}\mathbf{q}_3 \\
+&\vdots \\
+\mathbf{a}_{n} &= r_{1n}\mathbf{q}_1 + r_{2n}\mathbf{q}_2 + \cdots + r_{nn}\mathbf{q}_{n}.
+\end{align}
+$$
+
+---
+
+As a matrix formula this is
+
+$$
+A = \hat{Q}\hat{R},
+$$
+where $\hat{Q}\in\mathbb{R}^{m\times n}$ with orthonormal columns and $\hat{R}\in\mathbb{n\times n}$ is an upper triangular matrix.
+
+This is a reduced QR factorization of $A$.
+
+## Full QR Factorization
+
+A full QR factorization of $A\in\mathbb{R}^{m\times n} (m\geq n)$ is denoted by
+
+$$
+A = QR,
+$$
+
+where $Q\in\mathbb{R}^{m\times n}$ is orhthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
+
+The matrix $Q$ is created by appending an additional $m-n$ orthonormal columns to $\hat{Q}$.
+
+The matrix $R$ is created by appending $m$ rows of zeros to $\hat{R}$.
+
+## Gram-Schmidt Orthogonalization
+
+How do we construct our vectors $\mathbf{q}_{j}$? 
+
+Recall from the previous lecture that we can express a vector in the following form
+
+$$
+\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
+$$
+
+If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have a new $\mathbf{q}_{j}$ that spans $\langle\mathbf{a}_{1}\ldots \mathbf{a}_{j-1} \rangle$ and is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
+
+---
+
+The previous set of equations for the vectors $\mathbf{a}_{j}$ as
+
+$$
+\begin{align*}
+\mathbf{q}_{1} &= \frac{\mathbf{a}_{1}}{r_{11}} \\
+\mathbf{q}_{2} &= \frac{\mathbf{a}_{2}-r_{12}\mathbf{a}_{1}}{r_{22}} \\
+\mathbf{q}_{2} &= \frac{\mathbf{a}_{2}-r_{12}\mathbf{q}_{1}}{r_{22}} \\
+&\vdots \\
+\mathbf{q}_{n} &= \frac{\mathbf{a}_{n}-\sum_{i=1}^{n-1}r_{in}\mathbf{q}_{i}}{r_{nn}}.
+\end{align*}
+$$
+
+---
+
+Based on the previous slide and the formula
+
+$$
+\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
+$$
+
+we know that
+
+$$
+r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}\quad (i\neq j),
+$$
+
+and
+
+$$
+\vert r_{ij}\vert = \left\Vert \mathbf{a}_{j} - \sum_{i=1}^{j-1}r_{ij}\mathbf{q}_{j} \right\Vert.
+$$
+
+
+## Classical Gram-Schmidt 
+
+Let's combine the previous slides into an algorithm
+
+**Algorithm**
+
+1. for $j=1,\ldots n$
+1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
+1. $\quad\quad$ for $i=1,\ldots, j-1$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
+1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
+
+
+## Existence and Uniqueness
+
+All matrices have QR factorizations and under suitable restrictions they are unique.
+
+
+**Theorem (Existence)**
+
+Every $A\in\mathbb{R}^{m\times n} (m\geq n)$ has a full QR factorization, hence also a reduced QR factorization.
+
+**Theorem (Uniqueness)**
+
+Each $A\in\mathbb{R}^{m\times n} (m\geq n)$ of full rank has a unique reduced QR factorization $A=\hat{Q}\hat{R}$ with $r_{jj}>0$.
+
+## Gram-Schmidt Projections
+
+The CGS method is not numerically stable. However, we can modify this method to produce a numerically stable algorithm.
+
+The key idea behind this is projections. 
+
+We will show that
+
+$$
+\mathbf{q}_{1} = \frac{P_{1}\mathbf{a}_{1}}{\Vert P_1\mathbf{a}_{1}\Vert_2}, \mathbf{q}_{2} = \frac{P_{2}\mathbf{a}_{2}}{\Vert P_2\mathbf{a}_{1}\Vert_2}, \ldots, \mathbf{q}_{n} = \frac{P_{n}\mathbf{a}_{n}}{\Vert P_{n}\mathbf{a}_{n}\Vert_2},
+$$
+
+where each $P_{j}$ is an orthogonal projector.
+
+---
+
+Recall the following formula
+
+$$
+\mathbf{q}_{j} = \mathbf{a}_{j} -\sum_{i=1}^{j-1}(\mathbf{q}_{i}^{T}\mathbf{a}_{j})\mathbf{q}_{i}.
+$$
+
+Let's consider the case when $j=2$.
+
+---
+
+Observe that
+$$
+\mathbf{q}_{2} = \mathbf{a}_{2} - (\mathbf{q}_{1}^{T}\mathbf{a}_{2})\mathbf{q}_{1} = (I-\mathbf{q}_{}\mathbf{q}_{1}^{T})\mathbf{a}_{2}.
+$$
+
+The projector $(I-\mathbf{q}_{1}\mathbf{q}_{1}^{T})$ eliminates the component of $\mathbf{a}_2$ in the direction of $\mathbf{q}_{1}$.
+
+---
+
+For the general case we have that
+
+$$
+\mathbf{q}_{j} = (I - \sum_{i=1}^{j-1}\mathbf{q}_{i}\mathbf{q}_{i}^{T})\mathbf{a}_{j}.
+$$
+
+
+---
+
+Define
+
+$$
+Q_{j-1}
+=
+\begin{bmatrix}
+& & \\
+& & \\
+\mathbf{q}_{1} & \cdots & \mathbf{q}_{j-1} \\
+& & \\
+& & \\
+\end{bmatrix}
+=
+\sum_{i=1}^{j-1}\mathbf{q}_{i}\mathbf{q}_{i}^{T}.
+$$
+
+---
+
+The GS projection operators are define as
+$$
+P_{j} = I - Q_{j-1}Q_{j-1}^{T}.
+$$
+
+Recall the notation $P_{\perp \mathbf{q}_{j}} = I - \mathbf{q}_{j}\mathbf{q}_{j}^{T}$, then we can construct as a product of projectors
+
+$$
+P_{j} = P_{\perp \mathbf{q}_{j-1}}\cdots P_{\perp \mathbf{q}_{2}}P_{\perp \mathbf{q}_{1}}.
+$$
+
+## Modified Gram-Schmidt
+
+**Algorithm**
+
+1. for $i=1,\ldots n$
+1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
+1. for $i=1,\ldots n$
+1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+
+---
+
+:::: {.columns}
+::: {.column width="47.5%"}
+**CGS Algorithm**
+
+1. for $j=1,\ldots n$
+1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
+1. $\quad\quad$ for $i=1,\ldots, j-1$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
+1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
+:::
+::: {.column width="5%"}
+:::
+::: {.column width="47.5%"}
+**MGS Algorithm**
+
+1. for $i=1,\ldots n$
+1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
+1. for $i=1,\ldots n$
+1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+:::
+::::
+
+## MGS Operation Count
+
+:::: {.columns}
+::: {.column width="50%"}
+1. for $i=1,\ldots n$
+1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
+1. for $i=1,\ldots n$
+1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+:::
+::: {.column width=50"%"}
+Inner loop flops
+
+* Line 7: $m$ multiplications and $m-1$ additions 
+* Line 8: $m$ subtractions and $m$ multiplications
+
+This is a total of $\sim 4m$ operations.
+:::
+::::
+
+---
+
+There are 2 nested loops so we have
+
+$$
+\sum_{i=1}^{n}\sum_{j=i+1}^{n}4m \sim \sum_{i=1}^{n}(i)4m \sim 2mn^{2}.
+$$
+
+## Counting Operations Geometrically
+
+We can always count operations algebraically. However, let's consider a geometric approach.
+
+At the first step in the outer loop (Step 6), the MGS algorithm operates on the whole $m\times n$ matrix.
+
+At the second step, we operate on a submatrix with $m$ rows, but $n-1$ columns.
+
+---
+
+Repeating this process leads to the following figure.
+
+![](figures/QR-Complexity.png){fig-align="center"}
+
+The operation count is proportional to the volume of this figure. The constant of proportionality is 4 flops.
+
+---
+
+As $m,n\rightarrow\infty$ what shape does this figure approach?
+
+:::: {.fragment}
+A right triangular prism with an area of $mn^{2}/2$.
+::::
+
+:::: {.fragment}
+Multiplying by 4 yields $2mn^{2}$.
+::::
+
+## Gram-Schmidt as Triangular Orthogonalization
+
+Each outer step of the MGS algorithm can be interpreted as a right-multiplication by a square upper triangular matrix
+
+$$
+\scriptsize
+\begin{bmatrix}
+& & & \\
+& & & \\
+\mathbf{v}_{1} & \mathbf{v}_{2} & \cdots & \mathbf{v}_{n} \\
+& & &  \\
+& &  & \\
+\end{bmatrix}
+\begin{bmatrix}
+\frac{1}{r_{11}}&\frac{-r_{12}}{r_{11}} &\frac{-r_{13}}{r_{11}} &\cdots \\
+& 1& & \\
+& & 1&  \\
+& &  &\ddots \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+& & & \\
+& & & \\
+\mathbf{q}_{1} & \mathbf{v}_{2}^{(2)} & \cdots & \mathbf{v}_{n}^{(2)} \\
+& & &  \\
+& &  & \\
+\end{bmatrix}
+$$
+
+---
+
+At step $i$ of the MGS algorithm subtracts $r_{ij}/r_{ii}$ times column $i$ of the current A from columns $>i$ and replaces column $i$ by $1/r_{ii}$ times itselfs. These operations define the upper-triangular matrices $R_{i}$. 
+
+Shown below are the matrices when $i=2,3$
+$$
+\scriptsize
+R_{2} =
+\begin{bmatrix}
+1 & &  & \\
+& \frac{1}{r_{22}}&\frac{-r_{23}}{r_{22}} &\cdots \\
+& &1 & \\
+& &  &\ddots \\
+\end{bmatrix},
+\quad
+R_{3} =
+\begin{bmatrix}
+1 & &  & \\
+ & 1 & & \\ 
+& & \frac{1}{r_{33}} &\cdots \\
+& &  &\ddots \\
+\end{bmatrix},
+$$
+
+---
+
+At the end of the process we have
+
+$$
+A\underbrace{R_{1}R_{2}\cdots R_{n}}_{$\hat{R}^{-1}} = \hat{Q}.
+$$
+
+This shows that the Gram-Schmidt algorithm is a method of triangular orthogonalization.
+
+## Summary
+
+Today we learned about two approaches for generating the QR factorization
+
+- Classical Gram-Schmidt (numerically unstable)
+- Modified Gram-schmidt (numerically stable)
+
+The importance of projection matrices was fundamental to the MGS approach.
+
+We also determined the computational complexity of this algorithm.
