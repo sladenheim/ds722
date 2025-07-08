@@ -1,0 +1,394 @@
+---
+title: "Derivatives"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Calculus is the branch of mathematics  focused on the study of continuous change.
+
+The core concepts of calculus are limits, derivatives, and integrals.
+
+We will need these concepts in our future understanding of:
+
+- Optimization
+- Probability
+
+## Lecture Objectives
+
+Review:
+
+- Concepts of limits and single variable derivatives
+- Derivative rules:
+  - Polynomials, trigonometric, exponential, and log functions
+  - Addition, subtraction, multiplication, and division
+  - Chain rule
+- Taylor's Theorem
+- Partial derivatives and the gradient
+
+## Limits
+
+The limit of a function $f(x)$ is defined as
+
+$$
+\lim_{x\rightarrow c} f(x) = L.
+$$
+
+This definition means that the function $f(x)$ approaches the limit $L$ as $x$ approaches the value $c$.
+
+The value of $L$ need not be finite.
+
+---
+
+More precisely, we say that the limit of a function 
+$$
+\lim_{x\rightarrow c} f(x) = L,
+$$ 
+
+if for any $\varepsilon>0$, there exists a $\delta>0$ such that
+
+$$
+\vert f(x) - L\vert < \varepsilon,
+$$
+
+provided $\vert x-c\vert < \delta$.
+
+## One-Sided Limts
+
+We can be more specific and have the left-sided limit
+
+$$
+\lim_{x\rightarrow c^-{}} f(x),
+$$
+
+and the right-sided limit
+
+$$
+\lim_{x\rightarrow c^{+}} f(x).
+$$
+
+When these values are equal we have
+
+$$
+\lim_{x\rightarrow c^-{}} f(x)= \lim_{x\rightarrow c^{+}} f(x) = \lim_{x\rightarrow c} f(x) = L.
+$$
+
+## Examples
+
+Calculate 
+
+$$
+\lim_{x\rightarrow 2} x^{2} + 3x + 4 
+$$
+
+---
+
+Calculate
+
+$$
+\lim_{x\rightarrow 0} \sin{(x)}
+$$
+
+---
+
+Calculate
+
+$$
+\lim_{x\rightarrow 0} \log{(x)}
+$$
+
+---
+
+$$
+\lim_{x\rightarrow \infty} \frac{1}{x}
+$$
+
+---
+
+$$
+\lim_{x\rightarrow 0} \frac{\sin{(x)}}{x} 
+$$
+
+---
+
+$$
+\lim_{x\rightarrow 0} \frac{\cos{(x)}-1}{x} 
+$$
+
+## Derivative Definition
+
+The derivative $f^{\prime}(x)$ of single-variable real-valued function $f(x)$ at the point $x$ is
+
+$$
+f^{\prime}(x) = \lim_{h\rightarrow 0} \frac{f(x+h)-f(x)}{h}.
+$$
+
+Functions for which the derivative exists over their defined domain are called *differentiable*.
+
+---
+
+Another common notation for a derivative is
+
+$$
+f^{\prime}(x) = \frac{d}{dx}f(x).
+$$
+
+
+## Polynomial
+
+The differentiation rules for polynomials are
+
+$$
+\frac{d}{dx}x^{n} = n x^{n-1}.
+$$
+
+---
+
+For example, if $f(x) = x^{3}$ calculate $f^{\prime}(x)$
+
+:::: {.fragment}
+$$
+f^{\prime}(x) = 3x^{2}.
+$$
+::::
+
+---
+
+If $f(x) = \sqrt{x}$ what is $f^{\prime}(x)$?
+
+:::: {.fragment}
+$$
+\sqrt{x} = x^{\frac{1}{2}} = \frac{1}{2}x^{-\frac{1}{2}} = \frac{1}{2\sqrt{x}}.
+$$
+::::
+
+---
+
+How do we calculate derivatives of more complex functions such as
+
+$$
+f(x) = 10x^{2} - 3x^{6} - x^{-\frac{3}{2}}?
+$$
+
+
+## Addition Rule
+
+For differentiable functions $f(x)$ and $g(x)$
+
+$$
+(f(x) + g(x))^{\prime} = f^{\prime}(x) + g^{\prime}(x) 
+$$
+
+---
+
+In addition let $c$ be a constant, then
+
+$$
+(cf(x))^{\prime}(x) = cf^{\prime}(x).
+$$
+
+Therefore,
+
+$$
+(f(x) - g(x))^{\prime} = f^{\prime}(x) - g^{\prime}(x).
+$$
+
+---
+
+How do we calculate derivatives of more complex polynomials such as $f(x) = 10x^{2} - 3x^{6} - x^{-\frac{3}{2}}?$
+
+:::: {.fragment}
+$$
+f^{\prime}(x) = 20x - 18x^{5} + \frac{3}{2}x^{-\frac{5}{2}}.
+$$
+::::
+
+## Trigonometric Function Derivatives
+
+The derivative rules for $\sin$ and $\cos$ are 
+
+$$
+\begin{align}
+\frac{d}{dx}\sin{(x)} &= \cos{(x)} \\
+\frac{d}{dx}\cos{(x)} &= -\sin{(x)} \\
+\end{align}
+$$
+
+--- 
+
+Let's prove the derivative for $\sin$. By definition we have to compute
+
+$$
+\lim_{h\rightarrow \infty} \frac{\sin{(x+h)}-\sin{(x)}}{h}.
+$$
+
+
+---
+
+How could we derive these for other trigonometric functions like 
+
+$$
+\small
+\begin{align}
+\tan{(x)} &= \frac{\sin{(x)}}{\cos{(x)}}$, \\
+\csc{(x)} &= \frac{1}{\sin{(x)}}, \\ 
+\sec{(x)} &= \frac{1}{\cos{(x)}}, \\
+\cot{(x)} &= \frac{1}{\tan{(x)}} ?
+\end{align}
+$$
+
+We need help from the multiplication and quotient rules.
+
+
+## Multiplication Rule
+
+For differentiable functions $f(x)$ and $g(x)$ 
+
+$$
+(f(x)g(x))^{\prime} = f^{\prime}(x)g(x) + f(x)g^{\prime}(x).
+$$
+
+## Quotient Rule
+
+For differentiable functions $f(x)$ and $g(x)\neq 0$ 
+
+$$
+\left(\frac{f(x)}{g(x)}\right)^{\prime} = \frac{f^{\prime}(x)g(x) - f(x)g^{\prime}(x)}{(g(x))^{2}}.
+$$
+
+---
+
+Let's derive $\frac{d}{dx}\tan{(x)}$:
+
+$$
+\frac{d}{dx}\tan{(x)} =\frac{d}{dx} \left(\frac{\sin{(x)}}{\cos{(x)}}\right)
+$$
+
+## Exponential
+
+The derivative of the exponential function is
+
+$$
+\frac{d}{dx}e^{x}= e^{x}.
+$$
+
+## Logarithm
+
+The derivative of the logarithm function is
+
+$$
+\frac{d}{dx}\log{(x)}= \frac{1}{x}.
+$$
+
+## Chain Rule
+
+For differentiable functions $f(x)$ and $g(x)$ 
+
+$$
+f(g(x))^{\prime} = f^{\prime}(g(x))g^{\prime}(x).
+$$
+
+## Higher-Order Derivatives
+
+We can define second- and higher-order derivatives using our definitions. The following is a second derivative:
+
+$$
+f^{\prime\prime}(x) = \frac{d}{dx^{2}} f(x) = \lim_{h\rightarrow 0} \frac{f^{\prime}(x+h)-f^{\prime}(x)}{h}.
+$$
+
+For higher-order derivatives we have
+
+$$
+f^{(n)}(x) = \frac{d}{dx^{n}}f(x).
+$$
+
+## Partial Derivatives
+
+We can extend the concept of a derivative to for functions of 2 or more variables. Consider a real-valued function $f(x,y)$.
+
+The partial derivative of $f$ with respect to $x$ is
+
+$$
+\small
+\frac{\partial}{\partial x}f(x,y) = f_{x}(x, y) = \lim_{h\rightarrow 0} \frac{f(x+h, y) - f(x,y)}{h}.
+$$
+
+Similarly, The partial derivative of $f$ with respect to $y$ is
+
+$$
+\small
+\frac{\partial}{\partial y}f(x,y) = f_{y}(x, y) = \lim_{h\rightarrow 0} \frac{f(x, y+h) - f(x,y)}{h}.
+$$
+
+---
+
+For a real-valued function $f: \mathbb{R}^{n} \rightarrow \mathbb{R}$ the $i$th partial derivative is
+
+$$
+\scriptsize
+\frac{\partial}{\partial x_{i}}f(x_{1},x_{2},\ldots,x_{n}) = \lim_{h\rightarrow 0} \frac{f(x_{1},\dots, x_{i}+h,\ldots, x_{n}) - f(x_{1},\dots, x_{i},\ldots, x_{n})}{h}
+$$
+
+---
+
+Higher-order partial derivatives are defined similarly. For example, the second partial derivative of $f(x,y)$ is
+
+$$
+\small
+\frac{\partial}{\partial x^{2}}f(x,y) = f_{xx}(x, y) = \lim_{h\rightarrow 0} \frac{f_{x}(x+h, y) - f_{x}(x,y)}{h}.
+$$
+
+## Gradients
+
+Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the gradient is a vector consisting of all partial derivatives of $f$:
+
+$$
+\nabla f(\mathbf{x}) = 
+\begin{bmatrix}
+\frac{\partial}{\partial x_{1}}f(\mathbf{x}) \\
+\frac{\partial}{\partial x_{2}}f(\mathbf{x}) \\
+\vdots \\
+\frac{\partial}{\partial x_{n}}f(\mathbf{x}) \\
+\end{bmatrix}.
+$$
+
+## Taylor Series
+
+The Taylor series of a real function $f(x)$ that is infinitely differentiable at a real number $c$ is the infinite *power series*
+
+$$
+f(x) = \sum_{n=0}^{\infty}\frac{f^{(n)}(c)(x-c)^{n}}{n!}.
+$$
+
+
+---
+
+If we let $f(x)=e^{x}$ and $c=0$ we obtain the famous formula
+
+$$
+f(x) = \sum_{n=0}^{\infty}\frac{x^{n}}{n!}.
+$$
+
+## Taylor's Theorem
+
+Let $k$ be an integer and let the function $f(:\mathbb{R}\rightarrow \mathbb{R})$ be $k$ times differentiable at the point $c\in\mathbb{R}$. Then there exists a function $h_{k}:\mathbb{R}\rightarrow \mathbb{R}$ such that
+
+$$
+\small
+f(x) = \sum_{n=0}^{k} \frac{f^{(n)}(c)(x-c)^{n}}{n!} + h_{k}(x)(x-a)^{k},
+$$
+and
+
+$$
+\small
+\lim_{x\rightarrow c}h_{k}(x) = 0.
+$$
+
+## Summary
+
+We covered:
+
+- limits
+- derivatives, higher-order derivatives, partial derivatives
+- gradient vector
+- Taylor series and Taylor's Theorem
