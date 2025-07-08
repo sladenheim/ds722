@@ -36,7 +36,7 @@ $$
 
 ---
 
-Let $A\in\mathbb{R}&{m\times n}$ and $Q$ denote the matrix whose columns are $\mathbf{q}_{j}$.
+Let $A\in\mathbb{R}^{m\times n}$ and $Q$ denote the matrix whose columns are $\mathbf{q}_{j}$.
 In order for $Q$ to span the successive columns spaces of $A$, we must have
 
 $$
