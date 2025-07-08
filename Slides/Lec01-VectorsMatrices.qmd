@@ -571,9 +571,15 @@ plt.show()
 The Frobenius norm is defined as
 
 $$
-\Vert A \Vert_F = \left(\sum_{j=1}^{n}\sum_{i=1}^{m}\vert a_{ij}\vert^{2}\right)^{1/2}.
+\Vert A \Vert_F = \left(\sum_{j=1}^{n}\sum_{i=1}^{m}\vert a_{ij}\vert^{2}\right)^{1/2} = \left(\sum_{j=1}^{n}\Vert \mathbf{a}_{j}\Vert_{2}^{2}\right)^{1/2}.
 $$
 
+The trace operator, $\operatorname{tr}(A) = \sum_{i=1}^{m}a_{ii}$
+
+
+$$
+\Vert A \Vert_F = \sqrt{\operatorname{tr}(A^{T}A)} = \sqrt{\operatorname{tr}(AA^{T})}.
+$$
 
 ## Cauchy-Schwarz and H&ouml;lder Inequalities
 
