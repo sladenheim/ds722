@@ -10,8 +10,8 @@ project:
     - Lec05-Eigenvalues.qmd
     - Lec06-SVD.qmd
     - Lec07-LeastSquares.qmd
-    - Lec08-Derivatives.qmd
-    - Lec09-DerivativesIntegration.qmd
+    - Lec08-Derivatives1.qmd
+    - Lec09-Derivatives2.qmd
     - Lec10-Integration.qmd
     - Lec11-Optimization1.qmd
     - Lec12-Optimization2.qmd
