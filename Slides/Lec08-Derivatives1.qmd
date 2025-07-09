@@ -127,10 +127,10 @@ Functions for which the derivative exists over their defined domain are called *
 
 ---
 
-Another common notation for a derivative is
+Other common notations for a derivative are
 
 $$
-f^{\prime}(x) = \frac{d}{dx}f(x).
+f^{\prime}(x) = \frac{d}{dx}f(x) = \frac{df}{dx}.
 $$
 
 
@@ -248,6 +248,7 @@ $$
 (f(x)g(x))^{\prime} = f^{\prime}(x)g(x) + f(x)g^{\prime}(x).
 $$
 
+
 ## Quotient Rule
 
 For differentiable functions $f(x)$ and $g(x)\neq 0$ 
@@ -286,6 +287,12 @@ For differentiable functions $f(x)$ and $g(x)$
 
 $$
 f(g(x))^{\prime} = f^{\prime}(g(x))g^{\prime}(x).
+$$
+
+Alternatively if $h(x) = f(g(x))$ then
+
+$$
+h^{\prime}(x) = \frac{dh}{dx} = \frac{df}{dg}\frac{dg}{dx}.
 $$
 
 ## Higher-Order Derivatives
