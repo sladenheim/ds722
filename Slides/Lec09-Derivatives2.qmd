@@ -1,0 +1,283 @@
+---
+title: "Derivatives II"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Today we continue our review of derivatives. In particular, derivatives of vector-valued and functions of matrices.
+
+These concepts are essential for understanding back-propagation in deep neural networks.
+
+We also introduce the multivariate version of Taylor's theorem which will be useful in our lectures on optimization.
+
+## Lecture Objectives
+
+Review:
+
+- Derivatives of vector-valued functions  
+- Derivatives of matrix-valued functions
+- Automatic Differentiation
+- Multivariate Taylor's theorem
+
+## Gradient
+
+Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the gradient is a vector consisting of all partial derivatives of $f$:
+
+$$
+\nabla f(\mathbf{x}) = 
+\begin{bmatrix}
+\frac{\partial}{\partial x_{1}}f(\mathbf{x}) \\
+\frac{\partial}{\partial x_{2}}f(\mathbf{x}) \\
+\vdots \\
+\frac{\partial}{\partial x_{n}}f(\mathbf{x}) \\
+\end{bmatrix}.
+$$
+
+## Hessian
+
+Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the *Hessian* is the symmetric matrix:
+
+$$
+\small
+\nabla^{2} f(\mathbf{x}) = 
+\begin{bmatrix}
+\frac{\partial}{\partial x_{1}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{1}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{1}\partial x_{n}}f(\mathbf{x}) \\
+\frac{\partial}{\partial x_{2}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{2}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{2}\partial x_{n}}f(\mathbf{x})\\
+\vdots & \vdots & \ddots & \vdots \\ 
+\frac{\partial}{\partial x_{n}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{n}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{n}\partial x_{n}}f(\mathbf{x})\\
+\end{bmatrix}.
+$$
+
+
+## Vector-Valued Functions
+
+A vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a mapping from $n$-dimensional space to $m$-dimensional space
+
+$$
+\mathbf{f}(\mathbf{x}) = 
+\begin{bmatrix}
+f_{1}(\mathbf{x}) \\
+f_{2}(\mathbf{x}) \\
+\vdots \\
+f_{m}(\mathbf{x}) \\
+\end{bmatrix}\in\mathbb{R}^{m}.
+$$
+
+The rules for differentiation apply to each of the functions $f_{i}(\mathbf{x})$.
+
+## Gradient of Vector-Valued Functions
+
+The gradient of a vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a matrix
+
+$$
+\small
+J = 
+\nabla \mathbf{f}(\mathbf{x})
+=
+\begin{bmatrix}
+\frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{1}}{\partial x_{2}} & \cdots & \frac{\partial f_{1}}{\partial x_{n}} \\
+\frac{\partial f_{2}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}} &\cdots & \frac{\partial f_{2}}{\partial x_{n}} \\
+\vdots & \ddots & \ddots & \vdots\\
+\frac{\partial f_{m}}{\partial x_{1}} &\frac{\partial f_{m}}{\partial x_{2}} & \cdots & \frac{\partial f_{m}}{\partial x_{n}}.
+\end{bmatrix}\in\mathbb{R}^{m\times n}.
+$$
+
+This matrix is called the *Jacobian* and describes the rate of change of each output variable w.r.t. each input variable.
+
+## Tensors
+
+Tensors are a generalization of vectors and matrices to multidimensional arrays.
+
+Tensors arise naturally in deep learning applications.
+
+An $n$-dimensional tensor is an array 
+
+$$
+\mathcal{A}\in\mathbb{R}^{I_{1}\times I_{2}\times \cdots \times I_{n}}.
+$$
+
+---
+
+An example of a 3rd order tensor is an RGB image which is an array
+
+$$
+\mathcal{A}\in\mathbb{R}^{m\times n \times 3}.
+$$
+
+
+## Gradients of Matrices
+
+It is possible that we have a function mapping:
+
+$$
+\mathbf{f}: \mathbb{R}^{m\times n} \rightarrow \mathbb{R}^{p\times q}.
+$$
+
+For a linear mapping we can express this as the multiplication of $4$th order tensor $T\in\mathbb{R}^{p\times q\times m\times n}$ with the matrices $A$ and $B$,
+
+$$
+B_{ij} = \sum_{k=1}^{m}\sum_{l=1}^{n}T_{ijkl}A_{kl}.
+$$
+
+---
+
+Alternatively, we could *flatten* the matrices, $A$ and $B$ so that they become vectors $\tilde{A}\in\mathbb{R}^{mn}$ and $\tilde{B}\in\mathbb{R}^{pq}$. The $4$th order tensor $T$ can also be flattened into a matrix $\tilde{T}\in\mathbb{R}^{pq\times mn}$ and we can compute
+
+$$
+\tilde{B} = \tilde{T}\tilde{A}.
+$$
+
+The matrix $\tilde{A}$ can then be *unflattened* into a matrix of size $m\times n$.
+
+---
+
+Let $A\in\mathbb{R}^{m\times n}$ and $B\in\mathbb{R}^{p\times q}$. How can we compute the derivative of $A$ with respect to $B$?
+
+The result of this operation is a $4$-dimensional tensor
+
+$$
+J_{ijkl} = \frac{\partial A_{ij}}{\partial B_{kl}}.
+$$
+
+---
+
+Let's compute $\frac{d\mathbf{f}}{dA}\in\mathbb{R}^{m\times m\times n}$ when $\mathbf{f}=A\mathbf{x}\in\mathbb{R}^{m}$, where $A\in\mathbb{R}^{m\times n}$, and $\mathbf{x}\in\mathbb{R}^{n}$. 
+
+$$
+\frac{d\mathbf{f}}{dA}
+=
+\begin{bmatrix}
+\frac{\partial f_{1}}{\partial A}\\
+\frac{\partial f_{2}}{\partial A}\\
+\vdots \\
+\frac{\partial f_{m}}{\partial A}\\
+\end{bmatrix}
+$$
+
+---
+
+Let $R\in\mathbb{R}\in\mathbb{R}^{m\times n}$ and $K=R^{T}R\in\mathbb{R}^{n\times n}$. What is $\frac{dK}{dR}$?
+
+## Useful Identities for Computing Gradients
+
+$$
+\begin{align}
+\frac{\partial \mathbf{x}^{T}\mathbf{a}}{\partial \mathbf{x}} &= \mathbf{a}^{T} \\
+\frac{\partial \mathbf{a}^{T}\mathbf{x}}{\partial \mathbf{x}} &= \mathbf{a}^{T} \\
+\frac{\partial \mathbf{a}^{T}X\mathbf{b}}{\partial \mathbf{X}} &= \mathbf{a}\mathbf{b}^{T} \\
+\frac{\partial \mathbf{x}^{T}A\mathbf{x}}{\partial \mathbf{x}} &= \mathbf{x}^{T}(A + A^{T}) \\
+\end{align}
+$$
+
+## Automatic Differentiation
+
+Automatic differentiation is a set of techniques to numerically evaluate the derivative of a function.
+
+It is an efficient and accurate way to compute gradients by repeated use of the chain rule.
+
+
+Recall that if we have a function $h(x) = f(g(x))$ then
+
+$$
+\frac{dh}{dx} = \frac{df}{dg}\frac{dg}{dx}.
+$$
+
+---
+
+Consider the function 
+
+$$
+f(x) = \sqrt{x^{2} + e^{x^{2}}} + \cos{(x^{2} + e^{x^{2}})}.
+$$
+
+We'll use automatic differentiation to compute this efficiently.
+
+---
+
+![](figures/ForwardPass.png){fig-align="center"}
+
+How can we compute $\frac{df}{dx}$?
+
+:::: {.columns}
+::: {.column width="30%"}
+$$
+\small
+\begin{align}
+a &= x^{2} \\
+b &= e^{x^{2}} \\
+c &= a+b \\
+d &= \sqrt{c} \\
+e &= \cos{(c)} \\
+f &= d+e \\ 
+\end{align}
+$$
+:::
+::: {.column width="70%"}
+
+:::
+::::
+
+---
+
+![](figures/NeuralNetwork.png){fig-align="center"}
+
+---
+
+The output of the neural network is
+
+$$
+\scriptsize
+z^{[2]} = g^{[2]}(W^{[2]}\mathbf{a}^{[1]} + \mathbf{b}^{[2]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}\mathbf{x} + \mathbf{b}^{[1]}) + b^{[2]}).
+$$
+
+How do we compute the derivative of $z^{[2]}$ with respect to $\mathbf{x}$?
+
+:::: {.columns}
+::: {.column width="50%"}
+
+$$
+\small
+\begin{align}
+h^{[1]} &= W^{[1]}\mathbf{x} \\
+z^{[1]} &= g^{[1]}(h^{[1]})\\
+h^{[2]} &= W^{[2]}z^{[1]} \\
+z^{[2]} &= g^{[2]}(h^{[2]})
+\end{align}
+$$
+
+:::
+::: {.column width="50%"}
+:::: {.fragment}
+$$
+\scriptsize
+\begin{align}
+\frac{dz^{[1]}}{d\mathbf{x}} &= W^{[1]} \\
+\frac{dz^{[1]}}{dg^{[1]}} &= \frac{dg^{[1]}}{dh^{[1]}} \\
+\frac{dh^{[2]}}{dz^{[1]}} &= W^{[2]} \\
+\frac{dz^{[2]}}{dh^{[2]}} &= \frac{dg^{[2]}}{dh^{[2]}} \\
+\end{align}
+$$
+::::
+:::
+::::
+
+## Multivariate Taylor Series
+
+Let $f:\mathbb{R}^{n} \rightarrow \mathbb{R}$ be $k$-times differentiable function at the point $\mathbf{c}\in\mathbb{R}^{n}$ then
+
+$$
+\scriptsize
+f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{T}(\mathbf{x}-\mathbf{c}) + (\mathbf{x}-\mathbf{c})^{T}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
+$$
+
+## Summary
+
+We covered:
+
+- Gradients, Hessians, and Jacobians
+- Tensors
+- Gradients of vectors
+- Gradients of matrices
+- Automatic Differentiation
+- Multivariate Taylor's Theorem
