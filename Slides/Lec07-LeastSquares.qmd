@@ -1,0 +1,440 @@
+---
+title: "Least Squares"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Least squares data-fitting is an indispensable tool for data-scientists.
+
+We will formulate this problem as the solution of an overdetermined system of equations
+
+$$
+Ax=b
+$$
+
+where $A\in\mathbb{R}^{m\times n}$ and $m>n$.
+
+We will solve this problem by minimizing the $\Vert b-Ax\Vert_{2}$.
+
+## Lecture Objectives
+
+Understand:
+
+- Formulation of the least squares problem
+- Solution via projection
+- Normal equations and the pseudoinverse
+- Solution via QR decomposition
+
+## The Problem
+
+We wish to find $x\in\mathbb{R}^{n}$ that satisfies
+
+$$
+Ax = b
+$$
+
+where $A\in\mathbb{R}^{m\times n}$, $m>n$ and $b\in\mathbb{R}^{m}$.
+
+This is an *overdetermined* system of equations.
+
+The goal is to minimize the *residual$ vector
+
+$$
+r = b-Ax.
+$$
+
+---
+
+The least squares problem is 
+
+> Given $A\in\mathbb{R}^{m\times n}$, $m\geq n$, $b\in\mathbb{R}^{m}$, find $x\in\mathbb{R}^{n}$ such that $\Vert b-Ax\Vert_{2}$ is minimized.
+
+Geometrically we are searching for the vector $x\in\mathbb{R}^{n}$ such that $Ax\in\mathbb{R}^{m}$ is the closest point in $\operatorname{range}(A)$ to $b$.
+
+## Polynomial Data-Fitting
+
+### Interpolation
+
+Let's first consider linear interpolation. Suppose we have $m$ distinct points, $x_{1},\ldots, x_{m}\in\mathbb{R}$ and data $y_{1},\ldots, y_{m}\in\mathbb{R}$ at these points.
+
+We aim to find the unique polynomial of degree at most $m-1$
+
+$$
+p(x) = c_{0} + c_{1}x + \cdots + c_{m-1}x^{m-1},
+$$
+where $p(x_{i}) = y_{i}$ for $i=1,\ldots,m$.
+
+---
+
+The relationship between the data $\{x_{i}, y_{i}\}$ and the coefficients $\{c_{i}\}$ is expressed by the matrix equation
+
+$$
+\scriptsize
+\begin{bmatrix}
+1 & x_{1} & x_{1}^{2} & & x_{1}^{m-1} \\
+1 & x_{2} & x_{2}^{2} & & x_{2}^{m-1} \\
+1 & x_{3} & x_{3}^{2} & & x_{3}^{m-1} \\
+  & \vdots & & & \\
+1 & x_{m} & x_{m}^{2} & & x_{m}^{m-1} \\
+\end{bmatrix}
+\begin{bmatrix}
+c_{0}\\
+c_{1} \\
+c_{2}\\
+\vdots \\
+c_{m-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_{1}\\
+y_{2} \\
+y_{2}\\
+\vdots \\
+y_{m}
+\end{bmatrix}
+$$
+
+If all the data points are distinct, this matrix can be inverted to determine the coefficients for the polynomial.
+
+---
+
+### Example 
+
+The following plot has $11$ distinct points.
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6])
+y = np.array([0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0])
+
+plt.plot(x, y, '*', markersize=16)
+plt.ylim(-1, 2)
+plt.grid(True)
+plt.show()
+```
+
+Let's fit a polynomial of degree $10$ to this data.
+
+---
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+from numpy.polynomial import Polynomial
+
+x = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6])
+y = np.array([0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0])
+
+coeffs = Polynomial.fit(x, y, deg=10).convert().coef
+p = Polynomial(coeffs)
+
+x_fit = np.linspace(min(x)-1, max(x)+1, 500)
+y_fit = p(x_fit)
+
+plt.plot(x, y, '*', markersize=16)
+plt.plot(x_fit, y_fit, 'r-')
+plt.ylim(-2, 5)
+plt.grid(True)
+plt.show()
+```
+
+---
+
+### Polynomial Least Squares Fitting
+
+The oscillations can be reduced by fitting a polynomial of degree $n-1$ where $n<m$. The coefficients of this polynomial are determined by solving the least squares problem
+
+$$
+\scriptsize
+\begin{bmatrix}
+1 & x_{1} & x_{1}^{2} & & x_{1}^{n-1} \\
+1 & x_{2} & x_{2}^{2} & & x_{2}^{n-1} \\
+1 & x_{3} & x_{3}^{2} & & x_{3}^{n-1} \\
+  & \vdots & & & \\
+1 & x_{m} & x_{m}^{2} & & x_{m}^{n-1} \\
+\end{bmatrix}
+\begin{bmatrix}
+c_{0}\\
+c_{1} \\
+c_{2}\\
+\vdots \\
+c_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_{1}\\
+y_{2} \\
+y_{2}\\
+\vdots \\
+y_{m}
+\end{bmatrix}
+$$
+
+
+---
+
+The plot when $n=7$ is shown below.
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+from numpy.polynomial import Polynomial
+
+x = np.array([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6])
+y = np.array([0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0])
+
+coeffs = Polynomial.fit(x, y, deg=6).convert().coef
+p = Polynomial(coeffs)
+
+x_fit = np.linspace(min(x)-1, max(x)+1, 500)
+y_fit = p(x_fit)
+
+plt.plot(x, y, '*', markersize=16)
+plt.plot(x_fit, y_fit, 'r-')
+plt.ylim(-2, 5)
+plt.grid(True)
+plt.show()
+```
+
+## Orthogonal Projection and the Normal Equations
+
+Consider the following figure:
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the line using two points
+line_point1 = np.array([0, 0])
+line_point2 = np.array([2, 2])
+
+# Define the original point
+original_point = np.array([2, 0])
+
+# Compute the direction vector of the line
+line_direction = line_point2 - line_point1
+
+# Compute the vector from line_point1 to the original point
+vector_to_point = original_point - line_point1
+
+# Compute the projection scalar
+projection_scalar = np.dot(vector_to_point, line_direction) / np.dot(line_direction, line_direction)
+
+# Compute the projection point
+projection_point = line_point1 + projection_scalar * line_direction
+
+# Plotting
+plt.figure(figsize=(8, 6))
+plt.plot([line_point1[0], line_point2[0]], [line_point1[1], line_point2[1]], 'k-', label='Line')
+plt.plot(original_point[0], original_point[1], 'ro')
+plt.plot(projection_point[0], projection_point[1], 'bo')
+plt.plot([original_point[0], projection_point[0]], [original_point[1], projection_point[1]], 'r--')
+
+# Annotate points
+plt.text(original_point[0]+0.1, original_point[1], 'b', fontsize=12)
+plt.text(original_point[0]-0.25, original_point[1]+0.5, 'r=b-Ax', fontsize=12)
+plt.text(projection_point[0]+0.1, projection_point[1], "y=Ax=Pb'", fontsize=12)
+plt.text(-0.25, 0.5, "range(A)'", fontsize=12)
+
+# Set plot limits and labels
+plt.xlim(-1, 3)
+plt.ylim(-1, 3)
+plt.gca().set_aspect('equal', adjustable='box')
+plt.title('Least squares solution as orthogonal projection')
+plt.show()
+
+```
+
+---
+
+**Theorem**
+Let $A\in\mathbb{R}^{m\times n}~(m\geq n)$ and $b\in\mathbb{R}^{m}$ be given. A vector $x\in\mathbb{R}^{n}$ minimizes $\Vert r\Vert_{2} = \Vert b-Ax\Vert_{2}$, thereby solving the least squares problem if and only if $r \perp \operatorname{range}(A)$, that is,
+
+$$
+A^{T}r = 0 \Leftrightarrow A^{T}Ax = A^{T}b \Leftrightarrow Pb = Ax,
+$$
+where $P\in\mathbb{R}^{m\times m}$ is the orthgonal projector onto $\operatorname{range}(A)$. The $n\times n$ system of equations, $A^{T}Ax = A^{T}b$, called the *normal equations*, is nonsingular if and only if $A$ has full rank. Consequently, the solution is unique if and only if $A$ has full rank. 
+
+
+## Pseudoinverse
+
+If $A$ is full rank, then the solution to the least squares problem is unique and is given by $x=(A^{T}A)^{-1}A^{T}b$. The *pseudoinverse* of $A$ is
+
+$$
+A^{+} =(A^{T}A)^{-1}A^{T}\in\mathbb{R}^{n\times m}.
+$$
+
+This matrix maps vectors $b\in\mathbb{R}^{m}$ to vectors $x\in\mathbb{R}^{n}$.
+
+## Normal Equations
+
+The normal equations are
+
+$$
+A^{T}Ax = A^{T}b.
+$$
+
+> Solving this system by computing the inverse of $(A^{T}A)^{-1}$ is not numerically stable!
+
+The NumPy function `np.linalg.lstsq()` solves the least squares problem in a stable way.
+
+---
+
+Consider the following example where the solution to the least squares problem is `x=np.array([1, 1])`.
+
+```{python}
+#| code-fold: false
+import numpy as np
+A = np.array([[-1.42382504, -1.4238264 ],
+              [ 1.26372846,  1.26372911], 
+              [-0.87066174, -0.87066138]])
+b = A @ np.array([1, 1])
+
+# Pseudoinverse
+x1 = np.linalg.inv(A.T @ A) @ A.T @ b
+# QR
+[Q, R] = np.linalg.qr(A)
+x2 = np.linalg.solve(R, Q.T @ b)
+# np.linalg.lstsq
+x3, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+print(x1, np.linalg.norm(x1-np.array([1, 1])))
+print(x2, np.linalg.norm(x2-np.array([1, 1])))
+print(x3, np.linalg.norm(x3-np.array([1, 1])))
+```
+
+
+## QR Factorization
+
+Let $A=\hat{Q}\hat{R}$ be a reduced QR factorization, then
+
+$$
+A^{T}Ax = (\hat{Q}\hat{R})^{T}\hat{Q}\hat{R}x = \hat{R}^{T}\hat{Q}^{T}\hat{Q}\hat{R}x = \hat{R}^{T}\hat{R}x,
+$$
+
+and 
+
+$$ 
+A^{T}b = \hat{R}^{T}\hat{Q}^{T}b.
+$$
+
+As a result
+
+$$
+\hat{R}x = \hat{Q}^{T}b.
+$$
+
+---
+
+Alternatively, we could have used the fact if $A=\hat{Q}\hat{R}$, then  $P=\hat{Q}\hat{Q}^{T}$ is the orthogonal projector onto $\operatorname{range}(A)$, thus
+
+$$
+y=Pb = \hat{Q}\hat{Q}^{T}b.
+$$
+
+Since $Ax=y$, we have that $\hat{Q}\hat{R}x=\hat{Q}\hat{Q}^{T}b$ which is equivalent to
+
+$$
+\hat{R}x = \hat{Q}^{T}b.
+$$
+
+---
+
+To compute the least squares solution via QR factorization follow these steps:
+
+1. Compute the reduced QR factorization $A=\hat{Q}\hat{R}$.
+1. Compute the vector $\hat{Q}^{T}b$.
+1. Solve the upper triangular system $\hat{R}x = hat{Q}^{T}b$ for $x$.
+
+
+## Example: Polynomial Interpolation
+
+
+
+---
+
+With 11 distinct points we can fit a polynomial of degree $10$, i.e., we solve
+
+$$
+\begin{bmatrix}
+
+\end{bmatrix}
+$$
+
+## Example: Linear Regression
+
+We'll create our own toy dataset for doing a linear least squares regression.
+
+```{python}
+#| fig-align: center
+from sklearn.datasets import make_regression
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate a dataset for linear regression
+X, y = make_regression(n_samples=300,  # Number of samples (data points)
+                       n_features=1,   # Number of features (independent variables)
+                       n_informative=1, # Number of informative features (relevant for the target)
+                       noise=10,        # Standard deviation of the Gaussian noise added to the output
+                       random_state=42) # Seed for reproducibility
+
+# X will be the features (independent variable), and y will be the target (dependent variable).
+
+# You can now use X and y to train a linear regression model.
+
+# Example: Plotting the generated dataset
+plt.scatter(X, y)
+plt.xlabel("X (Feature)")
+plt.ylabel("y (Target)")
+plt.title("Generated Linear Regression Dataset")
+plt.show()
+```
+
+---
+
+Let's find our least squares line and plot it over our dataset.
+
+```{python}
+#| fig-align: center
+from sklearn.datasets import make_regression
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Generate a dataset for linear regression
+X, y = make_regression(n_samples=300,  # Number of samples (data points)
+                       n_features=1,   # Number of features (independent variables)
+                       n_informative=1, # Number of informative features (relevant for the target)
+                       noise=10,        # Standard deviation of the Gaussian noise added to the output
+                       random_state=42) # Seed for reproducibility
+reg = LinearRegression()
+reg.fit(X, y)
+
+beta0 = reg.intercept_
+beta1 = reg.coef_
+x = np.linspace(min(X), max(X), 500)
+z = beta0 + beta1*x
+
+plt.scatter(X, y)
+plt.plot(x, z, 'r')
+plt.xlabel("Independent variable")
+plt.ylabel("Dependent variable")
+plt.title("Linear Regression")
+plt.show()
+```
+
+## Summary
+
+We learned:
+
+- Formal definition of the least squares problem
+- How it is used in data-fitting
+- How to solve the least squares problem using projection
+- The normal equations
+- Numerically stable solution of the normal equations
