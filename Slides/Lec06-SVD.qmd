@@ -1,0 +1,469 @@
+---
+title: "Singular Value Decomposition"
+jupyter: python3
+---
+
+## Lecture Overview
+
+The Singular Value Decomposition (SVD) is a matrix factorization whose computation is a step in many algorithms.
+
+The SVD underpins
+
+- Principal Component Analysis (PCA)
+- Latent Semantic Analysis (LSA)
+- Image compression
+
+## Lecture Objectives
+
+To understand:
+
+- Geometric interpretation of SVD
+- Existence and uniqueness of the factorization
+- Matrix properties via the SVD
+- Low rank approximations
+
+## A Geometric Observation
+
+The SVD is motivate by the geometric fact:
+
+> The image of the unit sphere under any $m\times n$ matrix is a hyperellipse.
+
+Let $S$ be the unit sphere in $\mathbb{R}^{n}$, then for any $A\in\mathbb{R}^{m\times n}$ with $m\geq n$, the image $AS$ is a hyperellipse.
+
+A *hyperellipse* in $\mathbb{R}^{m}$ is the surface obtained by stretching the unit sphere in $\mathbb{R}^{m}$ by some factors $\sigma_{1},\ldots,\sigma_{m}$ (possibly 0) in some orthonormal directions $u_{1}\ldots,u_{m}\in\mathbb{R}^{m}$. 
+
+The vectors $\{\sigma_{i}u_{i}\}$ are the principal semiaxes of the hyperellipse.
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(1234)
+# Generate a random 2x2 matrix
+A = np.random.randn(2, 2)
+
+# Perform SVD
+U, S, VT = np.linalg.svd(A)
+
+# Create unit circle
+theta = np.linspace(0, 2 * np.pi, 200)
+circle = np.vstack((np.cos(theta), np.sin(theta)))
+
+# Transform the circle using matrix A
+transformed_circle = A @ circle
+
+# Right singular vectors (columns of V)
+V = VT.T
+right_singular_vectors = V
+
+# Left singular vectors scaled by singular values
+left_singular_vectors = U @ np.diag(S)
+
+# Plotting
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+# Plot unit circle and right singular vectors
+axes[0].plot(circle[0], circle[1], color='blue')
+for i in range(2):
+    axes[0].arrow(0, 0, right_singular_vectors[0, i], right_singular_vectors[1, i],
+                  color='blue', width=0.01, head_width=0.05, label='Right Singular Vectors' if i == 0 else "")
+axes[0].axis('equal')
+axes[0].grid(True)
+axes[0].legend()
+
+# Plot transformed circle and left singular vectors
+axes[1].plot(transformed_circle[0], transformed_circle[1])
+for i in range(2):
+    axes[1].arrow(0, 0, left_singular_vectors[0, i], left_singular_vectors[1, i],
+                  color='red', width=0.01, head_width=0.05, label='Left Singular Vectors' if i == 0 else "")
+axes[1].axis('equal')
+axes[1].grid(True)
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+:::: {.r-stack}
+:::: {.fragment .fade-in-then-out}
+The $n$ singular values $\sigma_{1},\ldots,\sigma_{n}$ of $A$ are the lengths of the $n$ principal semiaxes of $AS$ ordered in descending order, $\sigma_{1}\geq \sigma_{2}\geq\cdots\geq \sigma_{n}$.
+::::
+
+:::: {.fragment .fade-in-then-out}
+The $n$ left singular vectors of $A$ are the unit vectors $\{u_{1}, u_{2},\dots, u_{n}\}$ oriented in the directions of the principal semiaxes of $AS$.
+::::
+
+:::: {.fragment .fade-in-then-out}
+The $n$ right singular vectors of $A$ are the unit vectors $\{v_{1}, v_{2},\dots, v_{n}\}\in S$. These are the preimages of the principal semiaxes of $AS$ and satisfy $Av_{j}=\sigma_{j}u_{j}$.
+::::
+::::
+
+## Reduced SVD
+
+Collecting the individual equations $Av_{j}=\sigma_{j}u_{j}$ for $j=1,\ldots, n$ we obtain
+
+$$
+\scriptsize
+\begin{bmatrix}
+& & & & \\
+& & & & \\
+& & & & \\
+& & A & & \\
+& & & & \\
+& & & & \\
+& & & & \\
+\end{bmatrix}
+\begin{bmatrix}
+& &   \\
+& &   \\
+v_{1}& \cdots & v_{n} \\
+& &  \\
+& &   \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+& &   \\
+& &   \\
+& &   \\
+u_{1}& \cdots & u_{n} \\
+& &  \\
+& &   \\
+& &   \\
+\end{bmatrix}
+\begin{bmatrix}
+\sigma_{1}& & &  \\
+&\sigma_{2} & &  \\
+& & \ddots  & \\
+& & & \sigma_{n} \\
+\end{bmatrix}.
+$$
+
+
+:::: {.fragment}
+The factorization $AV=\hat{U}\hat{\Sigma}$ is called a reduced singular value decomposition.
+::::
+
+## Full SVD
+
+The full SVD of a matrix $A\in\mathbb{C}^{m\times n}$ is a factorization
+
+$$
+A = U\Sigma V^{*},
+$$
+
+where $U\in\mathbb{C}^{m \times m}$ is unitary and $\Sigma\in\mathbb{C}^{m\times n}$.
+
+The matrix $U$ is created by adjoining $\hat{U}$ with $m-n$ orthonormal columns.
+
+The matrix $\Sigma$ is created by adjoining $\hat{\Sigma}$ with $m-n$ rows of zeros.
+
+## Formal Definition
+
+Let $m$ and $n$ be arbitrary. Given $A\in\mathbb{C}^{m\times n}$, not necessarily of full rank, a *singular value decomposition* (SVD) of $A$ is a factorization
+
+$$
+A=U\Sigma V^{*},
+$$
+
+where
+
+- $U\in\mathbb{C}^{m\times m}$ is unitary,
+- $V\in\mathbb{C}^{n\times n}$ is unitary,
+- $\Sigma\in\mathbb{R}^{m\times n}$ is diagonal.
+
+
+## Existence and Uniqueness
+
+**Theorem**
+
+Every matrix $A\in\mathbb{C}^{m\times n}$ has a singular value decomposition $A=U\Sigma V^{*}$. Furthermore, the singular values $\{\sigma_{j}\}$ are uniquely determined, and , if $A$ is square and the $\sigma_{j}$ are distinct, the left and right singular vectors $\{u_{j}\}$ and $\{v_{j}\}$ are uniquely determined up to complex signs.
+
+## A Change of Bases
+
+The SVD makes it possible for us to say that every matrix is diagonal.
+
+Let $A\in\mathbb{C}^{m\times n}$, $x\in\mathbb{C}^{n}$, and $b\in\mathbb{C}^{m}$ satisfy $Ax=b$.
+
+The vectors $b$ and $x$ can be expanded in the basis of the columns of $U$ and the basis of the columns of $V$, respectively,
+
+$$
+b^{\prime} = U^{*}b, \quad x^{\prime}= V^{*}x.
+$$
+
+Then
+
+$$
+\small
+b=Ax \Leftrightarrow U^{*}b = U^{*}Ax = U^{*}U\Sigma V^{*}x \Leftrightarrow b^{\prime} = \Sigma x^{\prime}.
+$$
+
+## SVD vs. Eigenvalue Decomposition
+
+We previously saw that diagonalizing a matrix underlies the study of eigenvalues.
+
+Below is a table of differences between the SVD and eigenvalue decompositions:
+
+| SVD            | Eigendecomposition |
+|----------------|----------------|
+| $A=U\Sigma V^{*}$  | $A=X\Lambda X^{-1}$ |
+| Orthonormal bases  | Non-orthonormal bases |
+| Always exists  | May or may not exist |
+
+
+
+## Matrix Properties via the SVD
+
+The power of the SVD is in the connections to fundamental topics of linear algebra.
+
+We introduce several theorems to illustrate these connections. In each theorem we assume the following
+
+- $A\in\mathbb{C}^{m\times n}$
+- $p=\min\{m,n\}$
+- $r\leq p$ denotes the number of nonzero singular values of $A$
+- $\langle x, y,\ldots, z\rangle$ denotes the space spanned by the vectors $x,y,\ldots, z$.
+
+---
+
+**Theorem**
+
+The rank of $A$ is $r$, the number of nonzero singular values.
+
+---
+
+**Theorem**
+
+The $\operatorname{range}(A) = \langle u_{1},\ldots, u_{r}\rangle$ and $\operatorname{null}(A)=\langle v_{r+1},\ldots, v_{n}\rangle$.
+
+---
+
+**Theorem**
+
+$\Vert A\Vert_{2} = \sigma_{1}$ and $\Vert A \Vert_{F} = \sqrt{\sigma_{1}^{2}+\sigma_{2}^{2}+\cdots + \sigma_{r}^{2}}$.
+
+---
+
+**Theorem**
+
+The nonzero singular values of $A$ are the square roots of the nonzero eigenvalues of $A^{*}A$ or $AA^{*}$.
+
+
+## Low Rank Approximations
+
+The SVD can also be viewed as sum of rank-one matrices.
+
+**Theorem**
+
+$A$ is the sum of $r$ rank-one matrices:
+
+$$
+A = \sum_{j=1}^{r}\sigma_{j}u_{j}v_{j}^{*}.
+$$
+
+---
+
+The importance of this specific rank-one decomposition is that the $\nu$th partial sum captures as much of the energy of $A$ as possible.
+
+**Theorem**
+For any $\nu$ with $0\leq \nu \leq r$, define
+
+$$
+A_{\nu} = \sum_{j=1}^{\nu}\sigma_{j}u_{j}v_{j}^{*};
+$$
+
+if $\nu=p=\min\{m,n\}$ define $\sigma_{n+1}=0$. Then
+
+$$
+\small
+\Vert A-A_{\nu}\Vert_{2} = \inf_{B\in\mathbb{C}^{m\times n} \\ \operatorname{rank}(B)\leq \nu} \Vert A-B\Vert_{2} = \sigma_{\nu+1}.
+$$
+
+## Image Compression
+
+Low rank approximation via SVD can be used to compress images. Consider the following image consisting of $480\times 480$ pixels.
+
+![](figures/CityScape.jpeg){fig-align="center"}
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+
+image = Image.open("figures/CityScape.jpeg")
+image = image.convert("L")
+city_scape = np.array(image)
+
+u, s, vt = np.linalg.svd(city_scape, full_matrices=False)
+plt.plot(s)
+plt.xlabel('$k$', size=16)
+plt.ylabel(r'$\sigma_k$', size=16)
+plt.title('Singular Values of City Scape Image', size=16)
+plt.show()
+```
+
+---
+
+Reconstruction with $k=50$ singular values
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
+from PIL import Image
+
+image = Image.open("figures/CityScape.jpeg")
+image = image.convert("L")
+city_scape = np.array(image)
+
+u, s, vt = np.linalg.svd(city_scape, full_matrices=False)
+s[50:]=0
+city_scape_lr = u @ np.diag(s) @ vt
+
+plt.figure(figsize=(9, 6))
+plt.subplot(1, 2, 1)
+plt.imshow(city_scape_lr, cmap=cm.Greys_r)
+plt.axis('off')
+plt.title('Rank 50 City Scape')
+plt.subplot(1, 2, 2)
+plt.imshow(city_scape, cmap=cm.Greys_r)
+plt.axis('off')
+plt.title('Full Rank City Scape')
+plt.show()
+```
+
+## Principal Component Analysis
+
+PCA is a statistical techniques used to reduce the dimensionality of your data while preserving as much information as possible.
+
+Given a mean-centered and standardized matrix of data $A\in\mathbb{R}^{m\times n}$ with $m$ samples and $n$ features the steps of PCA are
+
+1. Form the correlation matrix $S=A^{T}A$
+1. Compute the eigenvectors (principal components) and eigenvalues (explained variance) $S=V\Lambda V^{T}$
+
+---
+
+Why is the eigendecomposition of this form with $V$ and $V^{T}$?
+
+
+:::: {.fragment}
+Recall from the previous lecture that since the matrix $S$ is symmetric the eigenvectors are unitary.
+::::
+
+:::: {.fragment}
+How is this related to the SVD? 
+::::
+
+---
+
+Let $A=U\Sigma V^{T}$, then recall that
+
+$$
+A^{T}A = (U\Sigma V^{T})^{T}U\Sigma V^{T} = V\Sigma U^TU \Sigma V^{T} = V\Sigma^{2}V^T.
+$$
+
+The eigenvalues $\lambda_{i}$ equal the squares of the singular values $\sigma_{i}^{2}$.
+
+In practice, PCA is done by computing the SVD of your data matrix because it is more numerically stable.
+
+## MNIST Digits
+
+Let's consider another example using the MNIST dataset.
+
+```{python}
+#| fig-align: center
+from sklearn import datasets
+digits = datasets.load_digits()
+
+plt.figure(figsize=(8, 8),)
+for i in range(8):
+    plt.subplot(2, 4, i + 1)
+    plt.imshow(digits.images[i], cmap='gray_r')
+    plt.axis('off')
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+To create the data matrix, the columns of each digit are vectorized to create a 64-D representation of the digits. 
+
+Each digit becomes a row (sample) with 64 entries in the data matrix.
+
+We perform PCA and plot the explained variance ratio and the total (cumulative) explained variance ratio.
+
+---
+
+```{python}
+#| fig-align: center
+from sklearn.decomposition import PCA
+
+X = digits.data
+y = digits.target
+
+pca = PCA()
+X_pca = pca.fit_transform(X)
+
+# Create subplots
+fig, axs = plt.subplots(2, 1, figsize=(6, 5))
+
+# Scree plot (graph of eigenvalues corresponding to PC number)
+# This shows the explained variance ratio
+axs[0].plot(np.arange(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_, marker='o', linestyle='--')
+axs[0].set_title('Scree Plot')
+axs[0].set_xlabel('Principal Component')
+axs[0].set_ylabel('Explained Variance Ratio')
+axs[0].grid(True)
+
+# Cumulative explained variance plot
+axs[1].plot(np.arange(1, len(pca.explained_variance_ratio_) + 1), np.cumsum(pca.explained_variance_ratio_), marker='o', linestyle='--')
+axs[1].set_title('Cumulative Explained Variance Plot')
+axs[1].set_xlabel('Principal Component')
+axs[1].set_ylabel('Cumulative Explained Variance')
+axs[1].grid(True)
+
+# Adjust layout
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+Below is a plot of the first two principal component directions using digit labels to color each digit in the reduced space.
+
+```{python}
+#| fig-align: center
+plt.figure(figsize=(7, 7))
+scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='tab20', edgecolor='k', s=50)
+plt.title('Digits in PC1 and PC2 Space')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+
+# Create a legend with discrete labels
+legend_labels = np.unique(y)
+handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=plt.cm.tab20(i / 9), markersize=10) for i in legend_labels]
+plt.legend(handles, legend_labels, title="Digit Label", loc="best")
+
+plt.show()
+```
+
+---
+
+We observe the following in our plot of the digits in the first two principal components:
+
+- There is a decent clustering of some of our digits, in particular 0, 2, 3, 4, and 6.
+- The numbers 0 and 6 seem to be relatively close to each other in this space.
+- There is not a very clear separation of the number 5 from some of the other points.
+
+## Summary
+
+We learned:
+
+- SVD definition and geometric interpretation
+- Matrix properties from the SVD
+- Low rank approximation
+- Relationship to PCA
