@@ -367,6 +367,8 @@ The inverse of an invertible matrix $A$ is denoted by $A^{-1}$ and satisfies $AA
 
 ---
 
+Note that $(A^{T})^{-1} = A^{-T}$. Why?
+
 **Theorem**
 
 For $A\in\mathbb{R}^{n\times n}$ the following conditions are equivalent:
