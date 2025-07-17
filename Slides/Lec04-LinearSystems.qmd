@@ -251,8 +251,8 @@ x_{1k} \\
 \vdots \\
 x_{kk} \\
 x_{k+1,k} \\
-\vdots
-x_{nk}
+\vdots \\
+x_{mk}
 \end{bmatrix}
 \rightarrow
 \quad
@@ -263,8 +263,8 @@ x_{1k} \\
 \vdots \\
 x_{kk} \\
 0 \\
-\vdots
-0
+\vdots \\
+0 
 \end{bmatrix}.
 $$
 
@@ -289,7 +289,7 @@ L_{k}
 & & 1 & & & \\
 & & -\ell_{k+1,k} & 1 & & \\
 & & \vdots &  &\ddots & \\
-& & -\ell_{nk} &  & & 1\\
+& & -\ell_{mk} &  & & 1\\
 \end{bmatrix}.
 $$
 
@@ -326,7 +326,8 @@ This shows that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$.
 Using the fact that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$, let's compute 
 
 $$
-L_{k}^{-1}L_{k+1}^{-1} = (I+\ell_{k}e_{k}^{T})(I+\ell_{k+1}e_{k+1}^{T} = I + \ell_{k}e_{k}^{T} + \ell_{k+1}e_{k+1}^{T}.
+\small
+L_{k}^{-1}L_{k+1}^{-1} = (I+\ell_{k}e_{k}^{T})(I+\ell_{k+1}e_{k+1}^{T}) = I + \ell_{k}e_{k}^{T} + \ell_{k+1}e_{k+1}^{T}.
 $$
 
 This shows that the product $L_{k}^{-1}L_{k+1}^{-1}$ is just the unit lower-triangular matrix with the entries of both $L_{k}^{-1}$ and $L_{k+1}^{-1}$ inserted in their usual places below the diagonal.
@@ -359,7 +360,7 @@ $$
 
 ## Operation Count
 
-The work is dominated by the vector operation in the inner loop $\ell_{j,k:m} = u_{j,k:n} - \ell_{jk}u_{k,k:m}$, a scalar-vector multiplication and one vector subtraction. If $l=m-k+1$, then we have $2l$ flops. 
+The work is dominated by the vector operation in the inner loop $\ell_{j,k:m} = u_{j,k:m} - \ell_{jk}u_{k,k:m}$, a scalar-vector multiplication and one vector subtraction. If $l=m-k+1$, then we have $2l$ flops. 
 
 For each value of $k$, the inner loop is repeated for rows $k+1,\ldots, m$ then the work correspond to one layer of the following solid.
 
@@ -748,7 +749,7 @@ $$
 L_{3}^{\prime} = L_{3}, \quad L_{2}^{\prime} = P_{3}L_{2}P_{3}^{-1}, \quad L_{1}^{\prime} = P_{3}P_{2}L_{1}P_{2}^{-1}P_{3}^{-1}.
 $$
 
-Note that for $L_{2}^{\prime}$ has the same structure of $L_{2}$. Why?
+Note that $L_{2}^{\prime}$ has the same structure of $L_{2}$. Why?
 
 :::: {.fragment}
 The permutation $P_{3}$ only swaps rows that are below row 3, preserving the structure of $L_{2}$.
