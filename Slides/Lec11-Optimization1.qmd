@@ -1,0 +1,466 @@
+---
+title: "Optimization"
+jupyter: python3
+---
+
+## Lecture Overview
+
+There is a wide use of optimization in science, engineering, economics, industry. As a data scientist it is essential to develop an understanding of optimization algorithms.
+
+Examples of optimization in data science:
+
+:::: {.incremental}
+- Model training (loss function minimization)
+- Clustering (minimizing the WCSS)
+- Portfolio optimization (maximize return while minimizing risk)
+- Resource allocation (e.g., computational resources, manufacturing, supply chains)
+::::
+
+## Lecture Objectives
+
+Understand:
+
+:::: {.incremental}
+- Mathematical formulation of optimization problems
+- Unconstrained vs. constrained optimization
+- First order methods (gradient descent and variants)
+::::
+
+## Optimization
+
+The most generic way to formulate a (unconstrained) minimization problem is
+
+$$
+\min_{x} f(x),
+$$
+
+where $x\in\mathbb{R}^{n}$ is a real vector with $n\geq 1$ components and $f: \mathbb{R}^{n}\rightarrow \mathbb{R}$.
+
+The function $f$ is referred to as an objective function.
+
+---
+
+Suppose we have data measurements $\left\{(t_i, y_i)\right\}_{i=1}^{m}$ and we are looking to find coefficients $x = [x_1, x_2]$ such that 
+
+$$
+\small
+\phi(t; x)=x_{2}t + x_{1}.
+$$ 
+
+Define $r_{i}(x) = y_i - \phi(t_i;x)$ then 
+
+$$
+\small
+\min_{x} \sum_{i=1}^{m}r_{i}^{2}(x) = \Vert y - Ax\Vert^{2},
+$$
+where $\small A = \begin{bmatrix} \vert & \vert \\ 1 & t_{i} \\ \vert & \vert \\ \end{bmatrix}$ and $x = \begin{bmatrix}x_{1} \\ x_{2}\end{bmatrix}$. 
+
+## Constrained Optimization
+
+A constrained optimization problem is
+$$
+\min_{x} f(x) \qquad\text{subject to}\quad 
+\begin{array}{l}
+c_i(x) = 0 & i\in\mathcal{E}, \\
+c_{i}(x) \geq 0 & i\in\mathcal{I},
+\end{array}
+$$
+
+where $c_{i}$ are constraint functions and $\mathcal{I},\mathcal{E}$ are sets of indices.
+
+---
+
+Consider the following example of a constrained optimization problem:
+
+$$
+\small
+\min (x_1 - 2)^{2} + (x_2 -1)^{2} \qquad\text{s.t}\quad 
+\begin{array}{l}
+-x_{1}^{2} + x_2 &\geq 0 \\
+-x_1 - x_2 + 2 &\geq 0. 
+\end{array}
+$$
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+# Define the function
+def f(x1, x2):
+    return (x1 - 2)**2 + (x2 - 1)**2
+
+# Define the constraints
+def constraint1(x1):
+    return x1**2
+
+def constraint2(x1):
+    return 2 - x1
+
+# Create a grid of points
+x1 = np.linspace(0, 2, 400)
+x2 = np.linspace(0, 2, 400)
+X1, X2 = np.meshgrid(x1, x2)
+Z = f(X1, X2)
+
+# Plot the contours of the function
+plt.contour(X1, X2, Z, levels=20, cmap='viridis')
+
+# Plot the feasible region
+x1_feasible = np.linspace(0, np.sqrt(2), 400)
+x2_feasible1 = constraint1(x1_feasible)
+x2_feasible2 = constraint2(x1_feasible)
+
+plt.fill_between(x1_feasible, x2_feasible1, x2_feasible2, where=(x2_feasible2 >= x2_feasible1), color='gray', alpha=0.5)
+
+# Find the minimum point within the feasible region
+from scipy.optimize import minimize
+
+def objective(x):
+    return f(x[0], x[1])
+
+constraints = [
+    {'type': 'ineq', 'fun': lambda x: x[1] - x[0]**2},
+    {'type': 'ineq', 'fun': lambda x: 2 - x[0] - x[1]}
+]
+
+result = minimize(objective, [0, 0], constraints=constraints)
+x_min, y_min = result.x
+
+# Plot the minimum point
+plt.plot(x_min, y_min, 'r*', markersize=15)
+plt.text(x_min, y_min, '  Minimum', verticalalignment='bottom', horizontalalignment='right')
+
+## Plot feasible lines
+plt.plot(x1, 2-x2, color='gray')
+plt.plot(x1_feasible, x1_feasible**2, color='gray')
+
+
+# Set labels and title
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.title('Contour plot with feasible region and minimum point')
+plt.grid(True)
+plt.show()
+```
+
+## Optimization Algorithms
+
+Optimization algorithms are iterative. They start from an initial guess of the variable $x$ and generate a sequence of improved estimates that converge to a solution.
+
+The strategy of how to move from one iterate to the next distinguishes one algorithm from another.
+
+Most strategies use:
+
+- values of the objective function
+- the constrain function
+- possibly first and/or second derivative information
+- information from previous iterations
+
+---
+
+Each optimization algorithm should possess the following properties
+
+:::: {.incremental}
+- Robustness. Perform well on a wide variety of problems in their class.
+- Efficiency. Not require excessive computing time or memory.
+- Accuracy. Identify a solution with precision, without being overly sensitive to errors in the data.
+::::
+
+
+## What is a solution?
+
+A point $x^{*}$ is a global minimizer if $f(x^{*}) \leq f(x)$ for all $x$.
+
+```{python}
+#| label: fig-global-min
+#| fig-cap: "Global Minimum"
+#| fig-align: "center"
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function y = x^2
+def f(x):
+    return x**2
+
+# Generate x values
+x = np.linspace(-10, 10, 400)
+y = f(x)
+
+# Plot the function
+plt.plot(x, y, label='$y = x^2$')
+
+# Mark the global minimum with a red star
+global_min_x = 0
+global_min_y = f(global_min_x)
+plt.plot(global_min_x, global_min_y, 'r*', markersize=15, label='global minimizer')
+
+# Add labels and title
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Plot of $y = x^2$ with global minimizer')
+plt.legend()
+
+# Show the plot
+plt.grid(True)
+plt.show()
+```
+
+---
+
+A point $x^{*}$ is a local minimizer if there is a neighborhood $\mathcal{N}$ of $x^{*}$ such that $f(x^{*}) \leq f(x)$ for all $x\in\mathcal{N}$.
+
+```{python}
+#| label: fig-local-min
+#| fig-cap: "Local Minima"
+#| fig-align: "center"
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function y = 2 + cos(x) + cos(2x-0.5)/2
+def f(x):
+    return 2 + np.cos(x) + np.cos(2*x-0.5)/2
+
+# Generate x values
+x = np.linspace(0, 2*np.pi, 400)
+y = f(x)
+
+# Plot the function
+plt.plot(x, y, label=r'$y = 2 + \cos{x} + \frac{\cos{2x-0.5}}{2}$')
+
+# Mark the global minimum with a red star
+global_min_x = 2.2611
+local_min_x = 4.3555
+global_min_y = f(global_min_x)
+local_min_y = f(local_min_x)
+plt.plot(global_min_x, global_min_y, 'r*', markersize=15, label='global minimizer')
+plt.plot(local_min_x, local_min_y, 'ro', markersize=10, label='local minimizer')
+
+# Add labels and title
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title(r'Plot of $y = 2 + \cos{x} + \frac{\cos{2x-0.5}}{2}$ with global and local minimizers')
+plt.legend()
+
+# Show the plot
+plt.grid(True)
+plt.show()
+```
+
+
+## Convexity
+
+The concept of convexity is a fundamental in optimization. 
+
+In a convex optimization problem, any local minimum is also a global minimum.
+
+Convex functions have smooth and predictable curvature meaning:
+
+- no valleys or humps
+- well-behaved gradients
+
+---
+
+A set $S\subset \mathbb{R}^{n}$ is convex if for any two points $x,y\in S$ then $\alpha x + (1-\alpha)y\in S$ for all $\alpha\in[0, 1]$.
+
+This means that the straight line segment connecting any 2 points in the set lies entirely inside the set.
+
+---
+
+The function $f$ is a convex function if its domain $S$ is a convex set and if for any two points $x,y\in S$ the following property is satisfied
+
+$$
+\small
+f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha)f(y),\quad \text{for all}~\alpha\in[0,1].
+$$
+
+For a convex function the line connecting the points $(x, f(x))$ $(y, f(y))$ must lie above the graph of $f$.
+
+## Recognizing a Local Minimum
+
+How do we recognize a local minimum $x^{*}$?
+
+:::: {.fragment}
+When a function is *smooth* (differentiable) there are efficient and practical ways to identify a local minima.
+
+We will use information from the gradient $\nabla f(x^{*})$ and the Hessian $\nabla^{2} f(x^{*})$.
+::::
+
+---
+
+The mathematical tool that we will use to study minimizers of smooth functions\ is Taylor's theorem.
+
+**Theorem**
+
+Suppose that $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$ is twice continuously differentiable and that $p\in\mathbb{R}^{n}$. Then we have that
+
+$$
+f(x+p) = f(x) + \nabla f(x+tp)^{T}p + \frac{1}{2}p^{T}\nabla^{2} f(x+tp)p,
+$$
+for some $t\in(0,1)$.
+
+## First Order Necessary Conditions
+
+Necessary conditions are derived by assuming that $x^{*}$ is a local minimizer and then proving facts about $\nabla f(x^{*})$ and $\nabla^{2} f(x^{*})$.
+
+**Theorem**
+If $x^{*}$ is a local minimizer and $f$ is continuously differentiable in an open neighborhood of $x^{*}$, then $\nabla f(x^{*})=0$.
+
+
+## Second Order Necessary Conditions
+
+**Theorem**
+If $x^{*}$ is a local minimizer and $f$ and $\nabla^{2} f$ exists and is continuously differentiable in an open neighborhood of $x^{*}$, then $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive semidefinite, i.e., $p^{T}\nabla^{2} f(x^{*})p \geq 0~\forall p$.
+
+
+
+## Second Order Sufficient Conditions
+
+Sufficient conditions are conditions on the derivatives of $f$ that guarantee that $x^{*}$ is a local minimizer.
+
+**Theorem**
+Suppose that $\nabla^{2} f$ is continuous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive definite, i.e., $p^{T}\nabla^{2} f(x^{*})p > 0~\forall p$. Then $x^{*}$ is a local minimizer of $f$.
+
+## From Local to Global
+
+**Theorem**
+When $f$ is convex, any local minimizer $x^{*}$ is a global minimizer of $f$. If in addition $f$ is differentiable, then any stationary point $x^{*}$ such that $\nabla f(x^{*})=0$ is a global minimizer of $f$.
+
+## Overview of Algorithms
+
+There are two fundamental strategies for moving from a current point $x_{k}$ to a new iterate $x_{k+1}$:
+
+- line search
+- trust region
+
+We will focus on line search algorithms.
+
+## Line Search Methods
+
+Line search algorithms choose a direction $p_{k}$ and searches along this direction from the current iterate $x_{k}$ for a new iterate with a lower objective function value, i.e., compute
+
+$$
+x_{k+1} = x_{k} + \alpha p_{k},
+$$
+
+such that $f(x_{k+1}) < f(x_{k})$.
+
+---
+
+Each iteration of a line search method computes a search direction $p_{k}$ and then creates the new iterate
+
+$$
+x_{k+1} = x_{k} + \alpha_{k}p_{k}.
+$$
+
+The value $\alpha_{k}$ is called the step length.
+
+The success of a line search method depends on both the direction and the step length.
+
+---
+
+The search direction often has the form
+
+$$
+p_{k} = -B_{k}^{-1}\nabla f_{k},
+$$
+
+where $B_{k}$ is a symmetric and nonsingular matrix and $\nabla f_{k}=\nabla f(x_{k})$.
+
+Different choices for $B_{k}$ lead to different methods.
+
+## Trust Region Methods
+
+Trust region algorithms use information about $f$ to construct a model function $m_{k}$ such that $m_{k}(x_{k}) \approx f(x_{k})$.
+
+The model $m_{k}$ is generally a poor approximation of $f$ for values of $x$ that are far away from $x_{k}$.
+
+Look for a candidate step $p$ that is within a small region around $x_{k}$ satisfying
+
+$$
+\min_{p} m_{k}(x_{k}+p).
+$$
+
+If $f(x_{k}+p)$ is not smaller than $f(x_{k})$, then we reduce the trust region and try again.
+
+## Gradient Descent
+
+Gradient descent is a line search method where $B_{k}=I$ so that $p_{k}=-\nabla f_{k}$. The iterative update is the familiar
+
+$$
+x_{k+1} = x_{k} -\alpha_{k}\nabla f_{k}.
+$$
+
+Gradient descent is called a first order method because it relies solely on first-order derivatives in the gradient to update $x_{k+1}$.
+
+## Newton's Method
+
+Newton's method is a line search method where $B_{k}=-\nabla^{2} f_{k}$ so that $p_{k}=-(\nabla^{2} f_{k})^{-1}\nabla f_{k}$. The iterative update is
+$$
+x_{k+1} = x_{k} -\alpha_{k}(\nabla^{2} f_{k})^{-1}\nabla f_{k}.
+$$
+
+Newton's method is called a second order method because it relies on on second-order derivatives in the Hessian matrix to update $x_{k+1}$.
+
+## Quasi-Newton Methods
+
+Quasi-Newton methods are line search methods where $B_{k}\approx-\nabla^{2} f_{k}$. The search direction is then $p_{k}=-B_{k}^{-1}\nabla f_{k}$. The iterative update is
+
+$$
+x_{k+1} = x_{k} -\alpha_{k}-(\nabla^{2} f_{k})^{-1}\nabla f_{k}.
+$$
+
+Quasi-Newton methods attempt to avoid the construction of full Hessian matrix while maintaining the desirable convergence properties of Newton methods. 
+
+The BFGS (Broydon-Fletcher-Goldfard-Shanno) algorithm is one such method.
+
+## Rates of Convergence
+
+Let $\{x_{k}\}$ be a sequence in $\mathbb{R}^{n}$ that converges to $x^{*}$. 
+
+### Linear
+
+We say that convergence is *Q-linear* if there is a constant $r\in(0,1)$ such that
+
+$$
+\frac{\Vert x_{k+1}-x^{*}\Vert}{\Vert x_{k}-x^{*}\Vert}\leq r
+$$
+
+for all $k$ sufficiently large.
+
+---
+
+### Superlinear
+
+The convergence is Q-superlinear if 
+
+$$
+\lim_{k\rightarrow 0} \frac{\Vert x_{k+1}-x^{*}\Vert}{\Vert x_{k}-x^{*}\Vert}= 0.
+$$
+
+If a sequence converges *superlinearly* then it must converge linearly.
+
+---
+
+### Quadratic
+
+We say that convergence is *Q-quadratic* if there is a positive constant $M$ such that
+
+$$
+\frac{\Vert x_{k+1}-x^{*}\Vert}{\Vert x_{k}-x^{*}\Vert^{2}}\leq M
+$$
+
+for all $k$ sufficiently large.
+
+## Summary
+
+We provided an overview of optimization. We covered
+
+- mathematical formulation
+- constrained vs. unconstrained optimization
+- global and local minimizers
+- iterative methods for solving optimization methods
+- necessary and sufficient conditions for minimizers
+- rates of convergence
