@@ -1,0 +1,359 @@
+---
+title: "Eigenvalues"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Eigenvalue problems are important in data science. 
+
+They are relevant in applications such as
+
+- Dimensionality reduction
+- Anomaly detection
+- Spectral clustering
+- Connectivity of graphs
+
+## Lecture Objectives
+
+Review the mathematics of the eigenvalue problem.
+
+- Complex numbers
+- Eigenvalues and eigenvectors
+- The characteristic polynomial
+- Algebraic and geometric multiplicity
+- Diagonalizability
+
+## Complex Numbers
+
+A complex number $z\in\mathbb{C}$ has the form
+
+$$
+z = a +ib,
+$$
+
+where $i=\sqrt{=1}$, and $a,b\in\mathbb{R}$.
+
+The conjugate 
+
+$$
+\bar{z} = a - ib.
+$$
+
+The modulus $\vert z\vert = z\bar{z} = a^{2} + b^{2}$.
+
+What does it mean if $z = \bar{z}$?
+
+:::: {.fragment}
+$z$ is a real number.
+::::
+
+
+## Eigenvalues and Eigenvectors
+
+Let $A\in\mathbb{C}^{m\times m}$ be a square matrix. A nonzero vector $x\in\mathbb{C}^{m}$ is an *eigenvector* of $A$, and $\lambda\in\mathbb{C}$ is its corresponding *eigenvalue*, if 
+
+$$
+Ax=\lambda x.
+$$
+
+The action of a matrix $A$ on a subspace $S\subseteq\mathbb{C}^{m}$ can mimic scalar multiplication. The subspace $S$ is called an *eigenspace* and any nonzero $x\in S$ is an eigenvector.
+
+The set of all eigenvalues $\Lambda(A)$ of a matrix $A$ is the *spectrum* of $A$.
+
+## Eigenvalue Decomposition
+
+An eigenvalue decomposition of a square matrix $A$ is a factorization
+
+$$
+A = X\Lambda X^{-1}.
+$$
+
+The matrix $X$ is nonsingular and $\Lambda$ is diagonal.
+
+---
+
+Equivalently,
+
+$$
+AX = X\Lambda,
+$$
+
+where
+
+$$
+\scriptsize
+\begin{bmatrix}
+& & & & \\
+& & & & \\
+& & A & & \\
+& & & & \\
+& & & & \\
+\end{bmatrix}
+\begin{bmatrix}
+& &   \\
+& &   \\
+x_{1}& \cdots & x_{m} \\
+& &  \\
+& &   \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+& &   \\
+& &   \\
+x_{1}& \cdots & x_{m} \\
+& &  \\
+& &   \\
+\end{bmatrix}
+\begin{bmatrix}
+\lambda_1& & &  \\
+&\lambda_2 & &  \\
+& & \ddots  & \\
+& & & \lambda_m \\
+\end{bmatrix}.
+$$
+
+
+## Geometric Multiplicity
+
+The set of eigenvectors corresponding to a single eigenvalue together with the zero vector forms a subspace of $\mathbb{C}^{m}$ called an *eigenspace*.
+
+If $\lambda\in\Lambda(A)$ is an eigenvalue, let us denote the corresponding eigenspace as $E_{\lambda}$.
+
+The eigenspace is invariant under the action of $A$. This means that $AE_{\lambda}\subseteq E_{\lambda}$.
+
+---
+
+The dimension of $E_{\lambda}$ is the maximum number of linearly independent eigenvectors corresponding to the eigenvalue $\lambda$. 
+
+This number is the *geometric multiplicity* of the eigenvalue
+
+## Characteristic Polynomial
+
+The *characteristic polynomial* of $A\in\mathbb{C}^{m\times m}$, denotes $p_{A}$ is the degree $m$ polynomial defined by
+
+$$
+p_{A}(z) = \operatorname{det}(zI-A).
+$$
+
+The characteristic polynomial $p_{A}(z)$ is a monic polynomial, meaning the coefficient of the degree $m$ term is 1.
+
+---
+
+**Theorem**
+
+$\lambda$ is an eigenvalue of $A$ if and only if $p_{A}(\lambda)=0$.
+
+
+## Algebraic Multiplicity
+
+The characteristic polynomial can always be factored as
+
+$$
+p_{A}(z) = (z-\lambda_1)(z-\lambda_2)\cdots(z-\lambda_{m})
+$$
+
+where $\lambda_{j}\in\mathbb{C}$ is an eigenvalue.
+
+The *algebraic multiplicity* of an eigenvalue $\lambda$ of $A$ is its multiplicity as a root of $p_{A}$.
+
+---
+
+**Theorem**
+
+If $A\in\mathbb{C}^{m\times m}$, then $A$ has $m$ eigenvalues, counted with algebraic multiplicity. In particular, if the roots of $p_{A}$ are simple, then $A$ has $m$ distinct eigenvalues.
+
+
+## Similarity Transformations
+
+If $X\in\mathbb{C}^{m\times m}$ is nonsingular, then 
+
+$$
+A \rightarrow X^{-1}AX,
+$$
+
+is called a *similarity transformation*.
+
+Two matrices $A$ and $B$ are *similar* if there is a similarity transformation relating one to the other, i.e.,
+
+$$
+B = X^{-1}AX.
+$$
+
+---
+
+**Theorem**
+
+If $X$ is nonsingular, then $A$ and $X^{-1}AX$ have the same characteristic polynomial, eigenvalues, and algebraic and geometric multiplicity.
+
+
+
+---
+
+**Theorem**
+
+The algebraic multiplicity of an eigenvalue $\lambda$ is at least as great as it's geometric multiplicity.
+
+## Defective Eigenvalues and Matrices
+
+An eigenvalue whose algebraic multiplicity exceeds its geometric multiplicity is a *defective eigenvalue*. A matrix that at least one defective eigenvalue is a *defective matrix*.
+
+What kind of matrix is nondefective?
+
+:::: {.fragment}
+A diagonal matrix.
+::::
+
+:::: {.fragment}
+We will see that the class of nondefective matrices is exactly the class of matrices that have an eigenvalue decomposition.
+::::
+
+
+## Diagonalizability
+
+**Theorem**
+
+An $m\times m$ matrix $A$ is nondefective  if and only if it has an eigenvalue decomposition $A=X\Lambda X^{-1}$.
+
+Another term for nondefective is *diagonalizable*.
+
+## Determinant and Trace
+
+The trace and the determinant are related to the eigenvalues.
+
+The trace of a matrix $A$ is 
+
+$$
+\operatorname{tr}(A) = \sum_{i=1}^{m}a_{ii}.
+$$ 
+
+---
+
+The determinant is
+
+$$
+\operatorname{det}(A) = \sum_{j=1}^{n}(-1)^{i+j}a_{ij}M_{ij},
+$$
+
+where $M_{ij}=\operatorname{det}(A_{ij})$ and $A_{ij}$ is an $n-1\times n-1$ matrix obtained by removing the $i$th row and the $j$th column.
+
+---
+
+**Theorem**
+
+The determinant $\operatorname{det}(A)$ and $\operatorname{tr}(A)$ are equal to the product and the sum of the eigenvalues of $A$, respectively, counted with algebra multiplicity:
+
+$$
+\operatorname{det}(A)=\prod_{j=1}^{m}\lambda_{j}, \quad \operatorname{tr}(A) = \sum_{j=1}^{m} \lambda_{j}.
+$$
+
+## Unitary Diagonalization
+
+A matrix is *unitarily diagonalizable* if there exists a decomposition
+
+$$
+A = Q\Lambda Q^{T},
+$$
+
+where $Q$ is a unitary (orthogonal) matrix.
+
+
+This means that the matrix $A\in\mathbb{C}^{m\times m}$ as $m$ linearly independent eigenvectors, but these can be chosen to be orthogonal. 
+
+---
+
+A symmetric matrix $A$ has the property $A=A^{T}$. 
+
+**Theorem**
+
+A symmetric matrix is unitarily diagonalizable and its eigenvalues are real.
+
+---
+
+**Theorem**
+
+A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{T} = A^{T}A = I$.
+
+## PageRank
+
+
+- Developed by Larry Page and Sergey Brin at Stanford (1996)
+- Algorithm used by Google Search to rank web pages
+- Based on the idea that **important pages are linked to by many other important pages**
+
+> The web as a graph: pages are nodes, hyperlinks are edges.
+
+## Graphs
+
+A graph is an ordered pair $G=(V,E)$ comprising
+
+- $V$, a set of vertices (nodes)
+- $E = \{(x,y) | x,y\in V~\text{and}~x\neq y \}$, a set of edges (links) between vertices.
+
+A graph can be represented with an adjacency matrix $A$, where $a_{ij}=1$ if node $i$ has a link to node $j$. 
+
+If the graph is undirected, then $A=A^{T}$.
+
+## PageRank and Eigenvalues
+
+- The web can be represented as a **directed graph** with an **adjacency matrix** $G$.
+- PageRank is the **principal eigenvector** (eigenvector corresponding to largest eigenvalue) of $G$.
+
+:::: {.fragment}
+How do we form $G$?
+::::
+
+## Google Matrix
+
+:::: {.columns}
+::: {.column width="50%"}
+![A Simple Internet](figures/PageRank.png){fig-align="center"}
+:::
+::: {.column width="50%"}
+$$
+G = 
+\begin{bmatrix}
+0 & 0 & 1 & \frac{1}{2} \\
+\frac{1}{3} & 0 & 0 & 0 \\
+\frac{1}{3} & \frac{1}{2} & 0 & \frac{1}{2} \\
+\frac{1}{3} & \frac{1}{2} & 0 & 0 \\
+\end{bmatrix}
+$$
+:::
+::::
+
+---
+
+Denote the importance of our 4 pages using $x = [x_{1}, x_{2}, x_{3}, x_{4}]^{T}$, then
+
+$$
+\small
+\begin{align}
+x_{1} &= x_{3} + \frac{1}{2}x_{4}, \\
+x_{2} &= \frac{1}{3}x_{1},\\\
+x_{3} &= \frac{1}{3}x_{1} + \frac{1}{2}x_{2} + \frac{1}{2}x_{4},\\
+x_{4} &= \frac{1}{3}x_{1} + \frac{1}{2}x_{2}.
+\end{align}
+$$
+
+
+The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the Google matrix: $Gx=x$.
+
+---
+
+- To ensure no dangling nodes a damping factor is added to ensure $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{n}$
+- The matrix $\tilde{G}$ is **column stochastic** 
+- The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
+    - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1
+    - The eigenvector has all positive entries
+- The power method, i.e., $G^{k}z\rightarrow x$ as $k\rightarrow\infty$ can be used to approximate the PageRank
+
+
+## Summary
+
+We learned about
+
+- Eigenvalues and eigenvectors
+- Geometric and algebraic multiplicity
+- Classes of matrices that are diagonalizable and unitarily diagonalizable
+- PageRank as an eigenvalue problem
