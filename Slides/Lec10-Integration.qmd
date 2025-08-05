@@ -1,0 +1,419 @@
+---
+title: "Integration"
+jupyter: python3
+---
+
+## Lecture Overview
+
+In introductory calculus courses, integrals are used to compute areas and volumes under curves.
+
+The fundamental theorem of calculus relates the integral to the derivative.
+
+Integrals are an essential tool in the study of probability. 
+
+## Lecture Objectives
+
+Review:
+
+- 1-D and higher dimensional integrals
+- The substitution rule
+- Fundamental theorem of calculus
+
+
+## Riemann Sums
+
+Let $f$ be a continuous function defined for $a\leq x\leq b$. Divide the interval $[a,b]$ into $n$ subintervals of equal width $\Delta x = (b-a)/n$. Let $x_{i} = a+ i\Delta x$ for $i=0,\ldots, n$.
+
+ The *Riemann sum* is defined as
+
+$$
+\sum_{i=1}^{n} f(x_{i}^{*})\Delta x,
+$$
+where $x_{i}^{*}$ is any point in the $i$th interval.
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import plotly.graph_objects as go
+
+# Define function and interval
+f = lambda x: np.sin(x)
+a, b = 0, np.pi
+exact_area = 2
+
+# Create x values for the function plot
+x_plot = np.linspace(a, b, 500)
+y_plot = f(x_plot)
+
+# Initialize Riemann bar data with initial n
+init_n = 4
+dx_init = (b - a) / init_n
+xs_init = np.linspace(a, b - dx_init, init_n)
+heights_init = f(xs_init)
+init_area = np.sum(heights_init * dx_init)
+init_error = abs(exact_area - init_area)
+
+# Precompute frames for animation
+frames = []
+for n in range(4, 61, 2):
+    dx = (b - a) / n
+    xs = np.linspace(a, b - dx, n)
+    heights = f(xs)
+    approx_area = np.sum(heights * dx)
+    error = abs(exact_area - approx_area)
+
+    frames.append(go.Frame(
+        data=[
+            go.Scatter(
+                x=x_plot, y=y_plot, mode='lines',
+                line=dict(color='blue'),
+                name='f(x) = sin(x)', showlegend=True if n == 4 else False
+            ),
+            go.Bar(
+                x=xs, y=heights, width=dx,
+                marker_color='skyblue', opacity=0.7,
+                name='Riemann Bars', showlegend=True if n == 4 else False
+            )
+        ],
+        name=str(n),
+        layout=go.Layout(
+            title_text=f"n = {n} | Approx = {approx_area:.4f} | Error = {error:.4f} | True Value = {exact_area:.4f}"
+        )
+    ))
+
+# Create figure with initial plot and bars
+fig = go.Figure(
+    data=[
+        go.Scatter(x=x_plot, y=y_plot, mode='lines',
+                   name='f(x) = sin(x)', line=dict(color='blue')),
+        go.Bar(x=xs_init, y=heights_init, width=dx_init,
+               marker_color='skyblue', opacity=0.7, name='Riemann Bars')
+    ],
+    frames=frames
+)
+
+# Add slider and play/pause controls
+fig.update_layout(
+    title=f"n = {init_n} | Approx = {init_area:.4f} | Error = {init_error:.4f} | True Value = {exact_area:.4f}",
+    updatemenus=[{
+        'type': 'buttons',
+        'buttons': [
+            {'label': 'Play', 'method': 'animate',
+             'args': [None, {"frame": {"duration": 500, "redraw": True}, "fromcurrent": True}]},
+            {'label': 'Pause', 'method': 'animate',
+             'args': [[None], {"frame": {"duration": 0}, "mode": "immediate"}]}
+        ]
+    }],
+    sliders=[{
+        'steps': [
+            {'method': 'animate', 'label': str(n),
+             'args': [[str(n)],
+                      {"frame": {"duration": 0, "redraw": True},
+                       "mode": "immediate"}]}
+            for n in range(4, 61, 2)
+        ],
+        'currentvalue': {'prefix': 'n = '}
+    }],
+    showlegend=True,
+    transition={'duration': 300, 'easing': 'cubic-in-out'},
+)
+
+fig.show()
+
+```
+
+
+## Definite Integrals
+
+If $f$ is a continuous function defined for $a\leq x \leq b$, the definite integral of $f$ from $a$ to $b$  is
+
+$$
+\int_{a}^{b}f(x) dx = \lim_{n\rightarrow\infty}\sum_{i=1}^{n}f(x_{i}^{*})\Delta x.
+$$
+
+The function $f$ is called the integrand.
+
+## Properties of Definite Integrals
+
+1. $\int_{a}^{b}cdx = c(b-a)$
+1. $\int_{a}^{b}f(x) + g(x) dx = \int_{a}^{b}f(x) dx + \int_{a}^{b} g(x) dx$
+1. $\int_{a}^{b}cf(x)dx = c \int_{a}^{b}f(x)dx$
+1. $\int_{a}^{c}f(x)dx + \int_{c}^{b}f(x)dx = \int_{a}^{b}f(x)dx$
+
+## Comparison Properties of the Integral
+
+1. If $f(x)\geq 0$ for $a\leq x\leq b$, then $\int_{a}^{b}f(x)dx \geq 0$
+1. If $f(x)\geq g(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}f(x)dx \geq \int_{a}^{b}g(x)dx$$
+1. If $m\leq f(x)\leq M$ for  $a\leq x\leq b$, then $$\small m(b-a)\leq \int_{a}^{b}f(x)dx \leq M(b-a)$$
+
+## Fundamental Theorem of Calculus
+
+### Part 1
+
+If $f$ is continuous on $[a, b]$, then the function 
+
+$$
+g(x) = \int_{a}^{x}f(t)dt\quad a \leq x \leq b
+$$
+
+is continuous on $[a,b]$, differentiable on $(a, b)$ and $g^{\prime}(x)=f(x)$.
+
+
+---
+
+**Example:**
+
+Find the derivative of the function $g(x)=\int_{0}^{x}\sqrt{1+t^{2}}dt$.
+
+---
+
+### Part 2
+
+If $f$ is continuous on $[a, b]$, then the function 
+
+$$
+\int_{a}^{b}f(x)dx = F(b) - F(a),
+$$
+
+where $F$ is any antiderivative of $f$, i.e., $F^{\prime} = f$.
+
+---
+
+**Example:**
+
+Evaluate the integral $\int_{1}^{3}e^{x}dx$.
+
+---
+
+### Summary
+
+Suppose $f$ is continuous on $[a, b]$, then
+
+1. If $g(x) = \int_{a}^{x}f(t)dt\quad a \leq x \leq b$, then $g^{\prime}(x)=f(x)$
+1. $\int_{a}^{b}f(x)dx = F(b) - F(a)$, where $F^{\prime}=f$.
+
+## Indefinite Integrals
+
+The indefinite integral is defined as
+
+$$
+\int f(x) dx = F(x),
+$$
+where $F^{\prime}(x) = f(x)$.
+
+> A definite integral is a number, whereas an indefinite integral is a function.
+
+## Some Important Indefinite Integrals
+
+1. $\int x^{n} dx = \frac{x^{n+1}}{n+1} + C$
+1. $\int \frac{1}{x}dx = \ln{\vert x\vert} + C$
+1. $\int e^{x}dx = e^{x} + C$
+1. $\int \sin{(x)}dx = -\cos{(x)} + C$
+1. $\int \tan{(x)}dx = \ln{(\vert \sec{(x)}\vert)} + C$
+1. $\int \sec^{2}{(x)}dx = \tan{(x)} + C$
+1. $\int \csc^{2}{(x)}dx = -\cot{(x)} + C$
+
+A nice reference for many integrals can be [here](https://www.math.purdue.edu/~egbertn/su2018/reference/stewart-reference).
+
+---
+
+**Example:**
+
+Evaluate $\int e^{3x} + \sin{(2\pi x)} + 3x^{2} dx$.
+
+## Improper Integrals
+
+If $\int_{a}^{t}f(x) dx$ exists for every number $t\geq a$, then
+
+$$
+\small
+\int_{a}^{\infty}f(x) dx = \lim_{t\rightarrow \infty}\int_{a}^{t}f(x)dx
+$$
+provided this limit exists.
+
+$\int_{t}^{b}f(x) dx$ exists for every number $t\leq b$, then
+
+$$
+\small
+\int_{-\infty}^{b}f(x) dx = \lim_{t\rightarrow -\infty}\int_{t}^{b}f(x)dx
+$$
+provided this limit exists.
+
+---
+
+If both $\int_{a}^{\infty}f(x) dx$ and $int_{-\infty}^{a}f(x) dx$ are convergent, then we define
+
+$$
+\int_{-\infty}^{\infty}f(x) dx = \int_{-\infty}^{a}f(x) dx + \int_{a}^{\infty}f(x) dx.
+$$
+
+
+## Substitution Rule
+
+If $u=g(x)$ is a differentiable function whose range is an interval $I$ and $f$ is continuous on $I$, then
+
+$$
+\int f(g(x))g^{\prime}(x) dx = \int f(u)du.
+$$
+
+**Example:**
+Find $\int x^{3}\cos{(x^{4}+2)}dx$.
+
+## Odd and Even Functions
+
+A function is **even** if $f(-x)=f(x)$. A function is **odd** if $f(-x) = -f(x)$.
+
+What does this imply for the integrals?
+
+
+## Integration by Parts
+
+Recall the product rule of differentiation for functions $f(x) and g(x)$:
+
+$$
+(f(x)g(x))^{\prime} = f^{\prime}(x)g(x) + f(x)g^{\prime}(x).
+$$
+
+This implies
+
+$$
+f(x)g(x) = \int f^{\prime}(x)g(x) dx + \int f(x)g^{\prime}(x) dx.
+$$
+
+---
+
+Rearranging the previous formula we obtain
+
+$$
+\int f^{\prime}(x)g(x) dx = f(x)g(x) - \int f(x)g^{\prime}(x) dx.
+$$
+
+Letting $u=f(x)$ and $v=g(x)$ we obtain the **integration by parts* formula:
+
+$$
+\int u dv = uv-\int vdu.
+$$
+
+---
+
+**Example:**
+
+Find $\int x \sin{(x)} dx$.
+
+## Trigonometric Integrals
+
+Trigonometric integrals involve combinations of trigonometric functions:
+
+1. $\int \cos^{3}{(x)} dx$
+1. $\int \sin^{2}{(x)}dx$
+
+The idea is to use trigonometric identities to simplify this work for you.
+
+---
+
+**Example 1**
+
+---
+
+**Example 2**
+
+## Trigonometric Substitution
+
+Trigonometric substitution is a useful method for solving integrals of the form
+
+$$
+\int \sqrt{a^{2} - x^{2}} dx.
+$$
+
+The idea is to use **inverse substitution**, setting $x=g(t)$ and then changing the integral
+
+$$
+\int f(x) dx = \int f(g(t))g^{\prime}(t)dt.
+$$
+
+---
+
+| Expression              | Substitution             | Range for θ             | Resulting Simplification               |
+|------------------------|--------------------------|--------------------------|----------------------------------------|
+| $$\small \sqrt{a^2 - x^2} $$ | $$\small x = a\sin\theta $$     | $$\small\left[-\frac{\pi}{2}, \frac{\pi}{2}\right] $$ | $$\small \sqrt{a^2 - x^2} = a\cos\theta $$   |
+| $$ \small\sqrt{a^2 + x^2} $$ | $$ \small x = a\tan\theta $$     | $$\small \left(-\frac{\pi}{2}, \frac{\pi}{2}\right) $$      | $$\small \sqrt{a^2 + x^2} = a\sec\theta $$   |
+| $$ \small\sqrt{x^2 - a^2} $$ | $$ \small x = a\sec\theta $$     | $$\small \left[0,\frac{\pi}{2}\right)~\text{or}~\small \left[\pi, \frac{3\pi}{2}\right) $$ | $$\small \sqrt{x^2 - a^2} = a\tan\theta $$   |
+
+---
+
+**Example:**
+
+Evaluate $\int \frac{\sqrt{9-x^{2}}}{x^{2}}dx$.
+
+
+## Strategy for Integration
+
+Here are some tips for solving integrals:
+
+1. Simplify the integrand if possible
+1. Look for an obvious substitution
+1. Classify the integrand according to its form
+1. Try again
+
+## Double Integrals
+
+Let $f(x, y)$ be a continuous function defined on the rectangle $R = [a, b]\times [c, d]$. 
+
+Divide the rectangle into $m\times n$ sub-rectangles of area $\Delta A = \Delta x \Delta y$, where $\Delta x = (b-a)/n$ and $\Delta y = (c-d)/m$. 
+
+Let $x_{i} = a+ i\Delta x$ for $i=0,\ldots, n$ and $y_{j}= c+ j\Delta y$ for $j=0,\ldots,m$.
+
+Let $(x_{ij}^{*}, y_{ij}^{*})$ denote any point in the subrectangle $R_{ij} = [x_{i-1}, x_{i}] \times [y_{j-1}, y_{j}]$.
+
+---
+
+The double integral of $f(x, y)$ over the rectangle $[a, b]\times [c, d]$ is
+
+$$
+\int_{c}^{d}\int_{a}^{b} f(x, y) dx dy = \lim_{m,n\rightarrow\infty} \sum_{i=1}^{m}\sum_{j=1}^{n}f(x_{ij}^{*}, y_{ij}^{*})\Delta x \Delta y
+$$
+
+where $(x_{ij}^{*}, y_{ij}^{*})$ is a sample point in $R_{ij}$.
+
+---
+
+**Example:**
+
+Evaluate $\int \int e^{x + y} dx dy$.
+
+
+## Triple Integrals
+
+Triple and higher dimensional integrals are defined similarly. For a continuous function $f(x,y,z)$, the triple integral is denoted
+
+$$
+\int \int \int f(x,y,z,)dxdydz.
+$$
+
+
+## Probability
+
+Integration plays an important role in probability. 
+
+We later introduce the notion of a **continuous random variable**  $X$ and its corresponding **probability density function** $f(x)$.
+
+Determining the probability that a random variable falls within an interval is given by,
+
+$$
+\mathbb{P}(a\leq X \leq b) = \int_{a}^{b}f(x)dx.
+$$
+
+Expectation and variance are also defined via integration.
+
+## Summary
+
+We covered:
+
+- definite and indefinite integrals
+- improper integrals
+- the substitution rule
+- integration by parts
+- trigonometric integrals
+- double and triple integrals
