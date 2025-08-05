@@ -6,3 +6,5 @@
 *.bkp
 *.drawio
 _slides/
+*_sol.ipynb
+Slides/iframe_figures/
