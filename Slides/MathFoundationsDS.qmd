@@ -1,0 +1,263 @@
+---
+title: "Mathematical Foundations of Data Science"
+jupyter: python3
+---
+
+## Mathematical Foundations of DS
+
+Welcome to DS722, Mathematical Foundations of DS.
+
+Data science is a multidisciplinary field that combines mathematics, computer science, and domain expertise to extract insights and knowledge from data.
+
+This is a Master's level introduction to the mathematical foundations that a data scientist needs.
+
+## Why Mathematics Matters in DS
+
+Mathematics is the backbone of data science. It helps us:
+
+:::: {.incremental}
+- Formulate models and algorithms that interpret data
+- Understand the theoretical limits of what data can reveal
+- Ensure robustness and reproducibility of results
+- Analyze error bounds and optimize performance
+::::
+
+:::: {.fragment}
+Without a solid mathematical foundation, it’s easy to misuse algorithms or misinterpret insights.
+::::
+
+## Course Overview
+
+In DS722 we'll explore:
+
+- Linear algebra
+- Optimization
+- Probability and Statistics
+
+## Course Staff{.smaller}
+
+:::: {.columns}
+::: {.column width="48%"}
+**Prof Scott Ladenheim** 
+
+![](figures/ladenheim.jpg){width="300px" fig-align="center"}
+
+* **OH:** WF 10:00-11:00am 
+* **Location:** CDS 1545
+* **Email:** saladenh &lt;at&gt; bu &lt;dot&gt; edu
+:::
+
+::: {.column width="48%"}
+**Yuke Zhang** 
+
+![](figures/zhang.jpeg){width="210px" fig-align="center"}
+
+* **OH:** MTu 3:00-4:00pm
+* **Location:** CDS XXXX
+* **Email:** yukez &lt;at&gt; bu &lt;dot&gt; edu
+:::
+::::
+
+## Course Resources
+
+- Piazza: [piazza.com/bu/fall2025/ds722](https://piazza.com/bu/fall2025/ds722)
+- [Gradescope](https://www.gradescope.com/)
+
+## Course Books 
+
+All course materials are available online or through the BU library.
+
+- [Numerical Linear Algebra](https://www.stat.uchicago.edu/~lekheng/courses/309/books/Trefethen-Bau.pdf), Trefethen & Bau  
+- [Mathematical Methods in Data Science (with Python)](https://mmids-textbook.github.io/index.html), Roch  
+- [Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf), Deisenroth, Faisal, Ong  
+- [All of Statistics: A concise course in statistical inference](library.bu.edu), Wasserman  
+- [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html), Murphy
+
+
+## Grading Breakdown
+
+Your grade is comprised of:
+
+- Homework (20%)
+- Discussion participation (10%)
+- Midterm (35%)
+- Final (35%)
+
+## Homework
+
+- There are 8 total homework assignments.
+
+- Your lowest homework grade is dropped.
+
+- Students are allotted a total of 5 late homework days throughout the semester, with a maximum of 2 days
+allowed per assignment. Late submissions beyond this policy will not be accepted.
+
+
+## Discussions
+
+- Each week there are discussion sections. 
+
+- Attendance will be recorded weekly during the 12 scheduled discussion sections. Students may miss up to 3
+sessions and still receive full participation credit. 
+
+- If more than 3 discussions are missed, participation credit
+will be prorated based on the percentage of sessions attended.
+
+
+## Shared Computing Cluster
+
+You have each been given an account on the BU Shared Computing Cluster (SCC). 
+
+You may use this computational resource for both your homework assignments and discussion sections. 
+
+I have included instructions for how to use the SCC on Piazza.
+
+## SCC Overview
+
+The SCC is a heterogeneous linux cluster.
+
+The system currently includes:
+
+- $>$12,000 CPU cores
+- $>$400 GPUs
+- $>$ 14 Pb of storage
+
+---
+
+### Helpful Resources
+
+Helpful information for the SCC can be found:
+
+- General support information: [RCS Overview](https://www.bu.edu/tech/support/research/)
+- [Linux Cheat Sheet](https://scv.bu.edu/documents/Linux_SCC_CheatSheet.pdf)
+- [SCC Cheat Sheet](https://scv.bu.edu/documents/SCC_CheatSheet.pdf)
+
+If you encounter any issues using the SCC direct questions to the teaching staff prior to reaching out to RCS help.
+
+---
+
+### Project ds722
+
+All of your work will can done using the `ds722` project.
+
+Each student has a small home directory located at `/projectnb/ds722/students/`
+Each student has a 10 GB quota on their home directory.
+
+Additional storage space can be used in `/projectnb/ds722/projects/`
+
+---
+
+### SCC OnDemand
+
+Use the SCC through the [OnDemand](scc-ondemand.bu.edu) interface.
+
+![](figures/SCCOnDemand.png){fig-align="center"}
+
+---
+
+### Using Python
+
+Please review the documentation for [using Python](https://www.bu.edu/tech/support/research/software-and-programming/common-languages/python/) on the SCC.
+
+In particular read the information about the [Academic ML Environment](https://www.bu.edu/tech/support/research/software-and-programming/common-languages/python/python-ml/academic-machine-learning-environment/).
+
+### Using conda on the SCC
+
+Configure where your potential conda environments are stored using the command line.
+
+![](figures/SCCCommandLine.png){fig-align="center"}
+
+---
+
+:::: {.columns}
+::: {.column width="45%"}
+1. Run the command `module load miniconda`
+1. Run the command `setup_scc_condarc.sh`
+1. Input the number corresponding to the relevant project and hit enter
+:::
+::: {.column width="55%"}
+![](figures/SCCCondaSetup.png){fig-align="center"}
+:::
+::::
+
+---
+
+### Jupyter Notebooks{.smaller}
+
+::: {.columns}
+::: {.column width="35%"}
+
+- Select Jupyter Notebook from Interactive Apps.
+
+- Fill in the options as shown in the figure.
+:::
+::: {.column width="65%"}
+![](figures/SCCOnDemandJupyter.png){fig-align="center"}
+:::
+:::
+
+
+## Quick SCC Demo
+
+Let me provide a quick SCC demo of how to use Jupyter on the SCC.
+
+You will gain more experience doing this during the first discussion.
+
+## Generative AI Policy
+
+This course follows the **CDS Generative AI Assistance (GAIA) Policy**.  
+Please read and understand the policy:  
+[bu.edu/cds-faculty/culture-community/gaia-policy](https://www.bu.edu/cds-faculty/culture-community/gaia-policy)
+
+You must disclose how you use tools like ChatGPT in your work.  
+Transparency matters.
+
+---
+
+### Your Responsibility
+
+- You’re encouraged to use AI tools to explore and understand course material.
+- AI should *support* your learning, not *replace* it.
+- Your insights and problem-solving skills are what truly count.
+  
+Relying too heavily on tools without mastering concepts may affect your performance on the exams.
+
+**Use AI as a learning aid—not a substitute for thinking.**
+
+## Academic Integrity
+
+Discussion with classmates is permitted,  
+but copying answers or plagiarizing is strictly prohibited.
+
+Your submitted work must be entirely your own.  
+All members of the class—including teaching staff—must uphold the  
+[Academic Code of Conduct](http://www.bu.edu/dos/policies/student-responsibilities/)
+
+---
+
+### Searching for Solutions Online
+
+Before turning to the internet, ask yourself:
+
+1. **Stuck on where to begin?**  
+   Reach out to a TF or post on Piazza. You’ll often get helpful guidance quickly.
+
+2. **Trying to validate your solution?**  
+   Can you find a way to verify it independently? That’s a powerful learning opportunity.
+
+3. **Short on time and tempted to search?**  
+   Consider this:
+   - It’s intellectually dishonest.  
+   - You’ll need to solve similar problems on exams.  
+   - You may skip one homework without penalty.
+
+It's better to submit what you have and plan ahead for future assignments.
+
+## Math is Fun
+  
+I’m excited to teach you about the world of mathematics and data.
+
+Feel free to ask questions, share your thoughts, and challenge ideas.  
+Your curiosity is the key to a great learning experience!
+
+_You’re not just here to absorb knowledge—you’re here to apply it, explore it, and transform it._
