@@ -25,7 +25,7 @@ This lecture sets the stage for our future understanding of
 
 A vector $\mathbf{v}$ is a unit vector (normalized) if $\Vert \mathbf{v}\Vert_2 = 1$.
 
-A matrix $Q\in\mathbb{R}^{n\times n}$ is symmetric if $Q=Q^{T}$.
+Recall that a matrix $Q\in\mathbb{R}^{m\times m}$ is symmetric if $Q=Q^{T}$.
 
 ## Orthogonal Vectors
 
@@ -108,14 +108,13 @@ $$
 
 ## Orthogonal Matrices
 
-A square matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
+A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
 
-Equivalently, $Q^{T} = Q^{-1}$, i.e., the transpose of $Q$ is the inverse of $Q$.
-
-This is an important subclass of matrices.
+Equivalently, $Q^{T} = Q^{-1}$, i.e., $Q^{T}$ is the inverse of $Q$.
 
 If the matrix $Q\in\mathbb{C}^{m\times m}$ and $Q^{*}Q = QQ^{*} = I$, we say the matrix is unitary.
 
+Orthogonal matrices are an extremely important class of matrices.
 
 ## Projectors
 
