@@ -240,7 +240,7 @@ $$
 We need help from the multiplication and quotient rules.
 
 
-## Multiplication Rule
+## Product Rule
 
 For differentiable functions $f(x)$ and $g(x)$ 
 
