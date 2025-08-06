@@ -47,6 +47,7 @@ The $i$th element of the vector is denoted $x_i$.
 
 A matrix with $m$ rows and $n$ columns, $A\in\mathbb{R}^{m\times n}$ is a 2-D array of numbers 
 $$
+\small
 A = 
 \begin{bmatrix}
 a_{11} & a_{12} & \cdots & a_{1n} \\
@@ -56,13 +57,14 @@ a_{m1} &a_{m2} & \cdots & a_{mn} \\
 \end{bmatrix}.
 $$
 
-The element at row $i$ and column $j$ is denoted $a_{ij}$. The matrix is square when $m=n$. A column vector is matrix of size $m\times 1$.
+The element at row $i$ and column $j$ is denoted $a_{ij}$. A column vector is matrix of size $m\times 1$.
 
 ---
 
 The transpose, $A^{T}$, of a matrix $A\in\mathbb{R}^{m\times n}$ is the $n\times m$ matrix
 
 $$
+\small
 A^{T} =
 \begin{bmatrix}
 a_{11} & a_{21} & \cdots & a_{m1} \\
@@ -73,6 +75,12 @@ a_{1n} &a_{2n} & \cdots & a_{nm} \\
 $$
 
 The transpose of a column vector $\mathbf{x}$ is a row vector. A row vector is a matrix of size $1\times m$.
+
+---
+
+A matrix is square when $m=n$. 
+
+A square matrix is symmetric if $A=A^{T}$.
 
 ## Vectors
 
@@ -240,6 +248,8 @@ $$
 \mathbf{x}^{T}\mathbf{y} = \sum_{i=1}^{m}x_iy_i.
 $$
 
+The notation $(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{T}\mathbf{y}$ is also used to denote the inner product.
+
 ---
 
 The Euclidean length of $\mathbf{x}$ is denoted $\Vert \mathbf{x} \Vert_2$ is the square root of the inner product of $\mathbf{x}$ with itself
@@ -269,6 +279,14 @@ $$
 
 ---
 
+Let $a_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
+
+$$
+b = \sum_{j=1}^{n}x_j a_j.
+$$
+
+---
+
 The map $\mathbf{x} \rightarrow A\mathbf{x}$ is linear, i.e.,
 
 $$
@@ -276,14 +294,6 @@ $$
 A(\mathbf{x} + \mathbf{y}) &= A\mathbf{x} + A\mathbf{y} \\
 A(\alpha \mathbf{x}) &= \alpha A \mathbf{x}
 \end{align*}
-$$
-
----
-
-Let $a_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
-
-$$
-b = \sum_{j=1}^{n}x_j a_j.
 $$
 
 ## Range  
@@ -304,10 +314,10 @@ The nullspace of $A\in\mathbb{R}^{m\times n}$ is the set of vectors $\mathbf{x}\
 
 ## A Matrix Times a Matrix
 
-Let $A\in\mathbb{R}^{\ell \times m}$, $C\in\mathbb{R}^{m \times n}$, then the matrix vector product $B = AC \in\mathbb{R}^{\ell \times n}$ is defined as
+Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matrix-matrix product $C = AB \in\mathbb{R}^{m \times p}$ is defined as
 
 $$
-b_{ij} = \sum_{k=1}^{m} a_{ik}c_{kj}.
+c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}.
 $$
 
 ## Batches in Neural Networks
@@ -568,6 +578,34 @@ plt.axis('equal')
 plt.show()
 ```
 
+## Condition Number
+
+The condition number of a matrix is
+
+$$
+\kappa(A) = \Vert A \Vert \Vert A^{-1} \Vert.
+$$
+
+It is a measure of how sensitive the solution of a linear system is to changes in the input.
+
+## SPD Matrices
+
+A symmetric matrix $B$ is positive definite (SPD) if
+
+$$
+\mathbf{x}^{T}B\mathbf{x} > 0\quad \forall \mathbf{x}\neq 0.
+$$
+
+
+A symmetric matrix $B$ is positive semidefinite if
+
+$$
+\mathbf{x}^{T}B\mathbf{x} \geq 0\quad \forall \mathbf{x}\neq 0.
+$$
+
+If $B$ is SPD then $\Vert \mathbf{x}\Vert_{B}^{2} = \mathbf{x}^{T}B\mathbf{x}$ is a well-defined norm.
+
+
 ## Frobenius Norm
 
 The Frobenius norm is defined as
@@ -604,6 +642,8 @@ As data scientists we predominantly work with the set of real numbers $\mathbb{R
 However, the theoretical results that we discuss in this course work also apply for the set of complex numbers $\mathbb{C}$, i.e., numbers of the form $z=a+ib$, where $i=\sqrt{-1}$.
 
 The conjugate of a complex number is $\bar{z} = a-ib$. For real numbers $\bar{z}=z$.
+
+---
 
 For vectors and matrices with complex numbers, we use the $^{*}$ notation to indicate the Hermitian conjugate, i.e., 
 
