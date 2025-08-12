@@ -1,5 +1,5 @@
 ---
-title: "Linear Systems and LU Factorization"
+title: "Random Variables and Distributions"
 jupyter: python3
 ---
 
@@ -21,20 +21,20 @@ Understand:
 
 ## Random Variable
 
-Let $\Omega$ be a sampel space. A *random variable* is a mapping 
+Let $\Omega$ be a sample space. A *random variable* is a mapping 
 
 $$
 X: \Omega \rightarrow \mathbb{R},
 $$
 
-that assigns a real number $X(\omega)$ to each outcome $\omega$
+that assigns a real number $X(\omega)$ to each outcome $\omega$.
 
 ---
 
 Flip a coin ten times. Let $X(\omega)$ be the number of heads in the sequence $\omega$. If 
 
 $$
-\omega = HTHTHTHTHT
+\omega = HTHTHTHTHT,
 $$
 then $X(\omega)=5$.
 
@@ -74,7 +74,16 @@ Flip a coin twice and let $X$ be the number of heads. Let's fill in the followin
 ::::
 
 
-## Distribution Functions and Probability Functions
+## Distribution and Probability Functions
+
+We introduce the following notions:
+
+- cumulative distribution functions
+- probability functions
+    - probability mass functions (discrete)
+    - probability density functions (continuous)
+
+---
 
 ### Cumulative Distribution Functions
 
@@ -89,7 +98,7 @@ $$
 F_{X}(x) = \mathbb{P}(X\leq x).
 $$
 
-The CDF contatins all the information about the random variable.
+The CDF contains all the information about the random variable.
 
 ---
 
@@ -155,11 +164,13 @@ A function $F$ mapping the real line to $[0, 1]$ is a CDF for some probability $
 1. $F$ is non-decreasing: $x_1 < x_2\Rightarrow F(x_{1})\leq F(x_{2})$.
 1. $F$ is normalized 
 $$
+\small
 \lim_{x\rightarrow -\infty}F(x)=0,~\text{and} 
 ~\lim_{x\rightarrow\infty}F(x)=1.
 $$
 1. $F$ is right-continuous: $F(x) = F(x^{+})$ for all $x$, where 
 $$
+\small
 F(x^{+}) = \lim_{y\rightarrow x^{+}}F(y).
 $$
 
@@ -201,14 +212,15 @@ and $f_{X}(x) = F^{\prime}_{X}(x)$ at all points $x$ at which $F_{X}$ is differe
 
 Let $F$ be the CDF for a random variable $X$. Then:
 
-1. $\mathbb{P}(X=x) = F(x) - F(x^{-1})$, where $F(x^{-1}) = \lim_{y\rightarrow x^{-1}}F(y)$.
+1. $\mathbb{P}(X=x) = F(x) - F(x^{-1})$, \ 
+where $F(x^{-1}) = \lim_{y\rightarrow x^{-1}}F(y)$.
 1. $\mathbb{P}(x<X\leq y) = F(y) - F(x)$.
 1. $\mathbb{P}(X>x) = 1 - F(x)$.
 1. If $X$ is continuous then
 $$
 \begin{align}
 F(b)-F(a) &= \mathbb{P}(a< X <b) = \mathbb{P}(a\leq X \leq b) \\
-\mathbb{P}(a< X \leq b) = \mathbb{P}(a\leq X \leq b)
+&= \mathbb{P}(a< X \leq b) = \mathbb{P}(a\leq X \leq b).
 \end{align}
 $$
 
@@ -265,7 +277,7 @@ Suppose we have a binary event with probability $p\in[0,1]$ and consider a seque
 $$
 f(x) =
 \begin{cases}
-{n}\choose{x}p^{x}(1-p)^{n-x} & \text{for}~x=0,\ldots, n\\
+{n \choose x} p^{x}(1-p)^{n-x} & \text{for}~x=0,\ldots, n\\
 0 & \text{otherwise}. 
 \end{cases}
 $$
@@ -276,6 +288,49 @@ The variables $n$ and $p$ are fixed parameters, whereas $x$ is a particular valu
 
 ---
 
+Steph Curry's career free throw percentage is 92%. What is the chance that if Steph shoots 4 free throws, he will make exactly 3 of them?
+
+---
+
+Let's show a simulation of 1000 Steph Curry free throws.
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import binom
+
+# Parameters
+n = 1000
+p = 0.9
+num_simulations = 10000
+
+# Create a random number generator instance
+rng = np.random.default_rng(12345)
+
+# Simulate binomial trials using the RNG
+data = rng.binomial(n=n, p=p, size=num_simulations)
+
+# Exact binomial PMF
+x = np.arange(binom.ppf(0.01, n, p),
+              binom.ppf(0.99, n, p))
+pmf = binom.pmf(x, n, p)
+
+# Plot histogram and true distribution
+plt.figure(figsize=(10, 6))
+plt.hist(data, bins=30, edgecolor='black', density=True)
+plt.plot(x, pmf, 'o', color='r', label='Exact Binomial PMF')
+plt.title(f'Histogram of Binomial Trials (n={n}, p={p})')
+plt.xlabel('Number of Successes')
+plt.ylabel('Frequency (Normalized)')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+---
+
 ### Geometric Distribution
 
 A random variable $X$ has a geometric distribution $X\sim \operatorname{Geom}(p)$ with parameter $p\in(0,1)$ if
@@ -283,6 +338,50 @@ A random variable $X$ has a geometric distribution $X\sim \operatorname{Geom}(p)
 $$
 \mathbb{P}(X=k) = p(1-p)^{k-1}, \quad k\geq 1.
 $$
+
+Think of this as the probability distribution of the number of failures before the first success. 
+
+---
+
+In the game Settlers of Catan you roll two dice and the number indicates which resource you can pick up. Let success be defined as rolling a 9, which allows you to pick up the resource ore. What is the probability that it will take more than 10 rolls to roll a 9?
+
+
+--- 
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import geom
+
+# Parameters
+n = 1000
+p = 4.0/36
+num_simulations = 10000
+
+# Create a random number generator instance
+rng = np.random.default_rng(12345)
+
+# Simulate binomial trials using the RNG
+data = rng.geometric(p=p, size=num_simulations)
+
+# Exact binomial PMF
+x = np.arange(geom.ppf(0.01, p),
+              geom.ppf(0.99, p))
+pmf = geom.pmf(x, p)
+
+# Plot histogram and true distribution
+plt.figure(figsize=(10, 6))
+plt.hist(data, bins=30, edgecolor='black', density=True)
+plt.plot(x, pmf, 'o', color='r', label='Exact Geometric PMF')
+plt.title(f'Histogram of Trials (n={n}, p={p:0.2f})')
+plt.xlabel('Number of rolls before success')
+plt.ylabel('Frequency (Normalized)')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
 
 ---
 
@@ -295,6 +394,86 @@ f(x) = e^{-\lambda}\frac{\lambda^{x}}{x!} \quad x\geq 0.
 $$
 
 The Poisson distribution is often used as a model for counts of rare events like radioactive decay, traffic accidents, and horse kicks to the head.
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import poisson
+
+# Set seaborn style
+sns.set(style="whitegrid")
+
+# Define lambda values
+lambda_values = range(1, 7)
+
+# Define x range
+x = np.arange(0, 20)
+
+# Create plot
+plt.figure(figsize=(10, 6))
+for lam in lambda_values:
+    pmf = poisson.pmf(x, mu=lam)
+    plt.plot(x, pmf, marker='o', label=f'λ = {lam}')
+
+# Set integer ticks on x-axis
+plt.xticks(np.arange(0, 25, 1))
+plt.grid(True, which='both', axis='x', linestyle='--', linewidth=0.5)
+
+
+# Add labels and title
+plt.title('Poisson Distributions for λ from 1 to 6', fontsize=14)
+plt.xlabel('Number of Events (k)', fontsize=12)
+plt.ylabel('Probability Mass Function (PMF)', fontsize=12)
+plt.legend(title='Lambda (λ)')
+plt.tight_layout()
+
+plt.show()
+```
+
+---
+
+A pizza restaurant receives an average of 20 delivery orders per hour. Assuming that this rate is independent What is the probability of receiving exactly 15 orders in a given hour? What is the probability of receiving more than 25 orders?
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import poisson
+
+# Parameters
+lam=20
+num_simulations = 10000
+
+# Create a random number generator instance
+rng = np.random.default_rng(12345)
+
+# Simulate binomial trials using the RNG
+data = rng.poisson(lam=lam, size=num_simulations)
+
+# Exact binomial PMF
+x = np.arange(poisson.ppf(0.01, lam),
+              poisson.ppf(0.99, lam))
+pmf = poisson.pmf(x, lam)
+
+# Plot histogram and true distribution
+plt.figure(figsize=(10, 6))
+plt.hist(data, bins=30, edgecolor='black', density=True)
+plt.plot(x, pmf, 'o', color='r', label='Exact Poisson PMF')
+plt.title(f'Histogram of Trials ($\\lambda$ = {lam:.2f})')
+plt.xlabel('Number of orders in 20 minutes')
+plt.ylabel('Frequency (Normalized)')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
 
 ## Some Important Continuous Random Variables
 
@@ -325,6 +504,44 @@ $$
 
 ---
 
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import uniform
+
+# Set seaborn style
+sns.set(style="whitegrid")
+
+# Define the range and distribution
+lower, upper = -1, 3
+x = np.linspace(lower - 1, upper + 1, 500)
+dist = uniform(loc=lower, scale=upper - lower)
+
+# Calculate PDF and CDF
+y_pdf = dist.pdf(x)
+y_cdf = dist.cdf(x)
+
+# Create side-by-side plots
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# PDF plot
+axes[0].plot(x, y_pdf, color='blue')
+axes[0].set_title('PDF of Uniform Distribution [-1, 3]', fontsize=14)
+axes[0].set_xlabel('x', fontsize=12)
+axes[0].set_ylabel('Probability Density', fontsize=12)
+
+# CDF plot
+axes[1].plot(x, y_cdf, color='green')
+axes[1].set_title('CDF of Uniform Distribution [-1, 3]', fontsize=14)
+axes[1].set_xlabel('x', fontsize=12)
+axes[1].set_ylabel('Cumulative Probability', fontsize=12)
+
+plt.show()
+```
+
+---
+
 ### Normal (Gaussian)
 
 The random variable $X$ has a Normal (Gaussian)  distribution $X\sim N(\mu, \sigma^{2})$ with parameters $\mu\in\mathbb{R}$ and $\sigma>0$ if
@@ -339,6 +556,39 @@ $X$ has a standard normal distribution if $\mu=0$ and $\sigma=1$.
 
 ---
 
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style
+sns.set(style="whitegrid")
+
+# Define parameters
+mean = 0
+variances = [0.5, 1, 2, 5]
+x = np.linspace(-10, 10, 1000)
+
+# Create plot
+plt.figure(figsize=(10, 6))
+colors = sns.color_palette("plasma", len(variances))
+
+for var, color in zip(variances, colors):
+    std_dev = np.sqrt(var)
+    y = (1 / (std_dev * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mean) / std_dev) ** 2)
+    plt.plot(x, y, label=f"Variance = {var}", color=color)
+
+plt.title("Gaussian Distributions with Mean = 0 and Varying Variances", fontsize=14)
+plt.xlabel("x", fontsize=12)
+plt.ylabel("Probability Density", fontsize=12)
+plt.legend(title="Distributions")
+plt.tight_layout()
+
+plt.show()
+```
+
+---
+
 ### Exponential Distribution
 
 The random variable $X$ has an exponential distribution $X\sim \operatorname{Exp}(\beta)$ with parameter $\beta>0$ if
@@ -348,6 +598,78 @@ f(x) = \frac{1}{\beta}e^{-x/\beta},\quad x>0.
 $$
 
 The exponential distribution is used to model the lifetime of electronic components and the waiting times between rare events.
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style for aesthetics
+sns.set(style="whitegrid")
+
+# Define beta values
+beta_values = [0.5, 1, 2, 5, 10]
+x = np.linspace(0, 10, 1000)
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+for beta in beta_values:
+    y = (1/beta) * np.exp(-x/beta)
+    plt.plot(x, y, label=f"β = {beta}")
+
+# Customize plot
+plt.title("Exponential Distributions for Different β Values", fontsize=16)
+plt.xlabel("x", fontsize=14)
+plt.ylabel("Probability Density", fontsize=14)
+plt.legend(title="Beta Values")
+plt.tight_layout()
+
+plt.show()
+```
+
+---
+
+An electronic component has a constant failure rate of 10% per year. Assuming the time until failure follows an exponential distribution, what is the probability that the part lasts more than 5 years?  
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import expon
+
+# Parameters
+beta=0.1
+num_simulations = 100000
+
+# Create a random number generator instance
+rng = np.random.default_rng(12345)
+
+# Simulate binomial trials using the RNG
+data = rng.exponential(scale=1/beta, size=num_simulations)
+
+# Exact binomial PMF
+x = np.arange(expon.ppf(0.01, scale=1/beta),
+              expon.ppf(0.99, scale=1/beta))
+pmf = expon.pdf(x, beta)
+
+# Plot histogram and true distribution
+plt.figure(figsize=(10, 6))
+plt.hist(data, bins=30, edgecolor='black', density=True)
+plt.plot(x, pmf, 'o', color='r', label='Exact Exponential PDF')
+plt.title(f'Histogram of Trials ($\\beta$ = {beta:.2f})')
+plt.xlabel('Simulations of part failure')
+plt.ylabel('Frequency')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
 
 ---
 
@@ -378,6 +700,37 @@ f(x) = \frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right
 $$
 
 The $t$-distribution is similar to the Normal but has thicker tails at the end of the distribution.
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import t
+import os
+
+# Set seaborn style
+sns.set(style="whitegrid")
+
+# Define degrees of freedom and t-values
+dfs = [1, 5, 10, 30]
+t_values = np.linspace(-5, 5, 500)
+
+# Plot t-distributions
+plt.figure(figsize=(10, 6))
+for df in dfs:
+    plt.plot(t_values, t.pdf(t_values, df), label=f'$\\nu$={df}')
+
+plt.title('t-Distribution for Various Degrees of Freedom', fontsize=14)
+plt.xlabel('t-value', fontsize=12)
+plt.ylabel('Probability Density', fontsize=12)
+plt.legend(title='Degrees of Freedom')
+plt.tight_layout()
+plt.show()
+```
 
 ---
 
@@ -443,7 +796,7 @@ The corresponding marginal distribution functions are $F_{X}$ and $F_{y}$.
 Two random variables $X$ and $Y$ are *independent* if for every $A$ and $B$,
 
 $$
-\mathbb{P}(X\in A, Y\in B) = \mathbb{P}(X\in A)\matbb{P}(Y\in B).
+\mathbb{P}(X\in A, Y\in B) = \mathbb{P}(X\in A)\mathbb{P}(Y\in B).
 $$
 
 If this condition is not satisfied then $X$ and $Y$ are *dependent*.
@@ -460,7 +813,7 @@ for all values $x$ and $y$.
 
 ## Conditional Distributions
 
-For discrete random variables, the *conditional probability mass function$ is
+For discrete random variables, the *conditional probability mass function* is
 
 $$
 \small
@@ -516,7 +869,55 @@ where $\mu\in\mathbb{R}^{n}$ is the vector of means of each $X_{i}$, $\Sigma\in\
 
 ---
 
-### Picture
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import multivariate_normal
+from mpl_toolkits.mplot3d import Axes3D
+
+# Set seaborn style
+sns.set(style="white")
+
+# Mean and covariance matrix
+mean = [0, 0]
+cov = [[1, 0.5], [0.5, 1]]
+
+# Create grid
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+pos = np.dstack((X, Y))
+
+# Multivariate normal distribution
+rv = multivariate_normal(mean, cov)
+Z = rv.pdf(pos)
+
+# Create figure and subplots
+fig = plt.figure(figsize=(14, 6))
+fig.tight_layout(pad=0.5)
+
+
+# 2D Contour plot
+ax1 = fig.add_subplot(1, 2, 1)
+contour = ax1.contour(X, Y, Z, cmap='viridis')
+ax1.set_title('2D Contour Plot')
+ax1.set_xlabel('X')
+ax1.set_ylabel('Y')
+ax1.set_xlim(-3, 3)
+ax1.set_ylim(-3, 3)
+
+# 3D Surface plot
+ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+surf = ax2.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
+ax2.set_title('3D Surface Plot')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
+ax2.set_zlabel('Probability Density')
+
+plt.show()
+```
+
 
 ## Transformations of Random Variables
 
@@ -532,7 +933,6 @@ To find $f_{Y}$ follow these three steps:
 
 1. For each $y$, find the set $A_{y}=\{x:~r(x)\leq y\}$.
 1. Find the CDF
-
 $$
 \small
 \begin{align}
@@ -541,7 +941,6 @@ F_{Y}(y) &= \mathbb{P}(Y\leq y) =  \mathbb{P}(r(X)\leq y) \\
 &= \int_{A_{y}}f_{X}(x)dx.
 \end{align} 
 $$
-
 1. The PDF is $f_{Y}(y) = F^{\prime}_{Y}(y)$.
 
 The steps for functions of several random variables are similar.
@@ -550,9 +949,9 @@ The steps for functions of several random variables are similar.
 
 ### Example
 
-## Summary
+Let $X\sim \operatorname{Uniform}(-1, 3)$. Find the PDF of $Y=X^{2}$.
 
-We covered:
+## Summary
 
 - Random variables
 - CDFs
