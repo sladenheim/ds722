@@ -19,8 +19,8 @@ project:
     - Lec14-Optimization4.qmd
     - Lec15-ProbabilityIntroduction.qmd
     - Lec16-RandomVariables.qmd
-    - Lec17.qmd
-    - Lec18.qmd
+    - Lec17-Expectation.qmd
+    - Lec18-InequalitiesLimitTheorems.qmd
     - Lec19.qmd
     - Lec21.qmd
     - Lec22.qmd
