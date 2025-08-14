@@ -1,0 +1,416 @@
+---
+title: "Expectation, Variance, and Moments"
+jupyter: python3
+---
+
+## Lecture Overview
+
+This lecture introduces key concepts in probability and statistics related to the behavior of random variables: 
+
+- **expectation**, 
+- **variance**, and 
+- **moments**. 
+
+These foundational tools enable us to describe and characterize the shapes of probability distributions
+
+## Lecture Objectives
+
+- Understand the definition and interpretation of expectation (mean) and variance.
+- Introduce conditional expectation and variance
+- Introduce higher-order moments.
+
+## Expectation
+
+The mean, or expectation, of a random variable $X$ is the average value of $X$.
+
+**Definition**
+The expected value (mean) of $X$ is defined to be
+
+$$
+\mathbb{E}(X) = 
+\begin{cases}
+\sum_{x}xf(x) & \text{if $X$ is discrete}, \\
+\int_{x}xf(x) & \text{if $X$ is continuous} ,\\
+\end{cases}
+$$
+
+assuming that the sum or integral is well defined.
+
+We will later see that the mean $E(X) = \mu = \mu_{X}$ is the **first moment**.
+
+---
+
+### Example: Bernoulli Distribution
+
+Let $X\sim\operatorname{Bernoulli}(p)$, what is $\mathbb{E}(X)$?
+
+---
+
+### Example: Uniform Distribution
+
+Let $X\sim\operatorname{Uniform}(-1, 3)$, what is $\mathbb{E}(X)$?
+
+---
+
+### Example: Cauchy Distribution
+
+Recall that a random variable has a Cauchy distribution if it has density $f_{X}(x) = \frac{\pi}{1+x^{2}}$. What is the mean of the Cauchy distribution?
+
+## The Rule of the Lazy Statistician
+
+Let $Y=r(X)$, then
+
+$$
+E(Y) = E(r(X)) = \int r(x)f_{X}(x)dx.
+$$
+
+---
+
+Let $A$ be an event and let $r(x) = I_{A}(x)$ be the indicator function. The indicator function is defined as
+
+$$
+I_{A}(x) =
+\begin{cases}
+1 & \text{if $x\in A$}, \\
+0 & \text{if $x\notin A$}.
+\end{cases}
+$$
+
+Observe that
+
+$$
+\small
+\mathbb{E}(I_{A}(X)) = \int I_{A}(x)f_{X}(x)dx = \int_{A}f_{X}(x)dx = \mathbb{P}(X\in A).
+$$
+
+:::: {.fragment}
+We have defined probability as a *special case* of expectation.
+::::
+
+---
+
+### Example
+
+Let $(X, Y)$ have a jointly uniform distribution on the unit square. Let $Z=r(X,Y) = X^{2} + Y^{2}$. Compute $E(Z)$.
+
+---
+
+## Properties of Expectations
+
+If $X_{1},\ldots, X_{n}$ are random variables and $a_{1},\ldots, a_{n}$ are constants, then
+
+$$
+\mathbb{E}\left(\sum_{i}a_{i}X_{i}\right)= \sum_{i}a_{i}\mathbb{E}(X_{i}).
+$$
+
+What kind of operator is the expectation?
+
+---
+
+Let $X_{1},\ldots, X_{n}$ be independent random variables, then
+
+$$
+\mathbb{E}\left(\prod_{i}X_{i}\right) = \prod_{i}\mathbb{E}(X_{i}).
+$$
+
+## Variance
+
+The variance measures the *spread* of a distribution.
+
+**Definition**
+Let $X$ be a random variable with mean $\mu$. The variance of $\mathbb{V}(X)=\sigma^{2}=\sigma_{X}^{2}$ is defined by
+
+$$
+\mathbb{V}(X) = \mathbb{E}(X-\mu)^{2} = \int(x-\mu)^{2}f_{X}(x)dx,
+$$
+
+assuming this value exists. 
+
+The **standard deviation** is $\sigma = \sqrt{\mathbb{V}(X)}$.
+
+---
+
+**Theorem**
+
+Assuming the variance is well-defined, it has the following properties
+
+1. $\mathbb{V}(X) = \mathbb{E}(X^{2})-\mu^{2}$.
+1. If $a$ and $b$ are constants, then $\mathbb{V}(aX+b) = a^{2}\mathbb{V}(X)$.
+1. If $X_{1},\ldots, X_{n}$ are independent and $a_{1},\ldots, a_{n}$ are constants, then 
+$$
+\mathbb{V}\left(\sum_{i}a_{i}X_{i}\right) = \sum_{i}a_{i}^{2}\mathbb{V}(X_{i}).
+$$
+
+---
+
+### Example: Binomial
+
+Let $X\sim\operatorname{Binomial}(n,p)$, what is $\mathbb{V}(X)$?
+
+## Sample Mean and Variance
+
+If $X_{1},\ldots, X_{n}$ are random variables, we define the **sample mean** to be
+
+$$
+\small
+\bar{X}_{n} = \frac{1}{n}\sum_{i}X_{i},
+$$
+and the **sample variance** to be
+
+$$
+\small
+S_{n}^{2} = \frac{1}{n-1}\sum_{i}(X_{i}-\bar{X}_{n})^{2}.
+$$
+
+The denominator has $n-1$ so that $\mathbb{E}(S_{n}^{2})= \sigma^{2}$.
+
+---
+
+**Theorem**
+Let $X_{1},\ldots, X_{n}$ be IID and let $\mu=\mathbb{E}(X_{i})$, $\sigma^{2}=\mathbb{V}(X_{i})$, then
+
+$$
+\mathbb{E}(\bar{X}_{n})=\mu,\quad \mathbb{V}(\bar{X}_{n}) = \frac{\sigma^{2}}{n},\quad \mathbb{E}(S_{n}^{2})=\sigma^{2}.
+$$
+
+## Covariance
+
+If $X$ and $Y$ are random variables, the covariance (and correlation) between $X$ and $Y$ measure how strong the linear relationship is between $X$ and $Y$.
+
+**Definition**
+Let $X$ and $Y$ be random variables with means $\mu_{x}$ and $\mu_{Y}$ and standard deviations $\sigma_{X}$ and $\sigma_{Y}$. Define the **covariance** between $X$ and $Y$ by
+
+$$
+\small
+\operatorname{Cov}(X,Y)=\mathbb{E}\left((X-\mu_{x})(Y-\mu_{Y})\right).
+$$
+
+## Correlation
+
+The **correlation** is defined as
+
+$$
+\small
+\rho=\rho(X,Y) = \frac{\operatorname{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}}.
+$$
+
+---
+
+**Theorem**
+The covariance satisfies:
+
+$$
+\operatorname{Cov}(X,Y) = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y).
+$$
+
+The correlation satisfies $-1\leq \rho \leq 1$.
+
+If $X$ and $Y$ are independent, then $\operatorname{Cov}(X,Y)=0$.
+
+>The converse is not in general true.
+
+---
+
+**Theorem**
+
+$$
+\mathbb{V}(X+Y) =  \mathbb{V}(X) + \mathbb{V}(Y) + 2\operatorname{Cov}(X,Y). 
+$$
+More generally for random variables $X_{1},\ldots, X_{n}$, 
+
+$$
+\mathbb{V}\left(\sum_{i}a_{i}X_{i}\right) = \sum_{i}a_{i}^{2}\mathbb{V}(X_{i}) + 2 \sum_{i} \sum_{j>i}\operatorname{Cov}(X_{i},X_{j}).
+$$
+
+## Expectation and Variance of Important RVs
+
+| Distribution              | Mean $\mathbb{E}[X]$         | Variance $\text{Var}(X)$           |
+|---------------------------|------------------------------|------------------------------------|
+| Point Mass at $a$     | $a$                          | $0$                                |
+| Bernoulli($p$)        | $p$                          | $p(1 - p)$                         |
+| Binomial($n, p$)      | $np$                         | $np(1 - p)$                        |
+| Geometric($p$)        | $\frac{1}{p}$                | $\frac{1 - p}{p^2}$                |
+| Poisson($\lambda$)    | $\lambda$                    | $\lambda$  |
+| Uniform($a, b$)       | $\frac{a + b}{2}$            | $\frac{(b - a)^2}{12}$             |
+| Normal($\mu, \sigma^2$) | $\mu$                      | $\sigma^2$                         |
+| Exponential($\lambda$) | $\frac{1}{\lambda}$         | $\frac{1}{\lambda^2}$              |                       
+
+## Random Vectors
+
+The mean of a random vector $X=[X_{1},\ldots, X_{k}]^{T}$ is a vector
+
+$$
+\mu =
+\begin{bmatrix}
+\mu_{1} \\
+\vdots \\
+\mu_{k}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbb{E}(X_{1}) \\
+\vdots \\
+\mathbb{E}(X_{k}).
+\end{bmatrix}
+$$
+
+## Covariance Matrix
+
+The variance-covariance matrix $\Sigma$ of a random vector $X$ is defined as
+
+$$
+\small
+\mathbb{V}(X) = 
+\begin{bmatrix}
+\mathbb{V}(X_{1}) & \operatorname{Cov}(X_{1}, X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
+\operatorname{Cov}(X_{2}, X_{1}) & \mathbb{V}(X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
+\vdots & \vdots & \vdots & \vdots \\
+\operatorname{Cov}(X_{k}, X_{1})  & \operatorname{Cov}(X_{k}, X_{2}) & \cdots  & \mathbb{V}(X_{k}) \\
+\end{bmatrix}
+$$
+
+What is a property you can immediately identify from this matrix?
+
+---
+
+If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{T}X) = a^{T}\mu$ and $\mathbb{V}(a^{T}X) = a^{T}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{T}$
+
+## Conditional Expectation
+
+Suppose that $X$ and $Y$ are random variables. What is the mean of $Y$ among those times when $X=x$?
+
+:::: {.fragment}
+The conditional expectation of $Y$ given $X=x$ is 
+
+$$
+\mathbb{E}(Y\vert X=x) = 
+\begin{cases}
+\sum y f_{Y\vert X}(y\vert x) & \text{discrete case},\\
+\int y f_{Y\vert X}(y\vert x) dy & \text{continuous case}.
+\end{cases}
+$$
+::::
+
+
+---
+
+### The Rule of Iterated Expectation
+
+For random variables $X$ and $Y$, assuming the expectations exist, we have that
+
+$$
+\mathbb{E}(\mathbb{E}(Y\vert X)) = \mathbb{E}(Y)\quad\text{and}\quad \mathbb{E}(\mathbb{E}(X\vert Y)) = \mathbb{E}(X).
+$$
+
+## Conditional Variance
+
+The conditional variance is defined as
+
+$$
+\mathbb{V}(Y\vert X=x) = \int (y-\mu(x))^{2}f(y\vert x)dy,
+$$
+where $\mu(x)=\mathbb{E}(Y\vert X=x)$.
+
+---
+
+For random variables $X$ and $Y$
+
+$$
+\mathbb{V}(Y) = \mathbb{E}(\mathbb{V}(Y\vert X)) + \mathbb{V}(\mathbb{E}((Y\vert X))).
+$$
+
+:::: {.fragment}
+How can we use this formula in a meaningful way?
+::::
+
+---
+
+Draw a county at random from the USA. Then draw $n$ people at random from this county. Let $X$ be the number of those people who have a certain disease. If $Q$ denotes the proportion of people in that county with the disease, then $Q$ is also a random variable. 
+
+Given $Q=q$, we have that $X\sim\operatorname{Binomial}(n,q)$.
+
+In this case, what is $\mathbb{E}(X\vert Q=q)$ and $\mathbb{V}(X\vert Q=q)$?
+
+:::: {.fragment}
+$$
+\mathbb{E}(X\vert Q=q) = nq, \quad \mathbb{V}(X\vert Q=q)=nq(1-q).
+$$
+::::
+
+---
+
+Suppose now that $Q\sim\operatorname{Uniform}(0,1)$. A distribution that is constructed in stages like this is called a **hierarchical model** and is written as
+
+$$
+\begin{align}
+Q&\sim\operatorname{Uniform}(0,1), \\
+X\vert Q=q&\sim\operatorname{Binomial}(n,q).
+\end{align}
+$$
+
+We can now used what we learned in class to compute $\mathbb{E}(X)$ and $\mathbb{V}(X)$.
+
+
+## Moments
+
+The $k$th moment of $X$ is defined to be $\mathbb{E}(X^{k})$ assuming that $\mathbb{E}(\vert X\vert^{k})<\infty$.
+
+:::: {.incremental}
+- What is the first moment? 
+
+:::: {.fragment}
+The mean.
+::::
+
+- What is the second moment?
+
+:::: {.fragment}
+The variance.
+::::
+::::
+
+:::: {.fragment}
+The third and fourth moments are called the skewness and the kurtosis.
+::::
+
+## Moment Generating Functions
+
+Moment generating functions are used for finding moments, finding the distributions of sums of random variables, and are used in proofs of some theorems.
+
+**Definition**
+The **moment generating function** (Laplace Transform) of $X$ is defined by
+
+$$
+\phi_{X}(t) = \mathbb{E}(e^{tX}) = \int e^{tx}f_{X}(x)dx.
+$$
+
+---
+
+When the MGF is well defined, we can interchange the operations of differentiation and integration. This allows us to compute
+
+$$
+\small
+\psi^{\prime}(0) = \frac{d}{dt}\mathbb{E}(e^{tX})\bigg\vert_{0} = \mathbb{E}\left(\frac{d}{dt}e^{tX}\right)\bigg\vert_{0}  = \mathbb{E}(Xe^{tX})\bigg\vert_{0}  = \mathbb{E}(X).
+$$
+
+We can similarly conclude that $\psi^{(k)}(0) = \mathbb{E}(X^{k})$.
+
+---
+
+### Moment Generating Functions (MGFs)
+
+| Distribution              | MGF $\psi(t)$                                      |
+|---------------------------|-------------------------------------------------------|
+| Bernoulli($p$)        | $\psi(t) = 1 - p + p e^t$                          |
+| Binomial($n, p$)      | $\psi(t) = (1 - p + p e^t)^n$                      |
+| Poisson($\lambda$)    | $\psi(t) = \exp\left( \lambda (e^t - 1) \right)$   |
+| Normal($\mu, \sigma^2$) | $\psi(t) = \exp\left( \mu t + \frac{1}{2} \sigma^2 t^2 \right)$ |
+
+
+## Summary
+
+We covered:
+
+- expectation
+- variance and covariance
+- moments and moment generating functions
