@@ -115,6 +115,33 @@ $$
 \lim_{x\rightarrow 0} \frac{\cos{(x)}-1}{x} 
 $$
 
+---
+title: "Limit Laws in Calculus"
+format: revealjs
+---
+
+## Limit Laws
+
+The following laws assume that $\lim_{x \to a} f(x)$ and $\lim_{x \to a} g(x)$ exist.
+
+1. $\lim_{x \to a} [f(x) + g(x)] = \lim_{x \to a} f(x) + \lim_{x \to a} g(x)$
+1. $\lim_{x \to a} [f(x) - g(x)] = \lim_{x \to a} f(x) - \lim_{x \to a} g(x)$
+1. $\lim_{x \to a} [c \cdot f(x)] = c \cdot \lim_{x \to a} f(x)$
+1. $\lim_{x \to a} [f(x) \cdot g(x)] = \lim_{x \to a} f(x) \cdot \lim_{x \to a} g(x)$
+1. $\lim_{x \to a} \left[\frac{f(x)}{g(x)}\right] = \frac{\lim_{x \to a} f(x)}{\lim_{x \to a} g(x)}$ *provided* $\lim_{x \to a} g(x) \ne 0$
+
+## Composite Limit Law
+
+If $\lim_{x \to a} g(x) = L$ and $f$ is continuous at $L$ (i.e., $\lim_{x \to L} f(x) = f(L)$), then  
+$$\lim_{x \to a} f(g(x)) = f\left(\lim_{x \to a} g(x)\right) = f(L)$$
+
+
+## Summary
+
+These laws help simplify the evaluation of limits and are foundational for understanding continuity and derivatives.
+
+
+
 ## Derivative Definition
 
 The derivative $f^{\prime}(x)$ of single-variable real-valued function $f(x)$ at the point $x$ is
@@ -230,7 +257,7 @@ How could we derive these for other trigonometric functions like
 $$
 \small
 \begin{align}
-\tan{(x)} &= \frac{\sin{(x)}}{\cos{(x)}}$, \\
+\tan{(x)} &= \frac{\sin{(x)}}{\cos{(x)}}, \\
 \csc{(x)} &= \frac{1}{\sin{(x)}}, \\ 
 \sec{(x)} &= \frac{1}{\cos{(x)}}, \\
 \cot{(x)} &= \frac{1}{\tan{(x)}} ?
