@@ -1,0 +1,924 @@
+---
+title: "Optimization: First Order Methods"
+jupyter: python3
+---
+
+## Lecture Overview
+
+First order optimization methods are based solely on information from the gradient of the objective function.
+
+The goal today is to refresh your knowledge on gradient descent and variants such as
+
+- stochastic gradient descent
+- gradient descent with momentum
+- RMSProp
+- Adam (Adaptive Moment Estimation)
+
+## Lecture Objectives
+
+Understand:
+
+:::: {.incremental}
+- Convergence of standard gradient descent
+- Mathematical formulations of various first order methods
+::::
+
+## Optimization Problem
+
+Recall from the previous lecture the optimization problem: 
+
+Given an objective function $f(x)$, compute
+
+$$
+\min_{x} f(x).
+$$
+
+## Gradient Descent
+
+Gradient descent is a line search method of the form
+
+$$
+x_{k+1} = x_{k} +\alpha_{k} p_{k},
+$$
+
+where $p_{k}=-\nabla f_{k}$ is the gradient of the objective function at the point $x_{k}$, i.e., $\nabla f_{k} = \nabla f(x_{k})$.
+
+
+## The Learning Rate
+
+To determine the optimal step $\alpha > 0$ we could consider the function $\phi(\alpha)= f(x_{k} + \alpha p_{k})$
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the function with two local minima
+def f(alpha):
+    return np.sin(alpha) + 0.1 * (alpha - 5)**2
+
+# Generate alpha values from 0 to 10
+alpha = np.linspace(0, 10, 400)
+y = f(alpha)
+
+# Plot the function
+plt.figure(figsize=(8, 5))
+plt.plot(alpha, y, label=r'$\phi(\alpha)$')
+plt.xlabel(r'$\alpha$')
+plt.ylabel(r'$\phi(\alpha)$')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+```
+
+and try to find the optimal $\alpha$.
+
+## Wolfe Conditions
+
+The Wolfe conditions stipulate what values should be chosen for the step length $\alpha_{k}$. 
+
+For $0 < c_{1} < c_{2} < 1$, the Wolfe conditions are:
+
+1. $f(x_{k} + \alpha_{k}p_{k}) \leq f(x_{k}) + c_{1}\alpha_{k}\nabla f_{k}^{T}p_{k}$
+1. $\nabla f(x_{k} + \alpha_{k}p_{k})^{T}p_{k} \geq c_{2}\nabla f_{k}^{T}p_{k}$
+
+Condition 1 is the sufficient decrease (Armijo) condition and Condition 2 is the curvature condition.
+
+For every function that is smooth (differentiable) and bounded below you can prove that there are step lengths $\alpha_{k}$ that satisfy the Wolfe conditions.
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the function with two local minima
+def f(alpha):
+    return np.sin(alpha) + 0.1 * (alpha - 5)**2
+
+# Generate alpha values from 0 to 10
+alpha = np.linspace(0, 10, 400)
+y = f(alpha)
+
+# Plot the function
+plt.figure(figsize=(8, 5))
+plt.plot(alpha, y, label=r'$\phi(\alpha)$')
+plt.xlabel(r'$\alpha$')
+plt.ylabel(r'$\phi(\alpha)$')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+## Convergence Theorem (Zoutendijk)
+
+Let $x_{k} +\alpha_{k} p_{k}$ and $\alpha_{k}$ satisfies the Wolfe conditions. Suppose that $f$ is bounded below in $\mathbb{R}^{n}$ and continuously differentiable in an open set $\mathcal{N}$ containing the level set $\mathcal{L} = \{x : f(x)\leq f(x_{0})\}$. Assume $\nabla f$ is Lipschitz continuous on $\mathcal{N}$, i.e., there exists $L>0$ such that
+
+$$
+\small
+\Vert \nabla f(x) - \nabla f(\tilde{x})\Vert \leq L \Vert x-\tilde{x}\Vert, \quad \forall x,\tilde{x}\in\mathcal{N}.
+$$
+
+Then
+
+$$
+\small
+\sum_{k} \cos^{2}{\theta_{k}} \Vert \nabla f_{k}\Vert^{2} < \infty,
+$$
+
+where $\cos{\theta_{k}} = \frac{-\nabla f_{k}p_{k}}{\Vert\nabla f_{k} \Vert \Vert p_{k} \Vert}$
+
+## Rate of Convergence
+
+To understand the rate of convergence of gradient descent we consider the ideal case when the objective function is
+
+$$
+f(x) = \frac{1}{2}x^{T}Qx - b^{T}x,
+$$
+
+where $Q\in\mathbb{R}^{n\times n}$ is SPD.
+
+Note that the gradient is $\nabla f(x) = Qx -b$. What is the unique minimizer $x^{*}$?
+
+---
+
+We can also compute the ideal step length that minimizes $f(x_{k} + \alpha\nabla f_{k})$. We compute
+
+$$
+\frac{d}{d\alpha} f(x_{k} + \alpha\nabla f_{k})
+$$
+
+:::: {.fragment}
+which gives $\alpha_{k} = \frac{\nabla f_{k}^{T}\nabla f_{k}}{\nabla f_{k}^{T}Q\nabla f_{k}}$. 
+
+Using this step length is called an exact line search.
+::::
+
+## Error Norm
+
+When $Q$ is SPD, the quantity 
+
+$$
+\Vert x \Vert_{Q}^{2} = x^{T}Qx,
+$$
+
+is a well-defined norm.
+
+---
+
+**Theorem**
+The steepest descent method with exact line searches is applied to the strongly convex quadratic function $f(x)$, the error norm satisfies
+
+$$
+\Vert x_{k+1} - x^{*}\Vert_{Q}^{2} \leq \left(\frac{\lambda_{n} - \lambda_{1}}{\lambda_{n} + \lambda_{1}}\right)^{2} \Vert x_{k+1} - x^{*}\Vert_{Q}^{2},
+$$
+
+where $\lambda_{1}\leq \lambda_{2}\leq \cdots \leq \lambda_{n}$ are the eigenvalues of $Q$.
+
+What does this tell us about the convergence?
+
+## Example 1
+
+Consider the objective function $f(x) = \frac{1}{2}x^{T}Qx - b^{T}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=I$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$.
+
+Let's plot the convergence of this.
+
+---
+
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style for aesthetics
+sns.set(style="whitegrid")
+
+# Define the quadratic objective function
+Q = np.eye(2)
+b = np.array([1.0, 1.0])
+
+def f(x):
+    return 0.5 * np.dot(x.T, np.dot(Q, x)) - np.dot(b.T, x)
+
+def grad_f(x):
+    return np.dot(Q, x) - b
+
+# Gradient descent with exact line search
+x = np.array([3.0, 3.0])  # Initial point
+trajectory = [x.copy()]
+
+max_steps=10
+n_steps=0
+for _ in range(max_steps):
+    g = grad_f(x)
+    alpha = np.dot(g, g) / np.dot(g, np.dot(Q, g))  # Exact line search step size
+    x = x - alpha * g
+    trajectory.append(x.copy())
+    n_steps += 1
+    if np.linalg.norm(b-x) < 1e-10:
+        break
+
+trajectory = np.array(trajectory)
+
+# Create contour plot of the function
+x_vals = np.linspace(-1, 4, 400)
+y_vals = np.linspace(-1, 4, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+Z = 0.5 * (X**2 + Y**2) - b[0]*X - b[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
+plt.title(f'Optimization Trajectory: {n_steps} step to converge')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+## Example 2
+
+Consider the objective function $f(x) = \frac{1}{2}x^{T}Qx - b^{T}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=\begin{bmatrix} 200 & -1 \\ -1 & 1 \end{bmatrix}$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$. The eigenvalues for this matrix are approximately 100 and 1. The true minimizer is $x^{*} = \begin{bmatrix} \frac{2}{99} \\ \frac{101}{99} \end{bmatrix}$.
+
+Let's plot the convergence of this.
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style for aesthetics
+sns.set(style="whitegrid")
+
+# Define the quadratic objective function
+Q = np.array([[100, -1], [-1, 1]])
+b = np.array([1.0, 1.0])
+x_min = np.linalg.solve(Q, b)
+
+def f(x):
+    return 0.5 * np.dot(x.T, np.dot(Q, x)) - np.dot(b.T, x)
+
+def grad_f(x):
+    return np.dot(Q, x) - b
+
+# Gradient descent with exact line search
+x = np.array([3.0, 3.0])  # Initial point
+trajectory = [x.copy()]
+
+max_steps=10
+n_steps=0
+for _ in range(max_steps):
+    g = grad_f(x)
+    alpha = np.dot(g, g) / np.dot(g, np.dot(Q, g))  # Exact line search step size
+    x = x - alpha * g
+    trajectory.append(x.copy())
+    n_steps += 1
+    if np.linalg.norm(x-x_min) < 1e-10:
+        break
+
+trajectory = np.array(trajectory)
+
+# Create contour plot of the function
+x_vals = np.linspace(-1, 4, 400)
+y_vals = np.linspace(-1, 4, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+
+# Compute Z = 0.5 * x^T Q x - b^T x
+Z = 0.5 * (Q[0,0]*X**2 + 2*Q[0,1]*X*Y + Q[1,1]*Y**2) - b[0]*X - b[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
+plt.title(f'Optimization Trajectory: {n_steps} step to converge')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+---
+
+**Example 1**
+```{python}
+import numpy as np
+import pandas as pd
+
+# Define the objective function and its gradient
+def f(Q, x, b):
+    return 0.5 * x.T @ Q @ x - b.T @ x
+
+def grad_f(Q, x, b):
+    return Q @ x - b
+
+# Gradient descent with exact line search
+def exact_line_search(Q, x, grad):
+    return (grad.T @ grad) / (grad.T @ Q @ grad)
+
+# Initialize variables
+x1 = np.array([3.0, 3.0])
+max_iter = 10
+
+# Store results
+results1 = []
+
+b = np.array([1.0, 1.0])
+Q1 = np.eye(2)
+
+for i in range(max_iter):
+    grad1 = grad_f(Q1, x1, b)
+    grad1_norm = np.linalg.norm(grad1)
+    func1_val = f(Q1, x1, b)
+    results1.append([i, x1[0], x1[1], grad1_norm, func1_val])
+    
+    if grad1_norm < 1e-6:
+        break
+
+    alpha = exact_line_search(Q1, x1, grad1)
+    x1 = x1 - alpha * grad1
+
+# Create DataFrame and save to CSV
+df1 = pd.DataFrame(results1, columns=["Iteration", "x1", "x2", "Gradient Norm", "Function Value"])
+print(df1.head())
+```
+
+**Example 2**
+```{python}
+import numpy as np
+import pandas as pd
+
+# Define the objective function and its gradient
+def f(Q, x, b):
+    return 0.5 * x.T @ Q @ x - b.T @ x
+
+def grad_f(Q, x, b):
+    return Q @ x - b
+
+# Gradient descent with exact line search
+def exact_line_search(Q, x, grad):
+    return (grad.T @ grad) / (grad.T @ Q @ grad)
+
+# Initialize variables
+x2 = np.array([3.0, 3.0])
+max_iter = 10
+
+# Store results
+results2 = []
+
+b = np.array([1.0, 1.0])
+Q2 = np.array([[100, -1], [-1, 1]])
+
+for i in range(max_iter):
+    grad2 = grad_f(Q2, x2, b)
+    grad2_norm = np.linalg.norm(grad2)
+    func2_val = f(Q2, x2, b)
+    results2.append([i, x2[0], x2[1], grad2_norm, func2_val])
+    
+    if grad2_norm < 1e-6:
+        break
+
+    alpha = exact_line_search(Q2, x2, grad2)
+    x2 = x2 - alpha * grad2
+
+# Create DataFrame and save to CSV
+df2 = pd.DataFrame(results2, columns=["Iteration", "x1", "x2", "Gradient Norm", "Function Value"])
+print(df2.head(8))
+```
+
+## Objective Functions in ML
+
+Let's now consider an objective function of the form
+
+$$
+f(w) = \frac{1}{m}\sum_{i=1}^{m}f_{i}(w),
+$$
+
+where each $f_{i}(w)$ is an objective function.
+
+This is a very common type of objective function in machine learning.
+
+---
+
+Consider a neural network with parameters $w$ and training data $\{(x_{i}, y_{i})\}_{i=1}^{m}$, then we recover the previous objective function
+
+$$
+f(w) = \frac{1}{m}\sum_{i=1}f_{i}(w; x_{i}, y_{i}),
+$$
+
+where each $f_{i}(w; x_{i}, y_{i})$ is a loss function.
+
+
+## Gradient Descent Algorithm
+
+Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
+
+1. Given $w_{0}$ and $\alpha>0$
+1. For $k=0,1,2,\ldots$
+1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
+1. $\quad\text{Update}~w_{k+1} = w_{k} - \alpha \nabla f_{k}$
+
+
+## Stochastic Gradient Descent
+
+Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
+
+1. Given $w_{0}$ and $\alpha>0$,
+1. For $k=0,1,2,\ldots$
+1. $\quad\text{Sample index}~i_{k}~\text{randomly}$
+1. $\quad\text{Compute}~\nabla f_{i_{k}} = \nabla f_{i}(w_{k})$
+1. $\quad w_{k+1} = w_{k}-\alpha \nabla f_{i_{k}}$
+
+---
+
+|                      | SGD        | GD                          |
+|---------------------------|----------------------------------------------------|------------------------------------------------|
+| **Computation per Update** | Low (uses one or few samples per update).          | High (uses all samples per update).           |
+| **Speed of Convergence** | Faster initial progress, but noisy updates.        | Slower per epoch due to full dataset pass.    |
+| **Memory Requirement**   | Low (only needs a few samples at a time).          | High (must load entire dataset).              |
+| **Convergence Stability**| Noisy; may oscillate around minima.                | Smooth and stable convergence.                |
+| **Suitability**          | Large datasets.                  | Small to medium datasets.                     |
+| **Risk of Local Minima** | Can escape local minima due to noise.              | More likely to get stuck in local minima.     |
+
+
+## Gradient Descent with Momentum
+
+Gradient descent can be slow, unstable, or inefficient in certain landscapes. Momentum addresses these issues by introducing **inertia**, helping the algorithm move more decisively and smoothly.
+
+We previously saw that for functions with anisotropic curvature (e.g., long narrow valleys), gradients can point in wildly different directions.
+
+Consequently standard gradient descent zigzags across the valley walls, slowing convergence.
+
+Momentum smooths these updates, reducing oscillations and allowing faster movement along the valley floor.
+
+---
+
+**Gradient Descent with Momentum**
+
+1. Given $w_{0}$, $\alpha>0$, $\beta\in[0, 1)$ and $v_{0}$
+1. For $k=0,1,2,\ldots$
+1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
+1. $\quad v_{k+1} = \beta v_{k} - \alpha \nabla f_{k}$
+1. $\quad w_{k+1} = w_{k}+v_{k}$
+
+
+---
+
+```{python}
+# Requires: pip install torch
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
+
+# --- Aesthetics ---
+sns.set(style="whitegrid")
+
+# --- Problem setup (same objective) ---
+Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+b_np = np.array([1.0, 1.0])
+
+# Convert to double-precision torch tensors
+dtype = torch.float64
+Q = torch.tensor(Q_np, dtype=dtype)
+b = torch.tensor(b_np, dtype=dtype)
+
+# Closed-form minimizer: Q x = b
+x_min = torch.linalg.solve(Q, b)
+
+def f(x):
+    # x is a 1D tensor of shape (2,)
+    return 0.5 * x @ (Q @ x) - b @ x
+
+# --- Momentum SGD setup ---
+# Initial point
+x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
+
+# Optimizer: SGD with momentum
+optimizer = torch.optim.SGD([x], lr=0.01, momentum=0.5, nesterov=False)
+
+# Record trajectory
+trajectory = [x.detach().numpy().copy()]
+
+max_steps = 200
+tol = 1e-6
+n_steps = 0
+
+for _ in range(max_steps):
+    optimizer.zero_grad()
+    loss = f(x)
+    loss.backward()
+    optimizer.step()
+
+    trajectory.append(x.detach().numpy().copy())
+    n_steps += 1
+
+    if torch.norm(x.detach() - x_min).item() < tol:
+        break
+
+trajectory = np.array(trajectory)
+
+# --- Contour plot (same as before) ---
+x_vals = np.linspace(-1, 4, 400)
+y_vals = np.linspace(-1, 4, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+
+# Z = 0.5 * x^T Q x - b^T x (expanded)
+Z = 0.5 * (Q_np[0,0]*X**2 + 2*Q_np[0,1]*X*Y + Q_np[1,1]*Y**2) - b_np[0]*X - b_np[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Momentum SGD Path')
+plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
+plt.title(f'Optimization Trajectory (Momentum): {n_steps} step(s)')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
+
+## RMSProp
+
+RMSProp (Root Mean Square Propagation) was designed to address a key limitation of gradient descent and even momentum-based methods:
+
+> Fixed learning rates struggle when gradients vary wildly across dimensions or over time.
+
+---
+
+**RMSProp**
+
+1. Given $w_{0}$, $\alpha>0$, $\gamma\in[0, 1)$, $\varepsilon >0$, and $E_{0}$
+1. For $k=0,1,2,\ldots$
+1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
+1. $\quad E_{k+1} = \gamma E_{k} + (1-\gamma)\nabla f_{k}^{2}$ (element-wise square)
+1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1} + \varepsilon}}\nabla f_{k}$
+
+---
+
+```{python}
+# Requires: pip install torch
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
+
+# --- Aesthetics ---
+sns.set(style="whitegrid")
+
+# --- Problem setup (same objective) ---
+Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+b_np = np.array([1.0, 1.0])
+
+# Convert to double-precision torch tensors
+dtype = torch.float64
+Q = torch.tensor(Q_np, dtype=dtype)
+b = torch.tensor(b_np, dtype=dtype)
+
+# Closed-form minimizer: Q x = b
+x_min = torch.linalg.solve(Q, b)
+
+def f(x):
+    # x is a 1D tensor of shape (2,)
+    return 0.5 * x @ (Q @ x) - b @ x
+
+# --- RMSprop setup ---
+# Initial point
+x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
+
+# Optimizer: RMSprop
+# alpha is the decay (smoothing) factor for the running average of squared grads
+optimizer = torch.optim.RMSprop(
+    [x],
+    lr=0.1,       # try 0.005–0.02 on this quadratic
+    alpha=0.9,     # smoothing for squared grads (common: 0.9–0.99)
+    eps=1e-8,
+    centered=False # set True to use a centered variance estimate
+)
+
+# Record trajectory
+trajectory = [x.detach().numpy().copy()]
+
+max_steps = 500
+tol = 1e-6
+n_steps = 0
+
+for _ in range(max_steps):
+    optimizer.zero_grad()
+    loss = f(x)
+    loss.backward()
+    optimizer.step()
+
+    trajectory.append(x.detach().numpy().copy())
+    n_steps += 1
+
+    if torch.norm(x.detach() - x_min).item() < tol:
+        break
+trajectory = np.array(trajectory)
+
+# --- Contour plot (same as before) ---
+x_vals = np.linspace(-1, 4, 400)
+y_vals = np.linspace(-1, 4, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+
+# Z = 0.5 * x^T Q x - b^T x (expanded)
+Z = 0.5 * (Q_np[0,0]*X**2 + 2*Q_np[0,1]*X*Y + Q_np[1,1]*Y**2) - b_np[0]*X - b_np[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='RMSprop Path')
+plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
+plt.title(f'Optimization Trajectory (RMSprop): {n_steps} step(s)')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+
+## Adaptive Moment Estimation (Adam)
+
+We have seen that:
+- Momentum helps smooth updates and accelerate convergence.
+- RMSProp adapts learning rates per parameter based on recent gradient magnitudes.
+
+The Adam optimizer combines both. It is a smart navigator that remembers both the direction and the terrain roughness.
+
+---
+
+**Adam**
+
+1. Given $w_{0}$, $\alpha>0$, $\beta_{1},\beta_{2}\in[0, 1)$, $\varepsilon >0$, $m_{0}$, and $v_{0}$
+1. For $k=0,1,2,\ldots$
+1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
+1. $\quad m_{k+1} = \beta_{1} m_{k} + (1-\beta_{1})\nabla f_{k}$
+1. $\quad v_{k+1} = \beta_{2} v_{k} + (1-\beta_{1})\nabla f_{k}^{2}$ (element-wise square)
+1. $\quad \hat{m}_{k+1} = \frac{m_{k+1}}{1-\beta_{1}^{k+1}}$, $\quad \hat{v}_{k+1} = \frac{v_{k+1}}{1-\beta_{2}^{k+1}}$
+1. $\quad w_{k+1} = w_{k}-\alpha \frac{\hat{m}_{k+1}}{\sqrt{\hat{v}_{k+1}} + \varepsilon}$ (element-wise division)
+
+
+---
+
+```{python}
+# Requires: pip install torch
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
+
+# --- Aesthetics ---
+sns.set(style="whitegrid")
+
+# --- Problem setup (same objective) ---
+Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+b_np = np.array([1.0, 1.0])
+
+# Convert to double-precision torch tensors
+dtype = torch.float64
+Q = torch.tensor(Q_np, dtype=dtype)
+b = torch.tensor(b_np, dtype=dtype)
+
+# Closed-form minimizer: Q x = b
+x_min = torch.linalg.solve(Q, b)
+
+def f(x):
+    # x is a 1D tensor of shape (2,)
+    return 0.5 * x @ (Q @ x) - b @ x
+
+# --- Adam setup ---
+# Initial point
+x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
+
+# Optimizer: Adam
+# Note: default lr=1e-3 is very stable; you can try 0.005–0.02 on this quadratic.
+optimizer = torch.optim.Adam(
+    [x],
+    lr=0.1,           # try 0.001–0.02; increase if too slow, decrease if jittery
+    betas=(0.9, 0.999), # (beta1 for momentum, beta2 for squared grads)
+    eps=1e-8,           # numerical stability
+    weight_decay=0.0    # set >0 to add L2 regularization (Adam, not decoupled)
+    # For decoupled weight decay, use torch.optim.AdamW instead.
+)
+
+# Record trajectory
+trajectory = [x.detach().numpy().copy()]
+
+max_steps = 200
+tol = 1e-6
+n_steps = 0
+
+for _ in range(max_steps):
+    optimizer.zero_grad()
+    loss = f(x)
+    loss.backward()
+    optimizer.step()
+
+    trajectory.append(x.detach().numpy().copy())
+    n_steps += 1
+
+    if torch.norm(x.detach() - x_min).item() < tol:
+        break
+
+trajectory = np.array(trajectory)
+
+# --- Contour plot (same as before) ---
+x_vals = np.linspace(-1, 4, 400)
+y_vals = np.linspace(-1, 4, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+
+# Z = 0.5 * x^T Q x - b^T x (expanded)
+Z = 0.5 * (Q_np[0,0]*X**2 + 2*Q_np[0,1]*X*Y + Q_np[1,1]*Y**2) - b_np[0]*X - b_np[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Adam Path')
+plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
+plt.title(f'Optimization Trajectory (Adam): {n_steps} step(s)')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+## Example: the Rosenbrock Function
+
+The Rosenbrock function is a classic test problem for optimization algorithms. It's defined as:
+
+$$
+f(x_{1}, x_{2}) = (1 - x_{1})^2 + 100(x_{2} - x_{1}^2)^2
+$$
+
+- Non-convex and highly curved
+- Global minimum at $(x_{1}, x_{2}) = (1, 1)$
+- Often used to evaluate gradient-based methods
+
+---
+
+### Why is it Challenging?
+
+- The function has a narrow, curved valley
+- Gradient descent struggles due to poor conditioning
+- Requires careful tuning of learning rates and momentum
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style
+sns.set(style='whitegrid')
+
+# Define the Rosenbrock function
+def rosenbrock(x, y):
+    return (1 - x)**2 + 100 * (y - x**2)**2
+
+# Create a grid of x and y values
+x = np.linspace(-2, 2, 400)
+y = np.linspace(-1, 3, 400)
+X, Y = np.meshgrid(x, y)
+Z = rosenbrock(X, Y)
+
+# Create the plot
+plt.figure(figsize=(10, 8))
+contour = plt.contour(X, Y, Z, levels=np.logspace(-1, 3, 20), cmap='plasma')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(1, 1, 'r*', markersize=15, label='Minimum Point (1, 1)')
+plt.title('Rosenbrock Function Contour Plot')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.grid(True)
+```
+
+---
+
+```{python}
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set style for plots
+sns.set(style='whitegrid')
+
+# Define Rosenbrock function
+def rosenbrock(x):
+    return (1 - x[0])**2 + 100 * (x[1] - x[0]**2)**2
+
+# Optimization loop
+def optimize(optimizer_class, lr, steps=2000):
+    x = torch.tensor([-1.5, 1.5], dtype=torch.float32, requires_grad=True)
+    optimizer = optimizer_class([x], lr=lr)
+    trajectory = [x.detach().numpy().copy()]
+    losses = [rosenbrock(x.detach().numpy())]
+    for _ in range(steps):
+        optimizer.zero_grad()
+        loss = rosenbrock(x)
+        loss.backward()
+        optimizer.step()
+        trajectory.append(x.detach().numpy().copy())
+        losses.append(loss.item())
+    return np.array(trajectory), losses
+
+# Run optimizers
+optimizers = {
+    'Gradient Descent': (torch.optim.SGD, 0.001),
+    'Momentum': (lambda params, lr: torch.optim.SGD(params, lr=lr, momentum=0.9), 0.001),
+    'RMSProp': (torch.optim.RMSprop, 0.001),
+    'Adam': (torch.optim.Adam, 0.01)
+}
+
+trajectories = {}
+loss_histories = {}
+for name, (opt_class, lr) in optimizers.items():
+    traj, losses = optimize(opt_class, lr)
+    trajectories[name] = traj
+    loss_histories[name] = losses
+
+# Prepare side-by-side plots
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+# Convergence plot
+for name, losses in loss_histories.items():
+    axes[0].plot(losses, label=name)
+axes[0].set_yscale('log')
+axes[0].set_xlabel('Iteration')
+axes[0].set_ylabel('Loss (log scale)')
+axes[0].set_title('Optimizer Convergence on Rosenbrock Function')
+axes[0].legend()
+
+# Contour plot
+x = np.linspace(-2, 2, 400)
+y = np.linspace(-1, 3, 400)
+X, Y = np.meshgrid(x, y)
+Z = (1 - X)**2 + 100 * (Y - X**2)**2
+
+cp = axes[1].contour(X, Y, Z, levels=np.logspace(-1, 3, 20), cmap='Greys')
+axes[1].clabel(cp, inline=True, fontsize=8)
+
+# Overlay trajectories with distinct markers
+markers = {
+    'Gradient Descent': 'o',
+    'Momentum': 's',
+    'RMSProp': '^',
+    'Adam': 'D'
+}
+for name, traj in trajectories.items():
+    axes[1].plot(traj[:, 0], traj[:, 1], label=name, linewidth=2, marker=markers[name], markevery=100)
+
+# Add red star at minimum
+axes[1].plot(1, 1, 'r*', markersize=15, label='Minimum')
+
+axes[1].set_xlabel('$x_1$')
+axes[1].set_ylabel('$x_2$')
+axes[1].set_title('Optimizer Trajectories on Rosenbrock Function')
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+
+```
+
+## Optimization in Practice
+
+As a data scientist, you will likely use one of these algorithms when training a machine learning model. In practice, however, you typically won't:
+
+- Prove the convergence of the algorithm for your specific problem  
+- Explicitly determine the optimal value of the parameter $\alpha_k$
+
+Nonetheless, it's important to understand the implementation details—especially when things don't go as expected. A solid grasp of the underlying mechanics can help you diagnose issues and make informed adjustments.
+
+
+## Summary
+
+In this lecture:
+
+- we proved linear convergence of the gradient descent method
+- introduced variants of the method
+- discussed the practical use of these methods in data science
