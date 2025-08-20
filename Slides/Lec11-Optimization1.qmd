@@ -278,6 +278,14 @@ $$
 
 For a convex function the line connecting the points $(x, f(x))$ $(y, f(y))$ must lie above the graph of $f$.
 
+---
+
+The second derivative test is another way to determine if a function is convex.
+
+If $f{\prime\prime}(x)>0$, then $f(x)$ is convex (concave up).
+
+When $x$ is a vector, the equivalent condition is that $\nabla^{2}f(x)$ is positive definite.
+
 ## Recognizing a Local Minimum
 
 How do we recognize a local minimum $x^{*}$?
