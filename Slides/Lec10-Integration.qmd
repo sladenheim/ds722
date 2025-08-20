@@ -145,8 +145,9 @@ The function $f$ is called the integrand.
 ## Comparison Properties of the Integral
 
 1. If $f(x)\geq 0$ for $a\leq x\leq b$, then $\int_{a}^{b}f(x)dx \geq 0$
-1. If $f(x)\geq g(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}f(x)dx \geq \int_{a}^{b}g(x)dx$$
+1. If $g(x)\leq f(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}g(x)dx \geq \int_{a}^{b}f(x)dx$$
 1. If $m\leq f(x)\leq M$ for  $a\leq x\leq b$, then $$\small m(b-a)\leq \int_{a}^{b}f(x)dx \leq M(b-a)$$
+1. $\left\vert \int_{a}^{b} f(x) dx \right\vert \leq \int_{a}^{b}\vert f(x)\vert dx$
 
 ## Fundamental Theorem of Calculus
 
@@ -243,7 +244,7 @@ provided this limit exists.
 
 ---
 
-If both $\int_{a}^{\infty}f(x) dx$ and $int_{-\infty}^{a}f(x) dx$ are convergent, then we define
+If both $\int_{a}^{\infty}f(x) dx$ and $\int_{-\infty}^{a}f(x) dx$ are convergent, then we define
 
 $$
 \int_{-\infty}^{\infty}f(x) dx = \int_{-\infty}^{a}f(x) dx + \int_{a}^{\infty}f(x) dx.
@@ -334,6 +335,8 @@ $$
 $$
 
 ---
+
+### FIX THIS
 
 | Expression              | Substitution             | Range for θ             | Resulting Simplification               |
 |------------------------|--------------------------|--------------------------|----------------------------------------|
