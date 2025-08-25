@@ -1,0 +1,411 @@
+---
+title: "Optimization: Second Order Methods"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Second order optimization methods used information from the Hessian of the objective function.
+
+The goal today is to introduce the most well-known second order method: **Newton's Method**.
+
+Newton's method was developed as a root finding algorithm but is an extremely powerful optimization algorithm.
+
+## Lecture Objectives
+
+Understand:
+
+- Convergence of Newton's method
+- Computational costs of Newton's method
+- Pros and cons of 1st and 2nd order methods
+
+## Newton's Method
+
+The Newton method is given by
+
+$$
+x_{k+1} = x_{k} + \alpha_{k}\nabla^{2}f_{k}^{-1}\nabla f_{k}. 
+$$
+
+Recall that $\nabla^{2}f_{k}^{-1}$ is the Hessian and $\nabla f_{k}$ is the gradient evaluated at $x_{k}$.
+
+---
+
+We can derive 
+
+## Example 1
+
+Consider the 1-D objective function $f(x) = 7x-\ln{x}$.
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function f(x) = 7x - ln(x)
+def f(x):
+    return 7 * x - np.log(x)
+
+# Define the domain, avoiding x <= 0 due to log(x)
+x = np.linspace(0.01, 10, 400)
+
+# Compute the function values
+y = f(x)
+
+# Plot the function
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
+plt.title('Plot of f(x) = 7x - ln(x)')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.grid(True)
+plt.show()
+```
+
+---
+
+What is the 1st derivative $f^{\prime}(x)$?
+
+:::: {.fragment}
+$f^{\prime}(x) = 7-\frac{1}{x}$
+
+At what point does $f$ achieve its minimum value?
+::::
+
+:::: {.fragment}
+What is the 2nd derivative $f^{\prime\prime}(x)$?
+::::
+
+:::: {.fragment}
+$f^{\prime\prime}(x) = \frac{1}{x^{2}}$
+::::
+
+:::: {.fragment}
+The Newton update is then
+
+$$
+x_{k+1} = x_{k} - \alpha_{k}\frac{7- 1/x_{k}}{1/x_{k}^{2}} = x_{k} - \alpha_{k}(7x_{k}^{2} -x_{k}).
+$$
+::::
+
+---
+
+We will now compute 10 steps of the Newton Method for the starting points $x_{0} = \{ 1.0, 0.0, 0.1, 0.01 \}$ with $\alpha_{k}=1$.
+
+```{python}
+import numpy as np
+import pandas as pd
+
+# Define the update direction
+f = lambda x: 7 * x**2 - x
+
+# Newton's method implementation with overflow handling
+def newton_method(x0, alpha=1, n_iter=10):
+    x = x0
+    iterations = [x]
+    for _ in range(n_iter):
+        try:
+            x = x - alpha * f(x)
+        except OverflowError:
+            x = float('nan')
+        iterations.append(x)
+    return iterations
+
+# Initial guesses
+initial_guesses = [1.0, 0.0, 0.1, 0.01]
+
+# Run Newton's method for each initial guess and collect results in a dictionary
+results_dict = {str(x0): newton_method(x0) for x0 in initial_guesses}
+
+# Convert the dictionary to a DataFrame
+results_df = pd.DataFrame(results_dict)
+
+# Display the DataFrame
+print(results_df)
+```
+
+
+## Example 2
+
+Consider the 2-D objective function $f(x_{1},x_{2}) = -\ln(1-x_{1}-x_{2}) - \ln(x_{1}) - \ln(x_{2})$.
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the objective function
+def f(x1, x2):
+    with np.errstate(divide='ignore', invalid='ignore'):
+        result = -np.log(1 - x1 - x2) - np.log(x1) - np.log(x2)
+        result[np.isnan(result)] = np.inf  # Replace NaNs with inf for plotting
+        return result
+
+# Create a grid of x1 and x2 values
+x1 = np.linspace(0.01, 0.98, 300)
+x2 = np.linspace(0.01, 0.98, 300)
+X1, X2 = np.meshgrid(x1, x2)
+
+# Mask values where x1 + x2 >= 1 to avoid domain errors
+mask = (X1 + X2) < 1
+Z = np.full_like(X1, np.inf)
+Z[mask] = f(X1[mask], X2[mask])
+
+# Create the contour plot with white background and contour lines only
+plt.figure(figsize=(8, 6))
+plt.contour(X1, X2, Z, levels=50, cmap='plasma')
+plt.gca().set_facecolor('white')
+plt.title(r"Contour lines of $f(x_1, x_2) = -\ln(1 - x_1 - x_2) - \ln(x_1) - \ln(x_2)$")
+plt.xlabel("x1")
+plt.ylabel("x2")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+What is the gradient $\nabla f(x_{1},x_{2})$?
+
+:::: {.fragment}
+$$
+\small
+\nabla f(x_{1},x_{2}) = 
+\begin{bmatrix}
+\frac{1}{1-x_{1}-x_{2}} - \frac{1}{x_{1}}\\
+\frac{1}{1-x_{1}-x_{2}} - \frac{1}{x_{2}}\\
+\end{bmatrix}
+$$
+::::
+
+:::: {.fragment}
+The minimum point is $\left(\frac{1}{3},\frac{1}{3}\right)$
+::::
+
+
+:::: {.fragment}
+What is the Hessian $\nabla f^{2}(x_{1},x_{2})$?
+::::
+
+:::: {.fragment}
+$$
+\small
+\nabla f^{2}(x_{1},x_{2}) = 
+\begin{bmatrix}
+\frac{1}{(1-x_{1}-x_{2})^{2}} - \frac{1}{x_{1}^{2}} & \frac{1}{(1-x_{1}-x_{2})^{2}} \\
+\frac{1}{(1-x_{1}-x_{2})^{2}} &  \frac{1}{(1-x_{1}-x_{2})^{2}} - \frac{1}{x_{2}^{2}}\\
+\end{bmatrix}
+$$
+::::
+
+---
+
+```{python}
+import numpy as np
+import pandas as pd
+
+# Define the objective function and its gradient and Hessian
+def f(x):
+    x1, x2 = x
+    return -np.log(1 - x1 - x2) - np.log(x1) - np.log(x2)
+
+def grad_f(x):
+    x1, x2 = x
+    df_dx1 = 1 / (1 - x1 - x2) - 1 / x1
+    df_dx2 = 1 / (1 - x1 - x2) - 1 / x2
+    return np.array([df_dx1, df_dx2])
+
+def hess_f(x):
+    x1, x2 = x
+    h11 = 1 / (1 - x1 - x2)**2 + 1 / x1**2
+    h22 = 1 / (1 - x1 - x2)**2 + 1 / x2**2
+    h12 = 1 / (1 - x1 - x2)**2
+    return np.array([[h11, h12], [h12, h22]])
+
+# Newton's method implementation
+x = np.array([0.85, 0.05])
+minimizer = np.array([1/3, 1/3])
+results = []
+
+for _ in range(8):
+    error = np.linalg.norm(x - minimizer)
+    results.append([x[0], x[1], error])
+    grad = grad_f(x)
+    hess = hess_f(x)
+    try:
+        delta = np.linalg.solve(hess, grad)
+        x = x - delta
+    except np.linalg.LinAlgError:
+        break
+
+# Create DataFrame
+df = pd.DataFrame(results, columns=["x1", "x2", "2-norm error"])
+print(df)
+```
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the objective function, gradient, and Hessian
+def f(x):
+    x1, x2 = x
+    return -np.log(1 - x1 - x2) - np.log(x1) - np.log(x2)
+
+def grad_f(x):
+    x1, x2 = x
+    df_dx1 = 1 / (1 - x1 - x2) - 1 / x1
+    df_dx2 = 1 / (1 - x1 - x2) - 1 / x2
+    return np.array([df_dx1, df_dx2])
+
+def hess_f(x):
+    x1, x2 = x
+    h11 = 1 / (1 - x1 - x2)**2 + 1 / x1**2
+    h22 = 1 / (1 - x1 - x2)**2 + 1 / x2**2
+    h12 = 1 / (1 - x1 - x2)**2
+    return np.array([[h11, h12], [h12, h22]])
+
+# Initialize parameters
+x0 = np.array([0.85, 0.05])
+minimizer = np.array([1/3, 1/3])
+n_iter = 8
+learning_rate = 0.01
+
+# Store trajectories
+newton_path = [x0.copy()]
+gd_path = [x0.copy()]
+
+x_newton = x0.copy()
+x_gd = x0.copy()
+
+for _ in range(n_iter):
+    # Newton's method
+    try:
+        delta_newton = np.linalg.solve(hess_f(x_newton), grad_f(x_newton))
+        x_newton = x_newton - delta_newton
+    except np.linalg.LinAlgError:
+        break
+    newton_path.append(x_newton.copy())
+
+    # Gradient descent
+    x_gd = x_gd - learning_rate * grad_f(x_gd)
+    gd_path.append(x_gd.copy())
+
+# Convert paths to arrays
+newton_path = np.array(newton_path)
+gd_path = np.array(gd_path)
+
+# Create contour plot
+x1 = np.linspace(0.01, 0.98, 300)
+x2 = np.linspace(0.01, 0.98, 300)
+X1, X2 = np.meshgrid(x1, x2)
+Z = np.full_like(X1, np.inf)
+mask = (X1 + X2) < 1
+Z[mask] = f([X1[mask], X2[mask]])
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X1, X2, Z, levels=50, cmap='plasma')
+plt.plot(newton_path[:, 0], newton_path[:, 1], 'o-', label='Newton\'s Method', color='blue')
+plt.plot(gd_path[:, 0], gd_path[:, 1], 's--', label='Gradient Descent', color='red')
+plt.scatter([1/3], [1/3], color='green', label='Minimizer (1/3, 1/3)')
+plt.xlabel("x1")
+plt.ylabel("x2")
+plt.title("Trajectories of Newton's Method and Gradient Descent")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
+
+## Observations
+
+What behavior have we seen from Newton's method?
+
+:::: {.fragment}
+:::: {.incremental}
+1. The method may converge or diverge depending on the initial starting point
+1. When the method does converge, it converges rapidly
+::::
+::::
+
+## Convergence
+
+**Second order sufficient conditions**
+
+Suppose that $\nabla^{2}f is continyous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2}f(x^{*})$ is positive definite, then $x^{*}$ is a strict local minimizer of $f$.
+
+---
+
+Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is Lipschitz continuous in a neighborhood of a solution $x^{*}$ at which the sufficient conditions are satisfied. Consider the iteration $x_{k+1} = x_{k} + p_{k}$, where $p_{k}=\nabla^{2}f_{k}^{-1}\nabla f_{k}$, then
+
+1. if the starting point $x_{0}$ is sufficiently close to $x^{*}$, the sequence of iterates converges to $x^{*}$,
+1. the rate of convergence of $\{x_{k}\}$ is quadratic,
+1. the sequence of gradient norms $\{\Vert \nabla f_{k}\Vert\}$ converges quadratically to zero.
+
+---
+
+To prove this we will make use of the following:
+
+1. $\Vert \nabla^{2} f(x) -\nabla^{2} f(y)\Vert\leq L \Vert x - y\Vert$
+1. The Hessian $\nabla^{2}f(x^{*})$ is nonsingular, which implies $\exists r>0$ such that $\Vert \nabla^{2}f_{k}^{-1}\Vert \leq 2 \Vert \nabla^{2}f(x^{*})^{-1}\Vert$ for all $x_{k}$ with $\Vert x_{k}-x^{*}\Vert \leq r$.
+
+---
+
+**Proof**
+
+
+## Computational Costs
+
+>What are issues with Newton's method if the dimension of the inputs $x\in\mathbb{R}^{n}$ to the objective function $f(x)$ is extremely large?
+
+:::: {.fragment}
+The computational costs of Newton's method:
+
+1. Compute and store the gradient $\nabla f_{k}\in\mathbb{R}^{n}$
+1. Compute and store the Hessian $\nabla^{2}f_{k}\in\mathbb{R}^{n\times n}$$
+1. Invert the Hessian $\nabla^{2}f_{k}^{-1}$
+::::
+
+## First vs. Second Order Methods 
+
+| Feature                         | First-Order Methods                          | Second-Order Methods                          |
+|---------------------------------|----------------------------------------------|-----------------------------------------------|
+| **Definition**                  | Use gradient (first derivative)              | Use gradient and Hessian (second derivative)  |
+| **Examples**                    | Gradient Descent, SGD, Adam                  | Newton's Method, BFGS, L-BFGS                 |
+| **Computational Cost per Step**| Low                                          | High (due to Hessian computation/inversion)   |
+| **Convergence Speed**          | Slower, especially near minima               | Faster, especially near local minima          |
+| **Memory Requirements**        | Low                                          | High (especially for full Hessian)            |
+| **Scalability**                | Good for large-scale problems                | Challenging for large-scale problems          |
+| **Robustness**                 | More robust to noise and non-smoothness      | Sensitive to noise and ill-conditioned Hessians |
+| **Implementation Complexity**  | Simple                                       | Complex                                       |
+| **Global vs Local Behavior**   | Better for global exploration                | Better for local refinement                   |
+| **Suitability for Deep Learning** | Commonly used due to scalability           | Rarely used due to cost and complexity        |
+
+
+## Where Newton Methods Excel
+
+- **Moderate problem size**: Feasible Hessian computation
+- **High precision needs**: Quadratic convergence near solution
+- **Smooth, well-behaved functions**: Positive definite Hessians
+
+---
+
+## Applications
+
+- Convex optimization (e.g., operations research)
+- Nonlinear programming (e.g., engineering design)
+- Econometrics & statistical modeling
+- Control systems & trajectory optimization
+- Computational physics & chemistry
+
+## Summary
+
+Today we covered:
+
+1. Newton's method
+1. Convergence of Newton's method
+1. Computational costs of Newton's method
+1. Comparison of 1st and 2nd order methods
