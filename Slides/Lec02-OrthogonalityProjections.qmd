@@ -133,7 +133,7 @@ There are two kinds of projectors:
 
 Imagine we shine a light onto the subspace $\operatorname{range}(P)$ from a particular direction, then $P\mathbf{v}$ is the shadow projected by the vector $\mathbf{v}$.
 
-If $\mathbf{v}\in\operatorname{range}(P)$, then $P\mathbf{v}$ lies precisely on its own shadow. Let $\mathbf{x} = P\mathbf{v}$, then
+If $\mathbf{v}\in\operatorname{range}(P)$, then $P\mathbf{v}$ lies precisely on its own shadow. Let $\mathbf{v} = P\mathbf{x}$, then
 
 $$
 P\mathbf{v} = P^{2}\mathbf{x} = P\mathbf{x} = \mathbf{v}.
