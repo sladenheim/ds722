@@ -52,8 +52,8 @@ In DS722 we'll explore:
 
 ![](figures/zhang.jpeg){width="210px" fig-align="center"}
 
-* **OH:** MTu 3:00-4:00pm
-* **Location:** CDS XXXX
+* **OH:** TuTh 10:00-11:00am
+* **Location:**  CDS 14th floor common area
 * **Email:** yukez &lt;at&gt; bu &lt;dot&gt; edu
 :::
 ::::
@@ -69,9 +69,11 @@ All course materials are available online or through the BU library.
 
 - [Numerical Linear Algebra](https://www.stat.uchicago.edu/~lekheng/courses/309/books/Trefethen-Bau.pdf), Trefethen & Bau  
 - [Mathematical Methods in Data Science (with Python)](https://mmids-textbook.github.io/index.html), Roch  
+- [Numerical Optimization](https://www.math.uci.edu/~qnie/Publications/NumericalOptimization.pdf), Nocedal \& Wright
 - [Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf), Deisenroth, Faisal, Ong  
 - [All of Statistics: A concise course in statistical inference](library.bu.edu), Wasserman  
 - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html), Murphy
+
 
 
 ## Grading Breakdown
@@ -143,7 +145,9 @@ All of your work will can done using the `ds722` project.
 Each student has a small home directory located at `/projectnb/ds722/students/`
 Each student has a 10 GB quota on their home directory.
 
-Additional storage space can be used in `/projectnb/ds722/projects/`
+Additional storage space can be used in `/projectnb/ds722/projects/`.
+
+The discussion notebooks will become available in `/projectnb/ds722/materials/`.
 
 ---
 
@@ -205,12 +209,12 @@ You will gain more experience doing this during the first discussion.
 
 ## Generative AI Policy
 
-This course follows the **CDS Generative AI Assistance (GAIA) Policy**.  
+This course follows the **CDS Generative AI Assistance (GAIA) Policy**. 
+
 Please read and understand the policy:  
 [bu.edu/cds-faculty/culture-community/gaia-policy](https://www.bu.edu/cds-faculty/culture-community/gaia-policy)
 
-You must disclose how you use tools like ChatGPT in your work.  
-Transparency matters.
+You must disclose how you use tools like ChatGPT in your work.
 
 ---
 
@@ -230,8 +234,7 @@ Discussion with classmates is permitted,
 but copying answers or plagiarizing is strictly prohibited.
 
 Your submitted work must be entirely your own.  
-All members of the class—including teaching staff—must uphold the  
-[Academic Code of Conduct](http://www.bu.edu/dos/policies/student-responsibilities/)
+All members of the class—including teaching staff—must uphold the [Academic Code of Conduct](http://www.bu.edu/dos/policies/student-responsibilities/)
 
 ---
 
