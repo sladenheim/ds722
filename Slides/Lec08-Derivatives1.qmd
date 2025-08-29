@@ -115,10 +115,6 @@ $$
 \lim_{x\rightarrow 0} \frac{\cos{(x)}-1}{x} 
 $$
 
----
-title: "Limit Laws in Calculus"
-format: revealjs
----
 
 ## Limit Laws
 
@@ -136,10 +132,114 @@ If $\lim_{x \to a} g(x) = L$ and $f$ is continuous at $L$ (i.e., $\lim_{x \to L}
 $$\lim_{x \to a} f(g(x)) = f\left(\lim_{x \to a} g(x)\right) = f(L)$$
 
 
-## Summary
-
 These laws help simplify the evaluation of limits and are foundational for understanding continuity and derivatives.
 
+## Some Famous Limits
+
+1. $\lim_{x\rightarrow 0}\frac{\sin(x)}{x} = 1$
+1. $\lim_{x\rightarrow 0} \frac{\ln(x+1)}{x} = 1$
+1. $\lim{x\rightarrow 0} (1+x)^{1/x} = e$
+1. $\lim{x\rightarrow\infty} \left(1+\frac{1}{x}\right)^{x} = e$
+
+## What is a Sequence?
+
+A **sequence** is an ordered list of numbers:
+
+$$
+a_0, a_1, a_2, a_3, \dots
+$$
+
+Each term may be defined by a rule or formula, such as:
+
+- Arithmetic: $a_n = a + nd$
+- Geometric: $a_n = ar^n$
+
+## Notation
+
+We often write sequences as:
+
+$$
+\{a_n\}_{n=0}^{\infty}
+$$
+
+Sequences are the building blocks of **series**, which are sums of sequence terms
+
+
+## Series
+
+
+A **series** is the sum of the terms of a sequence:
+
+$$
+\sum_{i=0}^{\infty} a_i.
+$$
+
+- If the sequence has a pattern, we can often find a closed-form expression.
+
+## Geometric Series
+
+A **geometric series** has the form:
+
+$$
+\sum_{i=0}^{\infty} ar^i = a + ar + ar^2 + ar^3 + \dots
+$$
+
+- $a$: first term  
+- $r$: common ratio
+
+Examples:
+
+- $a = 1, r = \frac{1}{2}$: $1 + \frac{1}{2} + \frac{1}{4} + \dots$
+
+
+## Convergence Criteria
+
+A geometric series converges **if and only if**:
+
+$$
+\vert r\vert < 1
+$$
+
+Then the sum is:
+
+$$
+\sum_{i=0}^{\infty} ar^i = \frac{a}{1 - r}
+$$
+
+## Divergence
+
+If $\vert r\vert \geq 1$, the series **diverges** (i.e., grows without bound or oscillates).
+
+Examples:
+
+- $r = \frac{1}{2}$: converges
+- $r = 2$: diverges
+- $r = 1$: 
+
+::: {.notes}
+Harmonic series, the sequence of naturally occurring overtones that make up a single musical pitch!
+:::
+
+## Example
+
+Evaluate:
+
+$$
+\sum_{i=0}^{\infty} \frac{1}{2^i}.
+$$
+
+This is a geometric series with:
+
+- $a = 1$
+- $r = \frac{1}{2}$
+
+---
+
+### Apply the formula:
+
+$$
+\sum_{i=0}^{\infty} \frac{1}{2^i} = \frac{1}{1 - \frac{1}{2}} = \frac{1}{\frac{1}{2}} = 2
+$$
 
 
 ## Derivative Definition
