@@ -21,11 +21,12 @@ project:
     - Lec16-RandomVariables.qmd
     - Lec17-Expectation.qmd
     - Lec18-InequalitiesLimitTheorems.qmd
-    - Lec19.qmd
-    - Lec21.qmd
-    - Lec22.qmd
-    - Lec23.qmd
-    - Lec24.qmd
+    - Lec19-ParameterEstimationMLE.qmd
+    - Lec20-BayesianStatistics1.qmd
+    - Lec21-BayesianStatistics2.qmd
+    - Lec22-MarkovChains.qmd
+    - Lec23-HiddenMarkovModels.qmd
+    - Lec24-SamplingAlgorithms.qmd
 
 format:
   revealjs:
