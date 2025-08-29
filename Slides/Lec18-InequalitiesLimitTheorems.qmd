@@ -1,0 +1,435 @@
+---
+title: "Inequalities and Limit Theorems"
+jupyter: python3
+---
+
+## Lecture Overview
+
+This lecture covers the following two topics:
+
+- probability inequalities
+- limit theorems
+
+Inequalities are useful for bounding quantities, such as distributions, that might otherwise be hard to compute.
+
+The most important aspect of probability theory concerns the behavior of sequences of random variables. Specifically, **what is the limiting behavior of a sequence of random variables?**
+
+::: {.notes}
+We will see that inequalities are essential tools for proving limit theorems.
+
+:::
+
+
+## Lecture Objectives
+
+We cover:
+
+- Markov's inequality
+- Chebyshev's inequality
+- Hoeffding's inequality
+- Inequalities for Expectations
+- Law of Large Numbers
+- Central Limit Theorem
+
+## Markov's Inequality
+
+Let $X$ be a nonnegative random variable and suppose that $\mathbb{E}(X)<\infty$. For any $t>0$,
+
+$$
+\mathbb{P}(X > t) \leq \frac{\mathbb{E}(X)}{t}.
+$$
+
+::: {.notes}
+Since $X>0$
+$$
+\begin{align}
+E(X) &= \int_{0}^{\infty}xf(x)dx = \int_{0}^{t}xf(x) dx + \int_{t}^{\infty} xf(x) dx \\
+&\geq \int_{t}^{\infty}xf(x)dx\leq t\int_{t}^{\infty}f(x)dx = \mathbb{P}(X>t).
+\end{align}
+$$
+:::
+
+---
+
+**Example**
+
+The score distribution of an exam is modelled by a random variable $X$ with range $\Omega_{X}=[0, 110]$ (with 10 points for extra credit). Given an upper bound on the proportion of students who score at lest 100 when the average is 50? What happens if the average is 25?
+
+:::: {.fragment}
+
+$\mathbb{P}(X \geq 100) =$
+
+::::
+
+
+::: {.notes}
+If the average is $\mathbb{E}(X) = 50$, an upper bound on the proportion of students who score at least 100 should be 50\%, right? If more than 50\% of students scored 100 (or higher), the average would already be at least 50, since all scores must be nonnegative $\geq 0$. Mathematically, we just argued that:
+
+$$
+\mathbb{P}(X \geq 100) \leq \frac{\mathbb{E}[X]}{100} = \frac{50}{100} = \frac{1}{2}
+$$
+
+This sounds reasonable — if, say, 70\% of the class were to get 100 or higher, the average would already be at least 70, even if everyone else got a zero. The best bound we can get is 50\%, and that requires everyone else to get a zero.
+
+If the average is $\mathbb{E}(X) = 25$, an upper bound on the proportion of students who score at least 100 is:
+
+$$
+\mathbb{P}(X \geq 100) \leq \frac{\mathbb{E}(X)}{100} = \frac{25}{100} = \frac{1}{4}
+$$
+:::
+
+---
+
+## Chebyshev's Inequality
+
+Let $\mu=\mathbb{E}(X)$ and $\sigma^{2}=\mathbb{V}(X)$. Then
+
+$$
+\mathbb{P}(\vert X-\mu\vert \geq t)\leq \frac{\sigma^{2}}{t^{2}}\quad\text{and}\quad \mathbb{P}(\vert Z\vert \geq k)\leq \frac{1}{k^{2}},
+$$
+
+where $Z=\frac{X-\mu}{\sigma}$. In particular $\mathbb{P}(\vert Z\vert > 2)\leq 1/4$ and $\mathbb{P}(\vert Z\vert > 3)\leq 1/9$.
+
+::: {.notes}
+Use Markov's inequality.
+
+$$
+\mathbb{P}(\vert X-\mu\vert \geq t) = \mathbb{P}(\vert X-\mu\vert^{2} \geq t^{2}) \leq \frac{\mathbb{E}\left((X-\mu)^{2}\right)}{t^{2}} = \frac{\sigma^{2}}{t^{2}}
+$$
+The second part follows by setting $t=k\sigma$.
+:::
+
+---
+
+### Neural Net Predictions
+
+Suppose we use a neural net to make a prediction on $n$ new test cases. Let $X_{i}=1$ if the NN is wrong and $X_{i}=0$ if the NN is correct. What is the observed error rate?
+
+:::: {.fragment}
+$$
+\small\bar{X}_{n} = \frac{1}{n}\sum_{i=1}^{n}X_{i}.
+$$
+::::
+
+:::: {.fragment}
+May assume $X_{i}\sim\operatorname{Bernoulli}(p)$. We would intuitively expect that $\bar{X}_{n}$ is close to $p$. How likely is $\bar{X}_{n}$ to NOT be within $\varepsilon$ of $p$?
+::::
+
+:::: {.fragment}
+$\mathbb{P}(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq$
+::::
+
+::: {.notes}
+$$
+\small\mathbb{P}(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq \mathbb{V}(\bar{X}_{n}){\varepsilon^{2}} = \frac{np(1-p)}{n^{2}\varepsilon^{2}}\leq \frac{1}{4n\varepsilon^{2}}
+$$
+:::
+
+## Hoeffding's Inequality
+
+Hoeffdings's inequalityt is similar to Markov's inequality, but is a *sharper* inequality.
+
+**Theorem**
+Let $X_{1},\ldots,X_{n}$ be independent observations such that $\mathbb{E}(X_{i})=0$ and $a_{i}\leq X_{i}\leq b_{i}$. Let $\varepsilon>0$. Then, for any $t>0$,
+
+$$
+\mathbb{P}\left(\sum_{i=1}^{n}X_{i}\geq \varepsilon\right) \leq e^{-t\varepsilon}\prod_{i=1}^{n}e^{t^{2}(b_{i}-a_{i})^{2}/8}.
+$$
+
+---
+
+Using Hoeffding's inequality, we can derive the following bound for $X_{1},\ldots,X_{n}\sim\operatorname{Bernoulli}(p)$. Let $\varepsilon>0$, then
+
+$$
+\mathbb{P}(\vert \bar{X}_{n}-p\vert > \varepsilon) \leq 2\varepsilon e^{-2ne^{2}},
+$$
+
+where $\bar{X}_{n}=n^{-1}\sum_{i=1}^{n}X_{i}$.
+
+---
+
+Recall that the Chebyshev' bound  $\mathbb{P}(\vert \bar{X}_{n}-p\vert > \varepsilon)$ when $n=100$ and $\varepsilon=0.2$ was 0.0625.
+
+Using the Hoeffding bound, we obtain
+
+$$
+\mathbb{P}(\vert \bar{X}_{n}-p\vert > 0.2) \leq 2e^{-2(100)/(0.2)^{2}} = 0.00067.
+$$
+
+
+## Mill's Inequality
+
+Mill's inequality is useful for bounding probability statements about Normal random variables.
+
+**Theorem**
+Let $Z\sim\mathcal{N}(0,1)$, then
+
+$$
+\mathbb{P}(\vert Z\vert > t)\leq \sqrt{\frac{2}{\pi}}\frac{e^{-t^{2}}}{t}.
+$$
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+# Define range of t values
+t_values = np.linspace(0.3, 2, 500)
+mill_values = np.linspace(0.3,2,500)
+cheb_values = np.linspace(0.3,2,500)
+
+# True probability P(|Z| > t) for Z ~ N(0,1)
+p_true = 2 * (1 - norm.cdf(t_values))
+
+
+# Mill's inequality bound: P(Z > t) < (1/sqrt(2*pi)) * (1/t) * exp(-t^2/2)
+mills_bound = np.sqrt(2 / np.pi) * (1 / mill_values) * np.exp(-mill_values**2 / 2)
+
+# Chebyshev's inequality bounds for k = 1 to 5
+chebyshev_bounds = {}
+for k in range(1,3):
+    chebyshev_bounds[k] = 1/cheb_values**k
+
+
+
+# Plot using matplotlib
+plt.figure(figsize=(10, 6))
+plt.plot(t_values, p_true, label='P(|Z| > t)', color='blue')
+plt.plot(mill_values, mills_bound, label="Mill's Inequality Bound", color='red', linestyle='--')
+
+for k in chebyshev_bounds:
+    plt.plot(cheb_values, chebyshev_bounds[k], label=f"Chebyshev Bound k={k}",linestyle=":")
+
+
+plt.title('Probability P(|Z| > t) for Z ~ N(0,1)')
+plt.xlabel('t')
+plt.ylabel('Probability')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+```
+
+## Cauchy-Schwarz
+
+We can use Cauchy-Schwarz to obtain bounds on expected values.
+
+If $X,Y$ have finite variances, then
+
+$$
+\mathbb{E}(XY) \leq \sqrt{\mathbb{E}(X^{2})\mathbb{E}(Y^{2})}.
+$$
+
+:::: {.fragment}
+You can prove this by expanding out $\mathbb{E}((X-\alpha Y)^{2})$ and setting $\alpha = \frac{\mathbb{E}(XY)^{2}}{\mathbb{E}(Y^{2})}$
+::::
+
+
+## Jensen's Inequality
+
+If $g$ is a convex function, then
+
+$$
+\mathbb{E}(g(X))\geq g(\mathbb{E}(X)).
+$$
+
+If $g$ is concave, then $\mathbb{E}(g(X))\leq g(\mathbb{E}(X))$.
+
+---
+
+**Proof**
+
+::: {.notes}
+Let $L(x) = a+bx$ be the line, tangent to $g(x)$ at the point $\mathbb{E}(X)$. Since $G$ is convex, it lies above the line $L(x)$, so
+
+$$
+\mathbb{E}(g(X))\geq\mathbb{E}(L(x)) = \mathbb{E}(a+bX) = a + b\mathbb{E}(X) = L(\mathbb{E(X)}) = g(\mathbb{E}(X)).
+$$
+:::
+
+## Limit Theories
+
+There are two main ideas we will cover 
+
+1. The *law of large numbers*
+1. The *central limit theorem*
+
+## Types of Convergence
+
+There are two main types of convergence that we will need to understand in order to introduce our limit theories. They are:
+
+1. Convergence in probability
+1. Convergence in distribution
+
+This will make rigorous the notion of convergence for random variables.
+
+## Convergence in Probability
+
+Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. 
+
+We say that $X_{n}$ converges to $X$ in probability, written $X\overset{P}\longrightarrow X$ if, for every $\varepsilon>0$,
+
+$$
+\mathbb{P}(\vert X_{n}-X\vert >\varepsilon) \rightarrow 0,
+$$
+
+as $n\rightarrow\infty$.
+
+## Convergence in Distribution
+
+Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. Let $F_{n}$ denote the CDF of $X_{n}$ and left $F$ denote the CDF of $X$.
+
+We say that $X_{n}$ converges to $X$ in distribution, written $X\leadsto X$ if
+
+$$
+\lim_{n\rightarrow\infty}F_{n}(t)=F(t),
+$$
+
+at all $t$ for which $F$ is continuous.
+
+## Convergence in Quadratic Mean
+
+Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. 
+
+We say that $X_{n}$ converges to $X$ in quadratic mean, written $X_{n}\overset{qm}\longrightarrow X$ if
+
+$$
+\mathbb{E}((X_{n}-X)^{2})\rightarrow 0,
+$$
+
+as $n\rightarrow\infty$.
+
+## Law of Large Numbers
+
+If $X_{1},\ldots,X_{n}$ are IID, then $\bar{X}_{n}\overset{P}\longrightarrow\mu$.
+
+This is the weak law of large numbers.
+
+The interpretation of the WLLN is that the distribution of $X_{n}$ becomes more concentrated around the mean $\mu$ as $n$ gets large.
+
+## Brain Cancer in South Dakota
+
+_Which parts of the USA have the biggest brain cancer problem?_
+
+- The national rate is 3.4 per 100,000 people
+- Highest rates: South Dakota (5.7), Nebraska, Alaska, Delaware, Maine.
+- Lowest rates: Wyoming, Vermont, North Dakota, Hawaii, D.C.
+
+Is something in South Dakota causing brain cancer?
+
+:::: {.notes}
+No! This is can all be explained by the law of large numbers. 
+
+The law of large numbers implies that larger populations approach the true mean. 
+
+In smaller populations you should expect to see more variance!
+::::
+
+::: {.callout-note}
+Example taken from "How not to be wrong: The power of Mathematical Thinking" Jordan Ellenberg.
+:::
+
+## Central Limit Theorem
+
+Let $X_{1},\ldots,X_{n}$ be IID with mean $\mu$ and variance $\sigma^{2}$. Let $\bar{X}_{n}=n^{-1}\sum_{i=1}^{n}X_{i}$. Then,
+
+$$
+\small
+Z_{n} = \frac{\bar{X}_{n}-\mu}{\sqrt{\mathbb{V}(\bar{X}_{n})}} = \frac{\sqrt{n(\bar{X}_{n}-\mu)}}{\sigma} \leadsto Z,
+$$
+
+where $Z\sim\mathcal{N}(0,1)$. In other words
+
+$$
+\lim_{n\rightarrow\infty}\mathbb{P}(Z_{n}\leq z) = \Phi(z) = \int_{-\infty}^{z}\frac{1}{2\pi}e^{-x^{2}/2}dx.
+$$
+
+::: {.notes}
+Probability statements about $\bar{X}_{n}$ can be approximated using a normal distribution. It's the probability statements that we are approximating, not the random variable itself!!
+:::
+
+## Errors in a Computer Program
+
+Suppose that the number of errors per compute program has a Poisson distribution with mean $5$. 
+
+We have 125 programs. Let $X_{1},\ldots,X_{125}$ be the number of errors in each of the programs.
+
+How can we compute the probability that the average number of errors $\bar{X}_{n}$ is less than 5.5?
+
+---
+
+We want to approximate $\mathbb{P}(\bar{X}_{n} < 5.5)$ using the CLT.
+
+What do we need?
+
+:::: {.incremental}
+1. The mean $\mu = \mathbb{E}(X_{i})= \lambda = 5$
+1. The variance $\sigma^{2} = \mathbb{V}(X_{i}) = \lambda = 5$.
+::::
+
+:::: {.fragment}
+By the CLT we compute
+
+$\mathbb{P}(\bar{X}_{n} < 5.5) =$
+::::
+
+::: {.notes}
+$$
+\mathbb{P}(\bar{X}_{n} < 5.5) = \mathbb{P}\left(\frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} < \frac{\sqrt{n}(5.5-\mu)}{\sigma} \right) \approx \mathbb{P}\left(Z < 2.5 \right) = 0.9938
+$$
+:::
+
+---
+
+```{python}
+import numpy as np
+import plotly.express as px
+
+# Parameters
+lambda_poisson = 5
+n_programs = 125
+
+# Create a random number generator
+rng = np.random.default_rng(12345)
+
+# Simulate one trial of Poisson-distributed error counts using rng
+error_counts = rng.poisson(lambda_poisson, n_programs)
+
+# Plot histogram of error counts
+fig = px.histogram(x=error_counts, nbins=20, title="Histogram of Error Counts",
+                   labels={'x': 'Number of Errors', 'y': 'Frequency'})
+
+fig.show()
+
+# Print summary statistics
+mean_errors = np.mean(error_counts)
+print(f"Mean number of errors: {mean_errors}")
+
+```
+
+
+## Multivariate CLT
+
+Let $X^{(1)},\ldots,X^{(n)}\in\mathbb{R}^{k}$ be IID random vectors each with vector mean $\mu\in\mathbb{R}^{k}$ and variance matrix $\Sigma\in\mathbb{R}^{k\times k}$. Let
+
+$$
+\small
+\bar{X} = \begin{bmatrix} \bar{X}_{1} \\ \bar{X}_{2} \\ \vdots \\ \bar{X}_{k} \end{bmatrix},
+$$
+
+where $\bar{X}_{j} = n^{-1}\sum_{i=1}^{n}X_{j}^{(i)}$. Then
+
+$$
+\small
+\sqrt{n}(\bar{X}-\mu) \leadsto \mathcal{N}(0,\Sigma).
+$$
+
+## Summary
+
+Today we covered:
+
+- probability inequalities
+- the law of large numbers
+- the central limit theorem
