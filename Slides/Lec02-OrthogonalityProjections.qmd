@@ -54,7 +54,7 @@ Inner products can be used used to decompose arbitrary vectors into orthogonal c
 
 Consider a set $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots \mathbf{q}_n \}$ of $m$-dimensional orthonormal vectors and let $\mathbf{v}$ be an arbitrary vector.
 
-The quantity $\mathbf{q}_{j}^T\mathbf{v}$ is a scalar and we will use these as coordinates in the
+The quantity $\mathbf{q}_{j}^T\mathbf{v}$ is a scalar and we can use these as the coefficients of a linear combination of vectors $\mathbf{q}_{i}$ in order to express $\mathbf{v}$.
 
 --- 
 
