@@ -11,6 +11,12 @@ Data science is a multidisciplinary field that combines mathematics, computer sc
 
 This is a Master's level introduction to the mathematical foundations that a data scientist needs.
 
+::: {.notes}
+Be sure to mention that this course will help them in their future courses. In particular, it will help them understand important notation and key ideas.
+
+My goal is to push you to ensure you understand these ideas properly.
+:::
+
 ## Why Mathematics Matters in DS
 
 Mathematics is the backbone of data science. It helps us:
@@ -26,6 +32,15 @@ Mathematics is the backbone of data science. It helps us:
 Without a solid mathematical foundation, it’s easy to misuse algorithms or misinterpret insights.
 ::::
 
+::: {.notes}
+Examples:
+Linear regression
+Neural networks
+Which algorithms converge?
+Examples: Gradient descent, Newton's method
+:::
+
+
 ## Course Overview
 
 In DS722 we'll explore:
@@ -33,6 +48,12 @@ In DS722 we'll explore:
 - Linear algebra
 - Optimization
 - Probability and Statistics
+
+::: {.notes}
+Mention each topic builds upon itself. It is essential to understand the early material in order to understand the later material.
+
+Discuss what is covered in each section.
+:::
 
 ## Course Staff{.smaller}
 
@@ -63,6 +84,10 @@ In DS722 we'll explore:
 - Piazza: [piazza.com/bu/fall2025/ds722](https://piazza.com/bu/fall2025/ds722)
 - [Gradescope](https://www.gradescope.com/)
 
+::: {.notes}
+Make sure to explain what is on Piazza and where things are located.
+:::
+
 ## Course Books 
 
 All course materials are available online or through the BU library.
@@ -74,7 +99,9 @@ All course materials are available online or through the BU library.
 - [All of Statistics: A concise course in statistical inference](library.bu.edu), Wasserman  
 - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html), Murphy
 
-
+::: {.notes}
+Highlight which books are predominantly used. Mention that suggested reading is in the syllabus.
+:::
 
 ## Grading Breakdown
 
@@ -94,6 +121,9 @@ Your grade is comprised of:
 - Students are allotted a total of 5 late homework days throughout the semester, with a maximum of 2 days
 allowed per assignment. Late submissions beyond this policy will not be accepted.
 
+::: {.notes}
+Mention that HW will be more theoretical.
+:::
 
 ## Discussions
 
@@ -105,6 +135,9 @@ sessions and still receive full participation credit.
 - If more than 3 discussions are missed, participation credit
 will be prorated based on the percentage of sessions attended.
 
+::: {.notes}
+Mention that discussions will be more computational.
+:::
 
 ## Shared Computing Cluster
 
@@ -228,6 +261,12 @@ Relying too heavily on tools without mastering concepts may affect your performa
 
 **Use AI as a learning aid—not a substitute for thinking.**
 
+::: {.notes}
+Mention that you ran most of the problems through ChatGPT and there are a good percentage that it is not able to solve. I'll know if you are using it.
+
+It is a very useful tool for helping you code/plot/visualize in discussion.
+:::
+
 ## Academic Integrity
 
 Discussion with classmates is permitted,  
@@ -236,19 +275,17 @@ but copying answers or plagiarizing is strictly prohibited.
 Your submitted work must be entirely your own.  
 All members of the class—including teaching staff—must uphold the [Academic Code of Conduct](http://www.bu.edu/dos/policies/student-responsibilities/)
 
----
-
-### Searching for Solutions Online
+## Searching for Solutions Online
 
 Before turning to the internet, ask yourself:
 
 1. **Stuck on where to begin?**  
    Reach out to a TF or post on Piazza. You’ll often get helpful guidance quickly.
 
-2. **Trying to validate your solution?**  
+1. **Trying to validate your solution?**  
    Can you find a way to verify it independently? That’s a powerful learning opportunity.
 
-3. **Short on time and tempted to search?**  
+1. **Short on time and tempted to search?**  
    Consider this:
    - It’s intellectually dishonest.  
    - You’ll need to solve similar problems on exams.  
@@ -258,7 +295,7 @@ It's better to submit what you have and plan ahead for future assignments.
 
 ## Math is Fun
   
-I’m excited to teach you about the world of mathematics and data.
+I’m excited to teach you about the world of mathematics and data science.
 
 Feel free to ask questions, share your thoughts, and challenge ideas.  
 Your curiosity is the key to a great learning experience!
