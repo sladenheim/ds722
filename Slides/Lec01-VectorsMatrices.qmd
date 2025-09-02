@@ -648,7 +648,7 @@ The following are commonly used matrix norms
 
 1. $\Vert A \Vert_1 = \max_{1\leq j\leq n}\sum_{i=1}^{m} \vert a_{ij}\vert$
 1. $\Vert A \Vert_2 = \sigma_{\text{max}}(A)$, where $\sigma_{\text{max}}(A)$ is the largest singular value ^[We will cover singular values in later lectures.].
-1. $\Vert A \Vert_\infty = \max_{1\leq j\leq m}\sum_{j=1}^{n} \vert a_{ij}\vert$
+1. $\Vert A \Vert_\infty = \max_{1\leq i\leq m}\sum_{j=1}^{n} \vert a_{ij}\vert$
 
 ::: {.notes}
 1. 1-norm is max column sum
@@ -773,7 +773,7 @@ The conjugate of a complex number is $\bar{z} = a-ib$. For real numbers $\bar{z}
 
 ---
 
-For vectors and matrices with complex numbers, we use the $^{*}$ notation to indicate the Hermitian conjugate, i.e., 
+For vectors and matrices with complex numbers, we use the $^{*}$ notation to indicate the Hermitian conjugate. Given
 
 $$
 A = 
@@ -781,12 +781,14 @@ A =
 a_{11} & a_{12}\\
 a_{21} & a_{22}\\
 a_{31} & a_{32}\\
-\end{bmatrix} 
-\Rightarrow
-A^{*} = 
+\end{bmatrix},
+$$
+the Hermitian conjugate is
+$$
+A^{*} = \bar{A}^{T}
 \begin{bmatrix}
 \bar{a}_{11} & \bar{a}_{21} & \bar{a}_{31}\\
-\bar{a}_{11} & \bar{a}_{22} & \bar{a}_{32}\\
+\bar{a}_{12} & \bar{a}_{22} & \bar{a}_{32}\\
 \end{bmatrix}
 $$
 

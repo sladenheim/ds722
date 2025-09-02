@@ -96,7 +96,7 @@ All course materials are available online or through the BU library.
 - [Mathematical Methods in Data Science (with Python)](https://mmids-textbook.github.io/index.html), Roch  
 - [Numerical Optimization](https://www.math.uci.edu/~qnie/Publications/NumericalOptimization.pdf), Nocedal \& Wright
 - [Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf), Deisenroth, Faisal, Ong  
-- [All of Statistics: A concise course in statistical inference](library.bu.edu), Wasserman  
+- [All of Statistics: A concise course in statistical inference](https://bu.primo.exlibrisgroup.com/permalink/01BOSU_INST/u1o13f/alma99209143168401161), Wasserman  
 - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html), Murphy
 
 ::: {.notes}
@@ -155,7 +155,7 @@ The system currently includes:
 
 - $>$12,000 CPU cores
 - $>$400 GPUs
-- $>$ 14 Pb of storage
+- $>$ 14 PB of storage
 
 ---
 
@@ -173,7 +173,7 @@ If you encounter any issues using the SCC direct questions to the teaching staff
 
 ### Project ds722
 
-All of your work will can done using the `ds722` project.
+All of your work can be done using the `ds722` project.
 
 Each student has a small home directory located at `/projectnb/ds722/students/`
 Each student has a 10 GB quota on their home directory.
