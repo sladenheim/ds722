@@ -17,6 +17,10 @@ Examples:
 - 3-D array (tensor)
 ::::
 
+::: {.notes}
+Draw a figure for each.
+:::
+
 ## Lecture Objectives
 
 - Introduce notation for vectors and matrices
@@ -26,6 +30,10 @@ Examples:
 ## Neural Networks
 
 ![](figures/NeuralNetwork.png){fig-align="center"}
+
+::: {.notes}
+Mention that by the end of the lecture you will understand how forward propagation is accomplished via matrix multiplication.
+:::
 
 ## Notation
 
@@ -43,9 +51,13 @@ $$
 
 The $i$th element of the vector is denoted $x_i$.
 
+::: {.notes}
+Mention that we will often see vectors of dimension $n$. Mention that we won't always use the boldface notation, but that whether something is a vector will be clear from the context.
+:::
+
 ---
 
-A matrix with $m$ rows and $n$ columns, $A\in\mathbb{R}^{m\times n}$ is a 2-D array of numbers 
+A matrix with $m$ rows and $n$ columns, $A\in\mathbb{R}^{m\times n}$, is a 2-D array of numbers 
 $$
 \small
 A = 
@@ -82,6 +94,14 @@ A matrix is square when $m=n$.
 
 A square matrix is symmetric if $A=A^{T}$.
 
+::: {.notes}
+Mention the importance of symmetric matrices.
+
+Plays a huge role in linear algebra, in particular the study of eigenvalues, and in optimization.
+
+Write an example.
+:::
+
 ## Vectors
 
 Given $\alpha, \beta\in\mathbb{R}$ and $\mathbf{x}, \mathbf{y}\in\mathbb{R}^{m}$, a linear combination is defined as
@@ -99,11 +119,15 @@ $$
 
 ## Span
 
- Let $S = \{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$, be a set of vectors where $\mathbf{v}_i\in\mathbb{R}^m$. The $\operatorname{span}(S)$ is the set of all linear combinations of vectors in $S$
+Let $S = \{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$, be a set of vectors where $\mathbf{v}_i\in\mathbb{R}^m$. The $\operatorname{span}(S)$ is the set of all linear combinations of vectors in the set $S$.
 
- $$
+$$
 \operatorname{span}(S) = \left\{ \alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 + \cdots + \alpha_n \mathbf{v}_n \right\}, \quad \alpha_i\in\mathbb{R}.
- $$
+$$
+
+::: {.notes}
+Use $\mathbf{u} = [1, 2]$ and $\mathbf{v} = [4, 1]$.
+:::
 
 ## Geometric Interpretation
 
@@ -201,17 +225,25 @@ In addition, a vector space must satisfy the following properties
 1. For every $\mathbf{v}\in V$, there exists $-\mathbf{v}\in V$ such that $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$ (inverse).
 1. $\alpha(\beta\mathbf{v}) = (\alpha\beta)\mathbf{v}$
 1. $1\mathbf{v} = \mathbf{v}$
-1. $c(\mathbf{u} + \mathbf{v}) = \alpha\mathbf{u} + \beta\mathbf{v}$
+1. $\alpha(\mathbf{u} + \mathbf{v}) = \alpha\mathbf{u} + \alpha\mathbf{v}$
 1. $(\alpha + \beta)\mathbf{v} = \alpha\mathbf{v} + \beta\mathbf{v}$
 ::::
 
+::: {.notes}
+Mention that a vector space doesn't just have to be vectors! It works for matrices and polynomials!
+:::
+
 ---
 
-A set of vectors $F = \{ \mathbf{f}_1, \ldots, \mathbf{f}_n \}$ spans a vectors space $V$ if every vector in $\mathbf{v}\in V$ can be expressed as a linear combination of the elements in F, i.e.,
+A set of vectors $F = \{ \mathbf{f}_1, \ldots, \mathbf{f}_n \}$ spans a vectors space $V$ if every vector $\mathbf{v}\in V$ can be expressed as a linear combination of the elements in F, i.e.,
 
 $$
 \mathbf{v} = \sum_{i=1}^{n}\alpha_i \mathbf{f}_i.
 $$
+
+::: {.notes}
+Mention $\mathbb{R}^{n}$.
+:::
 
 ## Linear Independence
 
@@ -219,6 +251,10 @@ A set of $n$ vectors $S =\{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$ is linearly
 $$
 \sum_{i=1}^{n} \alpha_i \mathbf{v}_i = 0.
 $$
+
+::: {.notes}
+Let $v_{1}=[2, 4]$ and $v_{2}=[1, 2]$, then $v_{1}-2v_{2} = 0$.
+:::
 
 ---
 
@@ -228,11 +264,15 @@ $$
 $$
 is only satisfied when $\alpha_i = 0$ for $i=1,\ldots,n$.
 
+::: {.notes}
+Give standard basis as example for $\mathbb{R}^{2}$ and $[1, 1]$ and $[1, -1]$. 
+:::
+
 ## Basis
 
 A basis for a vector $V$ is a set of vectors $B = \{\mathbf{b}_1, \ldots, \mathbf{b}_n\}$ that spans $V$ and is linearly independent.
 
-Let $e_{k}\in\mathbf{R}^{n}$ denote a vector with a 1 in the $k$-th entry and zero everywhere else, then
+Let $\mathbf{e}_{k}\in\mathbf{R}^{n}$ denote a vector with a 1 in the $k$-th entry and zero everywhere else, then
 
 $$
 \{\mathbf{e}_1, \ldots, \mathbf{e}_n\}
@@ -250,9 +290,15 @@ $$
 
 The notation $(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{T}\mathbf{y}$ is also used to denote the inner product.
 
+::: {.notes}
+Mention that an inner product is a more general idea and can be extended to work for functions. This leads to the ideas of orthogonal function and function spaces which are hugely important in quantum mechanics, signal processing, and machine learning.
+
+Show a picture of row vector times column vector.
+:::
+
 ---
 
-The Euclidean length of $\mathbf{x}$ is denoted $\Vert \mathbf{x} \Vert_2$ is the square root of the inner product of $\mathbf{x}$ with itself
+The Euclidean length of $\mathbf{x}$ is denoted $\Vert \mathbf{x} \Vert_2$ and is the square root of the inner product of $\mathbf{x}$ with itself
 
 $$
 \Vert \mathbf{x} \Vert_2 = \sqrt{\mathbf{x}^{T}\mathbf{x}} = \left(\sum_{i=1}^{m}\vert x_i\vert^{2}\right)^{1/2}.
@@ -263,6 +309,10 @@ The cosine of the angle $\theta$ between $\mathbf{x}$ and $\mathbf{y}$ can be ex
 $$
 \cos(\theta) = \frac{\mathbf{x}^{T}\mathbf{y}}{\Vert \mathbf{x}\Vert_2 \Vert \mathbf{y}\Vert_2}.
 $$
+
+::: {.notes}
+Reference word embeddings.
+:::
 
 ## Single Neuron
 
@@ -277,13 +327,25 @@ $$
 b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
 $$
 
+::: {.notes}
+Each entry is an inner product between a row of $A$ and the vector $x$.
+:::
+
 ---
 
-Let $a_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
+Let $\mathbf{a}_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
 
 $$
-b = \sum_{j=1}^{n}x_j a_j.
+b = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
 $$
+
+::: {.notes}
+Draw a picture of linear combinations of the columns of $A$.
+:::
+
+---
+
+Let $\mathbf{x}\in\mathbb{R}^{m}$ and $A\in\mathbb{R}^{m\times n}$, how can you interpret $\mathbf{x}^{T}A$?
 
 ---
 
@@ -304,6 +366,10 @@ The range of a matrix $A\in\mathbb{R}^{m\times n}$, range($A$), is the set of ve
 
 The $\operatorname{range}(A)$ is alternatively referred to as the column space.
 
+::: {.notes}
+Can introduce this with set notation. Use the picture as your proof.
+:::
+
 ## Nullspace
 
 The nullspace of $A\in\mathbb{R}^{m\times n}$ is the set of vectors $\mathbf{x}\in\mathbb{R}^{n}$ that satisfy $A\mathbf{x} = 0$, where $0$ is the $0$-vector in $\mathbb{R}^{m}$.
@@ -319,6 +385,10 @@ Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matri
 $$
 c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}.
 $$
+
+::: {.notes}
+Mention interpretation as linear combination of columns of $A$ with weights in $B$ and linear combination of the rows in $B$ with weights in $A$.
+:::
 
 ## Batches in Neural Networks
 
@@ -347,6 +417,10 @@ v_1u_m & \cdots & v_nu_m \\
 \end{bmatrix}
 $$
 
+::: {.notes}
+Demo a simple outer product $[1, 2]$ and $[3, 4]$. Write the $uv^{T}$ notation.
+:::
+
 ## Rank
 
 The column rank of a matrix is the dimension of its column space.
@@ -364,10 +438,38 @@ A matrix $A\in\mathbb{R}^{m\times n}$ of full rank is one that has the maximal p
 The determinant of a square matrix $A\in\mathbb{R}^{n\times n}$ is
 
 $$
-det(A) = \sum_{j=1}^{n}(-1)^{i+j}a_{ij}M_{ij},
+\operatorname{det}(A) = \sum_{j=1}^{n}(-1)^{i+j}a_{ij}M_{ij},
 $$
 
-where $M_{ij}=det(A_{ij})$ and $A_{ij}$ is an $n-1\times n-1$ matrix obtained by removing the $i$th row and the $j$th column.
+where $M_{ij}=\operatorname{det}(A_{ij})$ and $A_{ij}$ is an $n-1\times n-1$ matrix obtained by removing the $i$th row and the $j$th column.
+
+::: {.notes}
+
+We compute the determinant of the matrix:
+
+$$
+A = \begin{bmatrix}
+1 & 2 & 3 \\
+0 & 4 & 5 \\
+1 & 0 & 6
+\end{bmatrix}
+$$
+
+Using cofactor expansion along the first row:
+
+$$
+\begin{align*}
+\operatorname{det}(A) &= 1 \cdot \begin{vmatrix} 4 & 5 \\ 0 & 6 \end{vmatrix}
+- 2 \cdot \begin{vmatrix} 0 & 5 \\ 1 & 6 \end{vmatrix}
++ 3 \cdot \begin{vmatrix} 0 & 4 \\ 1 & 0 \end{vmatrix} \\
+&= 1(4 \cdot 6 - 0 \cdot 5) - 2(0 \cdot 6 - 1 \cdot 5) + 3(0 \cdot 0 - 1 \cdot 4) \\
+&= 1(24) - 2(-5) + 3(-4) \\
+&= 24 + 10 - 12 \\
+&= 22
+\end{align*}
+$$
+
+:::
 
 ## Inverse
 
@@ -379,6 +481,14 @@ The inverse of an invertible matrix $A$ is denoted by $A^{-1}$ and satisfies $AA
 
 Note that $(A^{T})^{-1} = A^{-T}$. Why?
 
+::: {.notes}
+$(AA^{-1})^{T} = (A^{-1})^{T}A^{T} = I$
+
+Mention the students will prove $(AB)^{T} = B^{T}A^{T}$ in homework.
+:::
+
+---
+
 **Theorem**
 
 For $A\in\mathbb{R}^{n\times n}$ the following conditions are equivalent:
@@ -389,7 +499,7 @@ For $A\in\mathbb{R}^{n\times n}$ the following conditions are equivalent:
 1. $\operatorname{null}(A) = {0}$
 1. $0$ is not an eigenvalue of $A$
 1. $0$ is not a singular value of $A$
-1. $det(A) \neq 0$
+1. $\operatorname{det}(A) \neq 0$
 
 ## Vector Norms
 
@@ -523,13 +633,27 @@ $$
 \Vert A \Vert_{(m,n)} = \sup_{\mathbf{x}\in\mathbf{R}^{n}\\ \mathbf{x}\neq 0}\frac{\Vert A\mathbf{x}\Vert_{(m)}}{\Vert \mathbf{x}\Vert_{(n)}}.
 $$
 
+::: {.notes}
+Mention that matrix norms are an essential tool for
+
+1. convergence analysis of algorithms
+1. Regularization terms
+1. Bounding errors
+1. Measuring sensitivity to changes in input
+:::
+
 ---
 
 The following are commonly used matrix norms
 
-1. $\Vert A \Vert_1 = \max_{1\leq j\leq n}\sum_{j=1}^{m} \vert a_{ij}\vert$
+1. $\Vert A \Vert_1 = \max_{1\leq j\leq n}\sum_{i=1}^{m} \vert a_{ij}\vert$
 1. $\Vert A \Vert_2 = \sigma_{\text{max}}(A)$, where $\sigma_{\text{max}}(A)$ is the largest singular value ^[We will cover singular values in later lectures.].
 1. $\Vert A \Vert_\infty = \max_{1\leq j\leq m}\sum_{j=1}^{n} \vert a_{ij}\vert$
+
+::: {.notes}
+1. 1-norm is max column sum
+1. Infinity norm is max row sum
+:::
 
 ---
 
@@ -587,6 +711,10 @@ $$
 $$
 
 It is a measure of how sensitive the solution of a linear system is to changes in the input.
+
+::: {.notes}
+Mention that this tells you how numerically stable your computations are. You can expect to lose $\log(\kappa(A))$ digits in a computation. A
+:::
 
 ## SPD Matrices
 
