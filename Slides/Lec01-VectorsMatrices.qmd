@@ -785,7 +785,7 @@ a_{31} & a_{32}\\
 $$
 the Hermitian conjugate is
 $$
-A^{*} = \bar{A}^{T}
+A^{*} = \bar{A}^{T} = 
 \begin{bmatrix}
 \bar{a}_{11} & \bar{a}_{21} & \bar{a}_{31}\\
 \bar{a}_{12} & \bar{a}_{22} & \bar{a}_{32}\\
