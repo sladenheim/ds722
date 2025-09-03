@@ -529,30 +529,33 @@ $$
 $$
 
 --- 
+
 ```{python}
 #| label: fig-2-norm
 #| fig-cap: "Unit Ball under the 2-Norm"
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Create a grid of points
-x = np.linspace(-1, 1, 400)
-y = np.linspace(-1, 1, 400)
-X, Y = np.meshgrid(x, y)
+# Create points on the boundary of the unit ball under 2-norm
+theta = np.linspace(0, 2 * np.pi, 500)
+x = np.cos(theta)
+y = np.sin(theta)
 
-# Calculate the 2-norm for each point in the grid
-p=2
-norm_2 = (np.abs(X)**p + np.abs(Y)**p)**(1/p)
-
-# Plot the unit ball under the 2-norm
+# Plot the boundary and fill the interior
 plt.figure(figsize=(8, 8))
-plt.contour(X, Y, norm_2, levels=[1], colors='red')
+plt.fill(x, y, color='grey', alpha=0.5)
+plt.plot(x, y, color='black')
+
+# Darken the x and y axis lines
+plt.axhline(0, color='black', linewidth=2)
+plt.axvline(0, color='black', linewidth=2)
+
 plt.title('Unit Ball under 2-Norm')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.grid(True)
 plt.axis('equal')
-plt.show
+plt.show()
 ```
 
 ---
@@ -571,24 +574,25 @@ $$
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Create a grid of points
-x = np.linspace(-1, 1, 400)
-y = np.linspace(-1, 1, 400)
-X, Y = np.meshgrid(x, y)
+# Define the vertices of the unit ball under 1-norm (diamond shape)
+x_1norm = np.array([0, 1, 0, -1, 0])
+y_1norm = np.array([1, 0, -1, 0, 1])
 
-# Calculate the 1-norm for each point in the grid
-p=1
-norm_1 = (np.abs(X)**p + np.abs(Y)**p)**(1/p)
-
-# Plot the unit ball under the 1-norm
+# Plot the boundary and fill the interior
 plt.figure(figsize=(8, 8))
-plt.contour(X, Y, norm_1, levels=[1], colors='red')
+plt.fill(x_1norm, y_1norm, color='grey', alpha=0.5)
+plt.plot(x_1norm, y_1norm, color='black')
+
+# Darken the x and y axis lines
+plt.axhline(0, color='black', linewidth=2)
+plt.axvline(0, color='black', linewidth=2)
+
 plt.title('Unit Ball under 1-Norm')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.grid(True)
 plt.axis('equal')
-plt.show
+plt.show()
 ```
 
 ---
@@ -606,23 +610,26 @@ $$
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Create a grid of points
-x = np.linspace(-1.5, 1.5, 400)
-y = np.linspace(-1.5, 1.5, 400)
-X, Y = np.meshgrid(x, y)
+# Define the vertices of the unit ball under infinity norm (square shape)
+x_inf = np.array([1, 1, -1, -1, 1])
+y_inf = np.array([1, -1, -1, 1, 1])
 
-# Calculate the infinity-norm for each point in the grid
-norm_inf = np.maximum(np.abs(X), np.abs(Y))
-
-# Plot the unit ball under the infinity-norm
+# Plot the boundary and fill the interior
 plt.figure(figsize=(8, 8))
-plt.contour(X, Y, norm_inf, levels=[1], colors='red')
-plt.title('Unit Ball under infinity-Norm')
+plt.fill(x_inf, y_inf, color='grey', alpha=0.5)
+plt.plot(x_inf, y_inf, color='black')
+
+# Darken the x and y axis lines
+plt.axhline(0, color='black', linewidth=2)
+plt.axvline(0, color='black', linewidth=2)
+
+plt.title('Unit Ball under Infinity-Norm')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.grid(True)
 plt.axis('equal')
-plt.show
+plt.show()
+
 ```
 
 ## Matrix Norms Induced by Vector Norms
