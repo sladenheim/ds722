@@ -336,7 +336,7 @@ Each entry is an inner product between a row of $A$ and the vector $x$.
 Let $\mathbf{a}_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
 
 $$
-b = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
+\mathbf{b} = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
 $$
 
 ::: {.notes}
@@ -637,7 +637,7 @@ plt.show()
 Let $A\in\mathbb{R}^{m\times n}$, the induced matrix norm is defined as
 
 $$
-\Vert A \Vert_{(m,n)} = \sup_{\mathbf{x}\in\mathbf{R}^{n}\\ \mathbf{x}\neq 0}\frac{\Vert A\mathbf{x}\Vert_{(m)}}{\Vert \mathbf{x}\Vert_{(n)}}.
+\Vert A \Vert_{(m,n)} = \sup_{\mathbf{x}\in\mathbb{R}^{n},~\mathbf{x}\neq 0}\frac{\Vert A\mathbf{x}\Vert_{(m)}}{\Vert \mathbf{x}\Vert_{(n)}}.
 $$
 
 ::: {.notes}
