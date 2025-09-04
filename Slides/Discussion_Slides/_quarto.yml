@@ -1,0 +1,24 @@
+project:
+  title: "MathFoundationsDS"
+  output-dir: _slides
+  render:
+    - Dis01-MatrixOperations.qmd
+
+format:
+  revealjs:
+    footer: "DS722 Discussion - Yuke Zhang"
+    scrollable: true
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    # html-math-method: mathjax
+    echo: true
+    code-fold: true
+    thebe:
+      use-jupyterlite: true   # run in the browser, no Binder needed
+      auto: true              # auto-start the runtime so Run buttons appear
+    code-tools: true          # show Copy / View Source controls
+
+jupyter: python3
+execute:
+  echo: true

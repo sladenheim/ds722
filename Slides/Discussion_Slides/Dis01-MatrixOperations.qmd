@@ -1,0 +1,202 @@
+---
+title: "1 Matrix Operations"
+---
+
+## From Lecture
+
+We introduced
+
+:::: {.incremental}
+1. Key notation and terminology for vectors and matrices
+1. Vector spaces, Span, and Basis 
+1. Matrix-vector and matrix-matrix products
+1. How a neural network uses matrix operations for forward propagation
+1. Vector and matrix norms
+::::
+
+
+## In this Discussion
+
+We focused on how to 
+
+:::: {.incremental}
+1. Work out the results and runtime of matrix–vector and matrix–matrix products  
+2. Compare their speed on CPU vs. GPU 
+::::
+
+
+
+## Notation
+
+A column vector of length $m$, $\mathbf{x}\in\mathbb{R}^{m}$, is a 1-dimensional (1-D) array of real numbers
+
+$$
+\mathbf{x} =
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_m
+\end{bmatrix}.
+$$
+
+The $i$th element of the vector is denoted $x_i$.
+
+---
+
+A matrix with $m$ rows and $n$ columns, $A\in\mathbb{R}^{m\times n}$ is a 2-D array of numbers 
+$$
+\small
+A = 
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{m1} &a_{m2} & \cdots & a_{mn} \\
+\end{bmatrix}.
+$$
+
+The element at row $i$ and column $j$ is denoted $a_{ij}$. A column vector is matrix of size $m\times 1$.
+
+---
+
+The transpose, $A^{T}$, of a matrix $A\in\mathbb{R}^{m\times n}$ is the $n\times m$ matrix
+
+$$
+\small
+A^{T} =
+\begin{bmatrix}
+a_{11} & a_{21} & \cdots & a_{m1} \\
+a_{12} & a_{22} & \cdots & a_{m2} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{1n} &a_{2n} & \cdots & a_{nm} \\
+\end{bmatrix}.
+$$
+
+The transpose of a column vector $\mathbf{x}$ is a row vector. A row vector is a matrix of size $1\times m$.
+
+---
+
+A matrix is square when $m=n$. 
+
+A square matrix is symmetric if $A=A^{T}$.
+
+## Inner Products between vectors
+
+The inner product of two columns vectors $\mathbf{x}, \mathbf{y}\in\mathbb{R}^n$ is the product of the transpose of $\mathbf{x}$ by $\mathbf{y}$
+
+$$
+\mathbf{x}^{T}\mathbf{y} = \sum_{i=1}^{n}x_iy_i.
+$$
+
+The notation $(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{T}\mathbf{y}$ is also used to denote the inner product.
+
+## Inner product
+
+Given two vectors $x,y\in\mathbb{R}^{n}$ what is the flop count of the inner product?
+
+::: {.fragment}
+**Answer:** There are $n$ multiplications and $n-1$ additions for a total of $2n-1$ flops.
+:::
+
+---
+
+```{python}
+```
+
+
+## A Matrix Times a Vector
+
+Let $\mathbf{x}\in\mathbb{R}^{n}$ and let $A\in\mathbb{R}^{m\times n}$, then the matrix-vector product $\mathbf{b}=A\mathbf{x}\in\mathbb{R}^{m}$ is defined as
+
+$$
+b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
+$$
+
+---
+
+Let $a_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
+
+$$
+b = \sum_{j=1}^{n}x_j a_j.
+$$
+
+## Matrix-vector product
+
+Given a matrix $A\in\mathbb{R}^{m\times n}$ and vector $x\in\mathbb{R}^{n}$ what is the flop count for the product $y=Ax$?
+
+::: {.fragment}
+**Answer:** There are $m$ inner products that each cost $2n-1$ flops for a total of $m*(2n - 1)$. 
+::: 
+
+---
+
+```{python}
+```
+
+## A Matrix Times a Matrix
+
+Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matrix-matrix product $C = AB \in\mathbb{R}^{m \times p}$ is defined as
+
+$$
+c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}.
+$$
+
+
+## Matrix-Matrix product
+
+Given a matrix $A\in\mathbb{R}^{m\times n}$ and matrix $B\in\mathbb{R}^{n\times p}$ what is the flop count for the product $C=AB$?
+
+::: {.fragment}
+**Answer:** There are $m\times p$ inner products costing $2n-1$ flops for a total of $mp(2n-1)$ flops.
+:::
+
+---
+
+```{python}
+```
+
+
+## Column Partition
+```{python}
+```
+
+## Outer Products
+
+The outer product is a matrix-matrix product between an $m$-dimensional column vector $\mathbf{u}$ with an $n$-dimensional row vector $\mathbf{v}$, the result is an $m\times n$ (rank 1) matrix
+
+$$
+\begin{bmatrix}
+u_1 \\
+u_2 \\
+\vdots \\
+u_m
+\end{bmatrix}
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+v_1u_1 & \cdots & v_nu_1 \\
+v_1u_2 & & v_nu_2 \\
+\vdots & & \vdots \\
+v_1u_m & \cdots & v_nu_m \\
+\end{bmatrix}
+$$
+
+---
+**Remark**: Why rank = 1 ?
+
+Recall that rank = dim(ColSpace) = dim(RowSpace),
+$$
+uv = [v_1u, ..., v_nu]
+$$
+
+---
+```{python}
+```
+
+## Comparing runtime when dimension gets larger
+
+```{python}
+```
