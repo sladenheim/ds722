@@ -38,7 +38,7 @@ $$
 A set of vectors $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_n \}$ are orthogonal if every pair of vectors is orthogonal, i.e.,
 
 $$
-\mathbf{q}_{2}^{T}\mathbf{q}_1 = 0 \quad \text{for all} \quad i\neq j.
+\mathbf{q}_{i}^{T}\mathbf{q}_{j} = 0 \quad \text{for all} \quad i\neq j.
 $$
 
 A set of vectors $S$ is orthonormal if every vector in S is orthogonal and is a unit vector.
@@ -50,7 +50,7 @@ The vectors in an orthogonal set $S$ are linearly independent.
 
 ## Components of a Vector
 
-Inner products can be used used to decompose arbitrary vectors into orthogonal components.
+Inner products can be used to decompose arbitrary vectors into orthogonal components.
 
 Consider a set $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots \mathbf{q}_n \}$ of $m$-dimensional orthonormal vectors and let $\mathbf{v}$ be an arbitrary vector.
 
@@ -194,7 +194,7 @@ A projector $P$ is orthogonal if and only if $P=P^{T}$.
 
 ## Projection with an Orthonormal Basis
 
-Let $\{\mathbf{q}_1,\ldots,\mathbf{q}_{n} \}$ be a set of or $n$ orthonormal vectors in $\mathbb{R}^{m}$. Recall that any vector 
+Let $\{\mathbf{q}_{1},\ldots,\mathbf{q}_{n} \}$ be a set of  $n$ orthonormal vectors in $\mathbb{R}^{m}$. Recall that any vector 
 $\mathbf{v}$ has the decomposition
 $$
 \mathbf{v} = \mathbf{r} + \sum_{i=1}(\mathbf{q}_{i}\mathbf{q}_{i}^{*})\mathbf{v},
@@ -214,9 +214,9 @@ Q =
 \end{bmatrix},
 $$
 
-then $QQ^{T}$ is an orthogonal projector onto $\operatorname{ranger}(Q)$. As long as the columns of $Q$ are orthonormal any product of this form projects onto the column space of $Q$.
+then $QQ^{T}$ is an orthogonal projector onto $\operatorname{range}(Q)$. As long as the columns of $Q$ are orthonormal any product of this form projects onto the column space of $Q$.
 
-Note that $I-QQ^{T}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{ranger}(Q)$.
+Note that $I-QQ^{T}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{range}(Q)$.
 
 ---
 
@@ -317,7 +317,7 @@ u1 = np.array([1/np.sqrt(2), 1/np.sqrt(2)])
 
 # Calculate the projection of v onto u1 
 Pq = np.outer(u1, u1)
-proj_v_u1 = Pq @ u1
+proj_v_u1 = Pq @ v
 
 #Calculate the complementary projection
 Pq_perp = np.eye(2) - Pq
@@ -330,13 +330,16 @@ plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, color='r', 
 plt.quiver(0, 0, proj_v_u1[0], proj_v_u1[1], angles='xy', scale_units='xy', scale=1, color='c', label='proj_v_u1')
 plt.quiver(0, 0, proj_v_perp[0], proj_v_perp[1], angles='xy', scale_units='xy', scale=1, color='m', label='proj_v_perp')
 
+# Plot the vector q_1 (u1)
+plt.quiver(0, 0, u1[0], u1[1], angles='xy', scale_units='xy', scale=1, color='g', label='q_1')
+
 # Set the limits and labels
 plt.xlim(-2, 2)
 plt.ylim(-2, 2)
 plt.axhline(0, color='grey', lw=0.5)
 plt.axvline(0, color='grey', lw=0.5)
 plt.grid(True)
-plt.legend()
+plt.legend(loc='upper left')
 plt.title('Projection of vector v')
 plt.xlabel('x')
 plt.ylabel('y')
@@ -424,7 +427,7 @@ plt.show()
 We covered
 
 - Orthogonal/Orthonormal vectors
-- Orthogonal/Orthonormal matrices
+- Orthogonal matrices
 - Defined orthogonal/oblique projectors
 - Defined projection with orthogonal and arbitrary bases
 
