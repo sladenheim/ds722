@@ -1,0 +1,156 @@
+---
+title: "2 Projection"
+author: "Yuke Zhang"
+---
+
+## From Lecture
+
+We introduced
+
+:::: {.incremental}
+- Vector spaces, Span, and Basis 
+- Matrix-vector and matrix-matrix products
+- How a neural network uses matrix operations for forward propagation
+- Vector and matrix norms
+::::
+
+## In this Discussion
+
+We focused on how to 
+
+:::: {.incremental}
+- Orthogonal/Orthonormal vectors
+- Orthogonal matrices
+- Defined orthogonal/oblique projectors
+- Defined projection with orthogonal and arbitrary bases
+- Approaches for generating the QR factorization
+    - Classical Gram-Schmidt
+    - Modified Gram-Schmidt
+::::
+
+## A pair of Orthogonal Vectors
+
+Two vectors $\mathbf{q}_1$ and $\mathbf{q}_2$ are *orthogonal* when
+
+$$
+\mathbf{q}_{2}^{T}\mathbf{q}_1 = 0.
+$$
+
+
+## A set of Orthogonal Vectors 
+
+A set of vectors $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_n \}$ are *orthogonal* if every pair of vectors is *orthogonal*, i.e.,
+
+$$
+\mathbf{q}_{i}^{T}\mathbf{q}_{j} = 0 \quad \text{for all} \quad i\neq j.
+$$
+
+A set of vectors $S$ is **orthonormal** if every vector in S is orthogonal and is a unit vector.
+
+The quantity $\mathbf{q}_{j}^T\mathbf{v}$ as the coefficients of a linear combination of vectors $\mathbf{q}_{i}$ in order to express $\mathbf{v}$.
+
+
+## Decomposition using orthonormal set
+
+Observe that the vector 
+
+$$
+\mathbf{r} = \mathbf{v} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2} - \cdots - (\mathbf{q}_{n}^T\mathbf{v})\mathbf{q}_{n}
+$$
+
+is orthogonal to $S$.
+
+Consequently we can always express
+
+$$
+\mathbf{v} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}^T\mathbf{v})\mathbf{q}_{i} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}\mathbf{q}_{i}^T)\mathbf{v}. 
+$$
+
+
+## Orthogonal Matrices
+A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
+
+Equivalently, $Q^{T} = Q^{-1}$, i.e., $Q^{T}$ is the inverse of $Q$.
+
+## Projectors
+A projector is a square matrix $P$ that satisfies
+
+$$
+P^{2} = P.
+$$
+
+Given matrix $A$, we can construct a projector $P = A(A^\top A)^{-1}A$.
+
+## Complementary Projectors
+
+If $P$ is a projector, $I-P$ is also a projector. The matrix $I-P$ is called the complementary projector to $P$.
+
+## Orthogonal Projectors
+
+**Theorem**
+A projector $P$ is orthogonal if and only if $P=P^{T}$.
+
+## Full QR Factorization
+
+A full QR factorization of $A\in\mathbb{R}^{m\times n} (m\geq n)$ is denoted by
+
+$$
+A = QR,
+$$
+
+where $Q\in\mathbb{R}^{m\times n}$ is orhthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
+
+## Gram-Schmidt Orthogonalization
+
+How do we construct our vectors $\mathbf{q}_{j}$? 
+
+Recall from the previous lecture that we can express a vector in the following form
+
+$$
+\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
+$$
+
+If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have a new $\mathbf{q}_{j}$ that spans $\langle\mathbf{a}_{1}\ldots \mathbf{a}_{j-1} \rangle$ and is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
+
+## Gram-Schmidt Projections
+
+The CGS method is not numerically stable. However, we can modify this method to produce a numerically stable algorithm.
+
+The key idea behind this is projections. 
+
+$$
+\mathbf{q}_{1} = \frac{P_{1}\mathbf{a}_{1}}{\Vert P_1\mathbf{a}_{1}\Vert_2}, \mathbf{q}_{2} = \frac{P_{2}\mathbf{a}_{2}}{\Vert P_2\mathbf{a}_{1}\Vert_2}, \ldots, \mathbf{q}_{n} = \frac{P_{n}\mathbf{a}_{n}}{\Vert P_{n}\mathbf{a}_{n}\Vert_2},
+$$
+
+where each $P_{j}$ is an orthogonal projector.
+
+
+---
+
+:::: {.columns}
+::: {.column width="47.5%"}
+**CGS Algorithm**
+
+1. for $j=1,\ldots n$
+1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
+1. $\quad\quad$ for $i=1,\ldots, j-1$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
+1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
+:::
+::: {.column width="5%"}
+:::
+::: {.column width="47.5%"}
+**MGS Algorithm**
+
+1. for $i=1,\ldots n$
+1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
+1. for $i=1,\ldots n$
+1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+:::
+::::

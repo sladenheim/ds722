@@ -3,6 +3,7 @@ project:
   output-dir: _slides
   render:
     - Dis01-MatrixOperations.qmd
+    - Dis02-Projection.qmd
 
 format:
   revealjs:
