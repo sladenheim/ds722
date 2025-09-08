@@ -103,7 +103,7 @@ $$
 Let's calculate the decomposition
 
 $$
-\mathbf{v} = \mathbf{r} + (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2}.
+\mathbf{v} = \mathbf{r} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2}.
 $$
 
 ## Orthogonal Matrices
@@ -197,7 +197,7 @@ A projector $P$ is orthogonal if and only if $P=P^{T}$.
 Let $\{\mathbf{q}_{1},\ldots,\mathbf{q}_{n} \}$ be a set of  $n$ orthonormal vectors in $\mathbb{R}^{m}$. Recall that any vector 
 $\mathbf{v}$ has the decomposition
 $$
-\mathbf{v} = \mathbf{r} + \sum_{i=1}(\mathbf{q}_{i}\mathbf{q}_{i}^{*})\mathbf{v},
+\mathbf{v} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}\mathbf{q}_{i}^{*})\mathbf{v},
 $$
 where $\mathbf{r}$ is orthogonal to $\{\mathbf{q}_1,\ldots,\mathbf{q}_{n} \}$.
 
@@ -214,7 +214,9 @@ Q =
 \end{bmatrix},
 $$
 
-then $QQ^{T}$ is an orthogonal projector onto $\operatorname{range}(Q)$. As long as the columns of $Q$ are orthonormal any product of this form projects onto the column space of $Q$.
+then $QQ^{T}$ is an orthogonal projector onto $\operatorname{range}(Q)$. 
+
+*Any* product of this is a projector onto the column space of $Q$ as long as its columns are orthonormal.
 
 Note that $I-QQ^{T}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{range}(Q)$.
 
@@ -231,7 +233,7 @@ The matrix $P_{q}$ is a rank one orthogonal projector that isolates the componen
 
 ---
 
-Can we reconstruct $Q$ from $P_{q_i}$?
+Can we reconstruct $QQ^{T}$ from $P_{q_i}$?
 
 ---
 
@@ -248,13 +250,13 @@ It is the complementary projector of $P_{q}$.
 For an arbitrary non-unit vector $\mathbf{a}$, the analogous operators are
 
 $$
-P_{a} = \mathbf{a}\mathbf{a}^{T},
+P_{a} = \frac{\mathbf{a}\mathbf{a}^{T}}{\mathbf{a}^{T}\mathbf{a}},
 $$
 
 and
 
 $$
-P_{\perp a} = I-\mathbf{a}\mathbf{a}^{T}. 
+P_{\perp a} = I-\frac{\mathbf{a}\mathbf{a}^{T}}{\mathbf{a}^{T}\mathbf{a}}. 
 $$
 
 ## Projection with an Arbitrary Basis

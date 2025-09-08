@@ -272,7 +272,7 @@ Give standard basis as example for $\mathbb{R}^{2}$ and $[1, 1]$ and $[1, -1]$.
 
 A basis for a vector $V$ is a set of vectors $B = \{\mathbf{b}_1, \ldots, \mathbf{b}_n\}$ that spans $V$ and is linearly independent.
 
-Let $\mathbf{e}_{k}\in\mathbf{R}^{n}$ denote a vector with a 1 in the $k$-th entry and zero everywhere else, then
+Let $\mathbf{e}_{k}\in\mathbb{R}^{n}$ denote a vector with a 1 in the $k$-th entry and zero everywhere else, then
 
 $$
 \{\mathbf{e}_1, \ldots, \mathbf{e}_n\}
