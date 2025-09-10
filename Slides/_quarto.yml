@@ -3,7 +3,8 @@ project:
   output-dir: _slides
   render:
     - MathFoundationsDS.qmd
-    - Lec01-VectorsMatrices.qmd
+    - Lec00-VectorsMatrices1.qmd
+    - Lec01-VectorsMatrices2.qmd
     - Lec02-OrthogonalityProjections.qmd
     - Lec03-QRFactorization.qmd
     - Lec04-LinearSystems.qmd

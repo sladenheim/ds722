@@ -1,0 +1,704 @@
+---
+title: "Vectors and Matrices"
+jupyter: python3
+---
+
+## Lecture Overview
+
+Vectors and matrices are the language of data science, machine learning, and scientific computing. 
+
+This lecture is a review of the previous lecture and will help to set the foundation for our future linear algebra lectures.
+
+## Lecture Objectives
+
+Better understand:
+
+- Vector and matrix operations
+- Vector spaces, spans, linear independence, basis, dimension, and subspaces
+- Invertible matrices
+- Outer products
+- Norms
+
+## Vectors
+
+Interpretations of vectors:
+
+1. Array of numbers
+1. Elements of vector space
+
+---
+
+Let $\mathbf{x} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$ and $\mathbf{y} = \begin{bmatrix} 4 \\ 1 \end{bmatrix}$.
+
+A linear combination of $\mathbf{x}$ and $\mathbf{y}$ is any vector of the form:
+$$
+\alpha \mathbf{x} + \beta \mathbf{y} = \alpha \begin{bmatrix} 1 \\ 2 \end{bmatrix} + \beta \begin{bmatrix} 4 \\ 1 \end{bmatrix} = \begin{bmatrix} \alpha + 4\beta \\ 2\alpha + 1\beta \end{bmatrix},
+$$
+where $\alpha, \beta \in \mathbb{R}$.
+
+---
+
+The linear combination of $\mathbf{x} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$  $\mathbf{y} = \begin{bmatrix} 4 \\ 1 \end{bmatrix}$ with $\alpha=\beta=1$ is 
+$$
+\alpha\mathbf{x} + \beta\mathbf{y} = \begin{bmatrix} 1 \\ 2 \end{bmatrix} + \begin{bmatrix} 4 \\ 1 \end{bmatrix} =  \begin{bmatrix} 5 \\ 3 \end{bmatrix}.
+$$
+
+---
+
+The sum is plotted in @fig-vector-addition. It is obtained by placing the tip of one vector to the tail of the other vector. 
+
+```{python}
+#| label: fig-vector-addition
+#| fig-cap: "Vector addition"
+import matplotlib.pyplot as plt
+import numpy as np
+fig = plt.figure()
+ax = plt.gca()
+u = np.array([1, 2])
+v = np.array([4, 1])
+w = np.array([5, 3])
+V = np.array([u, v, w])
+origin = np.array([[0, 0, 0], [0, 0, 0]])
+plt.quiver(*origin, V[:, 0], V[:, 1], 
+           color=['r', 'r', 'b'], 
+           angles='xy', 
+           scale_units='xy', 
+           scale=1)
+ax.set_xlim([-1, 6])
+ax.set_ylim([-1, 4])
+ax.text(1.3, 1.9, '$x$', size=16)
+ax.text(4.3, 1.2, '$y$', size=16)
+ax.text(5.3, 2.9, '$x+y$', size=16)
+plt.plot([1, 5], [2, 3], 'g--')
+plt.plot([4, 5], [1, 3], 'g--')
+ax.grid()
+plt.show()
+```
+
+## Matrices
+
+Matrices are 2-dimensional arrays:
+
+$$
+A = 
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{bmatrix},
+$$
+
+where $A \in \mathbb{R}^{m \times n}$ has $m$ rows and $n$ columns.
+
+Matrices can represent linear transformations, systems of equations, or collections of vectors.
+
+---
+
+Let $A, B \in \mathbb{R}^{m \times n}$ be two matrices of the same shape. The sum $A + B$ is defined by adding corresponding entries:
+
+$$
+(A + B)_{ij} = A_{ij} + B_{ij}.
+$$
+
+---
+
+**Example**
+
+::: {.notes}
+$$
+A = \begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix},
+\quad
+B = \begin{bmatrix}
+5 & 6 \\
+7 & 8
+\end{bmatrix}
+$$
+:::
+
+## Matrix-Vector Multiplication
+Let $\mathbf{x}\in\mathbb{R}^{n}$ and let $A\in\mathbb{R}^{m\times n}$, then the matrix-vector product $\mathbf{b}=A\mathbf{x}\in\mathbb{R}^{m}$ is defined as
+
+$$
+b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
+$$
+
+::: {.notes}
+Each entry is an inner product between a row of $A$ and the vector $x$.
+:::
+
+---
+
+Let $\mathbf{a}_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
+
+$$
+\mathbf{b} = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
+$$
+
+::: {.notes}
+Draw a picture of linear combinations of the columns of $A$.
+:::
+
+## Matrix-Matrix Multiplication
+
+Matrix-matrix multiplication is a way to combine two matrices to produce a new matrix. If $A \in \mathbb{R}^{m \times n}$ and $B \in \mathbb{R}^{n \times p}$, their product $C = AB$ is an $m \times p$ matrix defined by:
+
+$$
+c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj},
+$$
+
+for $i = 1, \ldots, m$ and $j = 1, \ldots, p$.
+
+Each entry $c_{ij}$ is an inner product of row $i$ of $A$ and column $j$ of $B$.
+
+---
+
+Alternatively:
+
+- Column $j$ of $C$ is a linear combination of the columns of $A$ with coefficients coming from column $j$ of $B$.
+- Row $i$ of $C$ is a linear combination of the rows of $B$ with coefficients coming from row $i$ of $A$.
+
+---
+
+**Example:**
+
+Let
+$$
+A = \begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+5 & 6 \\
+7 & 8
+\end{bmatrix}.
+$$
+
+::: {.notes}
+$$
+AB = \begin{bmatrix}
+1 \cdot 5 + 2 \cdot 7 & 1 \cdot 6 + 2 \cdot 8 \\
+3 \cdot 5 + 4 \cdot 7 & 3 \cdot 6 + 4 \cdot 8
+\end{bmatrix}
+= \begin{bmatrix}
+19 & 22 \\
+43 & 50
+\end{bmatrix}
+$$
+:::
+
+## Some Special Matrices
+
+We introduce a few important square matrices:
+
+- **Identity matrix**: $I$ has ones on the diagonal and zeros elsewhere.
+- **Diagonal matrix**: All off-diagonal entries are zero; only the diagonal may be nonzero.
+- **Lower triangular matrix**: All entries above the diagonal are zero.
+- **Upper triangular matrix**: All entries below the diagonal are zero.
+- **Symmetric matrix**: $A = A^T$; entries are mirrored across the diagonal.
+
+---
+
+### Identity Matrix
+The $m \times m$ identity matrix $I$ is defined as
+
+$$
+I = 
+\begin{bmatrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & 1
+\end{bmatrix},
+$$
+
+where all diagonal entries are $1$ and all off-diagonal entries are $0$.
+
+---
+
+### Diagonal Matrix
+A diagonal matrix is an $m \times m$ square matrix in which all entries off the main diagonal are zero. That is, for a matrix $D \in \mathbb{R}^{m \times m}$,
+
+$$
+D = 
+\begin{bmatrix}
+d_{11} & 0      & \cdots & 0      \\
+0      & d_{22} & \cdots & 0      \\
+\vdots & \vdots & \ddots & \vdots \\
+0      & 0      & \cdots & d_{mm}
+\end{bmatrix},
+$$
+
+where $d_{ii}$ are the diagonal entries, and $D_{ij} = 0$ for $i \neq j$.
+
+---
+
+### Lower Triangular Matrix
+
+A lower triangular matrix is a square matrix where all entries above the main diagonal are zero. For $L \in \mathbb{R}^{m \times m}$,
+
+$$
+L = 
+\begin{bmatrix}
+l_{11} & 0      & \cdots & 0      \\
+l_{21} & l_{22} & \cdots & 0      \\
+\vdots & \vdots & \ddots & \vdots \\
+l_{m1} & l_{m2} & \cdots & l_{mm}
+\end{bmatrix},
+$$
+
+where $l_{ij} = 0$ for $i < j$.
+
+---
+
+### Upper Triangular Matrix
+
+An upper triangular matrix is a square matrix where all entries below the main diagonal are zero. For $U \in \mathbb{R}^{m \times m}$,
+
+$$
+U = 
+\begin{bmatrix}
+u_{11} & u_{12} & \cdots & u_{1m} \\
+0      & u_{22} & \cdots & u_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+0      & 0      & \cdots & u_{mm}
+\end{bmatrix},
+$$
+
+where $u_{ij} = 0$ for $i > j$.
+
+---
+
+### Symmetric Matrices
+
+A symmetric matrix is a square matrix that is equal to its transpose, i.e., $A = A^T$. This means $a_{ij} = a_{ji}$ for all $i, j$.
+
+**Example:**
+
+$$
+A = 
+\begin{bmatrix}
+2 & 3 & 4 \\
+3 & 5 & 6 \\
+4 & 6 & 8
+\end{bmatrix}.
+$$
+
+Here, $A$ is symmetric because $a_{ij} = a_{ji}$ for all $i, j$.
+
+---
+
+**Questions**
+
+1. What happens to a vector $\mathbf{x}$ when we multiply it with the identity matrix?
+1. What happens to a vector $\mathbf{x}$ when we multiply it with a diagonal matrix?
+1. What happens to a matrix $A\in\mathbb{R}^{m\times m}$ when we multiply it with the identity matrix?
+1. What happens to a matrix $A\in\mathbb{R}^{m\times m}$ when we multiply it with a diagonal matrix?
+
+## Vector Spaces
+
+An important concept in linear algebra is the notion of a vector space. A vector space is a set $V$ such that for any 2 elements $\mathbf{u},\mathbf{v}\in V$, and any scalars, $\alpha$ and $\beta$, then $\alpha\mathbf{u} + \beta\mathbf{v}\in V$.
+
+We also need these properties:
+
+1. $\mathbf{u} + (\mathbf{v} + \mathbf{w}) = (\mathbf{u} + \mathbf{v}) + \mathbf{w}$ (associativity).
+1. $\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$ (commutativity).
+1. There exists $\mathbf{0}\in V$ such that $\mathbf{v} + \mathbf{0} = \mathbf{v}$ for all $\mathbf{v}\in V$ (identity element).
+1. For every $\mathbf{v}\in V$, there exists $-\mathbf{v}\in V$ such that $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$ (inverse).
+1. $\alpha(\beta\mathbf{v}) = (\alpha\beta)\mathbf{v}$
+1. $1\mathbf{v} = \mathbf{v}$
+1. $\alpha(\mathbf{u} + \mathbf{v}) = \alpha\mathbf{u} + \alpha\mathbf{v}$
+1. $(\alpha + \beta)\mathbf{v} = \alpha\mathbf{v} + \beta\mathbf{v}$
+
+---
+
+The importance of vector spaces is it allows us to introduce concepts like:
+
+- Linear combinations and span
+- Linear independence
+- Basis and dimension
+- Subspaces and orthogonality
+
+These concepts are fundamental for understanding solutions to linear systems, transformations, projections, and many algorithms in data science and machine learning.
+
+## Linear Independence
+
+The vectors in the set $S= \{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$ are linearly independent if they are not linearly dependent, i.e., the equation
+$$
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n = \mathbf{0},
+$$
+is only satisfied when $\alpha_i = 0$ for $i=1,\ldots,n$.
+
+---
+
+**Linear Independence Example**
+
+Consider the vectors $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$ and $\mathbf{v}_2 = \begin{bmatrix} 3 \\ 4 \end{bmatrix}$.
+
+Are they linearly independent?
+
+Suppose $\alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 = \mathbf{0}$:
+
+$$
+\alpha_1 \begin{bmatrix} 1 \\ 2 \end{bmatrix} + \alpha_2 \begin{bmatrix} 3 \\ 4 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}.
+$$
+
+::: {.notes}
+This gives the system:
+$$
+\begin{cases}
+\alpha_1 + 3\alpha_2 = 0 \\
+2\alpha_1 + 4\alpha_2 = 0
+\end{cases}
+$$
+
+Solving, we find $\alpha_1 = 0$, $\alpha_2 = 0$ is the only solution, so the vectors are linearly independent.
+:::
+
+
+## Spans and Basis
+The **span** of a set of vectors $\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\}$ in $\mathbb{R}^n$ is the set of all possible linear combinations of those vectors:
+$$
+\operatorname{span}\{\mathbf{v}_1, \ldots, \mathbf{v}_k\} = \left\{ \sum_{i=1}^{k} \alpha_i \mathbf{v}_i \mid \alpha_i \in \mathbb{R} \right\}.
+$$
+
+A **basis** for a vector space $V$ is a linearly independent set of vectors that spans $V$.
+
+The number of vectors in a basis is called the **dimension** of the vector space.
+
+---
+
+**Example**
+A basis for $\mathbb{R}^3$ is any set of three linearly independent vectors. The standard basis is:
+
+$$
+\left\{
+\begin{bmatrix}
+1 \\
+0 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+1 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+0 \\
+1
+\end{bmatrix}
+\right\}.
+$$
+
+---
+
+Any set of three linearly independent vectors in $\mathbb{R}^3$ forms a basis. For example,
+
+$$
+\left\{
+\begin{bmatrix}
+1 \\
+2 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+1 \\
+1
+\end{bmatrix},
+\begin{bmatrix}
+1 \\
+0 \\
+1
+\end{bmatrix}
+\right\}.
+$$
+
+---
+
+Suppose that we have a set of 4 vectors in $\mathbb{R}^{3}$, are these vectors linearly independent?
+
+::: {.notes}
+No, four vectors in $\mathbb{R}^3$ cannot be linearly independent. The maximum number of linearly independent vectors in $\mathbb{R}^3$ is three, which is the dimension of the space. Any set of four vectors in $\mathbb{R}^3$ must be linearly dependent.
+:::
+
+## Subspaces
+
+A **subspace** of a vector space $V$ is a subset $W \subseteq V$ that is itself a vector space under the same addition and scalar multiplication as $V$. That is, for any $\mathbf{u}, \mathbf{v} \in W$ and any scalar $\alpha$, both $\mathbf{u} + \mathbf{v} \in W$ and $\alpha \mathbf{u} \in W$.
+
+---
+
+**Examples of subspaces:**
+
+- The set of all vectors in $\mathbb{R}^3$ lying on a plane through the origin.
+- The set $\{ \mathbf{0} \}$ (the zero vector) is a subspace of any vector space.
+- The column space of a matrix $A\in\mathbb{R}^{m\times n}$ is a subspace of $\mathbb{R}^m$.
+
+A subspace must always contain the zero vector and be closed under addition and scalar multiplication.
+
+## Invertible Matrices
+
+A nonsingular or invertible matrix is a square matrix of full rank.
+
+The inverse of an invertible matrix $A$ is denoted by $A^{-1}$ and satisfies $AA^{-1} = A^{-1}A = I$, where $I$ is the identity matrix.
+
+---
+
+**Example**
+Let
+$$
+A = \begin{bmatrix}
+2 & 1 \\
+1 & 1
+\end{bmatrix}.
+$$
+
+The inverse of $A$ is
+$$
+A^{-1} = \begin{bmatrix}
+1 & -1 \\
+-1 & 2
+\end{bmatrix}.
+$$
+
+::: {.notes}
+Check:
+$$
+A A^{-1} = \begin{bmatrix}
+2 & 1 \\
+1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & -1 \\
+-1 & 2
+\end{bmatrix}
+=
+\begin{bmatrix}
+2 \cdot 1 + 1 \cdot (-1) & 2 \cdot (-1) + 1 \cdot 2 \\
+1 \cdot 1 + 1 \cdot (-1) & 1 \cdot (-1) + 1 \cdot 2
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+= I
+$$
+:::
+
+---
+
+For a $2\times 2$ matrix
+$$
+A = \begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix},
+$$
+the inverse is given by
+$$
+A^{-1} = \frac{1}{ad - bc}
+\begin{bmatrix}
+d & -b \\
+-c & a
+\end{bmatrix},
+$$
+provided that $ad - bc \neq 0$.
+
+---
+
+**Homework Hint (Q7)**
+
+To prove the inverse of a lower triangular matrix $L$ is also lower triangular, consider the formula $LL^{-1}=I$. Let 
+
+$$
+L^{-1} = 
+\begin{bmatrix}
+y_{11} & y_{12} & \cdots & y_{1m} \\
+y_{21} & y_{22} & \cdots & y_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+y_{m1} & y_{m2} & \cdots & y_{mm}
+\end{bmatrix}.
+$$
+
+Use the definition of matrix-matrix multiplication and argue that because of the structure of the identity, that the entries $y_{ij}=0$ when $i<j$.
+
+---
+
+## Outer Products
+
+The outer product is a matrix-matrix product between an $m$-dimensional column vector $\mathbf{u}$ with an $n$-dimensional row vector $\mathbf{v}$, the result is an $m\times n$ (rank 1) matrix
+
+$$
+\begin{bmatrix}
+u_1 \\
+u_2 \\
+\vdots \\
+u_m
+\end{bmatrix}
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+v_1u_1 & \cdots & v_nu_1 \\
+v_1u_2 & & v_nu_2 \\
+\vdots & & \vdots \\
+v_1u_m & \cdots & v_nu_m \\
+\end{bmatrix}.
+$$
+
+---
+
+**Example**
+Let $\mathbf{u} = \begin{bmatrix} 2 \\ 3 \end{bmatrix}$ and $\mathbf{v} = \begin{bmatrix} 4 \\ 5 \end{bmatrix}$.
+
+The outer product $\mathbf{u}\mathbf{v}^T$ is:
+
+::: {.notes}
+$$
+\begin{bmatrix}
+2 \\
+3
+\end{bmatrix}
+\begin{bmatrix}
+4 & 5
+\end{bmatrix}
+=
+\begin{bmatrix}
+2 \times 4 & 2 \times 5 \\
+3 \times 4 & 3 \times 5
+\end{bmatrix}
+=
+\begin{bmatrix}
+8 & 10 \\
+12 & 15
+\end{bmatrix}
+$$
+:::
+
+---
+
+**Homework Hint (Q5)**
+
+Let $A\in\mathbb{R}^{m\times n}, B\in\mathbb{R}^{m\times r},$ and $C\in\mathbb{R}^{r\times n}$, show that $A=BC = \sum_{k=1}^{r} b_{k}c_{k}^{T}$, i.e., A can be written as a sum of outer products.
+
+Let's consider the $2\times 2$ case with
+
+$$
+A = \begin{bmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{bmatrix}.
+$$
+
+::: {.notes}
+The matrix product $A = BC$ can be written as a sum of outer products:
+$$
+A = \sum_{k=1}^{2} \text{(column $k$ of $B$)} \times \text{(row $k$ of $C$)}
+$$
+
+Let's compute each outer product:
+
+- For $k=1$:
+    - Column 1 of $A$: $\begin{bmatrix} a_{11} \\ a_{21} \end{bmatrix}$
+    - Row 1 of $B$: $\begin{bmatrix} b_{11} & b_{12} \end{bmatrix}$
+    - Outer product:
+        $$
+        \begin{bmatrix} a_{11} \\ a_{21} \end{bmatrix}
+        \begin{bmatrix} b_{11} & b_{12} \end{bmatrix}
+        =
+        \begin{bmatrix}
+        a_{11}b_{11} & a_{11}b_{12} \\
+        a_{21}b_{11} & a_{21}b_{12}
+        \end{bmatrix}
+        $$
+
+- For $k=2$:
+    - Column 2 of $A$: $\begin{bmatrix} a_{12} \\ a_{22} \end{bmatrix}$
+    - Row 2 of $B$: $\begin{bmatrix} b_{21} & b_{22} \end{bmatrix}$
+    - Outer product:
+        $$
+        \begin{bmatrix} a_{12} \\ a_{22} \end{bmatrix}
+        \begin{bmatrix} b_{21} & b_{22} \end{bmatrix}
+        =
+        \begin{bmatrix}
+        a_{12}b_{21} & a_{12}b_{22} \\
+        a_{22}b_{21} & a_{22}b_{22}
+        \end{bmatrix}
+        $$
+
+Sum the outer products:
+$$
+C = 
+\begin{bmatrix}
+a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22}
+\end{bmatrix}
+$$
+
+This matches the direct matrix multiplication $AB$.
+:::
+
+## Vector Norms
+
+Recall the following norm definitions for vectors $\mathbf{x}\in\mathbb{R}^{m}$:
+
+1. The 1-norm: $\Vert\mathbf{x}\Vert_1 = \sum_{i=1}^m \vert x_i\vert$.
+1. The 2-norm : $\Vert \mathbf{x}\Vert_2 = \left( \sum_{i=1}^m \vert x_i\vert ^2 \right)^{1/2}$.
+1. The $\infty$-norm: $\Vert\mathbf{x}\Vert_\infty = \max_{i=1,\ldots,m} \vert x_i\vert$.
+1. Given a positive definite diagonal matrix $B$, the weighted norm is
+1. Weighted norm: $\Vert\mathbf{x}\Vert_W = \sqrt{\mathbf{x}^T W \mathbf{x}}$.
+
+A norm is just a function $\Vert \cdot \Vert: \mathbb{R}^{m}\rightarrow \mathbb{R}$.
+
+## Cauchy-Schwarz
+
+The Cauchy-Schwarz inequality for vectors $\mathbf{x},\mathbf{y}\in\mathbb{R}^{m}$ is
+
+$$
+\vert \mathbf{x}^{T}\mathbf{y}\vert \leq \Vert \mathbf{x}\Vert_{2}\Vert\mathbf{y}\Vert_{2}.
+$$
+
+---
+
+**Homework Hint (Q4)**
+
+1. $\mathbf{z}^{T}\mathbf{z}=\Vert \mathbf{z}\Vert_{2}^{2}\geq0$ for all $\mathbf{z}$
+1. $\mathbf{x}^{T}\mathbf{y} = \mathbf{y}^{T}\mathbf{x}$
+1. Expand out $(\mathbf{x}-\lambda \mathbf{y})^{T}(\mathbf{x}-\lambda \mathbf{y})$. Then try to find a special value of $\lambda$ that leads to $\Vert\mathbf{x}\Vert_{2}^{2} - \frac{(\mathbf{x}^{T}\mathbf{y})^{2}}{\Vert\mathbf{y}\Vert_{2}^{2}}$. 
+
+## Matrix Norms
+
+A matrix norm is a function that assigns a non-negative real number to a matrix, measuring its *stretch factor* in a way that generalizes vector norms.
+
+Recall the following matrix norms:
+
+1. $\Vert A \Vert_1 = \max_{1\leq j\leq n}\sum_{i=1}^{m} \vert a_{ij}\vert$
+1. $\Vert A \Vert_2 = \sigma_{\text{max}}(A)$, where $\sigma_{\text{max}}(A)$ is the largest singular value ^[We will cover singular values in later lectures.].
+1. $\Vert A \Vert_\infty = \max_{1\leq i\leq m}\sum_{j=1}^{n} \vert a_{ij}\vert$
+
+::: {.notes}
+1. 1-norm is max column sum
+1. Infinity norm is max row sum
+:::
+
+## Summary
+
+- Reviewed vectors and matrices 
+- Explained matrix operations
+- Introduced some special matrices
+- Reviewed vector spaces and their properties
+- Reviewed linear independence, span, basis, and dimension
+- Defined subspaces
+- Reviewed invertible matrices
+- Reviewed vector norms and matrix norms
+
