@@ -1,5 +1,5 @@
 ---
-title: "Orthogonality and Projections"
+title: "More Linear Algebra, Orthogonality and Projections"
 jupyter: python3
 ---
 
@@ -20,6 +20,63 @@ This lecture sets the stage for our future understanding of
 
 - Define orthogonal vectors and orthogonal matrices
 - Define and understand projection matrices
+
+## Projections
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Define the vector v and matrix A
+v = np.array([1, 2, 3])
+A = np.array([[1, 0], [0, 1], [1, 0]])
+
+# Compute the projection of v onto the column space of A
+A_T = A.T
+proj_matrix = A @ np.linalg.inv(A_T @ A) @ A_T
+proj_v = proj_matrix @ v
+
+# Define the basis vectors of the column space of A
+basis_vectors = A.T
+
+# Create the 3D plot
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the original vector v
+ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label='Original vector v')
+
+# Plot the projection of v onto the column space of A
+ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label='Projection of v')
+
+# Plot the basis vectors of the column space of A
+for vec in basis_vectors:
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label='Basis vector of col(A)')
+
+# Plot the plane spanned by the column space of A
+x = np.linspace(-1, 2, 10)
+y = np.linspace(-1, 2, 10)
+X, Y = np.meshgrid(x, y)
+Z = X  # Since the plane is spanned by [1, 0, 1] and [0, 1, 0]
+
+ax.plot_surface(X, Y, Z, alpha=0.5, color='y', rstride=100, cstride=100)
+
+# Add a dashed line connecting the original vector to its projection
+ax.plot([v[0], proj_v[0]], [v[1], proj_v[1]], [v[2], proj_v[2]], 'k--', label='Orthogonal component')
+
+# Set labels
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+
+# Set the legend
+ax.legend()
+
+# Show the plot
+plt.show()
+```
 
 ## Notation
 
@@ -216,7 +273,7 @@ $$
 
 then $QQ^{T}$ is an orthogonal projector onto $\operatorname{range}(Q)$. 
 
-*Any* product of this is a projector onto the column space of $Q$ as long as its columns are orthonormal.
+*Any* product of this form is a projector onto the column space of $Q$ as long as its columns are orthonormal.
 
 Note that $I-QQ^{T}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{range}(Q)$.
 
