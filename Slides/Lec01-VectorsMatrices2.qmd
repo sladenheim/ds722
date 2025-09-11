@@ -317,8 +317,8 @@ We also need these properties:
 
 The importance of vector spaces is it allows us to introduce concepts like:
 
-- Linear combinations and span
 - Linear independence
+- Linear combinations and span
 - Basis and dimension
 - Subspaces and orthogonality
 
@@ -585,7 +585,7 @@ $$
 
 **Homework Hint (Q5)**
 
-Let $A\in\mathbb{R}^{m\times n}, B\in\mathbb{R}^{m\times r},$ and $C\in\mathbb{R}^{r\times n}$, show that $A=BC = \sum_{k=1}^{r} b_{k}c_{k}^{T}$, i.e., A can be written as a sum of outer products.
+Let $C\in\mathbb{R}^{m\times n}, A\in\mathbb{R}^{m\times r},$ and $B\in\mathbb{R}^{r\times n}$, show that $C=AB = \sum_{k=1}^{r} a_{k}b_{k}^{T}$, i.e., A can be written as a sum of outer products.
 
 Let's consider the $2\times 2$ case with
 
@@ -600,53 +600,6 @@ b_{21} & b_{22}
 \end{bmatrix}.
 $$
 
-::: {.notes}
-The matrix product $A = BC$ can be written as a sum of outer products:
-$$
-A = \sum_{k=1}^{2} \text{(column $k$ of $B$)} \times \text{(row $k$ of $C$)}
-$$
-
-Let's compute each outer product:
-
-- For $k=1$:
-    - Column 1 of $A$: $\begin{bmatrix} a_{11} \\ a_{21} \end{bmatrix}$
-    - Row 1 of $B$: $\begin{bmatrix} b_{11} & b_{12} \end{bmatrix}$
-    - Outer product:
-        $$
-        \begin{bmatrix} a_{11} \\ a_{21} \end{bmatrix}
-        \begin{bmatrix} b_{11} & b_{12} \end{bmatrix}
-        =
-        \begin{bmatrix}
-        a_{11}b_{11} & a_{11}b_{12} \\
-        a_{21}b_{11} & a_{21}b_{12}
-        \end{bmatrix}
-        $$
-
-- For $k=2$:
-    - Column 2 of $A$: $\begin{bmatrix} a_{12} \\ a_{22} \end{bmatrix}$
-    - Row 2 of $B$: $\begin{bmatrix} b_{21} & b_{22} \end{bmatrix}$
-    - Outer product:
-        $$
-        \begin{bmatrix} a_{12} \\ a_{22} \end{bmatrix}
-        \begin{bmatrix} b_{21} & b_{22} \end{bmatrix}
-        =
-        \begin{bmatrix}
-        a_{12}b_{21} & a_{12}b_{22} \\
-        a_{22}b_{21} & a_{22}b_{22}
-        \end{bmatrix}
-        $$
-
-Sum the outer products:
-$$
-C = 
-\begin{bmatrix}
-a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\
-a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22}
-\end{bmatrix}
-$$
-
-This matches the direct matrix multiplication $AB$.
-:::
 
 ## Vector Norms
 
