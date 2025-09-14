@@ -1,5 +1,5 @@
 ---
-title: "More Linear Algebra, Orthogonality and Projections"
+title: "Orthogonality and Projections"
 jupyter: python3
 ---
 
@@ -82,7 +82,10 @@ plt.show()
 
 A vector $\mathbf{v}$ is a unit vector (normalized) if $\Vert \mathbf{v}\Vert_2 = 1$.
 
-Recall that a matrix $Q\in\mathbb{R}^{m\times m}$ is symmetric if $Q=Q^{T}$.
+Recall that 
+
+- the transpose of a matrix $Q$ with elements $(Q)_{ij}$ is the matrix $Q^{T}$, where $(Q^{T})_{ij} = (Q)_{ji}$
+- a matrix $Q\in\mathbb{R}^{m\times m}$ is symmetric if $Q=Q^{T}$
 
 ## Orthogonal Vectors
 
@@ -99,6 +102,68 @@ $$
 $$
 
 A set of vectors $S$ is orthonormal if every vector in S is orthogonal and is a unit vector.
+
+---
+
+**Examples**
+
+::: {.notes}
+The standard basis vectors are orthogonal.
+
+The vectors $\begin{bmatrix} 1 & 1\end{bmatrix}$ and $\begin{bmatrix} 1 & -1 \end{bmatrix}$ are orthogonal.
+
+The vectors $\begin{bmatrix} 1 & 0 & 1\end{bmatrix}$ and $\begin{bmatrix} 1 & 1 & -1 \end{bmatrix}$ are also orthogonal.
+:::
+
+---
+
+### Inner Product Geometry
+
+Let $\mathbf{x},\mathbf{y}\in\mathbb{R}^{2}$, how can we picture the inner product $(\mathbf{x},\mathbf{y}) = \mathbf{y}^{T}\mathbf{x}$?
+
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define two 2D vectors
+x = np.array([2, 0])
+y = np.array([1, 3])
+
+# Compute the projection of y onto x
+proj_scalar = np.dot(y, x) / np.dot(x, x)
+proj_y_on_x = proj_scalar * x
+
+# Plot the vectors
+plt.figure(figsize=(6,6))
+plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{x}$')
+plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', scale=1, color='b', label=r'$\mathbf{y}$')
+plt.quiver(0, 0, proj_y_on_x[0], proj_y_on_x[1], angles='xy', scale_units='xy', scale=1, color='g',
+           label=r'$\mathrm{proj}_{\mathbf{x}}\mathbf{y} = \frac{\mathbf{x}^T\mathbf{y}}{\mathbf{x}^T\mathbf{x}}\mathbf{x}$')
+
+# Compute the cosine of the angle between x and y
+cos_theta = np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
+
+# Add a label for the cosine of the angle
+plt.text(0.1, 0.1, f"$\\cos(\\theta)$", fontsize=12)
+
+
+# Draw dashed line from y to its projection on x
+plt.plot([y[0], proj_y_on_x[0]], [y[1], proj_y_on_x[1]], 'k--', label='Orthogonal component')
+
+plt.xlim(-1, 4)
+plt.ylim(-1, 4)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.grid(True)
+plt.legend()
+plt.title(r'Inner Product and Projection of $\mathbf{y}$ onto $\mathbf{x}$')
+
+plt.show()
+```
 
 ---
 
@@ -122,6 +187,8 @@ $$
 $$
 
 is orthogonal to $S$.
+
+---
 
 Consequently we can always express
 
@@ -160,8 +227,12 @@ $$
 Let's calculate the decomposition
 
 $$
-\mathbf{v} = \mathbf{r} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2}.
+\mathbf{r} = \mathbf{v} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2}.
 $$
+
+---
+
+**Calculation**
 
 ## Orthogonal Matrices
 
@@ -169,9 +240,9 @@ A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
 
 Equivalently, $Q^{T} = Q^{-1}$, i.e., $Q^{T}$ is the inverse of $Q$.
 
-If the matrix $Q\in\mathbb{C}^{m\times m}$ and $Q^{*}Q = QQ^{*} = I$, we say the matrix is unitary.
+If the matrix $Q\in\mathbb{C}^{m\times m}$ and $Q^{*}Q = QQ^{*} = I$, we say the matrix is *unitary*.
 
-Orthogonal matrices are an extremely important class of matrices.
+Orthogonal (unitary) matrices are an extremely important class of matrices.
 
 ## Projectors
 
@@ -304,6 +375,64 @@ It is the complementary projector of $P_{q}$.
 
 ---
 
+## Example
+
+Consider the following vector $\mathbf{v} = \begin{bmatrix} 1 & 2 \end{bmatrix}$ and orthonormal vector $\mathbf{q}_{1}=
+\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \end{bmatrix}$.
+
+Let's visualize the orthogonal projection of $\mathbf{v}$ onto $q_{1}$ and the orthogonal complement
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the vector v
+v = np.array([1, 2])
+
+# Define the orthonormal set of vectors S
+q1 = np.array([1/np.sqrt(2), 1/np.sqrt(2)])
+
+# Calculate the projection of v onto q1 
+Pq = np.outer(q1, q1)
+proj_v_q1 = Pq @ v
+
+#Calculate the complementary projection
+Pq_perp = np.eye(2) - Pq
+proj_v_perp = Pq_perp @ v
+
+# Plot the original vector v
+plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{v}$')
+
+# Plot the projections of Pq @ v and (I-Pq) @ v
+plt.quiver(0, 0, proj_v_q1[0], proj_v_q1[1], angles='xy', scale_units='xy', scale=1, color='c', label=r'$P_{q_{1}}\mathbf{v}$')
+plt.quiver(0, 0, proj_v_perp[0], proj_v_perp[1], angles='xy', scale_units='xy', scale=1, color='m', label=r'$(I-P_{q_{1}})\mathbf{v}$')
+
+# Plot the vector q_1 
+plt.quiver(0, 0, q1[0], q1[1], angles='xy', scale_units='xy', scale=1, color='g', label=r'$\mathbf{q}_1$')
+
+# Set the limits and labels
+plt.xlim(-2, 2)
+plt.ylim(-2, 2)
+plt.axhline(0, color='grey', lw=0.5)
+plt.axvline(0, color='grey', lw=0.5)
+plt.grid(True)
+plt.legend(loc='upper left')
+plt.title(r'Projection of vector $\mathbf{v}$')
+plt.xlabel('x')
+plt.ylabel('y')
+
+inner_product = np.dot(proj_v_q1, proj_v_perp)
+
+plt.text(-0.5, -1.5, f"$\\text{{Inner product between }} P_{{\\mathbf{{q}}_1}} \\mathbf{{v}} \\text{{ and }} (I - P_{{\\mathbf{{q}}_1}}) \\mathbf{{v}}: {inner_product:.2f}$", fontsize=12, bbox=dict(facecolor='white', alpha=0.5))
+
+# Show the plot
+plt.show()
+```
+
+## Projection with $\mathbf{a}$
+
 For an arbitrary non-unit vector $\mathbf{a}$, the analogous operators are
 
 $$
@@ -355,63 +484,7 @@ P = A(A^{T}A)^{-1}A^{T}.
 $$
 
 
-## Examples
-
-Consider the following vector $\mathbf{v} = \begin{bmatrix} 1 & 2 \end{bmatrix}$ and orthonormal vector $\mathbf{q}_{1}=
-\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \end{bmatrix}$.
-
-Let's visualize the orthogonal projection of $\mathbf{v}$ onto $q_{1}$ and the orthogonal complement
-
----
-
-```{python}
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Define the vector v
-v = np.array([1, 2])
-
-# Define the orthonormal set of vectors S
-u1 = np.array([1/np.sqrt(2), 1/np.sqrt(2)])
-
-# Calculate the projection of v onto u1 
-Pq = np.outer(u1, u1)
-proj_v_u1 = Pq @ v
-
-#Calculate the complementary projection
-Pq_perp = np.eye(2) - Pq
-proj_v_perp = Pq_perp @ v
-
-# Plot the original vector v
-plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, color='r', label='v')
-
-# Plot the projections of Pq @ v and (I-Pq) @ v
-plt.quiver(0, 0, proj_v_u1[0], proj_v_u1[1], angles='xy', scale_units='xy', scale=1, color='c', label='proj_v_u1')
-plt.quiver(0, 0, proj_v_perp[0], proj_v_perp[1], angles='xy', scale_units='xy', scale=1, color='m', label='proj_v_perp')
-
-# Plot the vector q_1 (u1)
-plt.quiver(0, 0, u1[0], u1[1], angles='xy', scale_units='xy', scale=1, color='g', label='q_1')
-
-# Set the limits and labels
-plt.xlim(-2, 2)
-plt.ylim(-2, 2)
-plt.axhline(0, color='grey', lw=0.5)
-plt.axvline(0, color='grey', lw=0.5)
-plt.grid(True)
-plt.legend(loc='upper left')
-plt.title('Projection of vector v')
-plt.xlabel('x')
-plt.ylabel('y')
-
-inner_product = np.dot(proj_v_u1, proj_v_perp)
-
-plt.text(-0.5, -1.5, f"$\\text{{Inner product between }} P_{{\\mathbf{{q}}_1}} \\mathbf{{v}} \\text{{ and }} (I - P_{{\\mathbf{{q}}_1}}) \\mathbf{{v}}: {inner_product:.2f}$", fontsize=12, bbox=dict(facecolor='white', alpha=0.5))
-
-# Show the plot
-plt.show()
-```
-
----
+## Example
 
 Let's visualize the projection of the vector $\mathbf{v} = [1, 2, 3]^{T}$ onto the range of
 
@@ -449,14 +522,14 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 # Plot the original vector v
-ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label='Original vector v')
+ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label=r'$\mathbf{v}$')
 
 # Plot the projection of v onto the column space of A
-ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label='Projection of v')
+ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label=r'$A(A^{T}A)^{-1}A^{T}\mathbf{v}$')
 
 # Plot the basis vectors of the column space of A
-for vec in basis_vectors:
-    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label='Basis vector of col(A)')
+for i, vec in enumerate(basis_vectors):
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'$\mathbf{{a}}_{{{i+1}}}$')
 
 # Plot the plane spanned by the column space of A
 x = np.linspace(-1, 2, 10)
