@@ -473,6 +473,16 @@ $$
 
 The matrix $A$ has n linearly independent columns, so it must have full rank. This implies that $A^{T}A$ is invertible, thus we can show
 
+::: {.notes}
+Assume that $A$ has full rank, then we know that $Ax=0$ if and only if $x=0$. Now,
+if $A^{T}Ax=0$ then we must show $x=0$. Consider
+
+$$
+0 = x^{T}A^{T}Ax = (Ax)^{T}Ax = \Vert Ax\Vert_{2}^{2}. 
+$$
+Since the above is a norm, we must have that $Ax=0$, which implies $x=0$.
+:::
+
 $$
 \mathbf{x} = (A^{T}A)^{-1}A^{T}\mathbf{v}.
 $$
