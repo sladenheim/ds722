@@ -14,11 +14,168 @@ This lecture will provide an understanding of how to compute the QR factorizatio
 
 ## Lecture Objectives
 
+- Review:
+  - orthogonal vectors/matrices
+  - projectors
 - Reduced and Full QR factorization
 - Classical and modified Gram-Schmidt algorithms
 - Computational complexity of QR factorization
 
-## Reduced QR Factorization
+## Orthogonal
+
+Two vectors $\mathbf{q}_1$ and $\mathbf{q}_2$ are orthogonal when
+
+$$
+\mathbf{q}_{2}^{T}\mathbf{q}_1 = 0.
+$$
+
+A set of vectors $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_n \}$ are orthogonal if every pair of vectors is orthogonal, i.e.,
+
+$$
+\mathbf{q}_{i}^{T}\mathbf{q}_{j} = 0 \quad \text{for all} \quad i\neq j.
+$$
+
+:::: {.fragment}
+What is the difference between orthogonal and orthonormal vectors?
+::::
+
+## Orthogonal Vectors
+
+Let $\mathbf{q}_{1}=\begin{bmatrix} 1 \\ 2 \\end{bmatrix}$ and $\mathbf{q}_{2}= \begin{bmatrix} 2 \\ -1 \end{bmatrix}$. 
+
+:::: {.fragment}
+Are these vectors orthogonal?
+::::
+
+:::: {.fragment}
+Are these vectors orthonormal?
+::::
+
+:::: {.fragment}
+How could we make them orthonormal?
+::::
+
+## Orthogonal Matrices
+
+A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
+
+:::: {.fragment}
+What does this imply about $Q^{-1}$?
+::::
+
+---
+
+The matrix
+
+$$
+G =
+\begin{bmatrix}
+\cos{\theta} & -\sin{\theta} \\
+\sin{\theta} & \cos{\theta}
+\end{bmatrix}
+$$
+
+that rotates 2-D vectors counterclockwise by an angle of $\theta$ is an example of an orthogonal matrix.
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+def create_rotation_matrix(angle):
+    angle_rad  = np.pi*angle/180
+    matrix = np.array([[np.cos(angle_rad), -np.sin(angle_rad)],
+                       [np.sin(angle_rad), np.cos(angle_rad)]])
+    return matrix
+
+def rotate_vector(vector, angle):
+    matrix = create_rotation_matrix(angle)
+    return matrix @ vector
+
+def rotate_vectors(vector, angles):
+    vectors = []
+    for angle in angles:
+        rotated_vector = rotate_vector(vector, angle)
+        vectors.append(rotated_vector)
+    return vectors
+
+def extract_coordinates(vectors):
+    x_coords = np.zeros(len(vectors))
+    y_coords = np.zeros(len(vectors))
+    for i, vector in enumerate(vectors):
+        x_coords[i] = vector[0]
+        y_coords[i] = vector[1]
+    return x_coords, y_coords
+
+
+plt.xlim(-1, 1)
+plt.ylim(-1, 1)
+plt.grid()
+colors = [
+    "crimson", "teal", "gold", "indigo", "coral", 
+    "limegreen", "orchid", "sienna", "dodgerblue", "plum",
+    "turquoise", "magenta"
+]
+
+vector = np.array([1, 0])
+angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]
+
+vectors = rotate_vectors(vector, angles)
+x_coords, y_coords = extract_coordinates(vectors)
+
+for i, (x, y) in enumerate(zip(x_coords, y_coords)):
+  plt.plot([0, x], [0, y], color=colors[i], label=f"{angles[i]}°")
+plt.legend(title="Rotation Angle", bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.show()
+```
+
+---
+
+The matrix 
+
+$$
+H =
+\begin{bmatrix}
+-1 & 0 \\
+0 & 1
+\end{bmatrix}
+$$
+
+reflects 2-D vectors across the y-axis and is also orthonormal.
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+H = np.array([[-1, 0],
+        [ 0, 1]])
+
+vector = np.array([2, 1])
+reflected_vector = H @ vector
+
+plt.figure()
+plt.grid()
+plt.plot([0, vector[0]], [0, vector[1]], color="blue", label=r"$\mathbf{v} = [2, 1]$")
+plt.plot([0, reflected_vector[0]], [0, reflected_vector[1]], color="red", label=r"$H\mathbf{v}=[-2,1]$")
+plt.legend()
+plt.title("Reflection Across the y-axis")
+plt.show()
+```
+
+## QR Factorization
+
+Today we will discuss how we can take a matrix $A\in\mathbb{R}^{m\times n}$ and produce a factorization of the form
+
+$$
+A = \hat{Q}\hat{R},
+$$
+
+where $\hat{Q}\in\mathbb{R}^{m\times n}$ is orthogonal and $R\in\mathbb{R}^{n\times n}$ is upper triangular.
+
+---
 
 For many applications we are interested in the successive column spaces of a matrix $A$, i.e.,
 
@@ -28,7 +185,7 @@ $$
 
 where $\langle \cdots \rangle$ denotes the subspace spanned by the vectors within the bracket.
 
-The idea behind the QR factorization is to construct a sequence of orthogonal vectors such tat
+The idea behind the QR factorization is to construct a sequence of orthogonal vectors such that
 
 $$
 \langle \mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_j \rangle = \langle \mathbf{a}_1, \mathbf{a}_2, \ldots, \mathbf{a}_j \rangle,~\text{for}~j=1,\ldots n.
@@ -36,8 +193,8 @@ $$
 
 ---
 
-Let $A\in\mathbb{R}^{m\times n}$ and $Q$ denote the matrix whose columns are $\mathbf{q}_{j}$.
-In order for $Q$ to span the successive columns spaces of $A$, we must have
+Let $A\in\mathbb{R}^{m\times n}$ and $\hat{Q}$ denote the matrix whose columns are $\mathbf{q}_{j}$.
+In order for $\hat{Q}$ to span the successive columns spaces of $A$, we must have
 
 $$
 \scriptsize
@@ -85,23 +242,11 @@ As a matrix formula this is
 $$
 A = \hat{Q}\hat{R},
 $$
-where $\hat{Q}\in\mathbb{R}^{m\times n}$ with orthonormal columns and $\hat{R}\in\mathbb{n\times n}$ is an upper triangular matrix.
+where $\hat{Q}\in\mathbb{R}^{m\times n}$ with orthonormal columns and $\hat{R}\in\mathbb{R}^{n\times n}$ is an upper triangular matrix.
 
-This is a reduced QR factorization of $A$.
+This is a *reduced QR factorization* of $A$.
 
-## Full QR Factorization
-
-A full QR factorization of $A\in\mathbb{R}^{m\times n} (m\geq n)$ is denoted by
-
-$$
-A = QR,
-$$
-
-where $Q\in\mathbb{R}^{m\times n}$ is orhthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
-
-The matrix $Q$ is created by appending an additional $m-n$ orthonormal columns to $\hat{Q}$.
-
-The matrix $R$ is created by appending $m$ rows of zeros to $\hat{R}$.
+Using what we learned about orthogonality from last class, we will derive a systematic way to produce this factorization.
 
 ## Gram-Schmidt Orthogonalization
 
@@ -110,7 +255,7 @@ How do we construct our vectors $\mathbf{q}_{j}$?
 Recall from the previous lecture that we can express a vector in the following form
 
 $$
-\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
+\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
 $$
 
 If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have a new $\mathbf{q}_{j}$ that spans $\langle\mathbf{a}_{1}\ldots \mathbf{a}_{j-1} \rangle$ and is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
@@ -146,7 +291,7 @@ $$
 and
 
 $$
-\vert r_{ij}\vert = \left\Vert \mathbf{a}_{j} - \sum_{i=1}^{j-1}r_{ij}\mathbf{q}_{j} \right\Vert.
+\vert r_{ij}\vert = \left\Vert \mathbf{a}_{j} - \sum_{i=1}^{j-1}r_{ij}\mathbf{q}_{j} \right\Vert_{2}.
 $$
 
 
@@ -165,10 +310,163 @@ Let's combine the previous slides into an algorithm
 1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
 
 
+## Example
+
+Let's work out a $3\times 3$ example of QR factorization using the Classical Gram-Schmidt (CGS) algorithm.
+
+Let
+$$
+A = \begin{bmatrix}
+2 & 0 & 1 \\
+1 & 1 & 0 \\
+0 & 1 & 2
+\end{bmatrix}
+$$
+
+We apply the CGS algorithm step-by-step
+
+---
+
+### Step 1
+
+Initialize $Q$ and $R$ as zero matrices.
+
+$$
+Q=
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix},\quad
+R =
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}.
+$$
+
+---
+
+### Step 2 (j=1)
+
+Set $\mathbf{v}_{1}=\begin{bmatrix}2 \\ 1 \\ 0 \end{bmatrix}$.
+
+Compute $r_{11} = \Vert \mathbf{v}_{1}\Vert_{2}$
+
+Compute $\mathbf{q}_{1} = \mathbf{v}_{1}/r_{11}$
+
+---
+
+$$
+Q=
+\begin{bmatrix}
+\frac{2}{\sqrt{5}} & 0 & 0 \\
+\frac{1}{\sqrt{5}} & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix},\quad
+R =
+\begin{bmatrix}
+\sqrt{5} & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}.
+$$
+
+---
+
+### Step 3 (j=2, i=1)
+
+Set $\mathbf{v}_{2}=\begin{bmatrix}0 \\ 1 \\ 1 \end{bmatrix}$.
+
+Compute $r_{12} = \mathbf{q}_{1}^{T}\mathbf{a}_{2}$
+
+Compute $\mathbf{v}_{2} = \mathbf{v}_{2} - r_{12}\mathbf{q}_{1}$.
+
+Compute $r_{22} = \Vert \mathbf{v}_{2}\Vert_{2}$
+
+Compute $\mathbf{q}_{2} = \mathbf{v}_{2}/r_{22}$
+
+---
+
+$$
+Q=
+\begin{bmatrix}
+\frac{2}{\sqrt{5}} & -\frac{2}{\sqrt{30}} & 0 \\
+\frac{1}{\sqrt{5}} & \frac{4}{\sqrt{30}} & 0 \\
+0 & \frac{4}{\sqrt{30}} & 0 \\
+\end{bmatrix},\quad
+R =
+\begin{bmatrix}
+\sqrt{5} & \frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}} \\
+0 & \sqrt{30} & \frac{4}{\sqrt{30}} \\
+0 & 0 & 0 \\
+\end{bmatrix}.
+$$
+
+---
+
+### Step 3 (j=3, i=1)
+
+Set $\mathbf{v}_{3}=\begin{bmatrix}1 \\ 0 \\ 2 \end{bmatrix}$.
+
+Compute $r_{13} = \mathbf{q}_{1}^{T}a_{3}$
+
+Compute $\mathbf{v}_{3} = \mathbf{v}_{3} - r_{13}\mathbf{q}_{1}$.
+
+---
+
+### Step 3 (j=3, i=2)
+
+Compute $r_{23} = \mathbf{q}_{2}^{T}a_{3}$
+
+Compute $\mathbf{v}_{3} = \mathbf{v}_{3} - r_{23}\mathbf{q}_{2}$.
+
+---
+
+### Step 3 (j=3, i=3)
+
+Compute $r_{33} = \Vert \mathbf{v}_{3}\Vert_{2}$
+
+Compute $\mathbf{q}_{3} = \mathbf{v}_{3}/r_{33}$.
+
+---
+
+We have
+
+$$
+Q=
+\begin{bmatrix}
+\frac{2}{\sqrt{5}} & -\frac{2}{\sqrt{30}} & \frac{1}{\sqrt{6}} \\
+\frac{1}{\sqrt{5}} & \frac{4}{\sqrt{30}} & -\frac{2}{\sqrt{6}} \\
+0 & \frac{4}{\sqrt{30}} & \frac{1}{\sqrt{6}} \\
+\end{bmatrix},\quad
+R =
+\begin{bmatrix}
+\sqrt{5} & \frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}} \\
+0 & \sqrt{30} & \frac{4}{\sqrt{30}} \\
+0 & 0 & \sqrt{6} \\
+\end{bmatrix}.
+$$
+
+
+## Full QR Factorization
+
+A full QR factorization of $A\in\mathbb{R}^{m\times n} (m\geq n)$ is denoted by
+
+$$
+A = QR,
+$$
+
+where $Q\in\mathbb{R}^{m\times m}$ is orthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
+
+The matrix $Q$ is created by appending an additional $m-n$ orthonormal columns to $\hat{Q}$.
+
+The matrix $R$ is created by appending $m$ rows of zeros to $\hat{R}$.
+
 ## Existence and Uniqueness
 
 All matrices have QR factorizations and under suitable restrictions they are unique.
-
 
 **Theorem (Existence)**
 
@@ -233,19 +531,21 @@ Q_{j-1}
 \mathbf{q}_{1} & \cdots & \mathbf{q}_{j-1} \\
 & & \\
 & & \\
-\end{bmatrix}
-=
-\sum_{i=1}^{j-1}\mathbf{q}_{i}\mathbf{q}_{i}^{T}.
+\end{bmatrix},
 $$
+
+where each column is orthonormal.
 
 ---
 
-The GS projection operators are define as
+The MGS projection operators are defined as
 $$
-P_{j} = I - Q_{j-1}Q_{j-1}^{T}.
+P_{j} = I - Q_{j-1}Q_{j-1}^{T},
 $$
 
-Recall the notation $P_{\perp \mathbf{q}_{j}} = I - \mathbf{q}_{j}\mathbf{q}_{j}^{T}$, then we can construct as a product of projectors
+where $Q_{j-1}$ is the matrix of orthonormal columns.
+
+Recall the notation $P_{\perp \mathbf{q}_{j}} = I - \mathbf{q}_{j}\mathbf{q}_{j}^{T}$, then we can construct $P_{j}$ as a product of projectors
 
 $$
 P_{j} = P_{\perp \mathbf{q}_{j-1}}\cdots P_{\perp \mathbf{q}_{2}}P_{\perp \mathbf{q}_{1}}.
@@ -287,12 +587,81 @@ $$
 1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
 1. for $i=1,\ldots n$
 1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
-1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
 1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
 :::
 ::::
+
+## Stability
+
+Recall that an orthogonal matrix $Q$ satisfies 
+$$
+Q^{T}Q = QQ^{T} = I.
+$$
+
+In the code cell below I create a random matrix of dimension $1000 \times 1000$ and compute the QR factorizations using the CGS and MGS methods.
+
+The 2 norm of $\Vert I - Q^{T}Q\Vert_{2}$ is printed to the screen.  
+
+```{python}
+import numpy as np
+
+def classical_gram_schmidt(A):
+    """Perform classical Gram-Schmidt orthogonalization on the columns of A."""
+    n_rows, n_cols = A.shape
+    Q = np.zeros_like(A)
+
+    for i in range(n_cols):
+        # Start with the original column
+        q = A[:, i]
+        for j in range(i):
+            # Subtract the projection onto previous orthogonal vectors
+            q -= np.dot(Q[:, j], A[:, i]) * Q[:, j]
+        # Normalize the vector
+        norm = np.linalg.norm(q)
+        if norm < 1e-10:
+            raise ValueError("The input matrix has linearly dependent columns.")
+        Q[:, i] = q / norm
+        
+    return Q
+
+def modified_gram_schmidt(A):
+    """Perform modified Gram-Schmidt orthogonalization on the columns of A."""
+    A = np.array(A, dtype=float)
+    n_rows, n_cols = A.shape
+    Q = np.zeros_like(A)
+
+    for i in range(n_cols):
+        # Start with the i-th column
+        q = A[:, i].copy()
+        for j in range(i):
+            # Subtract projection of q onto previously computed orthogonal vector
+            r = np.dot(Q[:, j], q)
+            q -= r * Q[:, j]
+        # Normalize the resulting vector
+        norm = np.linalg.norm(q)
+        if norm < 1e-10:
+            raise ValueError("Input contains linearly dependent columns.")
+        Q[:, i] = q / norm
+
+    return Q
+
+rng = np.random.default_rng(seed=42)
+
+A = rng.random((500, 500))
+Q_cgs = classical_gram_schmidt(A)
+Q_mgs = modified_gram_schmidt(A)
+
+error_cgs = np.linalg.norm(np.eye(500) - Q_cgs.T @ Q_cgs)
+error_mgs = np.linalg.norm(np.eye(500) - Q_mgs.T @ Q_mgs)
+
+print("Orthogonality error (Classical Gram-Schmidt):", error_cgs)
+print("Orthogonality error (Modified Gram-Schmidt):", error_mgs)
+```
+
+
 
 ## MGS Operation Count
 
@@ -322,7 +691,7 @@ This is a total of $\sim 4m$ operations.
 There are 2 nested loops so we have
 
 $$
-\sum_{i=1}^{n}\sum_{j=i+1}^{n}4m \sim \sum_{i=1}^{n}(i)4m \sim 2mn^{2}.
+\sum_{i=1}^{n}\sum_{j=i+1}^{n}4m \sim \sum_{i=1}^{n}(n-i)4m \sim 2mn^{2}.
 $$
 
 ## Counting Operations Geometrically
@@ -384,7 +753,7 @@ $$
 
 ---
 
-At step $i$ of the MGS algorithm subtracts $r_{ij}/r_{ii}$ times column $i$ of the current A from columns $>i$ and replaces column $i$ by $1/r_{ii}$ times itselfs. These operations define the upper-triangular matrices $R_{i}$. 
+At step $i$ of the MGS algorithm subtracts $r_{ij}/r_{ii}$ times column $i$ of the current A from columns $>i$ and replaces column $i$ by $1/r_{ii}$ times itself. These operations define the upper-triangular matrices $R_{i}$. 
 
 Shown below are the matrices when $i=2,3$
 $$
@@ -411,7 +780,7 @@ $$
 At the end of the process we have
 
 $$
-A\underbrace{R_{1}R_{2}\cdots R_{n}}_{$\hat{R}^{-1}} = \hat{Q}.
+A\underbrace{R_{1}R_{2}\cdots R_{n}}_{\hat{R}^{-1}} = \hat{Q}.
 $$
 
 This shows that the Gram-Schmidt algorithm is a method of triangular orthogonalization.
@@ -421,7 +790,7 @@ This shows that the Gram-Schmidt algorithm is a method of triangular orthogonali
 Today we learned about two approaches for generating the QR factorization
 
 - Classical Gram-Schmidt (numerically unstable)
-- Modified Gram-schmidt (numerically stable)
+- Modified Gram-Schmidt (numerically stable)
 
 The importance of projection matrices was fundamental to the MGS approach.
 
