@@ -299,7 +299,7 @@ $$
 \mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
 $$
 
-If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have a new $\mathbf{q}_{j}$ that spans $\langle\mathbf{a}_{1}\ldots \mathbf{a}_{j-1} \rangle$ and is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
+If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have an orthonormal $\mathbf{q}_{j}$. If we have repeated this process $j$ times, then $\mathbf{q}_{j}\in\langle\mathbf{a}_{1}\ldots, \mathbf{a}_{j} \rangle$ and by construction is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
 
 ---
 
@@ -364,7 +364,7 @@ A = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-We apply the CGS algorithm step-by-step
+We apply the CGS algorithm step-by-step.
 
 ---
 
