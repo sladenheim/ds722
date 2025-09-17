@@ -21,6 +21,47 @@ This lecture will provide an understanding of how to compute the QR factorizatio
 - Classical and modified Gram-Schmidt algorithms
 - Computational complexity of QR factorization
 
+## Proof by Mathematical Induction
+
+Suppose that we want to prove a claim or observation that starts with  *For all $n \in \mathbb{N}$*, (or equivalent).
+
+We can approach such proof as follows: 
+
+- first we check that the claim holds for 0,
+- then we show that for all $n \in \mathbb{N}$ that if the proposition is true for $n$, then it is also true for $n+1$.
+
+## Mathematical Induction Steps
+
+Every proof by induction contains the following three steps:
+
+1. Base case
+1. Induction hypothesis
+1. Induction Step
+
+---
+
+**Example**
+
+We are going to prove that for all $n \in \mathbb{N}$,
+$$
+\sum_{k=0}^{n} 2k = 0 + 2 + 4 + \dots + 2n = n(n+1).
+$$
+
+::: {.notes}
+Base case: $n=0.$
+
+Induction hypothesis: Let $n \in \mathbb{N}$ be arbitrary and fixed. Suppose $0 + 2 + 4 + \dots + 2n = n(n+1)$ holds.
+
+Induction step: For $n+1$ we obtain
+$$
+\begin{align*}
+    & 0 + 2 + 4 + \dots + 2n + 2(n+1) \\
+    & = \left( 0 + 2 + 4 + \dots + 2n \right) + 2(n+1) \\
+    & = n(n+1) + 2(n+1) = (n+1)(n+2).
+\end{align*}
+$$
+:::
+
 ## Orthogonal
 
 Two vectors $\mathbf{q}_1$ and $\mathbf{q}_2$ are orthogonal when
@@ -41,7 +82,7 @@ What is the difference between orthogonal and orthonormal vectors?
 
 ## Orthogonal Vectors
 
-Let $\mathbf{q}_{1}=\begin{bmatrix} 1 \\ 2 \\end{bmatrix}$ and $\mathbf{q}_{2}= \begin{bmatrix} 2 \\ -1 \end{bmatrix}$. 
+Let $\mathbf{q}_{1}=\begin{bmatrix} 1 \\ 2 \end{bmatrix}$ and $\mathbf{q}_{2}= \begin{bmatrix} 2 \\ -1 \end{bmatrix}$. 
 
 :::: {.fragment}
 Are these vectors orthogonal?
@@ -559,10 +600,10 @@ $$
 1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
 1. for $i=1,\ldots n$
 1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
-1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}\mathbf{q}_{i}$
 
 ---
 
@@ -574,7 +615,7 @@ $$
 1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
 1. $\quad\quad$ for $i=1,\ldots, j-1$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}\mathbf{q}_{i}$
 1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
 1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
 :::
@@ -590,7 +631,7 @@ $$
 1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}\mathbf{q}_{i}$
 :::
 ::::
 
@@ -674,7 +715,7 @@ print("Orthogonality error (Modified Gram-Schmidt):", error_mgs)
 1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
+1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}\mathbf{q}_{i}$
 :::
 ::: {.column width=50"%"}
 Inner loop flops
