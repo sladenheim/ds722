@@ -229,7 +229,7 @@ where $\langle \cdots \rangle$ denotes the subspace spanned by the vectors withi
 The idea behind the QR factorization is to construct a sequence of orthogonal vectors such that
 
 $$
-\langle \mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_j \rangle = \langle \mathbf{a}_1, \mathbf{a}_2, \ldots, \mathbf{a}_j \rangle,~\text{for}~j=1,\ldots n.
+\langle \mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_j \rangle = \langle \mathbf{a}_1, \mathbf{a}_2, \ldots, \mathbf{a}_j \rangle,~\text{for}~j=1,\ldots, n.
 $$
 
 ---
@@ -332,7 +332,7 @@ $$
 and
 
 $$
-\vert r_{ij}\vert = \left\Vert \mathbf{a}_{j} - \sum_{i=1}^{j-1}r_{ij}\mathbf{q}_{j} \right\Vert_{2}.
+\vert r_{jj}\vert = \left\Vert \mathbf{a}_{j} - \sum_{i=1}^{j-1}r_{ij}\mathbf{q}_{j} \right\Vert_{2}.
 $$
 
 
@@ -342,7 +342,7 @@ Let's combine the previous slides into an algorithm
 
 **Algorithm**
 
-1. for $j=1,\ldots n$
+1. for $j=1,\ldots, n$
 1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
 1. $\quad\quad$ for $i=1,\ldots, j-1$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
@@ -361,7 +361,7 @@ A = \begin{bmatrix}
 2 & 0 & 1 \\
 1 & 1 & 0 \\
 0 & 1 & 2
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
 We apply the CGS algorithm step-by-step.
@@ -451,7 +451,7 @@ $$
 
 Set $\mathbf{v}_{3}=\begin{bmatrix}1 \\ 0 \\ 2 \end{bmatrix}$.
 
-Compute $r_{13} = \mathbf{q}_{1}^{T}a_{3}$
+Compute $r_{13} = \mathbf{q}_{1}^{T}\mathbf{a}_{3}$
 
 Compute $\mathbf{v}_{3} = \mathbf{v}_{3} - r_{13}\mathbf{q}_{1}$.
 
@@ -459,7 +459,7 @@ Compute $\mathbf{v}_{3} = \mathbf{v}_{3} - r_{13}\mathbf{q}_{1}$.
 
 ### Step 3 (j=3, i=2)
 
-Compute $r_{23} = \mathbf{q}_{2}^{T}a_{3}$
+Compute $r_{23} = \mathbf{q}_{2}^{T}\mathbf{a}_{3}$
 
 Compute $\mathbf{v}_{3} = \mathbf{v}_{3} - r_{23}\mathbf{q}_{2}$.
 
@@ -596,9 +596,9 @@ $$
 
 **Algorithm**
 
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
 1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
@@ -611,7 +611,7 @@ $$
 ::: {.column width="47.5%"}
 **CGS Algorithm**
 
-1. for $j=1,\ldots n$
+1. for $j=1,\ldots, n$
 1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
 1. $\quad\quad$ for $i=1,\ldots, j-1$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
@@ -624,9 +624,9 @@ $$
 ::: {.column width="47.5%"}
 **MGS Algorithm**
 
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
 1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
@@ -708,11 +708,11 @@ print("Orthogonality error (Modified Gram-Schmidt):", error_mgs)
 
 :::: {.columns}
 ::: {.column width="50%"}
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
-1. for $i=1,\ldots n$
+1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
-1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
+1. $\quad \mathbf{q}_{i} = \mathbf{v}_{i}/r_{ii}$
 1. $\quad\quad$ for $j=i+1,\ldots, n$
 1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
 1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}\mathbf{q}_{i}$
