@@ -2,7 +2,8 @@ project:
   title: "MathFoundationsDS"
   output-dir: _slides
   render:
-    - Dis01-MatrixOperations.qmd
+    - Dis00-MatrixOperations.qmd
+    - Dis01-MatrixOperations-2.qmd
     - Dis02-Projection.qmd
 
 format:

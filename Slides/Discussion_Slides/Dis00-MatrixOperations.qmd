@@ -1,7 +1,25 @@
 ---
-title: "1 Matrix Operations"
+title: "0 Matrix Operations"
 author: "Yuke Zhang"
 ---
+
+## Little about me 
+:::: {.incremental}
+- Contact
+    - Office: 14th floor Desk #10
+    - Email: yukez@bu.edu
+- Education
+    - BS in Mathematics and Data Science at Purdue University
+    - Current 3rd year CDS Ph.D. student at our Boston University
+- Fun Facts
+    - 3-semester Python programming course TA experience
+    - Some LLM fine-tuning and prompt engineering experience
+        - Obtained silver medals in Kaggle competions on AI Mathematical Olympiad and ARC Prize 2024
+    - Research interest is statistical foundation on deep learning, specifically on spatio-temporal modeling using climate data.
+- "He who refuses to do arithmetic is doomed to talk nonsense." from Computer Scientist John McCarthy
+
+::::
+
 
 ## From Lecture
 
@@ -21,10 +39,32 @@ We introduced
 We focused on how to 
 
 :::: {.incremental}
-1. Work out the results and runtime of matrix–vector and matrix–matrix products  
-2. Compare their speed on CPU vs. GPU 
+1. Setup SCC notebook
+2. Work out the results and runtime of matrix–vector and matrix–matrix products  
+3. Compare their speed on CPU vs. GPU (Optional)
 ::::
 
+
+## Create a session accessing Jupyter Notebook
+Search SCC ondemand, login through BU account
+
+:::: {.incremental} 
+1.  Create a folder under /projectnb/ds722/student if you havent' do so
+    - Click "**Files**" and select **/projectnb/ds722** and select **student** subfolder
+2. Click "**Interactive apps**"
+    - List of modules to load (space separated) = 
+        - **miniconda** 
+        - **academic-ml/fall-2025**
+    - Pre-Launch Command (optional) = **conda activate fall-2025-pyt**
+    - Interface = **lab**
+    - Working Directory = **/projectnb/ds722/student/[username]**
+    - Number of hours = **2**
+    - Number of cores = **1**
+    - Number of gpus = **0**
+    (In order to use gpu, we need that for last question, just specify Number of gpus = **1** in another session)
+    - Projects = **ds722**
+3. Add Discussion notebook to SCC
+::::
 
 
 ## Notation
@@ -114,7 +154,6 @@ $$
 b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
 $$
 
----
 
 Let $a_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
 
@@ -159,6 +198,17 @@ Given a matrix $A\in\mathbb{R}^{m\times n}$ and matrix $B\in\mathbb{R}^{n\times 
 
 
 ## Column Partition
+
+Let $X_{i,*}$ denotes $i$ th row of $X$; and $X_{*,j}$ denotes $j$ th column of $X$ 
+
+Each column of $C$ is linear combination of columns of A with rows of B 
+
+$$
+C_{*,k} = \sum_{j=1}^{n} A_{*,j}\cdot B_{j,k}
+$$
+
+
+
 ```{python}
 ```
 
@@ -197,7 +247,3 @@ $$
 ```{python}
 ```
 
-## Comparing runtime when dimension gets larger
-
-```{python}
-```

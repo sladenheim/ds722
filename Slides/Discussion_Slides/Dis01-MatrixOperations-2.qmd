@@ -1,0 +1,87 @@
+---
+title: "Week 2: Matrix Operations Continued"
+author: "Yuke Zhang"
+---
+
+
+## Create a session accessing Jupyter Notebook
+Search SCC ondemand, login through BU account
+
+:::: {.incremental} 
+1.  Access /projectnb/ds722/student/<username>
+    - Click "**Files**" and select **/projectnb/ds722** and select **student** subfolder
+    - Upload new DiscussionWeek2.ipynb from Piazza Resources to the SCC folder
+2. Click "**Interactive apps**"
+    - List of modules to load (space separated) = 
+        - **miniconda** 
+        - **academic-ml/fall-2025**
+    - Pre-Launch Command (optional) = **conda activate fall-2025-pyt**
+    - Interface = **lab**
+    - Working Directory = **/projectnb/ds722/student/[username]**
+    - Number of hours = **2**
+    - Number of cores = **1**
+    - Number of gpus = **0**
+    (In order to use gpu,  just specify Number of gpus = **1** in another session)
+    - Projects = **ds722**
+3. Add Discussion notebook to SCC
+::::
+
+## Numpy Documentation
+https://numpy.org/doc/stable/reference/index.html
+![](Numpy_acos.png){fig-align="center"}
+
+## Formula Review
+**Inner Product**
+Let $\mathbf{x}, \mathbf{y}\in\mathbb{R}^n$
+$$
+\mathbf{x}^{T}\mathbf{y} = \sum_{i=1}^{n}x_iy_i.
+$$
+
+**A Matrix Times a Vector**
+Let $\mathbf{x}\in\mathbb{R}^{n}$ and let $A\in\mathbb{R}^{m\times n}$. $\mathbf{b}=A\mathbf{x}\in\mathbb{R}^{m}$ is defined as
+$$
+b_{i} = \sum_{j=1}^{n}A_{ij}x_j, \quad i=1,\ldots,m.
+$$
+
+Alternatively,
+$$
+\mathbf{b} = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
+$$
+
+
+**A Matrix Times a Matrix**
+Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matrix-matrix product $C = AB \in\mathbb{R}^{m \times p}$ is defined as
+$$
+C_{ij} = \sum_{k=1}^{n} A_{ik}B_{kj}.
+$$
+
+
+## Hint
+**Inner product**
+```{python}
+import numpy as np
+x = np.array([0,1])
+y = np.array([1,0])
+np.dot(x, y)
+```
+
+**Matrix multiplication**
+```{python}
+A = np.array([[1,0,0], [0,1,0], [0,0,1]])
+B = np.array([[1,2,3], [2,1,3], [3,2,1]])
+A @ B
+```
+
+**Plot a line**
+```{python}
+import matplotlib.pyplot as plt
+start_x = 0
+start_y = 0
+end_x = 1
+end_y = 1
+plt.xlim(-1.5, 1.5)
+plt.ylim(-1.5, 1.5)
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.plot([start_x, end_x], [start_y, end_y], color="red")
+plt.show()
+```
