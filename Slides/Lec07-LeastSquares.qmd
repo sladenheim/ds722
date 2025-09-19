@@ -10,12 +10,12 @@ Least squares data-fitting is an indispensable tool for data-scientists.
 We will formulate this problem as the solution of an overdetermined system of equations
 
 $$
-Ax=b
+Ax=b,
 $$
 
 where $A\in\mathbb{R}^{m\times n}$ and $m>n$.
 
-We will solve this problem by minimizing the $\Vert b-Ax\Vert_{2}$.
+We will solve this problem by minimizing $\Vert b-Ax\Vert_{2}$.
 
 ## Lecture Objectives
 
@@ -26,19 +26,334 @@ Understand:
 - Normal equations and the pseudoinverse
 - Solution via QR decomposition
 
+## Linear Regression
+
+In a simple linear regression, we're trying to find the line of the form 
+$$
+\hat b = x_{1} + a_{1}x_{2},
+$$ 
+
+that is the best fit to the data. 
+
+The hat over $\hat b$ indicates that it's a prediction, not the value $b$ observed in the data.
+
+---
+
+*Best fit* could be defined a lot of different ways. Here it's the line that minimizes the *residual sum of squares*, or the sum over all points of the square of the difference between the predicted value $\hat b_i$ and actual value $b_i$: 
+$$
+RSS(\hat b, b) = \sum_i (b_i - \hat b_i)^2.
+$$ 
+
+---
+
+Let's consider the following set of data:
+
+:::: {.columns style="display: flex;"}
+::: {.column width="25%" style="padding-top: 3em;"}
+$$
+\begin{align}
+(a_{1}, b_{1}) &= (-1, 2) \\
+(a_{2}, b_{2}) &= (0, -1) \\
+(a_{3}, b_{3}) &= (1, 3) \\
+\end{align}
+$$
+:::
+::: {.column width="55%"}
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+a = np.array([-1, 0, 1])
+b = np.array([2, -1, 3])
+
+plt.plot(a, b, 'o', markersize=16, color='#0072B2')
+plt.xlabel("a", fontsize=20)
+plt.ylabel("b", fontsize=20)
+plt.title("Data visualization", fontsize=28)
+plt.grid(True)
+plt.show()
+```
+:::
+::::
+
+---
+
+We plot the line that minimizes the residual sum of squares.
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.array([-1, 0, 1])
+b = np.array([2, -1, 3])
+
+# Design matrix for linear regression (add column of ones for intercept)
+A = np.vstack([np.ones_like(a), a]).T
+
+# Least squares solution
+x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+intercept, slope = x
+
+# Plot data points
+plt.plot(a, b, 'o', markersize=16, label='Data', color='#0072B2')
+
+# Plot regression line
+a_fit = np.linspace(min(a)-1, max(a)+1, 100)
+b_fit = slope * a_fit + intercept
+plt.plot(a_fit, b_fit, label='Least Squares Line', color='#D55E00', linewidth=3)
+
+plt.xlabel("a", fontsize=20)
+plt.ylabel("b", fontsize=20)
+plt.title("Line of Best Fit", fontsize=28)
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.array([-1, 0, 1])
+b = np.array([2, -1, 3])
+
+A = np.vstack([np.ones_like(a), a]).T
+x, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
+intercept, slope = x
+
+# Predicted values
+b_pred = slope * a + intercept
+residuals = b - b_pred
+
+plt.figure(figsize=(8, 6))
+plt.plot(a, b, 'o', markersize=16, label='Data', color='#0072B2')  # Blue
+plt.plot(a, b_pred, '-', label='Least Squares Line', color='#D55E00', linewidth=3)  # Orange
+
+# Plot residuals
+for i in range(len(a)):
+  plt.plot([a[i], a[i]], [b_pred[i], b[i]], '--', color='#CC79A7', linewidth=3)  # Purple
+  plt.plot(a[i], b_pred[i], 'o', color='#D55E00')
+
+plt.xlabel("a", fontsize=20)
+plt.ylabel("b", fontsize=20)
+plt.title("Line of Best Fit with Residuals", fontsize=28)
+plt.grid(True)
+plt.legend()
+plt.show()
+
+```
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import plotly.graph_objects as go
+
+a = np.array([-1, 0, 1])
+b = np.array([2, -1, 3])
+
+# True least squares solution
+A = np.vstack([np.ones_like(a), a]).T
+x_ls, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+intercept_ls, slope_ls = x_ls
+
+# Create a grid of intercepts and slopes
+intercepts = np.array([intercept_ls])
+# Ensure the first slope is the starting value (e.g., 0.5)
+starting_slope = 0.5
+slopes = np.concatenate([[starting_slope],
+                         np.linspace(0.5, 1.0, 10, endpoint=False)[1:],
+                         np.linspace(1.0, -1.0, 10, endpoint=False),
+                         np.linspace(-1.0, 0.5, 10)])
+
+frames = []
+for i, intercept in enumerate(intercepts):
+  for j, slope in enumerate(slopes):
+    b_pred = slope * a + intercept
+    residuals = b - b_pred
+    rss = np.sum(residuals**2)
+    scatter = go.Scatter(x=a, y=b, mode='markers', marker=dict(size=16, color='#0072B2'), name='Data')
+    line = go.Scatter(x=a, y=b_pred, mode='lines+markers', line=dict(color='#D55E00', width=3), name='Fit')
+    residual_lines = [
+      go.Scatter(x=[a[k], a[k]], y=[b_pred[k], b[k]], mode='lines', line=dict(color='#CC79A7', dash='dash', width=3), showlegend=False)
+      for k in range(len(a))
+    ]
+    frame = go.Frame(
+      data=[scatter, line] + residual_lines,
+      name=f"Intercept={intercept:.2f}, Slope={slope:.2f}, RSS={rss:.2f}",
+      layout=go.Layout(
+        title=f"Intercept={intercept:.2f}, Slope={slope:.2f}, RSS={rss:.2f}"
+      )
+    )
+    frames.append(frame)
+
+# Initial frame
+init_intercept = intercepts[0]
+init_slope = starting_slope
+init_b_pred = init_slope * a + init_intercept
+init_residuals = b - init_b_pred
+
+fig = go.Figure(
+  data=[
+    go.Scatter(x=a, y=b, mode='markers', marker=dict(size=16, color='#0072B2'), name='Data'),
+    go.Scatter(x=a, y=init_b_pred, mode='lines+markers', line=dict(color='#D55E00', width=3), name='Fit'),
+  ] + [
+    go.Scatter(x=[a[k], a[k]], y=[init_b_pred[k], b[k]], mode='lines', line=dict(color='#CC79A7', dash='dash', width=3), showlegend=False)
+    for k in range(len(a))
+  ],
+  layout=go.Layout(
+    title=f"Intercept={init_intercept:.2f}, Slope={init_slope:.2f}, RSS={np.sum(init_residuals**2):.2f}",
+    xaxis_title="a",
+    yaxis_title="b",
+    xaxis=dict(range=[min(a)-1, max(a)+1]),
+    yaxis=dict(range=[min(b)-3, max(b)+3]),
+    updatemenus=[dict(
+      type="buttons",
+      buttons=[
+        dict(label="Play", method="animate", args=[None]),
+        dict(label="Stop", method="animate", args=[[None], {"mode": "immediate", "frame": {"redraw": False}, "transition": {"duration": 0}}]),
+        dict(label="Restart", method="animate", args=[[0], {"mode": "immediate", "frame": {"redraw": True}, "transition": {"duration": 0}}])
+      ]
+    )]
+  ),
+  frames=frames
+)
+## Remove sorting and duplicate logic, as grid now starts/ends at best
+fig.show()
+```
+
+
+## Reformulating Linear Regression
+
+Let
+
+$$
+b = 
+\begin{bmatrix}
+2 \\
+-1 \\
+3 \\
+\end{bmatrix},
+\quad
+A = 
+\begin{bmatrix}
+1 & -1 \\
+1 & 0 \\
+1 & 1
+\end{bmatrix}.
+$$
+
+The linear regression computes $x = \begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$ so that $\hat b = Ax$ minimizes
+
+$$
+RSS(\hat b, b).
+$$
+
+---
+
+What is $RSS(\hat b, b)$?
+
+:::: {.fragment}
+Using the fact that $\hat{b} = Ax$, we have
+
+$$
+\begin{align}
+RSS(\hat b, b) &= \sum_{i=1}^{3} (b_{i}-\hat b_{i})^{2} \\
+&= (b - \hat b)^{\top}(b - \hat b) \\
+&= \Vert b - Ax\Vert_{2}^{2}.
+\end{align}
+$$
+::::
+
+---
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Define the vector v and matrix A
+b = np.array([2, -1, 3])
+A = np.array([[1, -1], [1, 0], [1, 1]])
+
+# Compute the projection of v onto the column space of A
+A_T = A.T
+proj_matrix = A @ np.linalg.inv(A_T @ A) @ A_T
+proj_b = proj_matrix @ b
+
+# Define the basis vectors of the column space of A
+basis_vectors = A.T
+
+# Create the 3D plot
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the original vector v
+ax.quiver(0, 0, 0, b[0], b[1], b[2], color='r', label=r'b')
+
+# Plot the projection of v onto the column space of A
+ax.quiver(0, 0, 0, proj_b[0], proj_b[1], proj_b[2], color='b', label=r'$\hat b= Ax=A(A^{\top}A)^{-1}A^{\top}b$')
+
+# Plot the basis vectors of the column space of A
+for i, vec in enumerate(basis_vectors):
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'${{a}}_{{{i+1}}}$')
+
+# Plot the plane spanned by the column space of A
+u = A[:, 0]
+v = A[:, 1]
+# Create a grid of scalars
+s = np.linspace(-1, 2, 10)
+t = np.linspace(-1, 2, 10)
+S, T = np.meshgrid(s, t)
+
+# Compute the plane points: P = s*u + t*v
+X = S * u[0] + T * v[0]
+Y = S * u[1] + T * v[1]
+Z = S * u[2] + T * v[2]
+
+ax.plot_surface(X, Y, Z, alpha=0.5, color='y', rstride=100, cstride=100)
+
+# Add a dashed line connecting the original vector to its projection
+ax.plot([b[0], proj_b[0]], [b[1], proj_b[1]], [b[2], proj_b[2]], 'k--', label=r'$\hat b - b$')
+
+# Set labels
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+
+# Move the legend outside the figure
+ax.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
+plt.tight_layout()
+
+# Set a better viewing angle
+ax.view_init(elev=30, azim=-120)
+# Compute squared norm of the residual
+squared_norm = np.linalg.norm(b - proj_b)**2
+
+# Add a textbox with the squared norm of the residual
+ax.text2D(0.05, 0.95, f"Squared norm of residual: {squared_norm:.2f}", transform=ax.transAxes, fontsize=14, bbox=dict(facecolor='white', alpha=0.8))
+# Show the plot
+plt.show()
+```
+
 ## The Problem
 
 We wish to find $x\in\mathbb{R}^{n}$ that satisfies
 
 $$
-Ax = b
+Ax = b,
 $$
 
 where $A\in\mathbb{R}^{m\times n}$, $m>n$ and $b\in\mathbb{R}^{m}$.
 
 This is an *overdetermined* system of equations.
 
-The goal is to minimize the *residual$ vector
+The goal is to minimize the *residual* vector
 
 $$
 r = b-Ax.
@@ -89,10 +404,10 @@ c_{m-1}
 \begin{bmatrix}
 y_{1}\\
 y_{2} \\
-y_{2}\\
+y_{3}\\
 \vdots \\
 y_{m}
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
 If all the data points are distinct, this matrix can be inverted to determine the coefficients for the polynomial.
@@ -172,7 +487,7 @@ y_{2} \\
 y_{2}\\
 \vdots \\
 y_{m}
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
 
@@ -249,7 +564,6 @@ plt.ylim(-1, 3)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.title('Least squares solution as orthogonal projection')
 plt.show()
-
 ```
 
 ---
@@ -258,17 +572,20 @@ plt.show()
 Let $A\in\mathbb{R}^{m\times n}~(m\geq n)$ and $b\in\mathbb{R}^{m}$ be given. A vector $x\in\mathbb{R}^{n}$ minimizes $\Vert r\Vert_{2} = \Vert b-Ax\Vert_{2}$, thereby solving the least squares problem if and only if $r \perp \operatorname{range}(A)$, that is,
 
 $$
-A^{T}r = 0 \Leftrightarrow A^{T}Ax = A^{T}b \Leftrightarrow Pb = Ax,
+A^{\top}r = 0 \Leftrightarrow A^{\top}Ax = A^{\top}b \Leftrightarrow Pb = Ax,
 $$
-where $P\in\mathbb{R}^{m\times m}$ is the orthgonal projector onto $\operatorname{range}(A)$. The $n\times n$ system of equations, $A^{T}Ax = A^{T}b$, called the *normal equations*, is nonsingular if and only if $A$ has full rank. Consequently, the solution is unique if and only if $A$ has full rank. 
+where $P=A(A^{\top}A)^{-1}A^{\top}\in\mathbb{R}^{m\times m}$ is the orthogonal projector onto $\operatorname{range}(A)$. 
 
+## Normal Equations
+
+The $n\times n$ system of equations, $A^{\top}Ax = A^{\top}b$, called the *normal equations*, is nonsingular if and only if $A$ has full rank. Consequently, the solution is unique if and only if $A$ has full rank. 
 
 ## Pseudoinverse
 
-If $A$ is full rank, then the solution to the least squares problem is unique and is given by $x=(A^{T}A)^{-1}A^{T}b$. The *pseudoinverse* of $A$ is
+If $A$ is full rank, then the solution to the least squares problem is unique and is given by $x=(A^{\top}A)^{-1}A^{\top}b$. The *pseudoinverse* of $A$ is
 
 $$
-A^{+} =(A^{T}A)^{-1}A^{T}\in\mathbb{R}^{n\times m}.
+A^{+} =(A^{\top}A)^{-1}A^{\top}\in\mathbb{R}^{n\times m}.
 $$
 
 This matrix maps vectors $b\in\mathbb{R}^{m}$ to vectors $x\in\mathbb{R}^{n}$.
@@ -278,10 +595,10 @@ This matrix maps vectors $b\in\mathbb{R}^{m}$ to vectors $x\in\mathbb{R}^{n}$.
 The normal equations are
 
 $$
-A^{T}Ax = A^{T}b.
+A^{\top}Ax = A^{\top}b.
 $$
 
-> Solving this system by computing the inverse of $(A^{T}A)^{-1}$ is not numerically stable!
+> Solving this system by computing the inverse of $(A^{\top}A)^{-1}$ is not numerically stable!
 
 The NumPy function `np.linalg.lstsq()` solves the least squares problem in a stable way.
 
@@ -315,33 +632,33 @@ print(x3, np.linalg.norm(x3-np.array([1, 1])))
 Let $A=\hat{Q}\hat{R}$ be a reduced QR factorization, then
 
 $$
-A^{T}Ax = (\hat{Q}\hat{R})^{T}\hat{Q}\hat{R}x = \hat{R}^{T}\hat{Q}^{T}\hat{Q}\hat{R}x = \hat{R}^{T}\hat{R}x,
+A^{\top}Ax = (\hat{Q}\hat{R})^{\top}\hat{Q}\hat{R}x = \hat{R}^{\top}\hat{Q}^{\top}\hat{Q}\hat{R}x = \hat{R}^{\top}\hat{R}x,
 $$
 
 and 
 
 $$ 
-A^{T}b = \hat{R}^{T}\hat{Q}^{T}b.
+A^{\top}b = \hat{R}^{\top}\hat{Q}^{\top}b.
 $$
 
 As a result
 
 $$
-\hat{R}x = \hat{Q}^{T}b.
+\hat{R}x = \hat{Q}^{\top}b.
 $$
 
 ---
 
-Alternatively, we could have used the fact if $A=\hat{Q}\hat{R}$, then  $P=\hat{Q}\hat{Q}^{T}$ is the orthogonal projector onto $\operatorname{range}(A)$, thus
+Alternatively, we could have used the fact if $A=\hat{Q}\hat{R}$, then  $P=\hat{Q}\hat{Q}^{\top}$ is the orthogonal projector onto $\operatorname{range}(A)$, thus
 
 $$
-y=Pb = \hat{Q}\hat{Q}^{T}b.
+y=Pb = \hat{Q}\hat{Q}^{\top}b.
 $$
 
-Since $Ax=y$, we have that $\hat{Q}\hat{R}x=\hat{Q}\hat{Q}^{T}b$ which is equivalent to
+Since $Ax=y$, we have that $\hat{Q}\hat{R}x=\hat{Q}\hat{Q}^{\top}b$ which is equivalent to
 
 $$
-\hat{R}x = \hat{Q}^{T}b.
+\hat{R}x = \hat{Q}^{\top}b.
 $$
 
 ---
@@ -349,26 +666,10 @@ $$
 To compute the least squares solution via QR factorization follow these steps:
 
 1. Compute the reduced QR factorization $A=\hat{Q}\hat{R}$.
-1. Compute the vector $\hat{Q}^{T}b$.
-1. Solve the upper triangular system $\hat{R}x = hat{Q}^{T}b$ for $x$.
-
-
-## Example: Polynomial Interpolation
-
-
-
----
-
-With 11 distinct points we can fit a polynomial of degree $10$, i.e., we solve
-
-$$
-\begin{bmatrix}
-
-\end{bmatrix}
-$$
+1. Compute the vector $\hat{Q}^{\top}b$.
+1. Solve the upper triangular system $\hat{R}x = \hat{Q}^{\top}b$ for $x$.
 
 ## Example: Linear Regression
-
 We'll create our own toy dataset for doing a linear least squares regression.
 
 ```{python}
@@ -427,6 +728,20 @@ plt.xlabel("Independent variable")
 plt.ylabel("Dependent variable")
 plt.title("Linear Regression")
 plt.show()
+
+# Compute residual vector r = y - (beta0 + beta1*X)
+r = y - reg.predict(X)
+
+# Compute A matrix for least squares (add column of ones for intercept)
+A = np.hstack([np.ones_like(X), X])
+
+# Compute A^T r
+ATr = A.T @ r
+
+from IPython.display import display, Math
+
+display(Math(r"A^{\top}r = " + np.array2string(ATr, precision=3)))
+display(Math(r"\text{Is } A^{\top}r \approx 0? \quad " + str(np.allclose(ATr, 0))))
 ```
 
 ## Summary
