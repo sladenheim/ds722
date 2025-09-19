@@ -52,10 +52,14 @@ proj_y_on_x = proj_scalar * x
 
 # Plot the vectors
 plt.figure(figsize=(6,6))
-plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{x}$')
-plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', scale=1, color='b', label=r'$\mathbf{y}$')
-plt.quiver(0, 0, proj_y_on_x[0], proj_y_on_x[1], angles='xy', scale_units='xy', scale=1, color='g',
-           label=r'$\mathrm{proj}_{\mathbf{x}}\mathbf{y} = \frac{\mathbf{x}^T\mathbf{y}}{\mathbf{x}^T\mathbf{x}}\mathbf{x}$')
+plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', \
+    scale=1, color='r', label=r'$\mathbf{x}$')
+plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', \
+    scale=1, color='b', label=r'$\mathbf{y}$')
+plt.quiver(0, 0, proj_y_on_x[0], proj_y_on_x[1], angles='xy', \
+    scale_units='xy', scale=1, color='g',
+           label=r'$\mathrm{proj}_{\mathbf{x}}\mathbf{y} = '
+           +r'\frac{\mathbf{x}^T\mathbf{y}}{\mathbf{x}^T\mathbf{x}}\mathbf{x}$')
 
 # Compute the cosine of the angle between x and y
 cos_theta = np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
@@ -65,7 +69,8 @@ plt.text(0.1, 0.1, f"$\\cos(\\theta)$", fontsize=12)
 
 
 # Draw dashed line from y to its projection on x
-plt.plot([y[0], proj_y_on_x[0]], [y[1], proj_y_on_x[1]], 'k--', label='Orthogonal component')
+plt.plot([y[0], proj_y_on_x[0]], [y[1], proj_y_on_x[1]], 'k--', \
+    label='Orthogonal component')
 
 plt.xlim(-1, 4)
 plt.ylim(-1, 4)
@@ -156,11 +161,13 @@ ax = fig.add_subplot(111, projection='3d')
 ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label=r'$\mathbf{v}$')
 
 # Plot the projection of v onto the column space of A
-ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label=r'$A(A^{T}A)^{-1}A^{T}\mathbf{v}$')
+ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', \
+    label=r'$A(A^{T}A)^{-1}A^{T}\mathbf{v}$')
 
 # Plot the basis vectors of the column space of A
 for i, vec in enumerate(basis_vectors):
-    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'$\mathbf{{a}}_{{{i+1}}}$')
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', \
+        label=fr'$\mathbf{{a}}_{{{i+1}}}$')
 
 # Plot the plane spanned by the column space of A
 x = np.linspace(-1, 2, 10)
@@ -171,7 +178,8 @@ Z = X  # Since the plane is spanned by [1, 0, 1] and [0, 1, 0]
 ax.plot_surface(X, Y, Z, alpha=0.5, color='y', rstride=100, cstride=100)
 
 # Add a dashed line connecting the original vector to its projection
-ax.plot([v[0], proj_v[0]], [v[1], proj_v[1]], [v[2], proj_v[2]], 'k--', label='Orthogonal component')
+ax.plot([v[0], proj_v[0]], [v[1], proj_v[1]], [v[2], proj_v[2]], \
+    'k--', label='Orthogonal component')
 
 # Set labels
 ax.set_xlabel('X')
