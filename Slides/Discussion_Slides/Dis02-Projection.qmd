@@ -1,156 +1,186 @@
 ---
-title: "2 Projection"
+title: "Week 3: Projection"
 author: "Yuke Zhang"
 ---
 
-## From Lecture
+## Create a session accessing Jupyter Notebook
+Search SCC ondemand, login through BU account
 
-We introduced
-
-:::: {.incremental}
-- Vector spaces, Span, and Basis 
-- Matrix-vector and matrix-matrix products
-- How a neural network uses matrix operations for forward propagation
-- Vector and matrix norms
+:::: {.incremental} 
+1.  Access /projectnb/ds722/student/<username>
+    - Click "**Files**" and select **/projectnb/ds722** and select **student** subfolder
+    - Upload new DiscussionWeek3.ipynb from Piazza Resources to the SCC folder
+2. Click "**Interactive apps**"
+    - List of modules to load (space separated) = 
+        - **miniconda** 
+        - **academic-ml/fall-2025**
+    - Pre-Launch Command (optional) = **conda activate fall-2025-pyt**
+    - Interface = **lab**
+    - Working Directory = **/projectnb/ds722/student/[username]**
+    - Number of hours = **2**
+    - Number of cores = **1**
+    - Number of gpus = **0**
+    (In order to use gpu,  just specify Number of gpus = **1** in another session)
+    - Projects = **ds722**
+3. Add Discussion notebook to SCC
 ::::
 
-## In this Discussion
+## Discussion on Projection onto a line
+Let $\mathbf{x}, \mathbf{y}\in\mathbb{R}^{n}$
 
-We focused on how to 
+- Projection is a *linear transformation*, denoted as $P$
+    - Project vector $\mathbf{y}$ onto vector space of $\mathbf{x}$: $P\mathbf{y}$
+    - $P$ is defined using $\mathbf{x}$
+- Projected vector $P\mathbf{y}$ can be viewed as shadow vector
+    - For any vector $\mathbf{v}\in\mathbb{R}^n$, 
+    $\mathbf{v} = ||\mathbf{v}|| \cdot \frac{\mathbf{v}}{||\mathbf{v}||}$
+    - shadow length = $||\mathbf{y}||\cos(\theta)$
+    - unit vector along direction of $\mathbf{x}$ = $\frac{\mathbf{x}}{||\mathbf{x}||}$
 
-:::: {.incremental}
-- Orthogonal/Orthonormal vectors
-- Orthogonal matrices
-- Defined orthogonal/oblique projectors
-- Defined projection with orthogonal and arbitrary bases
-- Approaches for generating the QR factorization
-    - Classical Gram-Schmidt
-    - Modified Gram-Schmidt
-::::
+## Discussion on Projection onto a line
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
 
-## A pair of Orthogonal Vectors
+# Define two 2D vectors
+x = np.array([2, 0])
+y = np.array([1, 3])
 
-Two vectors $\mathbf{q}_1$ and $\mathbf{q}_2$ are *orthogonal* when
+# Compute the projection of y onto x
+proj_scalar = np.dot(y, x) / np.dot(x, x)
+proj_y_on_x = proj_scalar * x
 
-$$
-\mathbf{q}_{2}^{T}\mathbf{q}_1 = 0.
-$$
+# Plot the vectors
+plt.figure(figsize=(6,6))
+plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{x}$')
+plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', scale=1, color='b', label=r'$\mathbf{y}$')
+plt.quiver(0, 0, proj_y_on_x[0], proj_y_on_x[1], angles='xy', scale_units='xy', scale=1, color='g',
+           label=r'$\mathrm{proj}_{\mathbf{x}}\mathbf{y} = \frac{\mathbf{x}^T\mathbf{y}}{\mathbf{x}^T\mathbf{x}}\mathbf{x}$')
 
+# Compute the cosine of the angle between x and y
+cos_theta = np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
 
-## A set of Orthogonal Vectors 
-
-A set of vectors $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_n \}$ are *orthogonal* if every pair of vectors is *orthogonal*, i.e.,
-
-$$
-\mathbf{q}_{i}^{T}\mathbf{q}_{j} = 0 \quad \text{for all} \quad i\neq j.
-$$
-
-A set of vectors $S$ is **orthonormal** if every vector in S is orthogonal and is a unit vector.
-
-The quantity $\mathbf{q}_{j}^T\mathbf{v}$ as the coefficients of a linear combination of vectors $\mathbf{q}_{i}$ in order to express $\mathbf{v}$.
-
-
-## Decomposition using orthonormal set
-
-Observe that the vector 
-
-$$
-\mathbf{r} = \mathbf{v} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2} - \cdots - (\mathbf{q}_{n}^T\mathbf{v})\mathbf{q}_{n}
-$$
-
-is orthogonal to $S$.
-
-Consequently we can always express
-
-$$
-\mathbf{v} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}^T\mathbf{v})\mathbf{q}_{i} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}\mathbf{q}_{i}^T)\mathbf{v}. 
-$$
+# Add a label for the cosine of the angle
+plt.text(0.1, 0.1, f"$\\cos(\\theta)$", fontsize=12)
 
 
-## Orthogonal Matrices
-A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
+# Draw dashed line from y to its projection on x
+plt.plot([y[0], proj_y_on_x[0]], [y[1], proj_y_on_x[1]], 'k--', label='Orthogonal component')
 
-Equivalently, $Q^{T} = Q^{-1}$, i.e., $Q^{T}$ is the inverse of $Q$.
+plt.xlim(-1, 4)
+plt.ylim(-1, 4)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.grid(True)
+plt.legend()
+plt.title(r'Inner Product and Projection of $\mathbf{y}$ onto $\mathbf{x}$')
 
-## Projectors
-A projector is a square matrix $P$ that satisfies
+plt.show()
+```
 
-$$
-P^{2} = P.
-$$
+## Discussion on Projection onto a line
+\begin{align*}
+P\mathbf{y}
+& = \frac{\mathbf{x}}{||\mathbf{x}||}||\mathbf{y}||\cos(\theta) \\
+& = \frac{\mathbf{x}||\mathbf{x}||}{||\mathbf{x}||^2}||\mathbf{y}||\cos(\theta) \\
+& = \frac{\mathbf{x}\mathbf{x}^\top\mathbf{y}}{||\mathbf{x}||^2}
+\end{align*}
+Then $$P = \frac{\mathbf{x}\mathbf{x}^\top}{||\mathbf{x}||^2}$$
 
-Given matrix $A$, we can construct a projector $P = A(A^\top A)^{-1}A$.
+## Discussion on Projection onto a line
+Here projection matrix is $$P = \frac{\mathbf{x}\mathbf{x}^\top}{||\mathbf{x}||^2} = \frac{\mathbf{x}\mathbf{x}^\top}{\mathbf{x}^\top \mathbf{x}}$$
 
-## Complementary Projectors
+When $||\mathbf{x}|| = 1$, 
+$$P\mathbf{x} = \mathbf{x}\mathbf{x}^\top\mathbf{y} = (\mathbf{x}\mathbf{x}^\top)\mathbf{y}$$
+here $P = \mathbf{x}\mathbf{x}^\top$ where $||\mathbf{x}|| = 1$ can be viewed as a projector.
 
-If $P$ is a projector, $I-P$ is also a projector. The matrix $I-P$ is called the complementary projector to $P$.
+## Discussion on Projection onto a line
+Let's check the property.
 
-## Orthogonal Projectors
+\begin{align*}
+P^2 
+& = (\mathbf{x}\mathbf{x}^\top)^\top (\mathbf{x} \mathbf{x}^\top)\\
+& = \mathbf{x}^\top \mathbf{x} \mathbf{x} \mathbf{x}^\top\\
+& = ||\mathbf{x}||^2 \mathbf{x}\mathbf{x}^\top \\
+& = \mathbf{x}\mathbf{x}^\top = P\\
+\end{align*}
+Thus, $P^2 = P$ also holds
 
-**Theorem**
-A projector $P$ is orthogonal if and only if $P=P^{T}$.
+## Discussion on Projection onto a plane
+since $||\mathbf{x}|| = \sqrt{\mathbf{x}^\top \mathbf{x}}$
+Similarly, 
+using $$P = \frac{\mathbf{x}\mathbf{x}^\top}{\mathbf{x}^\top \mathbf{x}}$$
+We can have analogy for matrix
+$$P = A(A^\top A)^{-1}A^\top$$
 
-## Full QR Factorization
 
-A full QR factorization of $A\in\mathbb{R}^{m\times n} (m\geq n)$ is denoted by
 
-$$
-A = QR,
-$$
+## Hint
 
-where $Q\in\mathbb{R}^{m\times n}$ is orhthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
-
-## Gram-Schmidt Orthogonalization
-
-How do we construct our vectors $\mathbf{q}_{j}$? 
-
-Recall from the previous lecture that we can express a vector in the following form
-
-$$
-\mathbf{v}_{j} = \mathbf{a}_{j} - (\mathbf{q}_{1}^{T}\mathbf{a}_{j})\mathbf{q}_{1} - (\mathbf{q}_{2}^{T}\mathbf{a}_{j})\mathbf{q}_{2} - \cdots - - (\mathbf{q}_{j-1}^{T}\mathbf{a}_{j})\mathbf{q}_{j-1}.
-$$
-
-If we divide $\mathbf{v}_{j}$ by $\Vert\mathbf{v}_{j}\Vert_2$, then we have a new $\mathbf{q}_{j}$ that spans $\langle\mathbf{a}_{1}\ldots \mathbf{a}_{j-1} \rangle$ and is orthonormal to $\mathbf{q}_1,\ldots \mathbf{q}_{j-1}$. 
-
-## Gram-Schmidt Projections
-
-The CGS method is not numerically stable. However, we can modify this method to produce a numerically stable algorithm.
-
-The key idea behind this is projections. 
+Let's visualize the projection of the vector $\mathbf{v} = [1, 2, 3]^{T}$ onto the range of
 
 $$
-\mathbf{q}_{1} = \frac{P_{1}\mathbf{a}_{1}}{\Vert P_1\mathbf{a}_{1}\Vert_2}, \mathbf{q}_{2} = \frac{P_{2}\mathbf{a}_{2}}{\Vert P_2\mathbf{a}_{1}\Vert_2}, \ldots, \mathbf{q}_{n} = \frac{P_{n}\mathbf{a}_{n}}{\Vert P_{n}\mathbf{a}_{n}\Vert_2},
+A =
+\begin{bmatrix}
+1 & 0 \\
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}.
 $$
-
-where each $P_{j}$ is an orthogonal projector.
-
 
 ---
 
-:::: {.columns}
-::: {.column width="47.5%"}
-**CGS Algorithm**
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-1. for $j=1,\ldots n$
-1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
-1. $\quad\quad$ for $i=1,\ldots, j-1$
-1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
-1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
-1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
-:::
-::: {.column width="5%"}
-:::
-::: {.column width="47.5%"}
-**MGS Algorithm**
+# Define the vector v and matrix A
+v = np.array([1, 2, 3])
+A = np.array([[1, 0], [0, 1], [1, 0]])
 
-1. for $i=1,\ldots n$
-1. $\quad \mathbf{v}_{i} = \mathbf{a}_{i}$
-1. for $i=1,\ldots n$
-1. $\quad r_{ii} = \Vert \mathbf{v}_{i}\Vert_{2}$
-1. $\quad \mathbf{q}_{i} = \Vert \mathbf{v}_{i}\Vert_{2}$
-1. $\quad\quad$ for $j=i+1,\ldots, n$
-1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{v}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
-:::
-::::
+# Compute the projection of v onto the column space of A
+A_T = A.T
+proj_matrix = A @ np.linalg.inv(A_T @ A) @ A_T
+proj_v = proj_matrix @ v
+
+# Define the basis vectors of the column space of A
+basis_vectors = A.T
+
+# Create the 3D plot
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the original vector v
+ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label=r'$\mathbf{v}$')
+
+# Plot the projection of v onto the column space of A
+ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label=r'$A(A^{T}A)^{-1}A^{T}\mathbf{v}$')
+
+# Plot the basis vectors of the column space of A
+for i, vec in enumerate(basis_vectors):
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'$\mathbf{{a}}_{{{i+1}}}$')
+
+# Plot the plane spanned by the column space of A
+x = np.linspace(-1, 2, 10)
+y = np.linspace(-1, 2, 10)
+X, Y = np.meshgrid(x, y)
+Z = X  # Since the plane is spanned by [1, 0, 1] and [0, 1, 0]
+
+ax.plot_surface(X, Y, Z, alpha=0.5, color='y', rstride=100, cstride=100)
+
+# Add a dashed line connecting the original vector to its projection
+ax.plot([v[0], proj_v[0]], [v[1], proj_v[1]], [v[2], proj_v[2]], 'k--', label='Orthogonal component')
+
+# Set labels
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+
+# Set the legend
+ax.legend()
+
+# Show the plot
+plt.show()
+```
