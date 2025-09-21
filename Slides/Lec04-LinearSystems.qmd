@@ -15,8 +15,6 @@ $$
 
 The simplest way the above system of equations is by Gaussian elimination.
 
-In this lecture we will describe how this algorithm works and how it can be programmed efficiently on a computer.
-
 
 ## Lecture Objectives
 
@@ -26,6 +24,51 @@ Understand:
 - Solving linear systems of equations via the LU factorization
 - Solving linear systems of equations via the QR factorization
 - Partial pivoting
+
+## Linear Systems of Equations
+Consider the following system of equations with two unknowns $x_{1}$ and $x_{2}$:
+
+$$
+\begin{cases}
+2x_{1} + 3x_{2} = 8 \\
+x_{1} - 4x_{2} = -2
+\end{cases}
+$$
+
+This can be written in matrix form as:
+
+$$
+\begin{bmatrix}
+2 & 3 \\
+1 & -4
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+8 \\
+-2
+\end{bmatrix}
+$$
+
+## Gaussian Elimination for $A\in\mathbb{R}^{2\times 2}$
+To solve the previous equation we would:
+
+1. Eliminate $x_1$ from the second equation.
+2. Solve for $x_2$ from the second equation.
+3. Substitute $x_2$ into the first equation to solve for $x_1$.
+
+---
+
+**Elimination**
+
+---
+
+The elimination of $x_{1}$ from the second equation is equivalent to transforming $A$ to an upper triangular matrix $U$.
+
+Solving for $x_{2}$ and $x_{1}$ is the process of back-substitution. Back-substitution is an efficient way to solve upper triangular systems of equations.
 
 ## LU Factorization
 
@@ -313,6 +356,11 @@ then $L_{k} = I-\ell_{k}e_{k}^{T}$, where $e_{k}$ is the column vector with 1 in
 
 ---
 
+Let's compute $L_{1}$ using this formula from our example.
+
+
+---
+
 Note that $e_{k}^{T}\ell_{k} = 0$. As a result
 
 $$
@@ -331,6 +379,11 @@ L_{k}^{-1}L_{k+1}^{-1} = (I+\ell_{k}e_{k}^{T})(I+\ell_{k+1}e_{k+1}^{T}) = I + \e
 $$
 
 This shows that the product $L_{k}^{-1}L_{k+1}^{-1}$ is just the unit lower-triangular matrix with the entries of both $L_{k}^{-1}$ and $L_{k+1}^{-1}$ inserted in their usual places below the diagonal.
+
+---
+
+Let's compute $L_{1}^{-1}L_{2}^{-1}$ from our example.
+
 
 ---
 
@@ -803,4 +856,3 @@ Gaussian elimination is equivalent to computing an LU factorization of the matri
 We now know how to solve linear systems of equations using either LU or QR factorization.
 
 We understand what partial pivoting is and why it is used in computing the LU factorization.
-
