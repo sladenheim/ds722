@@ -61,6 +61,10 @@ The action of a matrix $A$ on a subspace $S\subseteq\mathbb{C}^{m}$ can mimic sc
 
 The set of all eigenvalues $\Lambda(A)$ of a matrix $A$ is the *spectrum* of $A$.
 
+## Computing Eigenvalues
+
+
+
 ## Eigenvalue Decomposition
 
 An eigenvalue decomposition of a square matrix $A$ is a factorization
