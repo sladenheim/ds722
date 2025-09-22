@@ -30,12 +30,12 @@ Understand:
 
 In a simple linear regression, we're trying to find the line of the form 
 $$
-\hat b = x_{1} + a_{1}x_{2},
+\hat b = x_{1} + x_{2}a_{1},
 $$ 
 
 that is the best fit to the data. 
 
-The hat over $\hat b$ indicates that it's a prediction, not the value $b$ observed in the data.
+The hat over $b$ indicates that it's a prediction, not the value $b$ observed in the data.
 
 ---
 
@@ -484,7 +484,7 @@ c_{n-1}
 \begin{bmatrix}
 y_{1}\\
 y_{2} \\
-y_{2}\\
+y_{3}\\
 \vdots \\
 y_{m}
 \end{bmatrix}.
@@ -641,7 +641,7 @@ $$
 A^{\top}b = \hat{R}^{\top}\hat{Q}^{\top}b.
 $$
 
-As a result
+As a result,
 
 $$
 \hat{R}x = \hat{Q}^{\top}b.
@@ -649,7 +649,7 @@ $$
 
 ---
 
-Alternatively, we could have used the fact if $A=\hat{Q}\hat{R}$, then  $P=\hat{Q}\hat{Q}^{\top}$ is the orthogonal projector onto $\operatorname{range}(A)$, thus
+Alternatively, we could have used the fact that if $A=\hat{Q}\hat{R}$, then  $P=\hat{Q}\hat{Q}^{\top}$ is the orthogonal projector onto $\operatorname{range}(A)$. Thus
 
 $$
 y=Pb = \hat{Q}\hat{Q}^{\top}b.

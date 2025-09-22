@@ -7,10 +7,10 @@ project:
     - Lec01-VectorsMatrices2.qmd
     - Lec02-OrthogonalityProjections.qmd
     - Lec03-QRFactorization.qmd
-    - Lec04-LinearSystems.qmd
-    - Lec05-Eigenvalues.qmd
-    - Lec06-SVD.qmd
-    - Lec07-LeastSquares.qmd
+    - Lec04-LeastSquares.qmd
+    - Lec05-LinearSystems.qmd
+    - Lec06-Eigenvalues.qmd
+    - Lec07-SVD.qmd
     - Lec08-Derivatives1.qmd
     - Lec09-Derivatives2.qmd
     - Lec10-Integration.qmd
