@@ -30,7 +30,7 @@ Understand:
 
 In a simple linear regression, we're trying to find the line of the form 
 $$
-\hat b = x_{1} + x_{2}a_{1},
+\hat b = x_{1} + x_{2}a,
 $$ 
 
 that is the best fit to the data. 
