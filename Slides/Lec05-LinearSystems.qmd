@@ -5,7 +5,7 @@ jupyter: python3
 
 ## Lecture Overview
 
-Solving linear systems of equations is a fundamental to the study of linear algebra. 
+Solving linear systems of equations is fundamental to the study of linear algebra. 
 
 The problem of solving a linear system of equations is given $A\in\mathbb{R}^{m\times m}, \mathbf{b}\in\mathbb{R}^{m}$ find the vector $\mathbf{x}\in\mathbb{R}^{m}$ satisfying:
 
@@ -13,7 +13,7 @@ $$
 A\mathbf{x} = \mathbf{b}.
 $$
 
-The simplest way the above system of equations is by Gaussian elimination.
+The simplest way to solve a system of equations is by Gaussian elimination.
 
 
 ## Lecture Objectives
@@ -30,8 +30,8 @@ Consider the following system of equations with two unknowns $x_{1}$ and $x_{2}$
 
 $$
 \begin{cases}
-2x_{1} + 3x_{2} = 8 \\
-x_{1} - 4x_{2} = -2
+2x_{1} + 3x_{2} = 8, \\
+x_{1} - 4x_{2} = -2.
 \end{cases}
 $$
 
@@ -50,7 +50,7 @@ x_{2}
 \begin{bmatrix}
 8 \\
 -2
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
 ## Gaussian Elimination for $A\in\mathbb{R}^{2\times 2}$
@@ -74,11 +74,11 @@ Solving for $x_{2}$ and $x_{1}$ is the process of back-substitution. Back-substi
 
 Gaussian elimination transforms a full linear system of equations into an upper-triangular one by applying simple linear transformations on the left.
 
-The idea is to transform the square matrix $A\in\mathbb{R}^{m \times m}$ into an upper triangular matrix $U$ by introducing zeros below the diagonal starting with column 1, then column 2, until the final column $m$.
+The idea is to transform the square matrix $A\in\mathbb{R}^{m \times m}$ into an upper triangular matrix $U\in\mathbb{R}^{m \times m}$ by introducing zeros below the diagonal starting with column 1, then column 2, until the final column $m$.
 
 ---
 
-We will see that this process is equivalent to multiplying $A$ by a sequence of lower triangular matrix $L_{k}$ on the left, i.e.,
+We will see that this process is equivalent to multiplying $A$ by a sequence of lower triangular matrices $L_{k}\in\mathbb{R}^{m\times m}$ on the left, i.e.,
 
 $$
 \underbrace{L_{n-1}\cdots L_{2}L_{1}}_{L^{-1}}A = U \quad \Leftrightarrow \quad A=LU.
@@ -201,8 +201,8 @@ L_{3}L_{2}L_{1}A =
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 \\
-0 & -3 & 1 & 0 \\
-0 & -4 & 0 & 1\\
+0 & 0 & 1 & 0 \\
+0 & 0 & -1 & 1\\
 \end{bmatrix}
 \begin{bmatrix}
 2 & 1 & 1 & 0 \\
@@ -364,6 +364,7 @@ Let's compute $L_{1}$ using this formula from our example.
 Note that $e_{k}^{T}\ell_{k} = 0$. As a result
 
 $$
+\small
 L_{k}(I+\ell_{k}e_{k}^{T})= (I-\ell_{k}e_{k}^{T})(I+\ell_{k}e_{k}^{T}) = I - \ell_{k}e_{k}^{T}\ell_{k}e_{k}^{T} = I.
 $$
 
@@ -371,7 +372,7 @@ This shows that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$.
 
 ## Computing $L$
 
-Using the fact that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$, let's compute 
+Using the facts that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$ and $e_{k}^{T}\ell_{k+1}=0$, let's compute 
 
 $$
 \small
@@ -406,18 +407,25 @@ $$
 **Gaussian Elimination without Pivoting**
 
 1. $U=A$, $L=I$
-1. for $k=1,\ldots, n-1$
-1. $\quad$ for $j=k+1,\ldots,n$
+1. for $k=1,\ldots, m-1$
+1. $\quad$ for $j=k+1,\ldots,m$
 1. $\quad\quad \ell_{jk} = u_{jk}/u_{kk}$
-1. $\quad\quad \ell_{j,k:m} = u_{j,k:n} - \ell_{jk}u_{k,k:m}$
+1. $\quad\quad \ell_{j,k:m} = u_{j,k:m} - \ell_{jk}u_{k,k:m}$
 
 ## Operation Count
 
-The work is dominated by the vector operation in the inner loop $\ell_{j,k:m} = u_{j,k:m} - \ell_{jk}u_{k,k:m}$, a scalar-vector multiplication and one vector subtraction. If $l=m-k+1$, then we have $2l$ flops. 
+The work is dominated by the vector operation in the inner loop $\ell_{j,k:m} = u_{j,k:m} - \ell_{jk}u_{k,k:m}$, which consists of
 
-For each value of $k$, the inner loop is repeated for rows $k+1,\ldots, m$ then the work correspond to one layer of the following solid.
+- one scalar-vector multiplication 
+- one vector subtraction. 
+
+If $l=m-k+1$ is the length of the row vectors, then we have $2l$ flops. 
+
+For each value of $k$, the inner loop is repeated for rows $k+1,\ldots, m$.
 
 ---
+
+The work for this procedure corresponds to one layer of the following solid
 
 ![](figures/LU-Complexity.png){fig-align="center"}
 
@@ -465,14 +473,14 @@ y_{1}\\
 y_{2} \\
 \vdots \\
 y_{m}\\
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
-We can do this by solving for the components of $x$ one after the other, beginning with $x_{m}$ and finishing with $x_{1}$.
+We can do this by solving for the components of $\mathbf{x}$ one after the other, beginning with $x_{m}$ and finishing with $x_{1}$.
 
 ---
 
-**Back Subsitution Algorithm**
+**Back Substitution Algorithm**
 
 1. $x_{m} = y_{m}/u_{mm}$
 1. for $j=m-1,\ldots,1$
@@ -834,7 +842,7 @@ $$
 L_{k}^{\prime} = P_{m-1}\cdots P_{k+1}L_{k}P_{k+1}^{-1}\cdots P_{m-1}^{-1}.
 $$
 
-With $L=(L_{m-1}^{\prime}\cdots L_{2}^{\prime}L_{1}^{\prime})^{-1}$ and $P=P_{m-11}\cdots P_{2}P_{1}$ we obtain 
+With $L=(L_{m-1}^{\prime}\cdots L_{2}^{\prime}L_{1}^{\prime})^{-1}$ and $P=P_{m-1}\cdots P_{2}P_{1}$ we obtain 
 
 $$
 PA=LU.
