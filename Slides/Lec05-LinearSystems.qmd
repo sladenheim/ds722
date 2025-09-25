@@ -81,7 +81,7 @@ The idea is to transform the square matrix $A\in\mathbb{R}^{m \times m}$ into an
 We will see that this process is equivalent to multiplying $A$ by a sequence of lower triangular matrices $L_{k}\in\mathbb{R}^{m\times m}$ on the left, i.e.,
 
 $$
-\underbrace{L_{n-1}\cdots L_{2}L_{1}}_{L^{-1}}A = U \quad \Leftrightarrow \quad A=LU.
+\underbrace{L_{m-1}\cdots L_{2}L_{1}}_{L^{-1}}A = U \quad \Leftrightarrow \quad A=LU.
 $$
 
 ## Example
@@ -648,7 +648,7 @@ Next multiply by permutation matrix $P_{2}$
 $$
 \small
 \begin{bmatrix}
- &  & 1 &  \\
+ 1 &  &  &  \\
  &  &  & 1 \\
  &  & 1  &  \\
  & 1 &  & \\
