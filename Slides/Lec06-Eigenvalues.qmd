@@ -32,7 +32,7 @@ $$
 z = a +ib,
 $$
 
-where $i=\sqrt{=1}$, and $a,b\in\mathbb{R}$.
+where $i=\sqrt{-1}$, and $a,b\in\mathbb{R}$.
 
 The conjugate 
 
@@ -40,7 +40,7 @@ $$
 \bar{z} = a - ib.
 $$
 
-The modulus $\vert z\vert = z\bar{z} = a^{2} + b^{2}$.
+The modulus $\vert z\vert = \sqrt{z\bar{z}} = \sqrt{a^{2} + b^{2}}$.
 
 What does it mean if $z = \bar{z}$?
 
@@ -61,7 +61,156 @@ The action of a matrix $A$ on a subspace $S\subseteq\mathbb{C}^{m}$ can mimic sc
 
 The set of all eigenvalues $\Lambda(A)$ of a matrix $A$ is the *spectrum* of $A$.
 
-## Computing Eigenvalues
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+mpl.rcParams['text.usetex'] = True
+mpl.rcParams['text.latex.preamble'] = r'\usepackage{{amsmath}}'
+
+# Define the matrix
+A = np.array([[4, -1], [2, 1]])
+
+# Compute eigenvalues and eigenvectors
+eigvals, eigvecs = np.linalg.eig(A)
+
+# Define a non-eigenvector
+u = np.array([1, 0])
+Au = A @ u
+
+# Prepare the plot
+fig, ax = plt.subplots(figsize=(6, 6))
+ax.set_xlim(-5, 5)
+ax.set_ylim(-5, 5)
+ax.set_aspect('equal')
+ax.grid(True)
+ax.set_title("Eigenvectors and a Non-Eigenvector under $A$")
+
+# Define colors
+colors = ['blue', 'green', 'orange', 'purple']
+
+# Plot eigenvectors and their images
+for i in range(len(eigvals)):
+    v = eigvecs[:, i]
+    Av = A @ v
+    ax.quiver(0, 0, Av[0], Av[1], angles='xy', scale_units='xy', scale=1,
+              color=colors[2*i+1], label=f'$Av_{{{i+1}}}$')
+    ax.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1,
+              color=colors[2*i], label=f'$v_{{{i+1}}}$')
+
+# Plot non-eigenvector and its image
+ax.quiver(0, 0, Au[0], Au[1], angles='xy', scale_units='xy', scale=1,
+          color='red', label='$Au$')
+ax.quiver(0, 0, u[0], u[1], angles='xy', scale_units='xy', scale=1,
+          color='black', label='$u$')
+
+# Add legend with LaTeX formatting
+ax.legend(loc='upper left')
+
+# Add a textbox showing matrix A
+# Add a textbox showing matrix A
+matrix_text = r"$A = \begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$"
+ax.text(0.05, 0.35, matrix_text, transform=ax.transAxes,
+        fontsize=14, verticalalignment='top', bbox=dict(boxstyle="round,pad=0.3", facecolor="lightyellow", edgecolor="gray"))
+
+plt.show()
+
+```
+
+## Determinants
+
+The **determinant** of a square matrix $A\in\mathbb{C}^{m\times m}$, denoted $\det(A)$, is a scalar value that encodes important properties of the matrix.
+
+### $1\times 1$ matrix
+
+Let $A=\begin{bmatrix}a\end{bmatrix}$, then
+
+$$
+\det(A) = a.
+$$
+
+---
+
+### $2\times 2$ matrix
+
+Let $A=\begin{bmatrix}a & b \\ c & d \end{bmatrix}$, then
+
+$$
+\det(A) = ad-bc.
+$$
+
+---
+
+Let $A=\begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$. Compute $\det(A)$.
+
+---
+
+### $m\times m$ matrix
+
+Let $A\in\mathbb{R}^{m\times m}$, then
+
+$$
+\det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
+$$
+
+where $M_{ij} is the $m-1\times m-1$ *minor* formed by deleting row $i$ and column $j$ from $A$.
+
+---
+
+Let 
+
+$$
+A = \begin{bmatrix}
+1 & 2 & 3 \\
+0 & 4 & 5 \\
+1 & 0 & 6
+\end{bmatrix}.
+$$
+
+Let's compute $\det(A)$.
+
+::: {.notes}
+$$
+\begin{aligned}
+\det(A) &= 1 \cdot \begin{vmatrix} 4 & 5 \\ 0 & 6 \end{vmatrix}
+- 2 \cdot \begin{vmatrix} 0 & 5 \\ 1 & 6 \end{vmatrix}
++ 3 \cdot \begin{vmatrix} 0 & 4 \\ 1 & 0 \end{vmatrix} \\
+&= 1 \cdot (4 \cdot 6 - 0 \cdot 5)
+- 2 \cdot (0 \cdot 6 - 1 \cdot 5)
++ 3 \cdot (0 \cdot 0 - 1 \cdot 4) \\
+&= 1 \cdot 24 - 2 \cdot (-5) + 3 \cdot (-4) \\
+&= 24 + 10 - 12 = \boxed{22}
+\end{aligned}
+$$
+:::
+
+---
+
+###  Properties
+- $\det(A) = 0$ if and only if $A$ is singular (not invertible)
+- $\det(AB) = \det(A)\det(B)$ for any $A,B$
+- $\det(A^*) = \bar{\det(A)}$
+- $\det(cA)= c^{n}\det(A)$ for constant $c$.
+- $\det(I) = 1$ for the identity matrix $I$
+
+What is $\det(A^{-1})$?
+
+## Computing Eigenvalues and Eigenvectors
+
+Let's review the steps to compute an $2\times 2$ eigenvalue.
+
+1. Compute the *characteristic polynomial* $\det(A-\lambda I)=0$.
+1. Solve for the eigenvalues $\lambda$.
+1. For each eigenvalue, compute the eigenvector as the solution of $(A-\lambda I)v = 0$.
+
+---
+
+**Example**
+Let $A = \begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$.
 
 
 
@@ -117,6 +266,25 @@ x_{1}& \cdots & x_{m} \\
 \end{bmatrix}.
 $$
 
+---
+
+For $A\begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$, we have 
+
+$$
+A = X \Lambda X^{-1} =
+\begin{bmatrix}
+1 & 1 \\
+2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+2 & 0 \\
+0 & 3
+\end{bmatrix}
+\begin{bmatrix}
+-1 & 1 \\
+2 & -1
+\end{bmatrix}.
+$$
 
 ## Geometric Multiplicity
 
@@ -137,7 +305,7 @@ This number is the *geometric multiplicity* of the eigenvalue
 The *characteristic polynomial* of $A\in\mathbb{C}^{m\times m}$, denotes $p_{A}$ is the degree $m$ polynomial defined by
 
 $$
-p_{A}(z) = \operatorname{det}(zI-A).
+p_{A}(z) = \det(zI-A).
 $$
 
 The characteristic polynomial $p_{A}(z)$ is a monic polynomial, meaning the coefficient of the degree $m$ term is 1.
@@ -147,6 +315,16 @@ The characteristic polynomial $p_{A}(z)$ is a monic polynomial, meaning the coef
 **Theorem**
 
 $\lambda$ is an eigenvalue of $A$ if and only if $p_{A}(\lambda)=0$.
+
+## Two Theorems
+
+**Fundamental Theorem of Algebra**
+
+A polynomial of degree $m$ has $m$ roots.
+
+**Complex Conjugate Root Theorem**
+
+If a complex number $z$ is a root of a polynomial with real coefficients, then $\bar{z}$ is also a root.
 
 
 ## Algebraic Multiplicity
@@ -165,7 +343,7 @@ The *algebraic multiplicity* of an eigenvalue $\lambda$ of $A$ is its multiplici
 
 **Theorem**
 
-If $A\in\mathbb{C}^{m\times m}$, then $A$ has $m$ eigenvalues, counted with algebraic multiplicity. In particular, if the roots of $p_{A}$ are simple, then $A$ has $m$ distinct eigenvalues.
+If $A\in\mathbb{C}^{m\times m}$, then $A$ has $m$ eigenvalues, counted with algebraic multiplicity. In particular, if the roots of $p_{A}$ are *simple* (multiplicity 1), then $A$ has $m$ distinct eigenvalues.
 
 
 ## Similarity Transformations
@@ -190,17 +368,24 @@ $$
 
 If $X$ is nonsingular, then $A$ and $X^{-1}AX$ have the same characteristic polynomial, eigenvalues, and algebraic and geometric multiplicity.
 
-
-
 ---
 
 **Theorem**
 
-The algebraic multiplicity of an eigenvalue $\lambda$ is at least as great as it's geometric multiplicity.
+The algebraic multiplicity of an eigenvalue $\lambda$ is at least as great as it's geometric multiplicity. 
+
+::: {.notes}
+algebraic multiplicity $\geq$ geometric multiplicity
+:::
+
 
 ## Defective Eigenvalues and Matrices
 
-An eigenvalue whose algebraic multiplicity exceeds its geometric multiplicity is a *defective eigenvalue*. A matrix that at least one defective eigenvalue is a *defective matrix*.
+An eigenvalue whose algebraic multiplicity exceeds its geometric multiplicity is a *defective eigenvalue*. A matrix that has at least one defective eigenvalue is a *defective matrix*.
+
+::: {.notes}
+Nondefective means full set of linearly independent eigenvectors. Defective means that there is not a complete basis of eigenvectors (doesn't span $\mathbb{R}^{m}$). 
+:::
 
 What kind of matrix is nondefective?
 
@@ -212,12 +397,20 @@ A diagonal matrix.
 We will see that the class of nondefective matrices is exactly the class of matrices that have an eigenvalue decomposition.
 ::::
 
+---
+
+**Example**
+The matrix $A=\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$ is defective.
+
+::: {.notes}
+Eigenvalue of $1$ with algebraic multiplicity 2, geometric multiplicity of 1. 
+:::
 
 ## Diagonalizability
 
 **Theorem**
 
-An $m\times m$ matrix $A$ is nondefective  if and only if it has an eigenvalue decomposition $A=X\Lambda X^{-1}$.
+An $m\times m$ matrix $A$ is nondefective if and only if it has an eigenvalue decomposition $A=X\Lambda X^{-1}$.
 
 Another term for nondefective is *diagonalizable*.
 
@@ -236,19 +429,19 @@ $$
 The determinant is
 
 $$
-\operatorname{det}(A) = \sum_{j=1}^{n}(-1)^{i+j}a_{ij}M_{ij},
+\det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
 $$
 
-where $M_{ij}=\operatorname{det}(A_{ij})$ and $A_{ij}$ is an $n-1\times n-1$ matrix obtained by removing the $i$th row and the $j$th column.
+where $M_{ij}$ is the $m-1\times m-1$ minor formed by deleting row $i$ and column $j$ from $A$.
 
 ---
 
 **Theorem**
 
-The determinant $\operatorname{det}(A)$ and $\operatorname{tr}(A)$ are equal to the product and the sum of the eigenvalues of $A$, respectively, counted with algebra multiplicity:
+The determinant $\det(A)$ and $\operatorname{tr}(A)$ are equal to the product and the sum of the eigenvalues of $A$, respectively, counted with algebra multiplicity:
 
 $$
-\operatorname{det}(A)=\prod_{j=1}^{m}\lambda_{j}, \quad \operatorname{tr}(A) = \sum_{j=1}^{m} \lambda_{j}.
+\det(A)=\prod_{j=1}^{m}\lambda_{j}, \quad \operatorname{tr}(A) = \sum_{j=1}^{m} \lambda_{j}.
 $$
 
 ## Unitary Diagonalization
@@ -256,13 +449,13 @@ $$
 A matrix is *unitarily diagonalizable* if there exists a decomposition
 
 $$
-A = Q\Lambda Q^{T},
+A = Q\Lambda Q^{*},
 $$
 
 where $Q$ is a unitary (orthogonal) matrix.
 
 
-This means that the matrix $A\in\mathbb{C}^{m\times m}$ as $m$ linearly independent eigenvectors, but these can be chosen to be orthogonal. 
+This means that the matrix $A\in\mathbb{C}^{m\times m}$ has $m$ linearly independent eigenvectors, but these can be chosen to be orthogonal. 
 
 ---
 
@@ -276,10 +469,9 @@ A symmetric matrix is unitarily diagonalizable and its eigenvalues are real.
 
 **Theorem**
 
-A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{T} = A^{T}A = I$.
+A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{T} = A^{T}A$.
 
 ## PageRank
-
 
 - Developed by Larry Page and Sergey Brin at Stanford (1996)
 - Algorithm used by Google Search to rank web pages
@@ -334,7 +526,7 @@ $$
 \small
 \begin{align}
 x_{1} &= x_{3} + \frac{1}{2}x_{4}, \\
-x_{2} &= \frac{1}{3}x_{1},\\\
+x_{2} &= \frac{1}{3}x_{1},\\
 x_{3} &= \frac{1}{3}x_{1} + \frac{1}{2}x_{2} + \frac{1}{2}x_{4},\\
 x_{4} &= \frac{1}{3}x_{1} + \frac{1}{2}x_{2}.
 \end{align}
@@ -346,11 +538,11 @@ The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the 
 ---
 
 - To ensure no dangling nodes a damping factor is added to ensure $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{n}$
-- The matrix $\tilde{G}$ is **column stochastic** 
+- The matrix $\tilde{G}$ is **column stochastic**. 
 - The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
-    - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1
-    - The eigenvector has all positive entries
-- The power method, i.e., $G^{k}z\rightarrow x$ as $k\rightarrow\infty$ can be used to approximate the PageRank
+    - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1.
+    - The eigenvector has all positive entries.
+- The power method, i.e., $G^{k}z\rightarrow x$ as $k\rightarrow\infty$ can be used to approximate the PageRank.
 
 
 ## Summary
