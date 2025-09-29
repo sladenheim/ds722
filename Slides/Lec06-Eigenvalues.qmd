@@ -157,7 +157,7 @@ $$
 \det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
 $$
 
-where $M_{ij} is the $m-1\times m-1$ *minor* formed by deleting row $i$ and column $j$ from $A$.
+where $M_{ij}$ is the $m-1\times m-1$ *minor* formed by deleting row $i$ and column $j$ from $A$.
 
 ---
 
@@ -175,7 +175,7 @@ Let's compute $\det(A)$.
 
 ::: {.notes}
 $$
-\begin{aligned}
+\begin{align*}
 \det(A) &= 1 \cdot \begin{vmatrix} 4 & 5 \\ 0 & 6 \end{vmatrix}
 - 2 \cdot \begin{vmatrix} 0 & 5 \\ 1 & 6 \end{vmatrix}
 + 3 \cdot \begin{vmatrix} 0 & 4 \\ 1 & 0 \end{vmatrix} \\
@@ -183,8 +183,8 @@ $$
 - 2 \cdot (0 \cdot 6 - 1 \cdot 5)
 + 3 \cdot (0 \cdot 0 - 1 \cdot 4) \\
 &= 1 \cdot 24 - 2 \cdot (-5) + 3 \cdot (-4) \\
-&= 24 + 10 - 12 = \boxed{22}
-\end{aligned}
+&= 24 + 10 - 12 = 22
+\end{align*}
 $$
 :::
 
@@ -213,6 +213,9 @@ Let's review the steps to compute an $2\times 2$ eigenvalue.
 Let $A = \begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$.
 
 
+---
+
+**Example continued**
 
 ## Eigenvalue Decomposition
 
@@ -537,7 +540,7 @@ The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the 
 
 ---
 
-- To ensure no dangling nodes a damping factor is added to ensure $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{n}$
+- To ensure no dangling nodes a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{n}$ and $0<d <1$.
 - The matrix $\tilde{G}$ is **column stochastic**. 
 - The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
     - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1.
