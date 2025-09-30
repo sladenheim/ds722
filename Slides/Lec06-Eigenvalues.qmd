@@ -193,8 +193,8 @@ $$
 ###  Properties
 - $\det(A) = 0$ if and only if $A$ is singular (not invertible)
 - $\det(AB) = \det(A)\det(B)$ for any $A,B$
-- $\det(A^*) = \bar{\det(A)}$
-- $\det(cA)= c^{n}\det(A)$ for constant $c$.
+- $\det(A^*) = \overline{\det(A)}$
+- $\det(cA)= c^{m}\det(A)$ for constant $c$.
 - $\det(I) = 1$ for the identity matrix $I$
 
 What is $\det(A^{-1})$?
@@ -271,7 +271,7 @@ $$
 
 ---
 
-For $A\begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$, we have 
+For $A=\begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$, we have 
 
 $$
 A = X \Lambda X^{-1} =
@@ -540,7 +540,7 @@ The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the 
 
 ---
 
-- To ensure no dangling nodes a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{n}$ and $0<d <1$.
+- To ensure no dangling nodes a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{m}$ and $0<d <1$.
 - The matrix $\tilde{G}$ is **column stochastic**. 
 - The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
     - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1.
