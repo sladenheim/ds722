@@ -7,7 +7,7 @@ jupyter: python3
 
 The Singular Value Decomposition (SVD) is a matrix factorization whose computation is a step in many algorithms.
 
-The SVD underpins
+The SVD is used in
 
 - Principal Component Analysis (PCA)
 - Latent Semantic Analysis (LSA)
@@ -24,7 +24,7 @@ To understand:
 
 ## A Geometric Observation
 
-The SVD is motivate by the geometric fact:
+The SVD is motivated by the geometric fact:
 
 > The image of the unit sphere under any $m\times n$ matrix is a hyperellipse.
 
@@ -40,6 +40,7 @@ The vectors $\{\sigma_{i}u_{i}\}$ are the principal semiaxes of the hyperellipse
 #| fig-align: center
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 
 np.random.seed(1234)
 # Generate a random 2x2 matrix
@@ -65,23 +66,33 @@ left_singular_vectors = U @ np.diag(S)
 # Plotting
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
+right_handle = mlines.Line2D([], [], color='blue', label='Right Singular Vectors')
+left_handle = mlines.Line2D([], [], color='red', label='Left Singular Vectors')
+
 # Plot unit circle and right singular vectors
 axes[0].plot(circle[0], circle[1], color='blue')
 for i in range(2):
     axes[0].arrow(0, 0, right_singular_vectors[0, i], right_singular_vectors[1, i],
-                  color='blue', width=0.01, head_width=0.05, label='Right Singular Vectors' if i == 0 else "")
+                  color='blue', width=0.01, head_width=0.05)
+    axes[0].text(right_singular_vectors[0, i]*1.1, right_singular_vectors[1, i]*1.1,
+                 f'$v_{i+1}$', color='blue', fontsize=12)
 axes[0].axis('equal')
 axes[0].grid(True)
-axes[0].legend()
-
+axes[0].legend(handles=[right_handle])
 # Plot transformed circle and left singular vectors
 axes[1].plot(transformed_circle[0], transformed_circle[1])
 for i in range(2):
-    axes[1].arrow(0, 0, left_singular_vectors[0, i], left_singular_vectors[1, i],
-                  color='red', width=0.01, head_width=0.05, label='Left Singular Vectors' if i == 0 else "")
+    axes[1].arrow(0, 0, -left_singular_vectors[0, i], -left_singular_vectors[1, i],
+                  color='red', width=0.01, head_width=0.05)
+    axes[1].text(-left_singular_vectors[0, i]*1.08, -left_singular_vectors[1, i]*1.08,
+                 f'$u_{i+1}$', color='red', fontsize=12)
+
 axes[1].axis('equal')
 axes[1].grid(True)
-axes[1].legend()
+axes[1].legend(handles=[left_handle])
+
+axes[0].set_title("Unit Circle with Right Singular Vectors (V)")
+axes[1].set_title("Transformed Circle with Left Singular Vectors (UΣ)")
 
 plt.tight_layout()
 plt.show()
@@ -154,7 +165,7 @@ $$
 A = U\Sigma V^{*},
 $$
 
-where $U\in\mathbb{C}^{m \times m}$ is unitary and $\Sigma\in\mathbb{C}^{m\times n}$.
+where $U\in\mathbb{C}^{m \times m}$ is unitary, $V\in\mathbb{C}^{n\times n}$ is unitary, and $\Sigma\in\mathbb{C}^{m\times n}$.
 
 The matrix $U$ is created by adjoining $\hat{U}$ with $m-n$ orthonormal columns.
 
@@ -179,7 +190,7 @@ where
 
 **Theorem**
 
-Every matrix $A\in\mathbb{C}^{m\times n}$ has a singular value decomposition $A=U\Sigma V^{*}$. Furthermore, the singular values $\{\sigma_{j}\}$ are uniquely determined, and , if $A$ is square and the $\sigma_{j}$ are distinct, the left and right singular vectors $\{u_{j}\}$ and $\{v_{j}\}$ are uniquely determined up to complex signs.
+Every matrix $A\in\mathbb{C}^{m\times n}$ has a singular value decomposition $A=U\Sigma V^{*}$. Furthermore, the singular values $\{\sigma_{j}\}$ are uniquely determined, and if $A$ is square and the $\sigma_{j}$ are distinct, the left and right singular vectors $\{u_{j}\}$ and $\{v_{j}\}$ are uniquely determined up to complex signs.
 
 ## A Change of Bases
 
@@ -231,11 +242,19 @@ We introduce several theorems to illustrate these connections. In each theorem w
 
 The rank of $A$ is $r$, the number of nonzero singular values.
 
+::: {.notes}
+The rank of a diagonal matrix is equal to the number of its nonzero entries, and in the decomposition $A=U\Sigma V^{*}$, $U$ and $V$ are of full rank. Therefore $\operatorname{rank}(A)=\operatorname{rank}(\Sigma) = r$.
+:::
+
 ---
 
 **Theorem**
 
 The $\operatorname{range}(A) = \langle u_{1},\ldots, u_{r}\rangle$ and $\operatorname{null}(A)=\langle v_{r+1},\ldots, v_{n}\rangle$.
+
+::: {.notes}
+This follows from the fact that $\operatorname{range}(\Sigma) = \langle e_{1},\ldots, e_{r}\rangle\subseteq\mathbb{C}^{m}$ and $\operatorname{null}(\Sigma)=\langle e_{r+1},\ldots, e_{n}\rangle\subseteq\mathbb{C}^{n}$.
+:::
 
 ---
 
@@ -243,16 +262,171 @@ The $\operatorname{range}(A) = \langle u_{1},\ldots, u_{r}\rangle$ and $\operato
 
 $\Vert A\Vert_{2} = \sigma_{1}$ and $\Vert A \Vert_{F} = \sqrt{\sigma_{1}^{2}+\sigma_{2}^{2}+\cdots + \sigma_{r}^{2}}$.
 
+::: {.notes}
+$\Vert A\Vert_{2} = \Vert \Sigma \Vert_{2} = \max{\vert \sigma_{j}\vert} = \sigma_{1}$
+
+$\Vert A\Vert_{F} = \Vert \Sigma\Vert_{F}$ which gives the result.
+:::
+
 ---
 
 **Theorem**
 
 The nonzero singular values of $A$ are the square roots of the nonzero eigenvalues of $A^{*}A$ or $AA^{*}$.
 
+::: {.notes}
+$$
+A^{*}A = (U\Sigma V^{*})^{*}(U\Sigma V^{*}) = V\Sigma^{*}U^{*}U\Sigma V^{*} = V\Sigma^{*}\Sigma V^{*}
+$$
+shows that $A^{*}A$ is similar to $\Sigma^{*}\Sigma$, so it has the same $n$ eigenvalues. The eigenvalues of $\Sigma^{*}\Sigma$ are $\sigma_{1}^{2},\ldots, \sigma_{p}^{2}$ with $n-p$ additional zero eigenvalues if $n>p$. The same can be shown for $AA^{*}$.
+:::
+
+## Computing the SVD
+
+The **Singular Value Decomposition (SVD)** of a $2 \times 2$ matrix $A$ factors it as:
+
+$$
+A = U \Sigma V^{*}.
+$$
+
+The procedure to compute the SVD by hand for these small-scale matrices is given below.
+
+---
+
+### 1. Compute $A^{\top} A$
+
+$$
+A^{\top} A = \begin{bmatrix} a & c \\ b & d \end{bmatrix} \begin{bmatrix} a & b \\ c & d \end{bmatrix} = \begin{bmatrix} a^2 + c^2 & ab + cd \\ ab + cd & b^2 + d^2 \end{bmatrix}.
+$$
+
+This matrix is symmetric and positive semi-definite.
+
+---
+
+### 2. Find Eigenvalues of $A^{\top} A$
+
+These are the squares of the singular values:
+
+- Solve the characteristic polynomial: $\det(A^{\top} A - \lambda I) = 0$.
+- Let the eigenvalues be $\lambda_1, \lambda_2$, then: $\sigma_1 = \sqrt{\lambda_1}, \quad \sigma_2 = \sqrt{\lambda_2}\quad$
+  (assume $\sigma_1 \geq \sigma_2 \geq 0$).
+
+--- 
+
+### 3. Compute Right Singular Vectors (Columns of $V$)
+
+- For each eigenvalue $\lambda_i$, solve: $(A^{\top} A - \lambda_i I)v_i = 0$.
+- Normalize each eigenvector $v_i$ to get orthonormal columns of $V$.
+
+---
+
+### 4. Compute Left Singular Vectors (Columns of $U$)
+
+- Use: $u_i = \frac{1}{\sigma_i} A v_i$.
+- Normalize each $u_i$ to ensure orthonormality.
+
+--- 
+
+### 5. Construct $\Sigma$
+Using $\sigma_{1}$ and $\sigma_{2}$ compute:
+$$
+\Sigma = \begin{bmatrix} \sigma_1 & 0 \\ 0 & \sigma_2 \end{bmatrix}.
+$$
+
+---
+
+Let $A = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$.
+
+**Step 1**
+
+::: {.notes}
+$$
+A^\top A = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}^\top \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} = \begin{bmatrix} 2 & 2 \\ 2 & 2 \end{bmatrix}
+$$
+:::
+
+---
+
+**Step 2**
+
+::: {.notes}
+$$
+Solve the characteristic equation:  
+$$
+\det(A^\top A - \lambda I) = \det\left( \begin{bmatrix} 2-\lambda & 2 \\ 2 & 2-\lambda \end{bmatrix} \right) = (2-\lambda)^2 - 4 = \lambda^2 - 4\lambda
+$$
+
+Eigenvalues:  
+$$
+\lambda_1 = 4, \quad \lambda_2 = 0
+$$
+\sigma_1 = \sqrt{4} = 2, \quad \sigma_2 = \sqrt{0} = 0
+$$
+:::
+
+
+---
+
+**Step 3**
+
+::: {.notes}
+Eigenvectors of $A^\top A$:  
+- For $\lambda = 4$:  
+  $$
+  v_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+  $$
+- For $\lambda = 0$:  
+  $$
+  v_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix}
+  $$
+
+So,  
+$$
+V = \begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \end{bmatrix}
+$$
+:::
+
+---
+
+**Step 4**
+
+::: {.notes}
+$$
+u_1 = \frac{1}{\sigma_1} A v_1 = \frac{1}{2} \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} \cdot \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+$$
+
+Choose $u_2$ orthogonal to $u_1$:  
+$$
+u_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix}
+$$
+
+So,  
+$$
+U = \begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \end{bmatrix}
+$$
+:::
+
+---
+
+**Step 5**
+
+::: {.notes}
+$$
+\Sigma = \begin{bmatrix} 2 & 0 \\ 0 & 0 \end{bmatrix}
+$$
+
+$$
+A = U \Sigma V^\top = \begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \end{bmatrix}
+\begin{bmatrix} 2 & 0 \\ 0 & 0 \end{bmatrix}
+\begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \end{bmatrix}^\top
+$$
+:::
+
+
 
 ## Low Rank Approximations
 
-The SVD can also be viewed as sum of rank-one matrices.
+The SVD can also be viewed as a sum of rank-one matrices.
 
 **Theorem**
 
@@ -338,16 +512,16 @@ plt.show()
 
 ## Principal Component Analysis
 
-PCA is a statistical techniques used to reduce the dimensionality of your data while preserving as much information as possible.
+PCA is a statistical technique used to reduce the dimensionality of your data while preserving as much information as possible.
 
 Given a mean-centered and standardized matrix of data $A\in\mathbb{R}^{m\times n}$ with $m$ samples and $n$ features the steps of PCA are
 
-1. Form the correlation matrix $S=A^{T}A$
-1. Compute the eigenvectors (principal components) and eigenvalues (explained variance) $S=V\Lambda V^{T}$
+1. Form the correlation matrix $S=A^{\top}A$
+1. Compute the eigenvectors (principal components) and eigenvalues (explained variance) $S=V\Lambda V^{\top}$
 
 ---
 
-Why is the eigendecomposition of this form with $V$ and $V^{T}$?
+Why is the eigendecomposition of this form with $V$ and $V^{\top}$?
 
 
 :::: {.fragment}
@@ -360,19 +534,21 @@ How is this related to the SVD?
 
 ---
 
-Let $A=U\Sigma V^{T}$, then recall that
+Let $A=U\Sigma V^{\top}$, then recall that
 
 $$
-A^{T}A = (U\Sigma V^{T})^{T}U\Sigma V^{T} = V\Sigma U^TU \Sigma V^{T} = V\Sigma^{2}V^T.
+A^{\top}A = (U\Sigma V^{\top})^{\top}U\Sigma V^{\top} = V\Sigma^{\top} U^{\top}U \Sigma V^{\top} = V\Sigma^{2}V^{\top}.
 $$
 
 The eigenvalues $\lambda_{i}$ equal the squares of the singular values $\sigma_{i}^{2}$.
+
+The vectors $\{v_{i}\}$ can be used to compute the principal component directions $Av_{i}=\sigma_{i}u_{i}$.
 
 In practice, PCA is done by computing the SVD of your data matrix because it is more numerically stable.
 
 ## MNIST Digits
 
-Let's consider another example using the MNIST dataset.
+Let's consider an example using the MNIST dataset.
 
 ```{python}
 #| fig-align: center
@@ -414,7 +590,7 @@ fig, axs = plt.subplots(2, 1, figsize=(6, 5))
 # Scree plot (graph of eigenvalues corresponding to PC number)
 # This shows the explained variance ratio
 axs[0].plot(np.arange(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_, marker='o', linestyle='--')
-axs[0].set_title('Scree Plot')
+axs[0].set_title('Explained Variance Plot')
 axs[0].set_xlabel('Principal Component')
 axs[0].set_ylabel('Explained Variance Ratio')
 axs[0].grid(True)
