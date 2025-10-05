@@ -5,7 +5,7 @@ jupyter: python3
 
 ## Lecture Overview
 
-Calculus is the branch of mathematics  focused on the study of continuous change.
+Calculus is the branch of mathematics focused on the study of continuous change.
 
 The core concepts of calculus are limits, derivatives, and integrals.
 
@@ -51,9 +51,9 @@ $$
 \vert f(x) - L\vert < \varepsilon,
 $$
 
-provided $\vert x-c\vert < \delta$.
+for all $x$ such that $\vert x-c\vert < \delta$.
 
-## One-Sided Limts
+## One-Sided Limits
 
 We can be more specific and have the left-sided limit
 
@@ -72,6 +72,18 @@ When these values are equal we have
 $$
 \lim_{x\rightarrow c^-{}} f(x)= \lim_{x\rightarrow c^{+}} f(x) = \lim_{x\rightarrow c} f(x) = L.
 $$
+
+## Continuous Functions
+
+A function $f(x)$ is **continuous** at a point $c$ if
+
+$$
+\lim_{x \to c} f(x) = f(c).
+$$
+
+This means that as $x$ approaches $c$, the value of $f(x)$ approaches $f(c)$, with no jumps, breaks, or holes.
+
+More generally, $f(x)$ is **continuous** on an interval if it is continuous at every point in that interval.
 
 ## Examples
 
@@ -99,37 +111,29 @@ $$
 
 ---
 
+Calculate
+
 $$
 \lim_{x\rightarrow \infty} \frac{1}{x}
-$$
-
----
-
-$$
-\lim_{x\rightarrow 0} \frac{\sin{(x)}}{x} 
-$$
-
----
-
-$$
-\lim_{x\rightarrow 0} \frac{\cos{(x)}-1}{x} 
 $$
 
 
 ## Limit Laws
 
-The following laws assume that $\lim_{x \to a} f(x)$ and $\lim_{x \to a} g(x)$ exist.
+The following laws assume that $\lim_{x \to c} f(x)$ and $\lim_{x \to c} g(x)$ exist.
 
-1. $\lim_{x \to a} [f(x) + g(x)] = \lim_{x \to a} f(x) + \lim_{x \to a} g(x)$
-1. $\lim_{x \to a} [f(x) - g(x)] = \lim_{x \to a} f(x) - \lim_{x \to a} g(x)$
-1. $\lim_{x \to a} [c \cdot f(x)] = c \cdot \lim_{x \to a} f(x)$
-1. $\lim_{x \to a} [f(x) \cdot g(x)] = \lim_{x \to a} f(x) \cdot \lim_{x \to a} g(x)$
-1. $\lim_{x \to a} \left[\frac{f(x)}{g(x)}\right] = \frac{\lim_{x \to a} f(x)}{\lim_{x \to a} g(x)}$ *provided* $\lim_{x \to a} g(x) \ne 0$
+1. $\lim_{x \to c} [f(x) + g(x)] = \lim_{x \to c} f(x) + \lim_{x \to c} g(x)$
+1. $\lim_{x \to c} [f(x) - g(x)] = \lim_{x \to c} f(x) - \lim_{x \to c} g(x)$
+1. $\lim_{x \to c} [c \cdot f(x)] = c \cdot \lim_{x \to c} f(x)$
+1. $\lim_{x \to c} [f(x) \cdot g(x)] = \lim_{x \to c} f(x) \cdot \lim_{x \to c} g(x)$
+1. $\lim_{x \to c} \left[\frac{f(x)}{g(x)}\right] = \frac{\lim_{x \to c} f(x)}{\lim_{x \to c} g(x)}$ *provided* $\lim_{x \to c} g(x) \ne 0$
 
 ## Composite Limit Law
 
-If $\lim_{x \to a} g(x) = L$ and $f$ is continuous at $L$ (i.e., $\lim_{x \to L} f(x) = f(L)$), then  
-$$\lim_{x \to a} f(g(x)) = f\left(\lim_{x \to a} g(x)\right) = f(L)$$
+If $\lim_{x \to c} g(x) = L$ and $f$ is continuous at $L$, i.e., $\lim_{x \to L} f(x) = f(L)$, then  
+$$
+\lim_{x \to c} f(g(x)) = f\left(\lim_{x \to c} g(x)\right) = f(L).
+$$
 
 
 These laws help simplify the evaluation of limits and are foundational for understanding continuity and derivatives.
@@ -138,8 +142,9 @@ These laws help simplify the evaluation of limits and are foundational for under
 
 1. $\lim_{x\rightarrow 0}\frac{\sin(x)}{x} = 1$
 1. $\lim_{x\rightarrow 0} \frac{\ln(x+1)}{x} = 1$
-1. $\lim{x\rightarrow 0} (1+x)^{1/x} = e$
-1. $\lim{x\rightarrow\infty} \left(1+\frac{1}{x}\right)^{x} = e$
+1. $\lim_{x\rightarrow 0} (1+x)^{1/x} = e$
+1. $\lim_{x\rightarrow\infty} \left(1+\frac{1}{x}\right)^{x} = e$
+1. $\lim_{h\rightarrow 0}\frac{e^{h}-1}{h} = 1$
 
 ## What is a Sequence?
 
@@ -159,10 +164,10 @@ Each term may be defined by a rule or formula, such as:
 We often write sequences as:
 
 $$
-\{a_n\}_{n=0}^{\infty}
+\{a_n\}_{n=0}^{\infty}.
 $$
 
-Sequences are the building blocks of **series**, which are sums of sequence terms
+Sequences are the building blocks of **series**, which are sums of sequence terms.
 
 
 ## Series
@@ -189,7 +194,7 @@ $$
 
 Examples:
 
-- $a = 1, r = \frac{1}{2}$: $1 + \frac{1}{2} + \frac{1}{4} + \dots$
+- $a = 1, r = \frac{1}{2}$, then $\sum_{i=0}^{\infty}\left(\frac{1}{2}\right)^{i} = 1 + \frac{1}{2} + \frac{1}{4} + \dots$
 
 
 ## Convergence Criteria
@@ -197,13 +202,13 @@ Examples:
 A geometric series converges **if and only if**:
 
 $$
-\vert r\vert < 1
+\vert r\vert < 1.
 $$
 
 Then the sum is:
 
 $$
-\sum_{i=0}^{\infty} ar^i = \frac{a}{1 - r}
+\sum_{i=0}^{\infty} ar^i = \frac{a}{1 - r}.
 $$
 
 ## Divergence
@@ -214,7 +219,6 @@ Examples:
 
 - $r = \frac{1}{2}$: converges
 - $r = 2$: diverges
-- $r = 1$: 
 
 ::: {.notes}
 Harmonic series, the sequence of naturally occurring overtones that make up a single musical pitch!
@@ -261,6 +265,55 @@ f^{\prime}(x) = \frac{d}{dx}f(x) = \frac{df}{dx}.
 $$
 
 
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the function and its derivative
+def f(x):
+  return x**2
+
+def df(x):
+  return 2*x
+
+# Point to illustrate derivative
+x0 = 1.5
+h = 0.5
+
+# Compute slope using definition
+slope_secant = (f(x0 + h) - f(x0)) / h
+slope_tangent = df(x0)
+
+# Plot function
+x = np.linspace(0, 3, 100)
+y = f(x)
+
+plt.figure(figsize=(8, 5))
+plt.plot(x, y, label='$f(x) = x^2$')
+
+# Secant line
+x_secant = np.array([x0, x0 + h])
+y_secant = f(x_secant)
+plt.plot(x_secant, y_secant, 'ro-', label=r'$(f(x_{0}+h)-f(x_{0}))/h$')
+
+# Tangent line at x0
+tangent_line = slope_tangent * (x - x0) + f(x0)
+plt.plot(x, tangent_line, 'g--', label=r'$f^{\prime}(x_{0})$')
+
+plt.scatter([x0], [f(x0)], color='black', zorder=5)
+plt.text(x0, f(x0)+0.5, f'$x_0={x0}$', ha='center')
+
+plt.xlabel('$x$')
+plt.ylabel('$f(x)$')
+plt.legend()
+plt.title('Derivative as Slope: Secant and Tangent Lines')
+plt.grid(True)
+plt.show()
+```
+
 ## Polynomial
 
 The differentiation rules for polynomials are
@@ -285,9 +338,15 @@ If $f(x) = \sqrt{x}$ what is $f^{\prime}(x)$?
 
 :::: {.fragment}
 $$
-\sqrt{x} = x^{\frac{1}{2}} = \frac{1}{2}x^{-\frac{1}{2}} = \frac{1}{2\sqrt{x}}.
+f^{\prime}(x)= \frac{1}{2\sqrt{x}}.
 $$
 ::::
+
+::: {.notes}
+$$
+\frac{d}{dx}\sqrt{x} = \frac{d}{dx}x^{\frac{1}{2}} = \frac{1}{2}x^{-\frac{1}{2}}=  \frac{1}{2\sqrt{x}}
+$$
+:::
 
 ---
 
@@ -346,11 +405,46 @@ $$
 Let's prove the derivative for $\sin$. By definition we have to compute
 
 $$
-\lim_{h\rightarrow \infty} \frac{\sin{(x+h)}-\sin{(x)}}{h}.
+\lim_{h\rightarrow 0} \frac{\sin{(x+h)}-\sin{(x)}}{h}.
 $$
 
+::: {.notes}
+Recall the angle addition formula for sine:
+$$
+\sin(x+h) = \sin(x)\cos(h) + \cos(x)\sin(h)
+$$
 
----
+So,
+$$
+\frac{\sin(x+h) - \sin(x)}{h} = \frac{\sin(x)\cos(h) + \cos(x)\sin(h) - \sin(x)}{h}
+$$
+
+Group terms:
+$$
+= \frac{\sin(x)(\cos(h) - 1) + \cos(x)\sin(h)}{h}
+$$
+
+Take the limit as $h \to 0$:
+$$
+\lim_{h \to 0} \frac{\sin(x)(\cos(h) - 1)}{h} + \lim_{h \to 0} \frac{\cos(x)\sin(h)}{h}
+$$
+
+We know:
+- $\lim_{h \to 0} \frac{\sin(h)}{h} = 1$
+- $\lim_{h \to 0} \frac{\cos(h) - 1}{h} = 0$
+
+Therefore,
+$$
+f'(x) = \sin(x) \cdot 0 + \cos(x) \cdot 1 = \cos(x)
+$$
+
+So,
+$$
+\frac{d}{dx}\sin(x) = \cos(x)
+$$
+:::
+
+--- 
 
 How could we derive these for other trigonometric functions like 
 
@@ -427,18 +521,18 @@ $$
 We can define second- and higher-order derivatives using our definitions. The following is a second derivative:
 
 $$
-f^{\prime\prime}(x) = \frac{d}{dx^{2}} f(x) = \lim_{h\rightarrow 0} \frac{f^{\prime}(x+h)-f^{\prime}(x)}{h}.
+f^{\prime\prime}(x) = \frac{d^{2}}{dx^{2}} f(x) = \lim_{h\rightarrow 0} \frac{f^{\prime}(x+h)-f^{\prime}(x)}{h}.
 $$
 
 For higher-order derivatives we have
 
 $$
-f^{(n)}(x) = \frac{d}{dx^{n}}f(x).
+f^{(n)}(x) = \frac{d^{n}}{dx^{n}}f(x).
 $$
 
 ## Partial Derivatives
 
-We can extend the concept of a derivative to for functions of 2 or more variables. Consider a real-valued function $f(x,y)$.
+We can extend the concept of a derivative to functions of 2 or more variables. Consider a real-valued function $f(x,y)$.
 
 The partial derivative of $f$ with respect to $x$ is
 
@@ -447,7 +541,7 @@ $$
 \frac{\partial}{\partial x}f(x,y) = f_{x}(x, y) = \lim_{h\rightarrow 0} \frac{f(x+h, y) - f(x,y)}{h}.
 $$
 
-Similarly, The partial derivative of $f$ with respect to $y$ is
+Similarly, the partial derivative of $f$ with respect to $y$ is
 
 $$
 \small
@@ -469,7 +563,7 @@ Higher-order partial derivatives are defined similarly. For example, the second 
 
 $$
 \small
-\frac{\partial}{\partial x^{2}}f(x,y) = f_{xx}(x, y) = \lim_{h\rightarrow 0} \frac{f_{x}(x+h, y) - f_{x}(x,y)}{h}.
+\frac{\partial^{2}}{\partial x^{2}}f(x,y) = f_{xx}(x, y) = \lim_{h\rightarrow 0} \frac{f_{x}(x+h, y) - f_{x}(x,y)}{h}.
 $$
 
 ## Gradients
@@ -505,11 +599,11 @@ $$
 
 ## Taylor's Theorem
 
-Let $k$ be an integer and let the function $f(:\mathbb{R}\rightarrow \mathbb{R})$ be $k$ times differentiable at the point $c\in\mathbb{R}$. Then there exists a function $h_{k}:\mathbb{R}\rightarrow \mathbb{R}$ such that
+Let $k$ be an integer and let the function $f:\mathbb{R}\rightarrow \mathbb{R}$ be $k$ times differentiable at the point $c\in\mathbb{R}$. Then there exists a function $h_{k}:\mathbb{R}\rightarrow \mathbb{R}$ such that
 
 $$
 \small
-f(x) = \sum_{n=0}^{k} \frac{f^{(n)}(c)(x-c)^{n}}{n!} + h_{k}(x)(x-a)^{k},
+f(x) = \sum_{n=0}^{k} \frac{f^{(n)}(c)(x-c)^{n}}{n!} + h_{k}(x)(x-c)^{k+1},
 $$
 and
 
