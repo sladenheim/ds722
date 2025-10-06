@@ -20,6 +20,44 @@ Review:
 - Automatic Differentiation
 - Multivariate Taylor's theorem
 
+## Increasing/Decreasing Test
+
+The derivative $f^{\prime}(x)$ gives us information about the function $f(x)$.
+
+1. The function $f(x)$ is increasing when $f^{\prime}(x)>0$.
+1. The function $f(x)$ is decreasing when $f^{\prime}(x)<0$.
+
+A critical point is a value $x_{0}$ where $f^{\prime}(x_{0})=0$.
+
+## First Derivative Test
+
+The first derivative test gives us a way to  determine whether a critical point is a local maximum, minimum, or neither.
+
+If $f^{\prime}(x_0) = 0$ and $f'(x)$ changes sign at $x_0$:
+
+- If $f^{\prime}(x)$ changes from positive to negative at $x_0$, then $f(x_0)$ is a local maximum.
+- If $f'(x)$ changes from negative to positive at $x_0$, then $f(x_0)$ is a local minimum.
+- If $f'(x)$ does not change sign at $x_0$, then $f(x_0)$ is not a local extremum.
+
+This test is useful for analyzing the behavior of functions near their critical points.
+
+## Convexity/Concavity Test
+
+The convexity or concavity of a function can be determined using the second derivative.
+
+- If $f^{\prime\prime}(x) > 0$ for all $x$ in an interval, then $f(x)$ is **convex** (curves upwards) on that interval.
+- If $f^{\prime\prime}(x) < 0$ for all $x$ in an interval, then $f(x)$ is **concave** (curves downwards) on that interval.
+
+
+## Second Derivative Test
+
+The second derivative test helps determine the nature of a critical point $x_0$ for a function $f(x)$:
+
+- If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) > 0$, then $f(x_0)$ is a **local minimum**.
+- If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) < 0$, then $f(x_0)$ is a **local maximum**.
+- If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) = 0$, the test is **inconclusive**.
+
+
 ## Gradient
 
 Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the gradient is a vector consisting of all partial derivatives of $f$:
@@ -42,12 +80,29 @@ $$
 \small
 \nabla^{2} f(\mathbf{x}) = 
 \begin{bmatrix}
-\frac{\partial}{\partial x_{1}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{1}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{1}\partial x_{n}}f(\mathbf{x}) \\
-\frac{\partial}{\partial x_{2}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{2}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{2}\partial x_{n}}f(\mathbf{x})\\
+\frac{\partial^{2}}{\partial x_{1}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{1}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{1}\partial x_{n}}f(\mathbf{x}) \\
+\frac{\partial^{2}}{\partial x_{2}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{2}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{2}\partial x_{n}}f(\mathbf{x})\\
 \vdots & \vdots & \ddots & \vdots \\ 
-\frac{\partial}{\partial x_{n}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial}{\partial x_{n}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial}{\partial x_{n}\partial x_{n}}f(\mathbf{x})\\
+\frac{\partial^{2}}{\partial x_{n}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{n}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{n}\partial x_{n}}f(\mathbf{x})\\
 \end{bmatrix}.
 $$
+
+## Multivariable Derivative Tests
+
+For multivariate functions, convexity is determined by the Hessian matrix:
+
+- If the Hessian $\nabla^2 f(\mathbf{x})$ is **positive semi-definite** for all $\mathbf{x}$, then $f$ is convex.
+- If the Hessian is **negative semi-definite**, then $f$ is concave.
+
+Convex functions are important in optimization because any local minimum is also a global minimum.
+
+---
+
+For multivariate functions, use the Hessian matrix:
+
+- If the Hessian at $\mathbf{x}_0$ is **positive definite**, $f(\mathbf{x}_0)$ is a local minimum.
+- If the Hessian is **negative definite**, $f(\mathbf{x}_0)$ is a local maximum.
+- If the Hessian is **indefinite**, $\mathbf{x}_0$ is a saddle point.
 
 
 ## Vector-Valued Functions
@@ -132,7 +187,7 @@ The matrix $\tilde{A}$ can then be *unflattened* into a matrix of size $m\times 
 
 ---
 
-Let $A\in\mathbb{R}^{m\times n}$ and $B\in\mathbb{R}^{p\times q}$. How can we compute the derivative of $A$ with respect to $B$?
+Let $A\in\mathbb{R}^{m\times n}$ and $B\in\mathbb{R}^{p\times q}$. How can we compute the derivative $\frac{\partial A}{\partial B}$?
 
 The result of this operation is a $4$-dimensional tensor
 
@@ -157,7 +212,7 @@ $$
 
 ---
 
-Let $R\in\mathbb{R}\in\mathbb{R}^{m\times n}$ and $K=R^{T}R\in\mathbb{R}^{n\times n}$. What is $\frac{dK}{dR}$?
+Let $R\in\mathbb{R}^{m\times n}$ and $K=R^{T}R\in\mathbb{R}^{n\times n}$. What is $\frac{dK}{dR}$?
 
 ## Useful Identities for Computing Gradients
 
@@ -210,7 +265,7 @@ c &= a+b \\
 d &= \sqrt{c} \\
 e &= \cos{(c)} \\
 f &= d+e \\ 
-\end{align}
+\end{align}Rev
 $$
 :::
 ::: {.column width="70%"}
@@ -268,8 +323,9 @@ Let $f:\mathbb{R}^{n} \rightarrow \mathbb{R}$ be $k$-times differentiable functi
 
 $$
 \scriptsize
-f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{T}(\mathbf{x}-\mathbf{c}) + (\mathbf{x}-\mathbf{c})^{T}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
+f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{T}(\mathbf{x}-\mathbf{c}) + \frac{1}{2}(\mathbf{x}-\mathbf{c})^{T}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
 $$
+
 
 ## Summary
 
