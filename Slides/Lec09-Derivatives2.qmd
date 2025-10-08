@@ -29,9 +29,47 @@ The derivative $f^{\prime}(x)$ gives us information about the function $f(x)$.
 
 A critical point is a value $x_{0}$ where $f^{\prime}(x_{0})=0$.
 
+---
+
+**Example:** $f(x)=x^{2}-1$
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the function and its derivative
+def f(x):
+    return x**2 - 1
+
+def df(x):
+    return 2*x
+
+x = np.linspace(-3, 3, 400)
+y = f(x)
+dy = df(x)
+
+# Find where derivative is positive (increasing) and negative (decreasing)
+increasing = dy > 0
+decreasing = dy < 0
+
+plt.figure(figsize=(8, 5))
+plt.plot(x, y, label='$f(x) = x^2 - 1$')
+plt.fill_between(x, y, where=increasing, color='green', alpha=0.3, label='Increasing')
+plt.fill_between(x, y, where=decreasing, color='red', alpha=0.3, label='Decreasing')
+plt.axhline(0, color='gray', lw=0.5)
+plt.axvline(0, color='gray', lw=0.5)
+plt.legend()
+plt.title('Increasing and Decreasing Regions of $f(x) = x^2 - 1$')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.show()
+
+```
+
 ## First Derivative Test
 
-The first derivative test gives us a way to  determine whether a critical point is a local maximum, minimum, or neither.
+The first derivative test gives us a way to determine whether a critical point is a local maximum, minimum, or neither.
 
 If $f^{\prime}(x_0) = 0$ and $f'(x)$ changes sign at $x_0$:
 
@@ -41,12 +79,27 @@ If $f^{\prime}(x_0) = 0$ and $f'(x)$ changes sign at $x_0$:
 
 This test is useful for analyzing the behavior of functions near their critical points.
 
+---
+
+**Example:** $f(x)=x^{2}-1$
+
+- What is the critical point $x_{0}$?
+- What is the sign change as we pass from negative to positive $x$ values through $x_{0}$?
+
+
 ## Convexity/Concavity Test
 
 The convexity or concavity of a function can be determined using the second derivative.
 
 - If $f^{\prime\prime}(x) > 0$ for all $x$ in an interval, then $f(x)$ is **convex** (curves upwards) on that interval.
 - If $f^{\prime\prime}(x) < 0$ for all $x$ in an interval, then $f(x)$ is **concave** (curves downwards) on that interval.
+
+---
+
+**Example:** $f(x)=x^{2}-1$
+
+- What is $f^{\prime\prime}(x)$? 
+- On what intervals is this positive or negative?
 
 
 ## Second Derivative Test
@@ -56,6 +109,21 @@ The second derivative test helps determine the nature of a critical point $x_0$ 
 - If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) > 0$, then $f(x_0)$ is a **local minimum**.
 - If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) < 0$, then $f(x_0)$ is a **local maximum**.
 - If $f^{\prime}(x_0) = 0$ and $f^{\prime\prime}(x_0) = 0$, the test is **inconclusive**.
+
+---
+
+**Example:** $f(x)=x^{2}-1$
+
+- Using the second derivative test, what can we say about the minimum?
+
+
+---
+
+**Example:** $f(x)=x^{3}$
+
+- What is $f^{\prime}(x)$?
+- What is the critical point $x_{0}$?
+- What is $f^{\prime\prime}(x_{0})$?
 
 
 ## Gradient
@@ -72,6 +140,27 @@ $$
 \end{bmatrix}.
 $$
 
+---
+
+**Example** $f(x_{1},x_{2})= \sin(x_{1})\cos(x_{2})$
+
+Calculate $\nabla f(x_{1},x_{2})$:
+
+::: {.notes}
+$$
+\begin{align*}
+f(x_{1}, x_{2}) &= \sin(x_{1})\cos(x_{2}) \\
+\frac{\partial f}{\partial x_{1}} &= \cos(x_{1})\cos(x_{2}) \\
+\frac{\partial f}{\partial x_{2}} &= -\sin(x_{1})\sin(x_{2}) \\
+\nabla f(x_{1}, x_{2}) &= 
+\begin{bmatrix}
+\cos(x_{1})\cos(x_{2}) \\
+-\sin(x_{1})\sin(x_{2})
+\end{bmatrix}
+\end{align*}
+$$
+:::
+
 ## Hessian
 
 Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the *Hessian* is the symmetric matrix:
@@ -86,6 +175,31 @@ $$
 \frac{\partial^{2}}{\partial x_{n}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{n}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{n}\partial x_{n}}f(\mathbf{x})\\
 \end{bmatrix}.
 $$
+
+---
+
+**Example:** $f(x_{1},x_{2})=x_{1}^{3} + x_{1}^{2}x_{2} - x_{1}x_{2}^{2} + x_{2}^{3}$.
+
+Calculate $\nabla^{2} f(x_{1},x_{2})$:
+
+::: {.notes}
+$$
+\begin{align*}
+f(x_{1}, x_{2}) &= x_{1}^{3} + x_{1}^{2}x_{2} - x_{1}x_{2}^{2} + x_{2}^{3} \\[1em]
+\frac{\partial f}{\partial x_{1}} &= 3x_{1}^{2} + 2x_{1}x_{2} - x_{2}^{2} \\[0.5em]
+\frac{\partial f}{\partial x_{2}} &= x_{1}^{2} - 2x_{1}x_{2} + 3x_{2}^{2} \\[1em]
+\frac{\partial^{2} f}{\partial x_{1}^{2}} &= 6x_{1} + 2x_{2} \\[0.5em]
+\frac{\partial^{2} f}{\partial x_{1}\partial x_{2}} &= 2x_{1} - 2x_{2} \\[0.5em]
+\frac{\partial^{2} f}{\partial x_{2}^{2}} &= -2x_{1} + 6x_{2} \\[1em]
+\text{Hessian:}\quad
+\nabla^{2} f(x_{1}, x_{2}) &=
+\begin{bmatrix}
+6x_{1} + 2x_{2} & 2x_{1} - 2x_{2} \\
+2x_{1} - 2x_{2} & -2x_{1} + 6x_{2}
+\end{bmatrix}
+\end{align*}
+$$
+:::
 
 ## Multivariable Derivative Tests
 
@@ -140,6 +254,47 @@ $$
 
 This matrix is called the *Jacobian* and describes the rate of change of each output variable w.r.t. each input variable.
 
+---
+
+**Example:** $\mathbf{f}(x_{1},x_{2}) = \begin{bmatrix} \sin(x_{1}x_{2}) \\ 4x_{1}^{2}e^{x_{1}x_{2}} \end{bmatrix}$
+
+::: {.notes}
+$$
+\begin{align*}
+\mathbf{f}(x_{1},x_{2}) &= 
+\begin{bmatrix}
+\sin(x_{1}x_{2}) \\
+4x_{1}^{2}e^{x_{1}x_{2}}
+\end{bmatrix} \\[1em]
+J = \nabla \mathbf{f}(x_{1},x_{2}) &=
+\begin{bmatrix}
+\frac{\partial}{\partial x_{1}}\sin(x_{1}x_{2}) & \frac{\partial}{\partial x_{2}}\sin(x_{1}x_{2}) \\[0.5em]
+\frac{\partial}{\partial x_{1}}4x_{1}^{2}e^{x_{1}x_{2}} & \frac{\partial}{\partial x_{2}}4x_{1}^{2}e^{x_{1}x_{2}}
+\end{bmatrix} \\[1em]
+&=
+\begin{bmatrix}
+x_{2}\cos(x_{1}x_{2}) & x_{1}\cos(x_{1}x_{2}) \\[0.5em]
+8x_{1}e^{x_{1}x_{2}} + 4x_{1}^{2}x_{2}e^{x_{1}x_{2}} & 4x_{1}^{3}e^{x_{1}x_{2}}
+\end{bmatrix}
+\end{align*}
+$$
+:::
+
+## Gradient of $A\mathbf{x}$
+
+Let $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$, where $A\in\mathbb{R}^{m\times n}$ and $\mathbf{x}\in\mathbb{R}^{n}$. What is $\frac{d\mathbf{f}}{d\mathbf{x}}$?
+
+## Jacobian Dimensions
+
+Observe that
+
+:::: {.incremental}
+- Jacobian of a scalar-valued function $f(\mathbf{x})$ where $x\in\mathbb{R}^{n}$ is a vector $\nabla f(\mathbf{x})\in\mathbb{R}^{n}$.
+- Jacobian of a vector-valued function $\mathbf{f}(\mathbf{x})$ where $x\in\mathbb{R}^{n}$ and $\mathbf{f}\in\mathbb{R}^{m}$ is a matrix $J\in\mathbb{R}^{m\times n}$.
+- What is the Jacobian of a matrix-valued function?
+::::
+
+
 ## Tensors
 
 Tensors are a generalization of vectors and matrices to multidimensional arrays.
@@ -159,7 +314,6 @@ An example of a 3rd order tensor is an RGB image which is an array
 $$
 \mathcal{A}\in\mathbb{R}^{m\times n \times 3}.
 $$
-
 
 ## Gradients of Matrices
 
@@ -183,7 +337,7 @@ $$
 \tilde{B} = \tilde{T}\tilde{A}.
 $$
 
-The matrix $\tilde{A}$ can then be *unflattened* into a matrix of size $m\times n$.
+The matrix $\tilde{B}$ can be *unflattened* into a matrix of size $p\times q$.
 
 ---
 
@@ -192,10 +346,10 @@ Let $A\in\mathbb{R}^{m\times n}$ and $B\in\mathbb{R}^{p\times q}$. How can we co
 The result of this operation is a $4$-dimensional tensor
 
 $$
-J_{ijkl} = \frac{\partial A_{ij}}{\partial B_{kl}}.
+J_{ijkl} = \frac{\partial A_{ij}}{\partial B_{kl}}\in\mathbb{R}^{m\times n \times p \times q}.
 $$
 
----
+## Gradient of Vector w.r.t. Matrix
 
 Let's compute $\frac{d\mathbf{f}}{dA}\in\mathbb{R}^{m\times m\times n}$ when $\mathbf{f}=A\mathbf{x}\in\mathbb{R}^{m}$, where $A\in\mathbb{R}^{m\times n}$, and $\mathbf{x}\in\mathbb{R}^{n}$. 
 
@@ -212,18 +366,59 @@ $$
 
 ---
 
-Let $R\in\mathbb{R}^{m\times n}$ and $K=R^{T}R\in\mathbb{R}^{n\times n}$. What is $\frac{dK}{dR}$?
+Compute $\frac{df_{i}}{dA_{ij}}$:
+
+::: {.notes}
+$$
+\begin{align*}
+\mathbf{f} &= A\mathbf{x} \\
+f_{k} &= \sum_{l=1}^{n} A_{kl} x_{l} \\
+\frac{\partial f_{k}}{\partial A_{ij}} &= \frac{\partial}{\partial A_{ij}} \left( \sum_{l=1}^{n} A_{kl} x_{l} \right) \\
+&= \sum_{l=1}^{n} \frac{\partial A_{kl}}{\partial A_{ij}} x_{l} \\
+&= \sum_{l=1}^{n} \delta_{ki}\delta_{lj} x_{l} \\
+&= \delta_{ki} x_{j}
+\end{align*}
+$$
+:::
+
+
+---
+
+Compute $\frac{df_{i}}{dA_{kj}}$:
+
+
+## Gradient of a Matrix w.r.t. a Matrix
+
+Let $R\in\mathbb{R}^{m\times n}$ and $K=R^{\top}R\in\mathbb{R}^{n\times n}$. What is $\frac{dK}{dR}$?
+
+
+:::: {.fragment}
+Compute $\frac{dK_{pq}}{dR_{ij}}$
+::::
+
+
+---
+
+**Continued**
+
+
 
 ## Useful Identities for Computing Gradients
 
 $$
 \begin{align}
-\frac{\partial \mathbf{x}^{T}\mathbf{a}}{\partial \mathbf{x}} &= \mathbf{a}^{T} \\
-\frac{\partial \mathbf{a}^{T}\mathbf{x}}{\partial \mathbf{x}} &= \mathbf{a}^{T} \\
-\frac{\partial \mathbf{a}^{T}X\mathbf{b}}{\partial \mathbf{X}} &= \mathbf{a}\mathbf{b}^{T} \\
-\frac{\partial \mathbf{x}^{T}A\mathbf{x}}{\partial \mathbf{x}} &= \mathbf{x}^{T}(A + A^{T}) \\
+\frac{\partial A\mathbf{x}}{\partial \mathbf{x}} &= A, \quad
+\frac{\partial \mathbf{x}^{\top}A}{\partial \mathbf{x}} = A^{\top}, \\
+\frac{\partial \mathbf{x}^{\top}\mathbf{a}}{\partial \mathbf{x}} &= \mathbf{a}^{\top}, \quad
+\frac{\partial \mathbf{a}^{\top}\mathbf{x}}{\partial \mathbf{x}} = \mathbf{a}^{\top}, \\
+\frac{\partial \mathbf{a}^{\top}X\mathbf{b}}{\partial X} &= \mathbf{a}\mathbf{b}^{\top}, \quad
+\frac{\partial \mathbf{x}^{\top}A\mathbf{x}}{\partial \mathbf{x}} = \mathbf{x}^{\top}(A + A^{\top}). \\
 \end{align}
 $$
+
+::: {.notes}
+Numerator layout.
+:::
 
 ## Automatic Differentiation
 
@@ -231,11 +426,20 @@ Automatic differentiation is a set of techniques to numerically evaluate the der
 
 It is an efficient and accurate way to compute gradients by repeated use of the chain rule.
 
-
 Recall that if we have a function $h(x) = f(g(x))$ then
 
 $$
 \frac{dh}{dx} = \frac{df}{dg}\frac{dg}{dx}.
+$$
+
+---
+
+### Additive Rule
+
+If $h(x) = u(f(x)) + v(g(x))$, then
+
+$$
+\frac{dh}{dx} = \frac{du}{df}\frac{df}{dx} + \frac{dv}{dg}\frac{dg}{dx}.
 $$
 
 ---
@@ -246,7 +450,13 @@ $$
 f(x) = \sqrt{x^{2} + e^{x^{2}}} + \cos{(x^{2} + e^{x^{2}})}.
 $$
 
-We'll use automatic differentiation to compute this efficiently.
+The derivative is
+
+$$
+f^{\prime}(x) = 2x \left(\frac{1}{2\sqrt{x^{2}+e^{x^{2}}}} - \sin\left(x^{2} + e^{x^{2}}\right) \right) (1 + e^{x^{2}}).
+$$
+
+We'll use automatic differentiation to compute the derivative efficiently.
 
 ---
 
@@ -265,7 +475,7 @@ c &= a+b \\
 d &= \sqrt{c} \\
 e &= \cos{(c)} \\
 f &= d+e \\ 
-\end{align}Rev
+\end{align}
 $$
 :::
 ::: {.column width="70%"}
@@ -281,9 +491,14 @@ $$
 
 The output of the neural network is
 
-$$
+<!-- $$
 \scriptsize
 z^{[2]} = g^{[2]}(W^{[2]}\mathbf{a}^{[1]} + \mathbf{b}^{[2]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}\mathbf{x} + \mathbf{b}^{[1]}) + b^{[2]}).
+$$ -->
+
+$$
+\scriptsize
+z^{[2]} = g^{[2]}(W^{[2]}\mathbf{z}^{[1]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}\mathbf{x})).
 $$
 
 How do we compute the derivative of $z^{[2]}$ with respect to $\mathbf{x}$?
@@ -295,8 +510,8 @@ $$
 \small
 \begin{align}
 h^{[1]} &= W^{[1]}\mathbf{x} \\
-z^{[1]} &= g^{[1]}(h^{[1]})\\
-h^{[2]} &= W^{[2]}z^{[1]} \\
+\mathbf{z}^{[1]} &= g^{[1]}(h^{[1]})\\
+h^{[2]} &= W^{[2]}\mathbf{z}^{[1]} \\
 z^{[2]} &= g^{[2]}(h^{[2]})
 \end{align}
 $$
@@ -307,9 +522,9 @@ $$
 $$
 \scriptsize
 \begin{align}
-\frac{dz^{[1]}}{d\mathbf{x}} &= W^{[1]} \\
-\frac{dz^{[1]}}{dg^{[1]}} &= \frac{dg^{[1]}}{dh^{[1]}} \\
-\frac{dh^{[2]}}{dz^{[1]}} &= W^{[2]} \\
+\frac{dh^{[1]}}{d\mathbf{x}} &= W^{[1]} \\
+\frac{d\mathbf{z}^{[1]}}{dh^{[1]}} &= \frac{dg^{[1]}}{dh^{[1]}} \\
+\frac{dh^{[2]}}{d\mathbf{z}^{[1]}} &= W^{[2]} \\
 \frac{dz^{[2]}}{dh^{[2]}} &= \frac{dg^{[2]}}{dh^{[2]}} \\
 \end{align}
 $$
@@ -323,7 +538,7 @@ Let $f:\mathbb{R}^{n} \rightarrow \mathbb{R}$ be $k$-times differentiable functi
 
 $$
 \scriptsize
-f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{T}(\mathbf{x}-\mathbf{c}) + \frac{1}{2}(\mathbf{x}-\mathbf{c})^{T}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
+f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{\top}(\mathbf{x}-\mathbf{c}) + \frac{1}{2}(\mathbf{x}-\mathbf{c})^{\top}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
 $$
 
 
