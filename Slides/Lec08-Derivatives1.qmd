@@ -106,7 +106,7 @@ $$
 Calculate
 
 $$
-\lim_{x\rightarrow 0} \log{(x)}
+\lim_{x\rightarrow 0^{+}} \log{(x)}
 $$
 
 ---
@@ -370,7 +370,7 @@ $$
 In addition let $c$ be a constant, then
 
 $$
-(cf(x))^{\prime}(x) = cf^{\prime}(x).
+(cf(x))^{\prime} = cf^{\prime}(x).
 $$
 
 Therefore,
@@ -594,7 +594,7 @@ $$
 If we let $f(x)=e^{x}$ and $c=0$ we obtain the famous formula
 
 $$
-f(x) = \sum_{n=0}^{\infty}\frac{x^{n}}{n!}.
+e^{x}= \sum_{n=0}^{\infty}\frac{x^{n}}{n!}.
 $$
 
 ## Taylor's Theorem
