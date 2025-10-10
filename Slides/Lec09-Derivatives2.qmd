@@ -221,7 +221,7 @@ For multivariate functions, use the Hessian matrix:
 
 ## Vector-Valued Functions
 
-A vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a mapping from $n$-dimensional space to $m$-dimensional space
+A vector-valued function $\mathbf{f}: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a mapping from $n$-dimensional space to $m$-dimensional space
 
 $$
 \mathbf{f}(\mathbf{x}) = 
@@ -237,7 +237,7 @@ The rules for differentiation apply to each of the functions $f_{i}(\mathbf{x})$
 
 ## Gradient of Vector-Valued Functions
 
-The gradient of a vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a matrix
+The gradient of a vector-valued function $\mathbf{f}: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a matrix
 
 $$
 \small
@@ -289,8 +289,8 @@ Let $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$, where $A\in\mathbb{R}^{m\times n}$ a
 Observe that
 
 :::: {.incremental}
-- Jacobian of a scalar-valued function $f(\mathbf{x})$ where $x\in\mathbb{R}^{n}$ is a vector $\nabla f(\mathbf{x})\in\mathbb{R}^{n}$.
-- Jacobian of a vector-valued function $\mathbf{f}(\mathbf{x})$ where $x\in\mathbb{R}^{n}$ and $\mathbf{f}\in\mathbb{R}^{m}$ is a matrix $J\in\mathbb{R}^{m\times n}$.
+- Jacobian of a scalar-valued function $f(\mathbf{x})$ where $\mathbf{x}\in\mathbb{R}^{n}$ is a vector $\nabla f(\mathbf{x})\in\mathbb{R}^{n}$.
+- Jacobian of a vector-valued function $\mathbf{f}(\mathbf{x})$ where $\mathbf{x}\in\mathbb{R}^{n}$ and $\mathbf{f}\in\mathbb{R}^{m}$ is a matrix $J\in\mathbb{R}^{m\times n}$.
 - What is the Jacobian of a matrix-valued function?
 ::::
 
