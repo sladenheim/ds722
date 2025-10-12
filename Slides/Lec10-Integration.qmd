@@ -5,17 +5,19 @@ jupyter: python3
 
 ## Lecture Overview
 
+Integrals are an essential tool in the study of probability. 
+
 In introductory calculus courses, integrals are used to compute areas and volumes under curves.
 
 The fundamental theorem of calculus relates the integral to the derivative.
-
-Integrals are an essential tool in the study of probability. 
 
 ## Lecture Objectives
 
 Review:
 
-- 1-D and higher dimensional integrals
+- Integrals
+    - Single variable functions $f(x)$
+    - Multivariable functions $f(x,y)$ and $f(x,y,z)$
 - The substitution rule
 - Fundamental theorem of calculus
 
@@ -138,14 +140,14 @@ The function $f$ is called the integrand.
 ## Properties of Definite Integrals
 
 1. $\int_{a}^{b}cdx = c(b-a)$
-1. $\int_{a}^{b}f(x) + g(x) dx = \int_{a}^{b}f(x) dx + \int_{a}^{b} g(x) dx$
+1. $\int_{a}^{b}(f(x) + g(x)) dx = \int_{a}^{b}f(x) dx + \int_{a}^{b} g(x) dx$
 1. $\int_{a}^{b}cf(x)dx = c \int_{a}^{b}f(x)dx$
 1. $\int_{a}^{c}f(x)dx + \int_{c}^{b}f(x)dx = \int_{a}^{b}f(x)dx$
 
 ## Comparison Properties of the Integral
 
 1. If $f(x)\geq 0$ for $a\leq x\leq b$, then $\int_{a}^{b}f(x)dx \geq 0$
-1. If $g(x)\leq f(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}g(x)dx \geq \int_{a}^{b}f(x)dx$$
+1. If $g(x)\leq f(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}g(x)dx \leq \int_{a}^{b}f(x)dx$$
 1. If $m\leq f(x)\leq M$ for  $a\leq x\leq b$, then $$\small m(b-a)\leq \int_{a}^{b}f(x)dx \leq M(b-a)$$
 1. $\left\vert \int_{a}^{b} f(x) dx \right\vert \leq \int_{a}^{b}\vert f(x)\vert dx$
 
@@ -168,6 +170,15 @@ is continuous on $[a,b]$, differentiable on $(a, b)$ and $g^{\prime}(x)=f(x)$.
 
 Find the derivative of the function $g(x)=\int_{0}^{x}\sqrt{1+t^{2}}dt$.
 
+
+::: {.notes}
+By the FTC, the derivative of $g(x)$ is simply the integrand evaluated at $x$:
+
+$$
+g'(x) = \sqrt{1 + x^2}
+$$
+:::
+
 ---
 
 ### Part 2
@@ -186,13 +197,21 @@ where $F$ is any antiderivative of $f$, i.e., $F^{\prime} = f$.
 
 Evaluate the integral $\int_{1}^{3}e^{x}dx$.
 
+::: {.notes}
+The antiderivative of $e^{x}$ is $e^{x}$, so
+
+$$
+\int_{1}^{3}e^{x}dx = e^{x}\Big|_{1}^{3} = e^{3} - e^{1}.
+$$
+:::
+
 ---
 
 ### Summary
 
 Suppose $f$ is continuous on $[a, b]$, then
 
-1. If $g(x) = \int_{a}^{x}f(t)dt\quad a \leq x \leq b$, then $g^{\prime}(x)=f(x)$
+1. If $g(x) = \int_{a}^{x}f(t)dt,~ a \leq x \leq b$, then $g^{\prime}(x)=f(x)$
 1. $\int_{a}^{b}f(x)dx = F(b) - F(a)$, where $F^{\prime}=f$.
 
 ## Indefinite Integrals
@@ -208,21 +227,36 @@ where $F^{\prime}(x) = f(x)$.
 
 ## Some Important Indefinite Integrals
 
-1. $\int x^{n} dx = \frac{x^{n+1}}{n+1} + C$
+1. $\int x^{n} dx = \frac{x^{n+1}}{n+1} + C$ provided $n\neq-1$
 1. $\int \frac{1}{x}dx = \ln{\vert x\vert} + C$
 1. $\int e^{x}dx = e^{x} + C$
 1. $\int \sin{(x)}dx = -\cos{(x)} + C$
 1. $\int \tan{(x)}dx = \ln{(\vert \sec{(x)}\vert)} + C$
 1. $\int \sec^{2}{(x)}dx = \tan{(x)} + C$
-1. $\int \csc^{2}{(x)}dx = -\cot{(x)} + C$
 
-A nice reference for many integrals can be [here](https://www.math.purdue.edu/~egbertn/su2018/reference/stewart-reference).
+A nice reference for many integrals can be found [here](https://www.math.purdue.edu/~egbertn/su2018/reference/stewart-reference).
 
 ---
 
 **Example:**
 
 Evaluate $\int e^{3x} + \sin{(2\pi x)} + 3x^{2} dx$.
+
+::: {.notes}
+The integral can be split into three parts and evaluated term by term:
+
+1. $\int e^{3x} dx = \frac{1}{3}e^{3x} + C_1$
+2. $\int \sin{(2\pi x)} dx = -\frac{1}{2\pi}\cos{(2\pi x)} + C_2$
+3. $\int 3x^2 dx = x^3 + C_3$
+
+Combining these, the indefinite integral is:
+
+$$
+\int e^{3x} + \sin{(2\pi x)} + 3x^{2} dx = \frac{1}{3}e^{3x} - \frac{1}{2\pi}\cos{(2\pi x)} + x^3 + C
+$$
+
+where $C$ is the constant of integration.
+:::
 
 ## Improper Integrals
 
@@ -253,7 +287,8 @@ $$
 
 ## Substitution Rule
 
-If $u=g(x)$ is a differentiable function whose range is an interval $I$ and $f$ is continuous on $I$, then
+
+If $u = g(x)$ is differentiable and $f$ is continuous wherever $u = g(x)$, then
 
 $$
 \int f(g(x))g^{\prime}(x) dx = \int f(u)du.
@@ -262,16 +297,43 @@ $$
 **Example:**
 Find $\int x^{3}\cos{(x^{4}+2)}dx$.
 
+::: {.notes}
+Let $u = x^4 + 2$, so $du = 4x^3 dx$ or $x^3 dx = \frac{1}{4} du$.
+
+Substitute into the integral:
+
+$$
+\int x^3 \cos(x^4 + 2) dx = \int \cos(u) \cdot \frac{1}{4} du = \frac{1}{4} \int \cos(u) du = \frac{1}{4} \sin(u) + C
+$$
+
+Substitute back $u = x^4 + 2$:
+
+$$
+\int x^3 \cos(x^4 + 2) dx = \frac{1}{4} \sin(x^4 + 2) + C
+$$
+:::
+
 ## Odd and Even Functions
 
 A function is **even** if $f(-x)=f(x)$. A function is **odd** if $f(-x) = -f(x)$.
 
 What does this imply for the integrals?
 
+::: {.notes}
+**Examples:**
+
+- Even: $f(x) = x^2$ (since $(-x)^2 = x^2$)
+- Odd: $f(x) = x^3$ (since $(-x)^3 = -x^3$)
+
+**Implications for integrals:**
+
+- If $f$ is even, $\displaystyle \int_{-a}^{a} f(x) dx = 2 \int_{0}^{a} f(x) dx$
+- If $f$ is odd, $\displaystyle \int_{-a}^{a} f(x) dx = 0$
+:::
 
 ## Integration by Parts
 
-Recall the product rule of differentiation for functions $f(x) and g(x)$:
+Recall the product rule of differentiation for functions $f(x)$ and $g(x)$:
 
 $$
 (f(x)g(x))^{\prime} = f^{\prime}(x)g(x) + f(x)g^{\prime}(x).
@@ -288,10 +350,10 @@ $$
 Rearranging the previous formula we obtain
 
 $$
-\int f^{\prime}(x)g(x) dx = f(x)g(x) - \int f(x)g^{\prime}(x) dx.
+\int f(x)g^{\prime}(x)  dx = f(x)g(x) - \int f^{\prime}(x)g(x) dx.
 $$
 
-Letting $u=f(x)$ and $v=g(x)$ we obtain the **integration by parts* formula:
+Letting $u=f(x)$ and $v=g(x)$ we obtain the **integration by parts** formula:
 
 $$
 \int u dv = uv-\int vdu.
@@ -302,6 +364,16 @@ $$
 **Example:**
 
 Find $\int x \sin{(x)} dx$.
+
+::: {.notes}
+Let $u = x$ and $dv = \sin(x) dx$. Then $du = dx$ and $v = -\cos(x)$.
+
+By integration by parts:
+
+$$
+\int x \sin(x) dx = -x \cos(x) + \int \cos(x) dx = -x \cos(x) + \sin(x) + C
+$$
+:::
 
 ## Trigonometric Integrals
 
@@ -314,11 +386,58 @@ The idea is to use trigonometric identities to simplify this work for you.
 
 ---
 
-**Example 1**
+**Example 1:** $\int \cos^{3}{(x)} dx$
+
+::: {.notes}
+We can use the identity $\cos^3(x) = \cos(x)(1 - \sin^2(x)) = \cos(x) - \cos(x)\sin^2(x)$.
+
+Let’s split the integral:
+
+$$
+\int \cos^3(x) dx = \int \cos(x) dx - \int \cos(x)\sin^2(x) dx
+$$
+
+The first term is straightforward:
+
+$$
+\int \cos(x) dx = \sin(x)
+$$
+
+For the second term, let $u = \sin(x)$, so $du = \cos(x) dx$:
+
+$$
+\int \cos(x)\sin^2(x) dx = \int u^2 du = \frac{u^3}{3} = \frac{\sin^3(x)}{3}
+$$
+
+Putting it together:
+
+$$
+\int \cos^3(x) dx = \sin(x) - \frac{\sin^3(x)}{3} + C
+$$
+:::
 
 ---
 
-**Example 2**
+**Example 2:** $\int \sin^{2}{(x)}dx$
+
+::: {.notes}
+We use the identity $\sin^2(x) = \frac{1}{2}(1 - \cos(2x))$:
+
+$$
+\int \sin^2(x) dx = \int \frac{1}{2}(1 - \cos(2x)) dx = \frac{1}{2} \int dx - \frac{1}{2} \int \cos(2x) dx
+$$
+
+Integrate term by term:
+
+- $\int dx = x$
+- $\int \cos(2x) dx = \frac{1}{2} \sin(2x)$
+
+So,
+
+$$
+\int \sin^2(x) dx = \frac{1}{2}x - \frac{1}{4}\sin(2x) + C
+$$
+:::
 
 ## Trigonometric Substitution
 
@@ -336,19 +455,49 @@ $$
 
 ---
 
-### FIX THIS
-
-| Expression              | Substitution             | Range for θ             | Resulting Simplification               |
-|------------------------|--------------------------|--------------------------|----------------------------------------|
-| $$\small \sqrt{a^2 - x^2} $$ | $$\small x = a\sin\theta $$     | $$\small\left[-\frac{\pi}{2}, \frac{\pi}{2}\right] $$ | $$\small \sqrt{a^2 - x^2} = a\cos\theta $$   |
-| $$ \small\sqrt{a^2 + x^2} $$ | $$ \small x = a\tan\theta $$     | $$\small \left(-\frac{\pi}{2}, \frac{\pi}{2}\right) $$      | $$\small \sqrt{a^2 + x^2} = a\sec\theta $$   |
-| $$ \small\sqrt{x^2 - a^2} $$ | $$ \small x = a\sec\theta $$     | $$\small \left[0,\frac{\pi}{2}\right)~\text{or}~\small \left[\pi, \frac{3\pi}{2}\right) $$ | $$\small \sqrt{x^2 - a^2} = a\tan\theta $$   |
+| Expression                  | Substitution         | θ Range                        | Simplification           |
+|-----------------------------|----------------------|-------------------------------|--------------------------|
+| $\sqrt{a^2 - x^2}$          | $x = a\sin\theta$    | $[-\frac{\pi}{2}, \frac{\pi}{2}]$ | $\sqrt{a^2 - x^2} = a\cos\theta$ |
+| $\sqrt{a^2 + x^2}$          | $x = a\tan\theta$    | $(-\frac{\pi}{2}, \frac{\pi}{2})$ | $\sqrt{a^2 + x^2} = a\sec\theta$ |
+| $\sqrt{x^2 - a^2}$          | $x = a\sec\theta$    | $[0,\frac{\pi}{2})$ or $[\pi, \frac{3\pi}{2})$ | $\sqrt{x^2 - a^2} = a\tan\theta$ |
 
 ---
 
 **Example:**
 
 Evaluate $\int \frac{\sqrt{9-x^{2}}}{x^{2}}dx$.
+
+::: {.notes}
+Let $u = x$, and use the substitution $x = 3\sin\theta$, so $dx = 3\cos\theta d\theta$.
+
+Then $\sqrt{9 - x^2} = \sqrt{9 - 9\sin^2\theta} = 3\cos\theta$.
+
+Substitute into the integral:
+
+$$
+\int \frac{\sqrt{9-x^2}}{x^2} dx = \int \frac{3\cos\theta}{(3\sin\theta)^2} \cdot 3\cos\theta d\theta = \int \frac{3\cos\theta}{9\sin^2\theta} \cdot 3\cos\theta d\theta
+$$
+
+Simplify:
+
+$$
+= \int \frac{9\cos^2\theta}{9\sin^2\theta} d\theta = \int \frac{\cos^2\theta}{\sin^2\theta} d\theta = \int \cot^2\theta d\theta
+$$
+
+Recall $\cot^2\theta = \csc^2\theta - 1$, so:
+
+$$
+\int \cot^2\theta d\theta = \int (\csc^2\theta - 1) d\theta = -\cot\theta - \theta + C
+$$
+
+Back-substitute $x = 3\sin\theta \implies \sin\theta = x/3$, so $\theta = \arcsin(x/3)$ and $\cot\theta = \sqrt{9-x^2}/x$.
+
+Final answer:
+
+$$
+\int \frac{\sqrt{9-x^2}}{x^2} dx = -\frac{\sqrt{9-x^2}}{x} - \arcsin\left(\frac{x}{3}\right) + C
+$$
+:::
 
 
 ## Strategy for Integration
@@ -357,14 +506,14 @@ Here are some tips for solving integrals:
 
 1. Simplify the integrand if possible
 1. Look for an obvious substitution
-1. Classify the integrand according to its form
+1. Classify the integrand by its form
 1. Try again
 
 ## Double Integrals
 
 Let $f(x, y)$ be a continuous function defined on the rectangle $R = [a, b]\times [c, d]$. 
 
-Divide the rectangle into $m\times n$ sub-rectangles of area $\Delta A = \Delta x \Delta y$, where $\Delta x = (b-a)/n$ and $\Delta y = (c-d)/m$. 
+Divide the rectangle into $m\times n$ sub-rectangles of area $\Delta A = \Delta x \Delta y$, where $\Delta x = (b-a)/n$ and $\Delta y = (d-c)/m$. 
 
 Let $x_{i} = a+ i\Delta x$ for $i=0,\ldots, n$ and $y_{j}= c+ j\Delta y$ for $j=0,\ldots,m$.
 
@@ -384,15 +533,39 @@ where $(x_{ij}^{*}, y_{ij}^{*})$ is a sample point in $R_{ij}$.
 
 **Example:**
 
-Evaluate $\int \int e^{x + y} dx dy$.
+Evaluate $\int \int \sin(x)\cos(y) dx dy$.
 
+::: {.notes}
+We can evaluate the double integral $\int \int \sin(x)\cos(y) dx dy$ by integrating term by term.
+
+Assuming the limits are $x \in [a, b]$ and $y \in [c, d]$:
+
+
+1. Integrate with respect to $x$:
+    $$
+    \int \sin(x)\cos(y) dx = -\cos(x)\cos(y) + C
+    $$
+    (since $\cos(y)$ is constant with respect to $x$)
+
+2. Integrate with respect to $y$:
+    $$
+    \int -\cos(x)\cos(y) + Cdy = -\cos(x)\sin(y) + Cy + D
+    $$
+
+So, the indefinite double integral is:
+$$
+\int \int \sin(x)\cos(y) dx dy = -\cos(x)\sin(y) + Cy + D
+$$
+
+If you have specific limits, plug them in to evaluate the definite integral.
+:::
 
 ## Triple Integrals
 
 Triple and higher dimensional integrals are defined similarly. For a continuous function $f(x,y,z)$, the triple integral is denoted
 
 $$
-\int \int \int f(x,y,z,)dxdydz.
+\int \int \int f(x,y,z)dxdydz.
 $$
 
 
@@ -400,7 +573,7 @@ $$
 
 Integration plays an important role in probability. 
 
-We later introduce the notion of a **continuous random variable**  $X$ and its corresponding **probability density function** $f(x)$.
+We later introduce the notion of a **continuous random variable** $X$ and its corresponding **probability density function** $f(x)$.
 
 Determining the probability that a random variable falls within an interval is given by,
 
@@ -408,7 +581,31 @@ $$
 \mathbb{P}(a\leq X \leq b) = \int_{a}^{b}f(x)dx.
 $$
 
+
 Expectation and variance are also defined via integration.
+
+## Expectation
+
+The expectation of a continuous random variable with pdf $f(x)$ is given by
+
+$$
+\mathbb{E}(X) = \int_{-\infty}^{\infty} x f(x) dx,
+$$
+where $f(x)$ is the probability density function of $X$.
+
+## Variance 
+
+The variance of a continuous random variable $X$ with pdf $f(x)$ is given by:
+$$
+\mathbb{V}(X) = \int_{-\infty}^{\infty} (x - \mathbb{E}(X)^2 f(x) dx.
+$$
+
+An alternative formula is
+$$
+\mathbb{V}(X) = \mathbb{E}(X^2) - (\mathbb{E}(X))^2,
+$$
+where
+$\mathbb{E}(X^2) = \int_{-\infty}^{\infty} x^2 f(x) dx$.
 
 ## Summary
 
