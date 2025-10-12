@@ -5,7 +5,7 @@ jupyter: python3
 
 ## Lecture Overview
 
-There is a wide use of optimization in science, engineering, economics, industry. As a data scientist it is essential to develop an understanding of optimization algorithms.
+Optimization is widely used in science, engineering, economics, and industry. As a data scientist it is essential to develop an understanding of optimization algorithms.
 
 Examples of optimization in data science:
 
@@ -53,7 +53,7 @@ $$
 \small
 \min_{x} \sum_{i=1}^{m}r_{i}^{2}(x) = \Vert y - Ax\Vert^{2},
 $$
-where $\small A = \begin{bmatrix} \vert & \vert \\ 1 & t_{i} \\ \vert & \vert \\ \end{bmatrix}$ and $x = \begin{bmatrix}x_{1} \\ x_{2}\end{bmatrix}$. 
+where $\small A = \begin{bmatrix} 1 & t_1 \\ 1 & t_2 \\ \vdots & \vdots \\ 1 & t_m \end{bmatrix}$ and $x = \begin{bmatrix}x_{1} \\ x_{2}\end{bmatrix}$.
 
 ## Constrained Optimization
 
@@ -155,7 +155,7 @@ The strategy of how to move from one iterate to the next distinguishes one algor
 Most strategies use:
 
 - values of the objective function
-- the constrain function
+- the constraint function
 - possibly first and/or second derivative information
 - information from previous iterations
 
@@ -252,7 +252,7 @@ plt.show()
 
 ## Convexity
 
-The concept of convexity is a fundamental in optimization. 
+The concept of convexity is fundamental in optimization. 
 
 In a convex optimization problem, any local minimum is also a global minimum.
 
@@ -267,6 +267,61 @@ A set $S\subset \mathbb{R}^{n}$ is convex if for any two points $x,y\in S$ then 
 
 This means that the straight line segment connecting any 2 points in the set lies entirely inside the set.
 
+
+## Example: Convex Set
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create points for the unit circle
+theta = np.linspace(0, 2*np.pi, 400)
+x = np.cos(theta)
+y = np.sin(theta)
+
+# Plot the unit circle
+plt.figure(figsize=(6,6))
+plt.plot(x, y, label='Unit Circle')
+
+# Fill the interior to show convexity
+plt.fill(x, y, color='lightblue', alpha=0.5, label='Convex Set')
+
+# Pick two points inside the circle
+A = np.array([0.5, 0.5])
+B = np.array([-0.7, 0.6])
+plt.plot([A[0], B[0]], [A[1], B[1]], 'ro', label='Points A & B')
+
+# Draw the line segment between A and B
+plt.plot([A[0], B[0]], [A[1], B[1]], 'r-', linewidth=2, label='Line Segment AB')
+
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.title('Unit Circle as a Convex Set')
+plt.axis('equal')
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+
+---
+
+Let $S = \{x \in \mathbb{R}^2 : \Vert x \Vert_2 \leq 1\}$ denote the unit circle (including its interior).
+
+**Proof**
+
+::: {.notes}
+To show $S$ is convex, take any $x, y \in S$ and any $\alpha \in [0, 1]$. Consider $z = \alpha x + (1-\alpha) y$.
+
+By the triangle inequality for the Euclidean norm:
+$$
+\Vert z\Vert_2 = \Vert\alpha x + (1-\alpha) y\Vert_2 \leq \alpha \Vert x\Vert_2 + (1-\alpha) \Vert y\Vert_2 \leq \alpha \cdot 1 + (1-\alpha) \cdot 1 = 1
+$$
+
+Thus, $z \in S$. Therefore, the unit circle is convex.
+:::
+
+
 ---
 
 The function $f$ is a convex function if its domain $S$ is a convex set and if for any two points $x,y\in S$ the following property is satisfied
@@ -278,13 +333,67 @@ $$
 
 For a convex function the line connecting the points $(x, f(x))$ $(y, f(y))$ must lie above the graph of $f$.
 
+## Example: Convex Function
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define a convex function, e.g., f(x) = 1/x
+def f(x):
+    return 1/x
+
+x = np.linspace(0.01, 10, 400)  # 1/x is only defined for x > 0
+y = f(x)
+
+plt.plot(x, y, label='$f(x) = 1/x$')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.title('Example of a Convex Function: $f(x) = 1/x$')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+```
+
+---
+
+**Proof**
+
+::: {.notes}
+Let $f(x) = 1/x$ for $x > 0$. To show $f$ is convex, we check the definition:
+
+For any $x, y > 0$ and $\alpha \in [0, 1]$,
+$$
+f(\alpha x + (1-\alpha)y) = \frac{1}{\alpha x + (1-\alpha)y}
+$$
+and
+$$
+\alpha f(x) + (1-\alpha)f(y) = \frac{\alpha}{x} + \frac{1-\alpha}{y}
+$$
+
+We need to show:
+$$
+\frac{1}{\alpha x + (1-\alpha)y} \leq \frac{\alpha}{x} + \frac{1-\alpha}{y}
+$$
+
+
+This is true by the weighted arithmetic-harmonic mean inequality.
+
+:::
+
 ---
 
 The second derivative test is another way to determine if a function is convex.
 
-If $f{\prime\prime}(x)>0$, then $f(x)$ is convex (concave up).
+If $f^{\prime\prime}(x)>0$, then $f(x)$ is convex (concave up).
 
 When $x$ is a vector, the equivalent condition is that $\nabla^{2}f(x)$ is positive definite.
+
+---
+
+What is the 2nd derivative of $f(x)=\frac{1}{x}$?
+
 
 ## Recognizing a Local Minimum
 
@@ -298,14 +407,14 @@ We will use information from the gradient $\nabla f(x^{*})$ and the Hessian $\na
 
 ---
 
-The mathematical tool that we will use to study minimizers of smooth functions\ is Taylor's theorem.
+The mathematical tool that we will use to study minimizers of smooth functions is Taylor's theorem.
 
 **Theorem**
 
 Suppose that $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$ is twice continuously differentiable and that $p\in\mathbb{R}^{n}$. Then we have that
 
 $$
-f(x+p) = f(x) + \nabla f(x+tp)^{T}p + \frac{1}{2}p^{T}\nabla^{2} f(x+tp)p,
+f(x+tp) = f(x) + t\nabla f(x+tp)^{T}p + \frac{t^2}{2}p^{T}\nabla^{2} f(x+tp)p,
 $$
 for some $t\in(0,1)$.
 
@@ -410,19 +519,19 @@ $$
 x_{k+1} = x_{k} -\alpha_{k}(\nabla^{2} f_{k})^{-1}\nabla f_{k}.
 $$
 
-Newton's method is called a second order method because it relies on on second-order derivatives in the Hessian matrix to update $x_{k+1}$.
+Newton's method is called a second order method because it relies on second-order derivatives in the Hessian matrix to update $x_{k+1}$.
 
 ## Quasi-Newton Methods
 
 Quasi-Newton methods are line search methods where $B_{k}\approx-\nabla^{2} f_{k}$. The search direction is then $p_{k}=-B_{k}^{-1}\nabla f_{k}$. The iterative update is
 
 $$
-x_{k+1} = x_{k} -\alpha_{k}-(\nabla^{2} f_{k})^{-1}\nabla f_{k}.
+x_{k+1} = x_{k} -\alpha_{k}B_{k}^{-1}\nabla f_{k}.
 $$
 
-Quasi-Newton methods attempt to avoid the construction of full Hessian matrix while maintaining the desirable convergence properties of Newton methods. 
+Quasi-Newton methods attempt to avoid the construction of the full Hessian matrix while maintaining the desirable convergence properties of Newton methods. 
 
-The BFGS (Broydon-Fletcher-Goldfard-Shanno) algorithm is one such method.
+The BFGS (Broyden-Fletcher-Goldfarb-Shanno) algorithm is one such method.
 
 ## Rates of Convergence
 
@@ -440,15 +549,96 @@ for all $k$ sufficiently large.
 
 ---
 
+**Example**
+
+Consider the sequence $x_k = \left(\frac{1}{2}\right)^k$ converging to $x^* = 0$.
+
+Let's visualize its convergence
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Sequence definition
+k = np.arange(0, 20)
+x_k = (1/2)**k
+
+fig, axs = plt.subplots(1, 2, figsize=(12,4))
+
+# Standard plot
+axs[0].plot(k, x_k, 'o-', label=r'$x_k = (1/2)^k$')
+axs[0].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[0].set_xlabel('Iteration $k$')
+axs[0].set_ylabel(r'$x_k$')
+axs[0].set_title('Linear Convergence (Standard Plot)')
+axs[0].legend()
+axs[0].grid(True)
+
+# Semilog plot
+axs[1].semilogy(k, x_k, 'o-', label=r'$x_k = (1/2)^k$')
+axs[1].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[1].set_xlabel('Iteration $k$')
+axs[1].set_ylabel(r'$x_k$')
+axs[1].set_title('Linear Convergence (Semilog Plot)')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+
+---
+
 ### Superlinear
 
 The convergence is Q-superlinear if 
 
 $$
-\lim_{k\rightarrow 0} \frac{\Vert x_{k+1}-x^{*}\Vert}{\Vert x_{k}-x^{*}\Vert}= 0.
+\lim_{k\rightarrow \infty} \frac{\Vert x_{k+1}-x^{*}\Vert}{\Vert x_{k}-x^{*}\Vert}= 0.
 $$
 
 If a sequence converges *superlinearly* then it must converge linearly.
+
+---
+
+Consider the sequence $x_k = \frac{1}{k^{k}}$ converging to $x^* = 0$.
+
+Let's visualize its superlinear convergence:
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Sequence definition
+k = np.arange(1, 20)
+x_k = 1 / k**k
+
+fig, axs = plt.subplots(1, 2, figsize=(12,4))
+
+# Standard plot
+axs[0].plot(k, x_k, 'o-', label=r'$x_k = 1/k^k$')
+axs[0].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[0].set_xlabel('Iteration $k$')
+axs[0].set_ylabel(r'$x_k$')
+axs[0].set_title('Superlinear Convergence (Standard Plot)')
+axs[0].legend()
+axs[0].grid(True)
+
+# Semilog plot
+axs[1].semilogy(k, x_k, 'o-', label=r'$x_k = 1/k^k$')
+axs[1].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[1].set_xlabel('Iteration $k$')
+axs[1].set_ylabel(r'$x_k$')
+axs[1].set_title('Superlinear Convergence (Semilog Plot)')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
+```
 
 ---
 
@@ -461,6 +651,93 @@ $$
 $$
 
 for all $k$ sufficiently large.
+
+---
+
+**Example**
+
+Consider the sequence $x_k = \frac{1}{2^{2^{k}}}$ converging to $x^* = 0$.
+
+Let's visualize its quadratic convergence:
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Sequence definition
+k = np.arange(0, 20)
+x_k = 1 / 2**(2**k)
+
+fig, axs = plt.subplots(1, 2, figsize=(12,4))
+
+# Standard plot
+axs[0].plot(k, x_k, 'o-', label=r'$x_k = 1/2^{2^k}$')
+axs[0].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[0].set_xlabel('Iteration $k$')
+axs[0].set_ylabel(r'$x_k$')
+axs[0].set_title('Quadratic Convergence (Standard Plot)')
+axs[0].legend()
+axs[0].grid(True)
+
+# Semilog plot
+axs[1].semilogy(k, x_k, 'o-', label=r'$x_k = 1/2^{2^k}$')
+axs[1].axhline(0, color='gray', linestyle='--', label=r'$x^* = 0$')
+axs[1].set_xlabel('Iteration $k$')
+axs[1].set_ylabel(r'$x_k$')
+axs[1].set_title('Quadratic Convergence (Semilog Plot)')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+```{python}
+#| fig-align: center
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define sequences
+k_linear = np.arange(0, 20)
+xk_linear = (1/2)**k_linear
+
+k_superlinear = np.arange(1, 15)
+xk_superlinear = 1 / k_superlinear**k_superlinear
+
+k_quadratic = np.arange(0, 11)
+xk_quadratic = 1 / 2**(2**k_quadratic)
+
+fig, axs = plt.subplots(1, 2, figsize=(14,5))
+
+# Standard plot: overlay all sequences
+axs[0].plot(k_linear, xk_linear, 'o-', label='Linear: $(1/2)^k$')
+axs[0].plot(k_superlinear, xk_superlinear, 's-', label='Superlinear: $1/k^k$')
+axs[0].plot(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2k}$')
+axs[0].axhline(0, color='gray', linestyle='--')
+axs[0].set_xlabel('Iteration $k$')
+axs[0].set_ylabel('$x_k$')
+axs[0].set_title('Convergence Comparison (Standard Plot)')
+axs[0].legend()
+axs[0].grid(True)
+
+# Semilog plot: overlay all sequences
+axs[1].semilogy(k_linear, xk_linear, 'o-', label='Linear: $(1/2)^k$')
+axs[1].semilogy(k_superlinear, xk_superlinear, 's-', label='Superlinear: $1/k^k$')
+axs[1].semilogy(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2k}$')
+axs[1].axhline(0, color='gray', linestyle='--')
+axs[1].set_xlabel('Iteration $k$')
+axs[1].set_ylabel('$x_k$')
+axs[1].set_title('Convergence Comparison (Semilog Plot)')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
+```
 
 ## Summary
 
