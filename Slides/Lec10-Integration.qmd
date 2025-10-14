@@ -468,7 +468,7 @@ $$
 Evaluate $\int \frac{\sqrt{9-x^{2}}}{x^{2}}dx$.
 
 ::: {.notes}
-Let $u = x$, and use the substitution $x = 3\sin\theta$, so $dx = 3\cos\theta d\theta$.
+Use the substitution $x = 3\sin\theta$, so $dx = 3\cos\theta d\theta$.
 
 Then $\sqrt{9 - x^2} = \sqrt{9 - 9\sin^2\theta} = 3\cos\theta$.
 
@@ -597,7 +597,7 @@ where $f(x)$ is the probability density function of $X$.
 
 The variance of a continuous random variable $X$ with pdf $f(x)$ is given by:
 $$
-\mathbb{V}(X) = \int_{-\infty}^{\infty} (x - \mathbb{E}(X)^2 f(x) dx.
+\mathbb{V}(X) = \int_{-\infty}^{\infty} (x - \mathbb{E}(X)^2) f(x) dx.
 $$
 
 An alternative formula is
