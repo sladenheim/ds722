@@ -428,7 +428,7 @@ Suppose that $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$ is twice continuously diff
 
 $$
 \small
-f(x+tp) = f(x) + t\nabla f(x+tp)^{T}p + \frac{t^2}{2}p^{T}\nabla^{2} f(x+tp)p,
+f(x+p) = f(x) + \nabla f(x+p)^{T}p + \frac{1}{2}p^{T}\nabla^{2} f(x+tp)p,
 $$
 for some $t\in(0,1)$.
 
