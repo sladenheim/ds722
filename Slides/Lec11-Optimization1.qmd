@@ -55,6 +55,19 @@ $$
 $$
 where $\small A = \begin{bmatrix} 1 & t_1 \\ 1 & t_2 \\ \vdots & \vdots \\ 1 & t_m \end{bmatrix}$ and $x = \begin{bmatrix}x_{1} \\ x_{2}\end{bmatrix}$.
 
+---
+
+Suppose we are training a parameterized model $y=h_{\theta}(x)$. We have labeled training data $\left\{(x_{i}, y_{i})\right\}_{i=1}^{m}$. 
+
+We have the predicted outputs $\hat{y}_{i} = h_{\theta}(x_{i})$ and a loss function $\mathcal{L}(\hat{y}_{i}, y_{i})$
+
+In supervised learning we aim to minimize the average of all the loss functions, i.e., we solve
+
+$$
+\small
+\min_{\theta} \frac{1}{m}\sum_{i=1}^{m}\mathcal{L}(\hat{y}_{i}, y_{i}) = \min_{\theta}\frac{1}{m}\sum_{i=1}^{m}\mathcal{L}(h_{\theta}(x_{i}), y_{i}).
+$$
+
 ## Constrained Optimization
 
 A constrained optimization problem is
@@ -414,13 +427,14 @@ The mathematical tool that we will use to study minimizers of smooth functions i
 Suppose that $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$ is twice continuously differentiable and that $p\in\mathbb{R}^{n}$. Then we have that
 
 $$
+\small
 f(x+tp) = f(x) + t\nabla f(x+tp)^{T}p + \frac{t^2}{2}p^{T}\nabla^{2} f(x+tp)p,
 $$
 for some $t\in(0,1)$.
 
 ## First Order Necessary Conditions
 
-Necessary conditions are derived by assuming that $x^{*}$ is a local minimizer and then proving facts about $\nabla f(x^{*})$ and $\nabla^{2} f(x^{*})$.
+Necessary conditions are derived by assuming that $x^{*}$ is a local minimizer and proving facts about $\nabla f(x^{*})$ and $\nabla^{2} f(x^{*})$.
 
 **Theorem**
 If $x^{*}$ is a local minimizer and $f$ is continuously differentiable in an open neighborhood of $x^{*}$, then $\nabla f(x^{*})=0$.
@@ -613,7 +627,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Sequence definition
-k = np.arange(1, 20)
+k = np.arange(1, 15)
 x_k = 1 / k**k
 
 fig, axs = plt.subplots(1, 2, figsize=(12,4))
