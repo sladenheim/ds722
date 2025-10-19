@@ -28,6 +28,7 @@ project:
     - Lec22-MarkovChains.qmd
     - Lec23-HiddenMarkovModels.qmd
     - Lec24-SamplingAlgorithms.qmd
+    - LecYY-MidtermReview.qmd
 
 format:
   revealjs:
