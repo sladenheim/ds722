@@ -31,19 +31,26 @@ Important to know:
 
 ### Inner Product
 Let $x,y\in\mathbb{R}^{n}$ then
-
+$$
+x\cdot y = x^T y = \sum_{i=1}^n x_i y_i.
+$$
 
 
 ---
 
 ### Matrix-Vector Multiplication
 Let $A\in\mathbb{R}^{m\times n}$, $x\in\mathbb{R}^{n}$ and $b\in\mathbb{R}^{m}$ then
+$$
+Ax = b,\quad (Ax)_i = \sum_{j=1}^n a_{ij} x_j.
+$$
 
 ---
 
 ### Matrix-Matrix Multiplication
 Let $A\in\mathbb{R}^{m\times n}$, $B\in\mathbb{R}^{n\times p}$, then $C=AB\in\mathbb{R}^{m\times p}$ and
-
+$$
+C=AB,\quad c_{ij}=\sum_{k=1}^n a_{ik} b_{kj}.
+$$
 ---
 
 **Example**
@@ -65,7 +72,8 @@ Hence $\theta=\arccos\!\left(\tfrac{1}{2}\right)=\tfrac{\pi}{3}$.
 
 Let
 $$
-A = \begin{bmatrix} 2 & -1 & 3 \\[4pt] 0 & 4 & -2 \\[4pt] 1 & 1 & 1 \end{bmatrix}, \qquad
+\small
+A = \begin{bmatrix} 2 & -1 & 3 \\ 0 & 4 & -2 \\ 1 & 1 & 1 \end{bmatrix}, \qquad
 x = \begin{bmatrix} 3 \\ -1 \\ 2 \end{bmatrix}.
 $$
 
@@ -84,7 +92,8 @@ $$
 :::
 ---
 
-**Example 3**
+**Example**
+
 Assume that $A\in\mathbb{R}^{m\times m}$ has the factorization $A=LDU$. Show that if $A$ is symmetric ($A=A^{T}$), then $U=L^{T}$.
 
 ::: {.notes}
@@ -95,7 +104,7 @@ and if $A=A^T$ then
 $$
 LDU=U^T D L^T.
 $$
-Assuming the usual normalization ( $L$ unit lower-triangular, $U$ unit upper-triangular, $D$ diagonal ), the LU factorization with this normalization is unique. Comparing the two factorizations of $A$ (one with factors $L,D,U$, the other with $U^T,D,L^T$) forces
+Assuming the usual normalization ($L$ unit lower-triangular, $U$ unit upper-triangular, $D$ diagonal), the LU factorization with this normalization is unique. Comparing the two factorizations of $A$ (one with factors $L,D,U$, the other with $U^T,D,L^T$) forces
 $$
 U^T=L\quad\text{and}\quad L^T=U,
 $$
@@ -125,6 +134,7 @@ Determine whether the two vectors $x=\begin{bmatrix}1 \\ 2 \\ 3 \\ 4 \end{bmatri
 
 Let
 $$
+\small
 Q=\begin{bmatrix}
 \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} & 0 \\
 \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\
@@ -132,7 +142,7 @@ Q=\begin{bmatrix}
 \end{bmatrix}
 $$
 
-Verify that $Q^{T}Q=I$ (equivalently, its columns are orthonormal). Compute $\det(Q)$ as an additional check.
+Verify that $Q^{T}Q=I$ (equivalently, its columns are orthonormal).
 
 
 ## Projections
@@ -206,13 +216,14 @@ Important to know:
 
 Let
 $$
+\small
 A=\begin{bmatrix}
 1 & 2 \\
 0 & 1 \\
 1 & -1
 \end{bmatrix}, \qquad
 b=\begin{bmatrix}
-3 \\[4pt] 1 \\[4pt] 0
+3 \\ 1 \\ 0
 \end{bmatrix}.
 $$
 
@@ -226,8 +237,8 @@ Compute the least squares solution $\hat{x}$ that minimizes $\|Ax-b\|_2$. Solve 
 Compute the normal equations: $A^T A \hat{x} = A^T b$.
 
 $$
-A^T A = \begin{bmatrix}2 & 1 \\[4pt] 1 & 6\end{bmatrix}, \qquad
-A^T b = \begin{bmatrix}3 \\[4pt] 7\end{bmatrix}.
+A^T A = \begin{bmatrix}2 & 1 \\ 1 & 6\end{bmatrix}, \qquad
+A^T b = \begin{bmatrix}3 \\ 7\end{bmatrix}.
 $$
 
 Solve
@@ -241,8 +252,8 @@ From the first equation $x_2 = 3-2x_1$. Substituting gives $-11x_1 = -11$, so $x
 
 Therefore
 $$
-\hat{x} = \begin{bmatrix}1 \\[4pt] 1\end{bmatrix}, \qquad
-r = b - A\hat{x} = \begin{bmatrix}0 \\[4pt] 0 \\[4pt] 0\end{bmatrix}, \qquad
+\hat{x} = \begin{bmatrix}1 \\ 1\end{bmatrix}, \qquad
+r = b - A\hat{x} = \begin{bmatrix}0 \\ 0 \\ 0\end{bmatrix}, \qquad
 \|r\|_2 = 0.
 $$
 :::
@@ -274,12 +285,12 @@ Let $A = \begin{bmatrix}1 & 2 \\ 2 & 4 \end{bmatrix}$ compute the eigenvalues an
 
 ::: {.notes}
 $$
-A=\begin{bmatrix}1 & 2\\[4pt] 2 & 4\end{bmatrix}
+A=\begin{bmatrix}1 & 2\\ 2 & 4\end{bmatrix}
 $$
 
 Characteristic polynomial:
 $$
-\det(A-\lambda I)=\det\begin{bmatrix}1-\lambda & 2\\[4pt] 2 & 4-\lambda\end{bmatrix}=(1-\lambda)(4-\lambda)-4=\lambda(\lambda-5).
+\det(A-\lambda I)=\det\begin{bmatrix}1-\lambda & 2\\ 2 & 4-\lambda\end{bmatrix}=(1-\lambda)(4-\lambda)-4=\lambda(\lambda-5).
 $$
 
 Eigenvalues:
@@ -289,20 +300,20 @@ $$
 
 Eigenvector for $\lambda_1=5$ (solve $(A-5I)x=0$):
 $$
-\begin{bmatrix}-4 & 2\\[4pt] 2 & -1\end{bmatrix}\begin{bmatrix}x_1\\[4pt] x_2\end{bmatrix}=0
-\quad\Rightarrow\quad x\propto\begin{bmatrix}1\\[4pt] 2\end{bmatrix}.
+\begin{bmatrix}-4 & 2\\ 2 & -1\end{bmatrix}\begin{bmatrix}x_1\\ x_2\end{bmatrix}=0
+\quad\Rightarrow\quad x\propto\begin{bmatrix}1\\ 2\end{bmatrix}.
 $$
 
 Eigenvector for $\lambda_2=0$ (solve $Ax=0$):
 $$
-\begin{bmatrix}1 & 2\\[4pt] 2 & 4\end{bmatrix}\begin{bmatrix}x_1\\[4pt] x_2\end{bmatrix}=0
-\quad\Rightarrow\quad x\propto\begin{bmatrix}2\\[4pt] -1\end{bmatrix}.
+\begin{bmatrix}1 & 2\\ 2 & 4\end{bmatrix}\begin{bmatrix}x_1\\ x_2\end{bmatrix}=0
+\quad\Rightarrow\quad x\propto\begin{bmatrix}2\\ -1\end{bmatrix}.
 $$
 
 (Optional normalized eigenvectors)
 $$
-u_1=\frac{1}{\sqrt{5}}\begin{bmatrix}1\\[4pt] 2\end{bmatrix},\qquad
-u_2=\frac{1}{\sqrt{5}}\begin{bmatrix}2\\[4pt] -1\end{bmatrix}.
+u_1=\frac{1}{\sqrt{5}}\begin{bmatrix}1\\ 2\end{bmatrix},\qquad
+u_2=\frac{1}{\sqrt{5}}\begin{bmatrix}2\\ -1\end{bmatrix}.
 $$
 :::
 
@@ -327,7 +338,13 @@ Important to know:
 ---
 
 **Example**
-Draw the computational graph and use automatic differentiation to calculate the partial derivatives of $$f(x,y) = \cos(x^{2} + 3y) + \sqrt{y^{2} + 3x}$$
+Draw the computational graph and use automatic differentiation to calculate the partial derivatives of $f(x,y) = \cos(x^{2} + 3y).$
+
+
+---
+
+**Solution**
+
 
 ## Integration
 
@@ -341,13 +358,53 @@ Important to know:
 
 **Example**
 
-Compute $\int_{0}^{2}\int_{-1}^{1}x^{2}\frac{\cos{\pi y}}{\pi}dxdy$
+Compute $\int_{0}^{1}\int_{-1}^{1}x^{2}\frac{\cos{\pi y}}{\pi}dxdy$.
+
+::: {.notes}
+Compute the inner integral first:
+$$
+\int_{-1}^{1} x^{2}\frac{\cos(\pi y)}{\pi}\,dx
+= \frac{\cos(\pi y)}{\pi}\int_{-1}^{1} x^{2}\,dx
+= \frac{\cos(\pi y)}{\pi}\cdot\frac{2}{3}
+= \frac{2\cos(\pi y)}{3\pi}.
+$$
+
+Now integrate in $y$ from 0 to 1:
+$$
+\int_{0}^{1}\frac{2\cos(\pi y)}{3\pi}\,dy
+= \frac{2}{3\pi}\int_{0}^{1}\cos(\pi y)\,dy
+= \frac{2}{3\pi}\cdot\frac{1}{\pi}\big[\sin(\pi y)\big]_{0}^{1}
+= \frac{2}{3\pi^{2}}(\sin\pi-\sin 0)=0.
+$$
+
+Hence
+$$
+\int_{0}^{1}\int_{-1}^{1} x^{2}\frac{\cos(\pi y)}{\pi}\,dx\,dy=0.
+$$
+:::
 
 ---
 
 **Example**
 
-Compute $\int\int x^{2}\frac{\cos{\pi y}}{\pi}dxdy$
+Compute $\int\int x^{2}\frac{\cos{\pi y}}{\pi}dxdy$.
+
+::: {.notes}
+Compute the inner integral with respect to $x$:
+$$
+\int x^{2}\frac{\cos(\pi y)}{\pi}\,dx
+=\frac{\cos(\pi y)}{\pi}\int x^{2}\,dx
+=\frac{\cos(\pi y)}{\pi}\cdot\left(\frac{x^{3}}{3} + C_{1}\right)
+$$
+
+Now integrate with respect to $y$:
+$$
+\int\frac{\cos(\pi y)}{\pi}\cdot\,dy
+=\left(\frac{x^{3}}{3} + C_{1}\right)\frac{1}{\pi}\int\cos(\pi y)\,dy
+=\left(\frac{x^{3}}{3} + C_{1}\right)\cdot\left(\frac{\sin(\pi y)}{\pi^{2}} + C_{2}\right)
+=\frac{x^{3}}{3}\frac{\sin(\pi y)}{\pi^{2}} + C_{1}f(y) + C_{2}f(x) + C_{1}C_{2}.
+$$
+:::
 
 ## Exam Advice
 
