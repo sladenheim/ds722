@@ -25,9 +25,7 @@ Understand:
 
 ## Optimization Problem
 
-Recall from the previous lecture the optimization problem: 
-
-Given an objective function $f(x)$, compute
+Given an objective function $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$, compute
 
 $$
 \min_{x} f(x).
@@ -41,7 +39,7 @@ $$
 x_{k+1} = x_{k} +\alpha_{k} p_{k},
 $$
 
-where $p_{k}=-\nabla f_{k}$ is the gradient of the objective function at the point $x_{k}$, i.e., $\nabla f_{k} = \nabla f(x_{k})$.
+where $p_{k}=-\nabla f_{k}$ is the negative gradient of the objective function at the point $x_{k}$, i.e., $\nabla f_{k} = \nabla f(x_{k})$. 
 
 
 ## The Learning Rate
@@ -80,12 +78,14 @@ The Wolfe conditions stipulate what values should be chosen for the step length 
 
 For $0 < c_{1} < c_{2} < 1$, the Wolfe conditions are:
 
-1. $f(x_{k} + \alpha_{k}p_{k}) \leq f(x_{k}) + c_{1}\alpha_{k}\nabla f_{k}^{T}p_{k}$
-1. $\nabla f(x_{k} + \alpha_{k}p_{k})^{T}p_{k} \geq c_{2}\nabla f_{k}^{T}p_{k}$
+1. $f(x_{k} + \alpha_{k}p_{k}) \leq f(x_{k}) + c_{1}\alpha_{k}\nabla f_{k}^{\top}p_{k}$
+1. $\nabla f(x_{k} + \alpha_{k}p_{k})^{\top}p_{k} \geq c_{2}\nabla f_{k}^{\top}p_{k}$
 
+::: {.notes}
 Condition 1 is the sufficient decrease (Armijo) condition and Condition 2 is the curvature condition.
 
 For every function that is smooth (differentiable) and bounded below you can prove that there are step lengths $\alpha_{k}$ that satisfy the Wolfe conditions.
+:::
 
 ---
 
@@ -112,14 +112,21 @@ plt.legend()
 plt.show()
 ```
 
-## Convergence Theorem (Zoutendijk)
 
-Let $x_{k} +\alpha_{k} p_{k}$ and $\alpha_{k}$ satisfies the Wolfe conditions. Suppose that $f$ is bounded below in $\mathbb{R}^{n}$ and continuously differentiable in an open set $\mathcal{N}$ containing the level set $\mathcal{L} = \{x : f(x)\leq f(x_{0})\}$. Assume $\nabla f$ is Lipschitz continuous on $\mathcal{N}$, i.e., there exists $L>0$ such that
+## Convergence Theorem (Zoutendijk)
+Assumptions:
+
+- $x_{k+1} = x_{k} +\alpha_{k} p_{k}$.
+- $\alpha_{k}$ satisfies the Wolfe conditions.
+- $f$ is bounded below in $\mathbb{R}^{n}$ and continuously differentiable in an open set $\mathcal{N}$ containing the level set $\mathcal{L} = \{x : f(x)\leq f(x_{0})\}$. 
+- Assume $\nabla f$ is Lipschitz continuous on $\mathcal{N}$, i.e., there exists $L>0$ such that
 
 $$
 \small
 \Vert \nabla f(x) - \nabla f(\tilde{x})\Vert \leq L \Vert x-\tilde{x}\Vert, \quad \forall x,\tilde{x}\in\mathcal{N}.
 $$
+
+--- 
 
 Then
 
@@ -128,14 +135,14 @@ $$
 \sum_{k} \cos^{2}{\theta_{k}} \Vert \nabla f_{k}\Vert^{2} < \infty,
 $$
 
-where $\cos{\theta_{k}} = \frac{-\nabla f_{k}p_{k}}{\Vert\nabla f_{k} \Vert \Vert p_{k} \Vert}$
+where $\cos{\theta_{k}} = \frac{-\nabla f_{k}^{\top}p_{k}}{\Vert\nabla f_{k} \Vert \Vert p_{k} \Vert}$.
 
 ## Rate of Convergence
 
 To understand the rate of convergence of gradient descent we consider the ideal case when the objective function is
 
 $$
-f(x) = \frac{1}{2}x^{T}Qx - b^{T}x,
+f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x,
 $$
 
 where $Q\in\mathbb{R}^{n\times n}$ is SPD.
@@ -151,28 +158,27 @@ $$
 $$
 
 :::: {.fragment}
-which gives $\alpha_{k} = \frac{\nabla f_{k}^{T}\nabla f_{k}}{\nabla f_{k}^{T}Q\nabla f_{k}}$. 
+which gives $\alpha_{k} = \frac{\nabla f_{k}^{\top}\nabla f_{k}}{\nabla f_{k}^{\top}Q\nabla f_{k}}$. 
 
 Using this step length is called an exact line search.
 ::::
 
 ## Error Norm
 
-When $Q$ is SPD, the quantity 
+When $Q$ is SPD, we use the norm
 
 $$
-\Vert x \Vert_{Q}^{2} = x^{T}Qx,
+\Vert x \Vert_{Q}^{2} = x^{\top}Qx.
 $$
 
-is a well-defined norm.
 
 ---
 
 **Theorem**
-The steepest descent method with exact line searches is applied to the strongly convex quadratic function $f(x)$, the error norm satisfies
+If the steepest descent method with exact line searches is applied to the strongly convex quadratic function $f(x)$, then the error norm satisfies
 
 $$
-\Vert x_{k+1} - x^{*}\Vert_{Q}^{2} \leq \left(\frac{\lambda_{n} - \lambda_{1}}{\lambda_{n} + \lambda_{1}}\right)^{2} \Vert x_{k+1} - x^{*}\Vert_{Q}^{2},
+\Vert x_{k+1} - x^{*}\Vert_{Q}^{2} \leq \left(\frac{\lambda_{n} - \lambda_{1}}{\lambda_{n} + \lambda_{1}}\right)^{2} \Vert x_{k} - x^{*}\Vert_{Q}^{2},
 $$
 
 where $\lambda_{1}\leq \lambda_{2}\leq \cdots \leq \lambda_{n}$ are the eigenvalues of $Q$.
@@ -181,12 +187,11 @@ What does this tell us about the convergence?
 
 ## Example 1
 
-Consider the objective function $f(x) = \frac{1}{2}x^{T}Qx - b^{T}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=I$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$.
+Consider the objective function $f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=I$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$.
 
-Let's plot the convergence of this.
+Let's plot the convergence of this with $\alpha=0.99$.
 
 ---
-
 
 ```{python}
 #| fig-align: center
@@ -207,7 +212,6 @@ def f(x):
 def grad_f(x):
     return np.dot(Q, x) - b
 
-# Gradient descent with exact line search
 x = np.array([3.0, 3.0])  # Initial point
 trajectory = [x.copy()]
 
@@ -215,11 +219,11 @@ max_steps=10
 n_steps=0
 for _ in range(max_steps):
     g = grad_f(x)
-    alpha = np.dot(g, g) / np.dot(g, np.dot(Q, g))  # Exact line search step size
+    alpha = 0.99 
     x = x - alpha * g
     trajectory.append(x.copy())
     n_steps += 1
-    if np.linalg.norm(b-x) < 1e-10:
+    if np.linalg.norm(g) < 1e-10:
         break
 
 trajectory = np.array(trajectory)
@@ -234,7 +238,7 @@ plt.figure(figsize=(8, 6))
 contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
-plt.title(f'Optimization Trajectory: {n_steps} step to converge')
+plt.title(f'Optimization Trajectory: {n_steps} steps to converge')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -243,78 +247,11 @@ plt.tight_layout()
 plt.show()
 
 ```
-
-## Example 2
-
-Consider the objective function $f(x) = \frac{1}{2}x^{T}Qx - b^{T}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=\begin{bmatrix} 200 & -1 \\ -1 & 1 \end{bmatrix}$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$. The eigenvalues for this matrix are approximately 100 and 1. The true minimizer is $x^{*} = \begin{bmatrix} \frac{2}{99} \\ \frac{101}{99} \end{bmatrix}$.
-
-Let's plot the convergence of this.
 
 ---
 
 ```{python}
 #| fig-align: center
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Set seaborn style for aesthetics
-sns.set(style="whitegrid")
-
-# Define the quadratic objective function
-Q = np.array([[100, -1], [-1, 1]])
-b = np.array([1.0, 1.0])
-x_min = np.linalg.solve(Q, b)
-
-def f(x):
-    return 0.5 * np.dot(x.T, np.dot(Q, x)) - np.dot(b.T, x)
-
-def grad_f(x):
-    return np.dot(Q, x) - b
-
-# Gradient descent with exact line search
-x = np.array([3.0, 3.0])  # Initial point
-trajectory = [x.copy()]
-
-max_steps=10
-n_steps=0
-for _ in range(max_steps):
-    g = grad_f(x)
-    alpha = np.dot(g, g) / np.dot(g, np.dot(Q, g))  # Exact line search step size
-    x = x - alpha * g
-    trajectory.append(x.copy())
-    n_steps += 1
-    if np.linalg.norm(x-x_min) < 1e-10:
-        break
-
-trajectory = np.array(trajectory)
-
-# Create contour plot of the function
-x_vals = np.linspace(-1, 4, 400)
-y_vals = np.linspace(-1, 4, 400)
-X, Y = np.meshgrid(x_vals, y_vals)
-
-# Compute Z = 0.5 * x^T Q x - b^T x
-Z = 0.5 * (Q[0,0]*X**2 + 2*Q[0,1]*X*Y + Q[1,1]*Y**2) - b[0]*X - b[1]*Y
-
-plt.figure(figsize=(8, 6))
-contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
-plt.clabel(contour, inline=True, fontsize=8)
-plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
-plt.title(f'Optimization Trajectory: {n_steps} step to converge')
-plt.xlabel('$x_1$')
-plt.ylabel('$x_2$')
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-
-```
-
----
-
-**Example 1**
-```{python}
 import numpy as np
 import pandas as pd
 
@@ -345,16 +282,85 @@ for i in range(max_iter):
     func1_val = f(Q1, x1, b)
     results1.append([i, x1[0], x1[1], grad1_norm, func1_val])
     
-    if grad1_norm < 1e-6:
+    if grad1_norm < 1e-10:
         break
 
-    alpha = exact_line_search(Q1, x1, grad1)
+    alpha = 0.99 #exact_line_search(Q1, x1, grad1)
     x1 = x1 - alpha * grad1
 
 # Create DataFrame and save to CSV
-df1 = pd.DataFrame(results1, columns=["Iteration", "x1", "x2", "Gradient Norm", "Function Value"])
-print(df1.head())
+df1 = pd.DataFrame(results1, columns=["Iteration", "x1", "x2", "Gradient Norm", "f(x) Value"])
+print(df1.head(7))
 ```
+
+
+## Example 2
+
+Consider the objective function $f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=\begin{bmatrix} 40 & -1 \\ -1 & 1 \end{bmatrix}$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$. The eigenvalues for this matrix are approximately 40 and 1. The true minimizer is $x^{*} = \begin{bmatrix} \frac{2}{39} \\ \frac{41}{39} \end{bmatrix}$.
+
+Let's plot the convergence of this with $\alpha=0.01$.
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style for aesthetics
+sns.set(style="whitegrid")
+
+# Define the quadratic objective function
+Q = np.array([[40, -1], [-1, 1]])
+b = np.array([1.0, 1.0])
+x_min = np.linalg.solve(Q, b)
+
+def f(x):
+    return 0.5 * np.dot(x.T, np.dot(Q, x)) - np.dot(b.T, x)
+
+def grad_f(x):
+    return np.dot(Q, x) - b
+
+x = np.array([3.0, 3.0])  # Initial point
+trajectory = [x.copy()]
+
+max_steps=40
+n_steps=0
+for _ in range(max_steps):
+    g = grad_f(x)
+    alpha = 0.01
+    x = x - alpha * g
+    trajectory.append(x.copy())
+    n_steps += 1
+    if np.linalg.norm(x-x_min) < 1e-10:
+        break
+
+trajectory = np.array(trajectory)
+
+# Create contour plot of the function
+x_vals = np.linspace(-0.5, 3.5, 400)
+y_vals = np.linspace(-0.5, 3.5, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+
+# Compute Z = 0.5 * x^T Q x - b^T x
+Z = 0.5 * (Q[0,0]*X**2 + 2*Q[0,1]*X*Y + Q[1,1]*Y**2) - b[0]*X - b[1]*Y
+
+plt.figure(figsize=(8, 6))
+contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
+plt.title(f'Optimization Trajectory: {n_steps} steps')
+plt.xlabel('$x_1$')
+plt.ylabel('$x_2$')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+---
 
 **Example 2**
 ```{python}
@@ -380,7 +386,7 @@ max_iter = 10
 results2 = []
 
 b = np.array([1.0, 1.0])
-Q2 = np.array([[100, -1], [-1, 1]])
+Q2 = np.array([[40, -1], [-1, 1]])
 
 for i in range(max_iter):
     grad2 = grad_f(Q2, x2, b)
@@ -391,12 +397,12 @@ for i in range(max_iter):
     if grad2_norm < 1e-6:
         break
 
-    alpha = exact_line_search(Q2, x2, grad2)
+    alpha = 0.01  # exact_line_search(Q2, x2, grad2)
     x2 = x2 - alpha * grad2
 
 # Create DataFrame and save to CSV
-df2 = pd.DataFrame(results2, columns=["Iteration", "x1", "x2", "Gradient Norm", "Function Value"])
-print(df2.head(8))
+df2 = pd.DataFrame(results2, columns=["Iteration", "x1", "x2", "Gradient Norm", "f(x) Value"])
+print(df2.head(10))
 ```
 
 ## Objective Functions in ML
@@ -416,7 +422,7 @@ This is a very common type of objective function in machine learning.
 Consider a neural network with parameters $w$ and training data $\{(x_{i}, y_{i})\}_{i=1}^{m}$, then we recover the previous objective function
 
 $$
-f(w) = \frac{1}{m}\sum_{i=1}f_{i}(w; x_{i}, y_{i}),
+f(w) = \frac{1}{m}\sum_{i=1}^{m}f_{i}(w; x_{i}, y_{i}),
 $$
 
 where each $f_{i}(w; x_{i}, y_{i})$ is a loss function.
@@ -439,7 +445,7 @@ Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
 1. Given $w_{0}$ and $\alpha>0$,
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Sample index}~i_{k}~\text{randomly}$
-1. $\quad\text{Compute}~\nabla f_{i_{k}} = \nabla f_{i}(w_{k})$
+1. $\quad\text{Compute}~\nabla f_{i_{k}} = \nabla f_{i_{k}}(w_{k})$
 1. $\quad w_{k+1} = w_{k}-\alpha \nabla f_{i_{k}}$
 
 ---
@@ -472,12 +478,13 @@ Momentum smooths these updates, reducing oscillations and allowing faster moveme
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad v_{k+1} = \beta v_{k} - \alpha \nabla f_{k}$
-1. $\quad w_{k+1} = w_{k}+v_{k}$
+1. $\quad w_{k+1} = w_{k}+v_{k+1}$
 
 
 ---
 
 ```{python}
+#| fig-align: center
 # Requires: pip install torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -488,7 +495,7 @@ import torch
 sns.set(style="whitegrid")
 
 # --- Problem setup (same objective) ---
-Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+Q_np = np.array([[40.0, -1.0], [-1.0, 1.0]])
 b_np = np.array([1.0, 1.0])
 
 # Convert to double-precision torch tensors
@@ -544,7 +551,7 @@ contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Momentum SGD Path')
 plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
-plt.title(f'Optimization Trajectory (Momentum): {n_steps} step(s)')
+plt.title(f'Optimization Trajectory (Momentum): {n_steps} steps')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -572,6 +579,7 @@ RMSProp (Root Mean Square Propagation) was designed to address a key limitation 
 ---
 
 ```{python}
+#| fig-align: center
 # Requires: pip install torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -582,7 +590,7 @@ import torch
 sns.set(style="whitegrid")
 
 # --- Problem setup (same objective) ---
-Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+Q_np = np.array([[40.0, -1.0], [-1.0, 1.0]])
 b_np = np.array([1.0, 1.0])
 
 # Convert to double-precision torch tensors
@@ -605,7 +613,7 @@ x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
 # alpha is the decay (smoothing) factor for the running average of squared grads
 optimizer = torch.optim.RMSprop(
     [x],
-    lr=0.1,       # try 0.005–0.02 on this quadratic
+    lr=0.1,       
     alpha=0.9,     # smoothing for squared grads (common: 0.9–0.99)
     eps=1e-8,
     centered=False # set True to use a centered variance estimate
@@ -644,7 +652,7 @@ contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='RMSprop Path')
 plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
-plt.title(f'Optimization Trajectory (RMSprop): {n_steps} step(s)')
+plt.title(f'Optimization Trajectory (RMSprop): {n_steps} steps')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -658,6 +666,7 @@ plt.show()
 ## Adaptive Moment Estimation (Adam)
 
 We have seen that:
+
 - Momentum helps smooth updates and accelerate convergence.
 - RMSProp adapts learning rates per parameter based on recent gradient magnitudes.
 
@@ -671,7 +680,7 @@ The Adam optimizer combines both. It is a smart navigator that remembers both th
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad m_{k+1} = \beta_{1} m_{k} + (1-\beta_{1})\nabla f_{k}$
-1. $\quad v_{k+1} = \beta_{2} v_{k} + (1-\beta_{1})\nabla f_{k}^{2}$ (element-wise square)
+1. $\quad v_{k+1} = \beta_{2} v_{k} + (1-\beta_{2})\nabla f_{k}^{2}$ (element-wise square)
 1. $\quad \hat{m}_{k+1} = \frac{m_{k+1}}{1-\beta_{1}^{k+1}}$, $\quad \hat{v}_{k+1} = \frac{v_{k+1}}{1-\beta_{2}^{k+1}}$
 1. $\quad w_{k+1} = w_{k}-\alpha \frac{\hat{m}_{k+1}}{\sqrt{\hat{v}_{k+1}} + \varepsilon}$ (element-wise division)
 
@@ -679,6 +688,7 @@ The Adam optimizer combines both. It is a smart navigator that remembers both th
 ---
 
 ```{python}
+#| fig-align: center
 # Requires: pip install torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -689,7 +699,7 @@ import torch
 sns.set(style="whitegrid")
 
 # --- Problem setup (same objective) ---
-Q_np = np.array([[100.0, -1.0], [-1.0, 1.0]])
+Q_np = np.array([[40.0, -1.0], [-1.0, 1.0]])
 b_np = np.array([1.0, 1.0])
 
 # Convert to double-precision torch tensors
@@ -709,11 +719,10 @@ def f(x):
 x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
 
 # Optimizer: Adam
-# Note: default lr=1e-3 is very stable; you can try 0.005–0.02 on this quadratic.
 optimizer = torch.optim.Adam(
     [x],
-    lr=0.1,           # try 0.001–0.02; increase if too slow, decrease if jittery
-    betas=(0.9, 0.999), # (beta1 for momentum, beta2 for squared grads)
+    lr=0.1, 
+    betas=(0.5, 0.999), # (beta1 for momentum, beta2 for squared grads)
     eps=1e-8,           # numerical stability
     weight_decay=0.0    # set >0 to add L2 regularization (Adam, not decoupled)
     # For decoupled weight decay, use torch.optim.AdamW instead.
@@ -753,7 +762,7 @@ contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Adam Path')
 plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
-plt.title(f'Optimization Trajectory (Adam): {n_steps} step(s)')
+plt.title(f'Optimization Trajectory (Adam): {n_steps} steps')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -768,7 +777,7 @@ plt.show()
 The Rosenbrock function is a classic test problem for optimization algorithms. It's defined as:
 
 $$
-f(x_{1}, x_{2}) = (1 - x_{1})^2 + 100(x_{2} - x_{1}^2)^2
+f(x_{1}, x_{2}) = (1 - x_{1})^2 + 100(x_{2} - x_{1}^2)^2.
 $$
 
 - Non-convex and highly curved
@@ -782,6 +791,64 @@ $$
 - The function has a narrow, curved valley
 - Gradient descent struggles due to poor conditioning
 - Requires careful tuning of learning rates and momentum
+
+---
+
+```{python}
+#| fig-align: center
+# 3-D Plotly surface of the Rosenbrock function with minimizer marked in red
+import numpy as np
+import plotly.graph_objects as go
+
+# Grid
+x = np.linspace(-2, 2, 200)
+y = np.linspace(-1, 3, 200)
+X, Y = np.meshgrid(x, y)
+
+# Rosenbrock
+Z = (1 - X)**2 + 100 * (Y - X**2)**2
+
+# Minimizer (x1, x2) = (1, 1) with value 0
+min_x, min_y = 1.0, 1.0
+min_z = (1 - min_x)**2 + 100 * (min_y - min_x**2)**2
+
+# Create surface and marker for minimizer
+fig = go.Figure(
+    data=[
+        go.Surface(
+            x=X, y=Y, z=Z,
+            colorscale='Viridis',
+            showscale=True,
+            contours={"z": {"show": True, "usecolormap": True, "highlightcolor": "white", "project": {"z": True}}},
+            lighting=dict(ambient=0.6, diffuse=0.8, fresnel=0.1),
+            hovertemplate="x=%{x:.3f}<br>y=%{y:.3f}<br>z=%{z:.3f}<extra></extra>"
+        ),
+        go.Scatter3d(
+            x=[min_x], y=[min_y], z=[min_z],
+            mode='markers+text',
+            marker=dict(size=6, color='red', symbol='circle'),
+            name='Minimizer'
+        )
+    ]
+)
+
+# Layout
+fig.update_layout(
+    title="Rosenbrock Function (3D Surface) with Minimizer",
+    scene=dict(
+        xaxis_title='x1',
+        yaxis_title='x2',
+        zaxis_title='f(x1,x2)',
+        camera=dict(eye=dict(x=1.5, y=1.5, z=0.8))
+    ),
+    margin=dict(l=0, r=0, t=40, b=0),
+    width=800,
+    height=600
+)
+
+fig.show()
+```
+
 
 ---
 
@@ -810,8 +877,8 @@ contour = plt.contour(X, Y, Z, levels=np.logspace(-1, 3, 20), cmap='plasma')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(1, 1, 'r*', markersize=15, label='Minimum Point (1, 1)')
 plt.title('Rosenbrock Function Contour Plot')
-plt.xlabel('x')
-plt.ylabel('y')
+plt.xlabel(r'$x_{1}$')
+plt.ylabel(r'$x_{2}$')
 plt.legend()
 plt.grid(True)
 ```
@@ -907,18 +974,26 @@ plt.show()
 
 ## Optimization in Practice
 
-As a data scientist, you will likely use one of these algorithms when training a machine learning model. In practice, however, you typically won't:
+In practice, data scientists usually select a suitable optimizer rather than proving convergence or computing an exact step size for every problem. You will rarely:
 
-- Prove the convergence of the algorithm for your specific problem  
-- Explicitly determine the optimal value of the parameter $\alpha_k$
+- prove convergence for your particular model, or
+- determine the exact optimal learning rate $\alpha_{k}$.
 
-Nonetheless, it's important to understand the implementation details—especially when things don't go as expected. A solid grasp of the underlying mechanics can help you diagnose issues and make informed adjustments.
+Understanding implementation details and failure modes is essential as it makes tuning, debugging, and algorithm choice much simpler.
+
+::: {.notes}
+As a practitioner you will normally rely on established optimizers instead of proving convergence or finding exact step sizes for every problem.
+
+While formal convergence proofs and exact line searches are important theoretically, practical work focuses on diagnosing behavior, choosing hyperparameters (e.g., the learning rate $\alpha_{k}$), and applying robust defaults. 
+
+A clear understanding of the mechanics enables faster troubleshooting and better-informed adjustments.
+:::
 
 
 ## Summary
 
 In this lecture:
 
-- we proved linear convergence of the gradient descent method
+- we discussed linear convergence of the gradient descent method
 - introduced variants of the method
 - discussed the practical use of these methods in data science
