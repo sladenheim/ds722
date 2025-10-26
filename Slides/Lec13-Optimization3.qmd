@@ -5,9 +5,12 @@ jupyter: python3
 
 ## Lecture Overview
 
-Second order optimization methods used information from the Hessian of the objective function.
+Second order optimization methods use information from the Hessian of the objective function.
 
-The goal today is to introduce the most well-known second order method: **Newton's Method**.
+The goal today is to introduce two second order methods:
+
+- **Newton's Method**
+- **Quasi-Newton Methods**
 
 Newton's method was developed as a root finding algorithm but is an extremely powerful optimization algorithm.
 
@@ -17,6 +20,7 @@ Understand:
 
 - Convergence of Newton's method
 - Computational costs of Newton's method
+- Quasi-Newton Methods
 - Pros and cons of 1st and 2nd order methods
 
 ## Newton's Method
@@ -24,14 +28,14 @@ Understand:
 The Newton method is given by
 
 $$
-x_{k+1} = x_{k} + \alpha_{k}\nabla^{2}f_{k}^{-1}\nabla f_{k}. 
+x_{k+1} = x_{k} - \alpha_{k}\nabla^{2}f_{k}^{-1}\nabla f_{k}. 
 $$
 
-Recall that $\nabla^{2}f_{k}^{-1}$ is the Hessian and $\nabla f_{k}$ is the gradient evaluated at $x_{k}$.
+Here $\nabla f_{k} = \nabla f(x_{k}$ and $\nabla^{2}f_{k}^{-1}$ is the inverse Hessian.
 
 ---
 
-We can derive 
+We can derive  #TODO
 
 ## Example 1
 
@@ -90,14 +94,14 @@ $$
 
 ---
 
-We will now compute 10 steps of the Newton Method for the starting points $x_{0} = \{ 1.0, 0.0, 0.1, 0.01 \}$ with $\alpha_{k}=1$.
+We will now compute 10 steps of the Newton Method for the starting points $x_{0} = \{ 1.0, 0.25, 0.1, 0.01 \}$ with $\alpha_{k}=1$.
 
 ```{python}
 import numpy as np
 import pandas as pd
 
 # Define the update direction
-f = lambda x: 7 * x**2 - x
+update_direction = lambda x: 7 * x**2 - x
 
 # Newton's method implementation with overflow handling
 def newton_method(x0, alpha=1, n_iter=10):
@@ -105,14 +109,14 @@ def newton_method(x0, alpha=1, n_iter=10):
     iterations = [x]
     for _ in range(n_iter):
         try:
-            x = x - alpha * f(x)
+            x = x - alpha * update_direction(x)
         except OverflowError:
             x = float('nan')
         iterations.append(x)
     return iterations
 
 # Initial guesses
-initial_guesses = [1.0, 0.0, 0.1, 0.01]
+initial_guesses = [1.0, 0.25, 0.1, 0.01]
 
 # Run Newton's method for each initial guess and collect results in a dictionary
 results_dict = {str(x0): newton_method(x0) for x0 in initial_guesses}
@@ -124,6 +128,164 @@ results_df = pd.DataFrame(results_dict)
 print(results_df)
 ```
 
+---
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function f(x) = 7x - ln(x)
+def f(x):
+    return 7 * x - np.log(x)
+
+# Define the Newton update direction: f'(x)/f''(x) simplified
+def update_direction(x):
+    return 7 * x**2 - x
+
+# Newton's method implementation with overflow handling
+def newton_method(x0, alpha=1, n_iter=10):
+    x = x0
+    iterations = [x]
+    for _ in range(n_iter):
+        try:
+            x = x - alpha * update_direction(x)
+        except OverflowError:
+            x = float('nan')
+        iterations.append(x)
+    return iterations
+
+# Initial guesses
+initial_guesses = [0.1]
+trajectories = [newton_method(x0) for x0 in initial_guesses]
+
+# Define the domain, avoiding x <= 0 due to log(x)
+x = np.linspace(0.001, 1.5, 400)
+y = f(x)
+
+# Plot the function and Newton's method trajectories
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
+
+colors = ['red']
+for i, traj in enumerate(trajectories):
+    y_traj = f(np.array(traj))
+    plt.plot(traj, y_traj, 'o-', color=colors[i], label=f"Start at x0 = {initial_guesses[i]}")
+
+plt.title("Newton's Method Trajectories on f(x) = 7x - ln(x)")
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function f(x) = 7x - ln(x)
+def f(x):
+    return 7 * x - np.log(x)
+
+# Define the Newton update direction: f'(x)/f''(x) simplified
+def update_direction(x):
+    return 7 * x**2 - x
+
+# Newton's method implementation with overflow handling
+def newton_method(x0, alpha=1, n_iter=10):
+    x = x0
+    iterations = [x]
+    for _ in range(n_iter):
+        try:
+            x = x - alpha * update_direction(x)
+        except OverflowError:
+            x = float('nan')
+        iterations.append(x)
+    return iterations
+
+# Initial guesses
+initial_guesses = [0.01]
+trajectories = [newton_method(x0) for x0 in initial_guesses]
+
+# Define the domain, avoiding x <= 0 due to log(x)
+x = np.linspace(0.001, 1.5, 400)
+y = f(x)
+
+# Plot the function and Newton's method trajectories
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
+
+colors = ['red']
+for i, traj in enumerate(trajectories):
+    y_traj = f(np.array(traj))
+    plt.plot(traj, y_traj, 'o-', color=colors[i], label=f"Start at x0 = {initial_guesses[i]}")
+
+plt.title("Newton's Method Trajectories on f(x) = 7x - ln(x)")
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function f(x) = 7x - ln(x)
+def f(x):
+    return 7 * x - np.log(x)
+
+# Define the Newton update direction: f'(x)/f''(x) simplified
+def update_direction(x):
+    return 7 * x**2 - x
+
+# Newton's method implementation with overflow handling
+def newton_method(x0, alpha=1, n_iter=10):
+    x = x0
+    iterations = [x]
+    for _ in range(n_iter):
+        try:
+            x = x - alpha * update_direction(x)
+        except OverflowError:
+            x = float('nan')
+        iterations.append(x)
+    return iterations
+
+# Initial guesses
+initial_guesses = [0.25]
+trajectories = [newton_method(x0) for x0 in initial_guesses]
+
+# Define the domain, avoiding x <= 0 due to log(x)
+x = np.linspace(0.001, 1.5, 400)
+y = f(x)
+
+# Plot the function and Newton's method trajectories
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
+
+colors = ['red']
+for i, traj in enumerate(trajectories):
+    y_traj = f(np.array(traj))
+    plt.plot(traj, y_traj, 'o-', color=colors[i], label=f"Start at x0 = {initial_guesses[i]}")
+
+plt.title("Newton's Method Trajectories on f(x) = 7x - ln(x)")
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+```
 
 ## Example 2
 
@@ -184,16 +346,16 @@ The minimum point is $\left(\frac{1}{3},\frac{1}{3}\right)$
 
 
 :::: {.fragment}
-What is the Hessian $\nabla f^{2}(x_{1},x_{2})$?
+What is the Hessian $\nabla^{2} f(x_{1},x_{2})$?
 ::::
 
 :::: {.fragment}
 $$
 \small
-\nabla f^{2}(x_{1},x_{2}) = 
+\nabla^{2} f(x_{1},x_{2}) = 
 \begin{bmatrix}
-\frac{1}{(1-x_{1}-x_{2})^{2}} - \frac{1}{x_{1}^{2}} & \frac{1}{(1-x_{1}-x_{2})^{2}} \\
-\frac{1}{(1-x_{1}-x_{2})^{2}} &  \frac{1}{(1-x_{1}-x_{2})^{2}} - \frac{1}{x_{2}^{2}}\\
+\frac{1}{(1-x_{1}-x_{2})^{2}} + \frac{1}{x_{1}^{2}} & \frac{1}{(1-x_{1}-x_{2})^{2}} \\
+\frac{1}{(1-x_{1}-x_{2})^{2}} &  \frac{1}{(1-x_{1}-x_{2})^{2}} + \frac{1}{x_{2}^{2}}\\
 \end{bmatrix}
 $$
 ::::
@@ -335,7 +497,7 @@ What behavior have we seen from Newton's method?
 
 **Second order sufficient conditions**
 
-Suppose that $\nabla^{2}f is continyous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2}f(x^{*})$ is positive definite, then $x^{*}$ is a strict local minimizer of $f$.
+Suppose that $\nabla^{2}f$ is continuous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2}f(x^{*})$ is positive definite, then $x^{*}$ is a (strict) local minimizer of $f$.
 
 ---
 
@@ -345,18 +507,6 @@ Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is L
 1. the rate of convergence of $\{x_{k}\}$ is quadratic,
 1. the sequence of gradient norms $\{\Vert \nabla f_{k}\Vert\}$ converges quadratically to zero.
 
----
-
-To prove this we will make use of the following:
-
-1. $\Vert \nabla^{2} f(x) -\nabla^{2} f(y)\Vert\leq L \Vert x - y\Vert$
-1. The Hessian $\nabla^{2}f(x^{*})$ is nonsingular, which implies $\exists r>0$ such that $\Vert \nabla^{2}f_{k}^{-1}\Vert \leq 2 \Vert \nabla^{2}f(x^{*})^{-1}\Vert$ for all $x_{k}$ with $\Vert x_{k}-x^{*}\Vert \leq r$.
-
----
-
-**Proof**
-
-
 ## Computational Costs
 
 >What are issues with Newton's method if the dimension of the inputs $x\in\mathbb{R}^{n}$ to the objective function $f(x)$ is extremely large?
@@ -365,7 +515,7 @@ To prove this we will make use of the following:
 The computational costs of Newton's method:
 
 1. Compute and store the gradient $\nabla f_{k}\in\mathbb{R}^{n}$
-1. Compute and store the Hessian $\nabla^{2}f_{k}\in\mathbb{R}^{n\times n}$$
+1. Compute and store the Hessian $\nabla^{2}f_{k}\in\mathbb{R}^{n\times n}$
 1. Invert the Hessian $\nabla^{2}f_{k}^{-1}$
 ::::
 
@@ -391,15 +541,435 @@ The computational costs of Newton's method:
 - **High precision needs**: Quadratic convergence near solution
 - **Smooth, well-behaved functions**: Positive definite Hessians
 
----
-
-## Applications
+<!-- ## Applications
 
 - Convex optimization (e.g., operations research)
 - Nonlinear programming (e.g., engineering design)
 - Econometrics & statistical modeling
 - Control systems & trajectory optimization
-- Computational physics & chemistry
+- Computational physics & chemistry -->
+
+## Quasi-Newton Methods
+
+Quasi-Newton methods require only the gradient of the objective function at each iteration.
+
+These methods measure changes in the gradient and construct a model of the objective function that is good enough to produce superlinear convergence.
+
+For challenging problems these methods can outperform steepest descent methods.
+
+Importantly, these methods do not require 2nd derivatives and can be more efficient than Newton's Method.
+
+## Historical Context
+
+The development of Quasi-Newton methods began in the mid-1950's.
+
+The physicist, [W.C. Davidon](https://en.wikipedia.org/wiki/William_C._Davidon), working at Argonne National Laboratory was performing long optimization calculations.
+
+Davidon developed a way to accelerate the convergence which Roger Fletcher and Michael J. D. Powell demonstrated was much faster and more reliable than existing methods.
+
+The method is called DFP and is related to BFGS.
+
+## The BFGS Method
+
+To derive the BFGS method, we introduce the quadratic model of the objective function
+
+$$
+m_{k}(p) = f_{k} + \nabla f_{k}^{\top}(p) + \frac{1}{2}p^{\top}B_{k}p.
+$$
+
+Here, $B_{k}\in\mathbb{R}^{n\times n}$ is SPD. The minimizer $p_{k}=B_{k}^{-1}\nabla f_{k}$ is used as a search direction and $x_{k+1}=x_{k}+\alpha_{k}p_{k}$.
+
+---
+
+We don't want to reconstruct $B_{k+1}$ from scratch at each iteration. The idea is to *update* it using curvature information from the most recent step.
+
+Suppose we have a new iterate $x_{k+1}$ and wish to construct a new quadratic model
+
+$$
+m_{k+1}(p) = f_{k+1} + \nabla f_{k+1}^{\top}(p) + \frac{1}{2}p^{\top}B_{k+1}p.
+$$
+
+What requirements should we impose on $B_{k+1}$ using information from the previous step?
+
+---
+
+Two reasonable requirements:
+
+1. $\nabla m_{k+1}$ should match $\nabla f_{k}$ and 
+1. $\nabla m_{k+1}$ should match $\nabla f_{k+1}$
+
+:::: {.fragment}
+Note that
+
+$$
+\nabla m_{k+1}(p) = \nabla f_{k+1} + B_{k+1}p,
+$$
+
+so $\nabla m_{k+1}(0) = \nabla f_{k+1}$.
+::::
+
+
+---
+
+The first condition is
+
+$$
+\nabla m_{k+1}(-\alpha p_{k}) = \nabla f_{k+1} - \alpha_{k}B_{k+1}p_{k} = \nabla f_{k},
+$$
+
+which is equivalent to
+
+$$
+B_{k+1}\alpha_{k}p_{k} = \nabla f_{k+1} - \nabla f_{k}.
+$$
+
+Introducing 
+
+$$
+s_{k} = x_{k+1}-x_{k} = \alpha_{k}p_{k}, \quad y_{k} = \nabla f_{k+1} - \nabla f_{k},
+$$
+
+$$
+B_{k+1}s_{k} = y_{k} \quad(\text{secant equation}).
+$$
+
+::: {.notes}
+$s_{k}$ is the displacement, and $y_{k}$ is the change of gradients.
+:::
+
+---
+
+Given $s_{k}$ and $y_{k}$, the secant equation requires that $B_{k+1}$ maps $s_{k}$ to $y_{k}$. This is possible only if 
+
+$$
+s_{k}^{\top}y_{k} > 0~(\text{curvature condition}).
+$$
+
+For convex problems this is always true. 
+
+For non-convex problems, we have to enforce this by imposing conditions on $\alpha$.
+
+## Determining $B_{k+1}$
+
+When the curvature condition is satisfied, $B_{k+1}s_{k}=y_{k}$ always has a solution, but it is **not unique**.
+
+To determine $B_{k+1}$ uniquely, the following minimization problem is solved
+
+$$
+\begin{align}
+&\min_{B} \Vert B- B_{k}\Vert \\
+\text{subject to}~&B=B^{\top}~\text{and}~Bs_{k}=y_{k}.
+\end{align}
+$$
+
+Different matrix norms give rise to different quasi-Newton methods.
+
+---
+
+The norm
+
+$$
+\Vert A\Vert_{W} = \Vert W^{1/2}AW^{1/2}\Vert,
+$$
+
+where $W$ can be any SPD matrix satisfying $Ws_{k}=y_{k}$. 
+
+Solving the optimization problem using this norm leads to an update rule for $B_{k+1}$. This derivation is the DFP update. 
+
+## DFP Update
+
+The DFP update is
+
+$$
+B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{\top})B_{k}(I-\rho_{k}s_{k}y_{k}^{\top}) + \rho_{k}y_{k}y_{k}^{\top}.
+$$
+where $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
+
+The inverse of $B_{k}$, denoted $H_{k}=B_{k}^{-1}$ can be determined using the Sherman-Morrison-Woodbury formula to obtain
+
+$$
+H_{k+1} = H_{k} - \frac{H_{k}y_{k}y_{k}^{\top}H_{k}}{y_{k}^{\top}H_{k}y_{k}} + \frac{s_{k}s_{k}^{\top}}{y_{k}^{\top}s_{k}}.
+$$
+
+## BFGS Update
+
+The BFGS update is derived by solving the minimization problem
+
+$$
+\begin{align}
+&\min_{H} \Vert H- H_{k}\Vert \\
+\text{subject to}~&H=H^{\top}~\text{and}~Hy_{k}=s_{k}.
+\end{align}
+$$
+
+This leads to the update rule
+
+$$
+H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top}) + \rho_{k}s_{k}s_{k}^{\top}.
+$$
+
+
+## BFGS Algorithm
+
+Given starting point $x_{0}$, $\varepsilon>0$, and $H_{0}$. 
+
+1. $k\leftarrow0$
+1. while $\Vert \nabla f_{k} \Vert > \varepsilon$
+1. $\quad$ Compute $p_{k} = -H_{k}\nabla f_{k}$ and $x_{k+1} = x_{k} + \alpha_{k}p_{k}$
+1. $\quad$ Compute $s_{k} = x_{k+1}-x_{k}$ and $y_{k} = \nabla f_{k+1}-\nabla f_{k}$
+1. $\quad$ $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
+1. $\quad$ $H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top})+\rho_{k}s_{k}s_{k}^{\top}$
+1. $\quad k\leftarrow k+1$
+
+## Rosenbrock's Function
+
+Recall the Rosenbrock function:
+
+$$
+f(x_{1}, x_{2}) = (1 - x_{1})^2 + 100(x_{2} - x_{1}^2)^2
+$$
+
+- Non-convex and highly curved
+- Global minimum at $(x_{1}, x_{2}) = (1, 1)$
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set seaborn style
+sns.set(style='whitegrid')
+
+# Define the Rosenbrock function
+def rosenbrock(x, y):
+    return (1 - x)**2 + 100 * (y - x**2)**2
+
+# Create a grid of x and y values
+x = np.linspace(-2, 2, 400)
+y = np.linspace(-1, 3, 400)
+X, Y = np.meshgrid(x, y)
+Z = rosenbrock(X, Y)
+
+# Create the plot
+plt.figure(figsize=(10, 8))
+contour = plt.contour(X, Y, Z, levels=np.logspace(-1, 3, 20), cmap='plasma')
+plt.clabel(contour, inline=True, fontsize=8)
+plt.plot(1, 1, 'r*', markersize=15, label='Minimum Point (1, 1)')
+plt.title('Rosenbrock Function Contour Plot')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.grid(True)
+```
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import line_search
+
+# Rosenbrock function and its gradient
+def rosenbrock(x):
+    return (1 - x[0])**2 + 100 * (x[1] - x[0]**2)**2
+
+def rosenbrock_grad(x):
+    grad = np.zeros_like(x)
+    grad[0] = -2 * (1 - x[0]) - 400 * x[0] * (x[1] - x[0]**2)
+    grad[1] = 200 * (x[1] - x[0]**2)
+    return grad
+
+# Hessian of the Rosenbrock function
+def rosenbrock_hessian(x):
+    hessian = np.zeros((2, 2))
+    hessian[0, 0] = 2 - 400 * x[1] + 1200 * x[0]**2
+    hessian[0, 1] = -400 * x[0]
+    hessian[1, 0] = -400 * x[0]
+    hessian[1, 1] = 200
+    return hessian
+
+# Gradient descent with Wolfe line search
+def gradient_descent_wolfe(x0, max_iter=6000, c1=1e-4, c2=0.9):
+    x = x0.copy()
+    trajectory = [x.copy()]
+    for i in range(max_iter):
+        grad = rosenbrock_grad(x)
+        direction = -grad
+        alpha = line_search(rosenbrock, rosenbrock_grad, x, direction, grad, c1=c1, c2=c2)[0]
+        if alpha is None:
+            alpha = 1e-3
+        x = x + alpha * direction
+        trajectory.append(x.copy())
+        if np.linalg.norm(grad) < 1e-5:
+            return np.array(trajectory), i + 1
+    return np.array(trajectory), max_iter
+
+# Newton's method with Wolfe line search
+def newton_method_wolfe(x0, max_iter=100, c1=1e-4, c2=0.9):
+    x = x0.copy()
+    trajectory = [x.copy()]
+    for i in range(max_iter):
+        grad = rosenbrock_grad(x)
+        hess = rosenbrock_hessian(x)
+        direction = -np.linalg.solve(hess, grad)
+        alpha = line_search(rosenbrock, rosenbrock_grad, x, direction, grad, c1=c1, c2=c2)[0]
+        if alpha is None:
+            alpha = 1e-3
+        x = x + alpha * direction
+        trajectory.append(x.copy())
+        if np.linalg.norm(grad) < 1e-5:
+            return np.array(trajectory), i + 1
+    return np.array(trajectory), max_iter
+
+# BFGS method with Wolfe line search
+def bfgs_method_wolfe(x0, max_iter=1000, c1=1e-4, c2=0.9):
+    x = x0.copy()
+    trajectory = [x.copy()]
+    n = len(x0)
+    H = np.eye(n)
+    for i in range(max_iter):
+        grad = rosenbrock_grad(x)
+        direction = -H @ grad
+        alpha = line_search(rosenbrock, rosenbrock_grad, x, direction, grad, c1=c1, c2=c2)[0]
+        if alpha is None:
+            alpha = 1e-3
+        x_new = x + alpha * direction
+        grad_new = rosenbrock_grad(x_new)
+        s = x_new - x
+        y = grad_new - grad
+        rho = 1.0 / (y @ s)
+        I = np.eye(n)
+        H = (I - rho * np.outer(s, y)) @ H @ (I - rho * np.outer(y, s)) + rho * np.outer(s, s)
+        x = x_new
+        trajectory.append(x.copy())
+        if np.linalg.norm(grad_new) < 1e-5:
+            return np.array(trajectory), i + 1
+    return np.array(trajectory), max_iter
+
+# Starting point
+x0 = np.array([-1.2, 1.0])
+
+# Run optimizations
+traj_gd, iter_gd = gradient_descent_wolfe(x0)
+traj_newton, iter_newton = newton_method_wolfe(x0)
+traj_bfgs, iter_bfgs = bfgs_method_wolfe(x0)
+
+# Create contour plot
+x_vals = np.linspace(-2, 2, 400)
+y_vals = np.linspace(-1, 3, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+Z = (1 - X)**2 + 100 * (Y - X**2)**2
+
+plt.figure(figsize=(10, 6))
+plt.contour(X, Y, Z, levels=np.logspace(-1, 3, 4), cmap='gray')
+plt.plot(traj_gd[:, 0], traj_gd[:, 1], label=f'Gradient Descent ({iter_gd} iters)')
+plt.plot(traj_newton[:, 0], traj_newton[:, 1], label=f'Newton ({iter_newton} iters)')
+plt.plot(traj_bfgs[:, 0], traj_bfgs[:, 1], label=f'BFGS ({iter_bfgs} iters)')
+plt.scatter([-1.2], [1.0], color='red', label='Start')
+plt.scatter([1], [1], color='red', marker='*', s=200, label='Minimum')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Optimization Trajectories on Rosenbrock Function')
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+
+---
+
+```{python}
+import pandas as pd
+import numpy as np
+#| fig-align: center
+
+min_point = np.array([1, 1])
+norms_gd = np.linalg.norm(traj_gd[-5:] - min_point, axis=1)
+norms_newton = np.linalg.norm(traj_newton[-5:] - min_point, axis=1)
+norms_bfgs = np.linalg.norm(traj_bfgs[-5:] - min_point, axis=1)
+
+# Create table of final 5 gradient norms
+df = pd.DataFrame({
+    "Gradient Descent": norms_gd,
+    "Newton": norms_newton,
+    "BFGS": norms_bfgs
+})
+print("Final 5 Gradient Norms for Each Method:")
+print(df)
+
+```
+## Convergence 
+
+We make the following assumptions:
+
+**Assumption 1**:
+
+1. The objective function $f$ is twice continuously differentiable.
+1. The level set $\mathcal{L}= \{x\in\mathbb{R}^{n}\vert f(x)\leq f(x_{0})\}$ is convex, and there exist positive constants $m$ and $M$ such that
+
+$$
+m\Vert z\Vert^{2} \leq z^{\top}\nabla^{2}f(x)z \leq M \Vert z\Vert^{2},
+$$
+for all $z\in\mathbb{R}^{n}$ and $x\in\mathcal{L}$.
+
+---
+
+**Theorem**
+Let $B_{0}$ be any symmetric positive definite initial matrix, and let $x_{0}$ be a starting point for which Assumption 1 is satisfied. Then the sequence $x_{k}$ generated by the BFGS algorithm (with $\varepsilon=0$) converges to the minimizer $x^{*}$ of $f$.
+
+## Convergence Rate
+
+**Assumption 2**
+The Hessian matrix $\nabla f^{2}$ is Lipschitz continuous at $x^{*}$, that is,
+
+$$
+\Vert \nabla f^{2}(x) - \nabla f^{2}(x^{*})\Vert \leq L \Vert x-x^{*}\Vert,
+$$
+for all $x$ near $x^{*}$, where $L$ is a positive constant.
+
+---
+
+**Theorem**
+Suppose that $f$ is twice continuously differentiable and that the iterates generated by the BFGS algorithm converged to the minimizer $x^{*}$ at which Assumption 2 holds. Suppose also that $\sum_{k=1}^{\infty}\Vert x_{k}-x^{*}\Vert < \infty$. Then $x_{k}$ converges to $x^{*}$ at a superlinear rate.
+
+## Large-Scale Optimization
+
+Many applications give rise to unconstrained optimization problems with millions (or more) variables.
+
+Solving these problems is a challenge:
+
+1. Storage costs (gradient and Hessian)
+1. Inversion costs (Hessian)
+    - Newton: $\mathcal{O}(n^{3})$ per iteration
+    - BFGS: $\mathcal{O}(n^{2})$ per iteration
+    - L-BFGS: $\mathcal{O}(mn)$ per iteration, where $m$ is history
+
+## Inexact Newton
+
+In Newton methods we have to solve
+
+$$
+\nabla^{2} f_{k}p_{k} = -\nabla f_{k}.
+$$
+
+Inexact Newton methods *approximate* this equation using iterative methods for linear systems of equations.
+
+Compute $\tilde{p}_{k}$ such that the residual $r_{k}=\nabla^{2}f_{k}\tilde{p}_{k} + \nabla f_{k}$ is small.
+
+
+## L-BFGS
+
+*Limited memory* quasi-Newton methods are useful for large problems where the Hessian matrix cannot be computed at a reasonable cost.
+
+Limited memory methods maintain a history of the last $m$ updates of:
+
+  - Position differences: $s_k = x_{k+1} - x_k$
+  - Gradient differences: $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$
+
+Use the limited history to build a low-rank approximation of the inverse Hessian $H_{k}$.
 
 ## Summary
 
@@ -409,3 +979,4 @@ Today we covered:
 1. Convergence of Newton's method
 1. Computational costs of Newton's method
 1. Comparison of 1st and 2nd order methods
+1. Quasi-Newton methods (BFGS, L-BFGS)
