@@ -477,8 +477,8 @@ Momentum smooths these updates, reducing oscillations and allowing faster moveme
 1. Given $w_{0}$, $\alpha>0$, $\beta\in[0, 1)$ and $v_{0}$
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
-1. $\quad v_{k+1} = \beta v_{k} - \alpha \nabla f_{k}$
-1. $\quad w_{k+1} = w_{k}+v_{k+1}$
+1. $\quad v_{k+1} = \beta v_{k} + \alpha \nabla f_{k}$
+1. $\quad w_{k+1} = w_{k}-v_{k+1}$
 
 
 ---
@@ -575,6 +575,14 @@ RMSProp (Root Mean Square Propagation) was designed to address a key limitation 
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad E_{k+1} = \gamma E_{k} + (1-\gamma)\nabla f_{k}^{2}$ (element-wise square)
 1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1} + \varepsilon}}\nabla f_{k}$
+
+::: {.notes}
+Think of $E_{k+1}$ as an exponentially weighted moving average  of squared gradients. 
+
+When the gradient has consistently small magnitudes, then the moving average is small, the denominator is small and we can take larger steps when the gradient is consistent.
+
+When the gradient fluctuates or is large, then the weighted moving average is larger and we take smaller steps. Prevents overshooting or divergence.
+:::
 
 ---
 
@@ -684,6 +692,9 @@ The Adam optimizer combines both. It is a smart navigator that remembers both th
 1. $\quad \hat{m}_{k+1} = \frac{m_{k+1}}{1-\beta_{1}^{k+1}}$, $\quad \hat{v}_{k+1} = \frac{v_{k+1}}{1-\beta_{2}^{k+1}}$
 1. $\quad w_{k+1} = w_{k}-\alpha \frac{\hat{m}_{k+1}}{\sqrt{\hat{v}_{k+1}} + \varepsilon}$ (element-wise division)
 
+::: {.notes}
+The $1-\beta^{k+1}$ term corrects for the fact that the moving average started at zero (bias fades over time). For warming up the training. Without this you understimate the true gradient information.
+:::
 
 ---
 
