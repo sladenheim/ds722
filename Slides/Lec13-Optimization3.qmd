@@ -28,14 +28,11 @@ Understand:
 The Newton method is given by
 
 $$
-x_{k+1} = x_{k} - \alpha_{k}\nabla^{2}f_{k}^{-1}\nabla f_{k}. 
+x_{k+1} = x_{k} - \alpha_{k}(\nabla^{2}f_{k})^{-1}\nabla f_{k}. 
 $$
 
-Here $\nabla f_{k} = \nabla f(x_{k}$ and $\nabla^{2}f_{k}^{-1}$ is the inverse Hessian.
+Here $\nabla f_{k} = \nabla f(x_{k})$ and $\nabla^{2}f_{k}^{-1}$ is the inverse Hessian.
 
----
-
-We can derive  #TODO
 
 ## Example 1
 
@@ -501,7 +498,7 @@ Suppose that $\nabla^{2}f$ is continuous in an open neighborhood of $x^{*}$ and 
 
 ---
 
-Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is Lipschitz continuous in a neighborhood of a solution $x^{*}$ at which the sufficient conditions are satisfied. Consider the iteration $x_{k+1} = x_{k} + p_{k}$, where $p_{k}=\nabla^{2}f_{k}^{-1}\nabla f_{k}$, then
+Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is Lipschitz continuous in a neighborhood of a solution $x^{*}$ at which the sufficient conditions are satisfied. Consider the iteration $x_{k+1} = x_{k} + p_{k}$, where $p_{k}=-\nabla^{2}f_{k}^{-1}\nabla f_{k}$, then
 
 1. if the starting point $x_{0}$ is sufficiently close to $x^{*}$, the sequence of iterates converges to $x^{*}$,
 1. the rate of convergence of $\{x_{k}\}$ is quadratic,
@@ -529,9 +526,6 @@ The computational costs of Newton's method:
 | **Convergence Speed**          | Slower, especially near minima               | Faster, especially near local minima          |
 | **Memory Requirements**        | Low                                          | High (especially for full Hessian)            |
 | **Scalability**                | Good for large-scale problems                | Challenging for large-scale problems          |
-| **Robustness**                 | More robust to noise and non-smoothness      | Sensitive to noise and ill-conditioned Hessians |
-| **Implementation Complexity**  | Simple                                       | Complex                                       |
-| **Global vs Local Behavior**   | Better for global exploration                | Better for local refinement                   |
 | **Suitability for Deep Learning** | Commonly used due to scalability           | Rarely used due to cost and complexity        |
 
 
@@ -561,23 +555,38 @@ Importantly, these methods do not require 2nd derivatives and can be more effici
 
 ## Historical Context
 
-The development of Quasi-Newton methods began in the mid-1950's.
+The development of Quasi-Newton methods began in the mid-1950s.
 
 The physicist, [W.C. Davidon](https://en.wikipedia.org/wiki/William_C._Davidon), working at Argonne National Laboratory was performing long optimization calculations.
 
 Davidon developed a way to accelerate the convergence which Roger Fletcher and Michael J. D. Powell demonstrated was much faster and more reliable than existing methods.
 
-The method is called DFP and is related to BFGS.
+This is called the DFP method; it is related to BFGS.
 
-## The BFGS Method
+## Quasi-Newton Methods
 
-To derive the BFGS method, we introduce the quadratic model of the objective function
+The main idea behind the BFGS (and other Quasi-Newton) method(s) is that we will generate at each step
+
+$$
+B_{k}\approx \nabla^{2}f_{k}.
+$$
+
+The BFGS method provides:
+
+- a simple (and efficient) way to update $B_{k}$
+- still achieve superlinear convergence
+
+## Quasi-Newton Derivation
+
+Quasi-Newton methods are derived by introducing the following quadratic model of the objective function
 
 $$
 m_{k}(p) = f_{k} + \nabla f_{k}^{\top}(p) + \frac{1}{2}p^{\top}B_{k}p.
 $$
 
-Here, $B_{k}\in\mathbb{R}^{n\times n}$ is SPD. The minimizer $p_{k}=B_{k}^{-1}\nabla f_{k}$ is used as a search direction and $x_{k+1}=x_{k}+\alpha_{k}p_{k}$.
+Here, $B_{k}\in\mathbb{R}^{n\times n}$ is SPD. 
+
+The minimizer $p_{k}=-B_{k}^{-1}\nabla f_{k}$ is used as a search direction and $x_{k+1}=x_{k}+\alpha_{k}p_{k}$.
 
 ---
 
@@ -598,7 +607,7 @@ Two reasonable requirements:
 1. $\nabla m_{k+1}$ should match $\nabla f_{k}$ and 
 1. $\nabla m_{k+1}$ should match $\nabla f_{k+1}$
 
-:::: {.fragment}
+<!-- :::: {.fragment}
 Note that
 
 $$
@@ -606,32 +615,22 @@ $$
 $$
 
 so $\nabla m_{k+1}(0) = \nabla f_{k+1}$.
-::::
-
+:::: -->
 
 ---
 
-The first condition is
+With a bit of algebra we can show that these conditions lead to the following equation
+
 
 $$
-\nabla m_{k+1}(-\alpha p_{k}) = \nabla f_{k+1} - \alpha_{k}B_{k+1}p_{k} = \nabla f_{k},
+B_{k+1}s_{k} = y_{k} \quad(\text{secant equation}),
+$$
+where
+$$
+s_{k} = x_{k+1}-x_{k}, \quad y_{k} = \nabla f_{k+1} - \nabla f_{k}.
 $$
 
-which is equivalent to
 
-$$
-B_{k+1}\alpha_{k}p_{k} = \nabla f_{k+1} - \nabla f_{k}.
-$$
-
-Introducing 
-
-$$
-s_{k} = x_{k+1}-x_{k} = \alpha_{k}p_{k}, \quad y_{k} = \nabla f_{k+1} - \nabla f_{k},
-$$
-
-$$
-B_{k+1}s_{k} = y_{k} \quad(\text{secant equation}).
-$$
 
 ::: {.notes}
 $s_{k}$ is the displacement, and $y_{k}$ is the change of gradients.
@@ -664,7 +663,7 @@ $$
 
 Different matrix norms give rise to different quasi-Newton methods.
 
----
+<!-- ---
 
 The norm
 
@@ -674,14 +673,14 @@ $$
 
 where $W$ can be any SPD matrix satisfying $Ws_{k}=y_{k}$. 
 
-Solving the optimization problem using this norm leads to an update rule for $B_{k+1}$. This derivation is the DFP update. 
+Solving the optimization problem using this norm leads to an update rule for $B_{k+1}$. This derivation is the DFP update.  -->
 
 ## DFP Update
 
 The DFP update is
 
 $$
-B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{\top})B_{k}(I-\rho_{k}s_{k}y_{k}^{\top}) + \rho_{k}y_{k}y_{k}^{\top}.
+B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{\top})B_{k}(I-\rho_{k}s_{k}y_{k}^{\top}) + \rho_{k}y_{k}y_{k}^{\top},
 $$
 where $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
 
@@ -691,18 +690,11 @@ $$
 H_{k+1} = H_{k} - \frac{H_{k}y_{k}y_{k}^{\top}H_{k}}{y_{k}^{\top}H_{k}y_{k}} + \frac{s_{k}s_{k}^{\top}}{y_{k}^{\top}s_{k}}.
 $$
 
+Why is it better to work with $H_{k}$ as opposed to $B_{k}$?
+
 ## BFGS Update
 
-The BFGS update is derived by solving the minimization problem
-
-$$
-\begin{align}
-&\min_{H} \Vert H- H_{k}\Vert \\
-\text{subject to}~&H=H^{\top}~\text{and}~Hy_{k}=s_{k}.
-\end{align}
-$$
-
-This leads to the update rule
+The BFGS update for $H_{k}$ derived in a similar way and has the update rule
 
 $$
 H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top}) + \rho_{k}s_{k}s_{k}^{\top}.
@@ -901,7 +893,7 @@ print("Final 5 Gradient Norms for Each Method:")
 print(df)
 
 ```
-## Convergence 
+## BFGS Convergence 
 
 We make the following assumptions:
 
@@ -918,22 +910,33 @@ for all $z\in\mathbb{R}^{n}$ and $x\in\mathcal{L}$.
 ---
 
 **Theorem**
-Let $B_{0}$ be any symmetric positive definite initial matrix, and let $x_{0}$ be a starting point for which Assumption 1 is satisfied. Then the sequence $x_{k}$ generated by the BFGS algorithm (with $\varepsilon=0$) converges to the minimizer $x^{*}$ of $f$.
+Let $B_{0}$ be any symmetric positive definite initial matrix, and let $x_{0}$ be a starting point for which Assumption 1 is satisfied. Then the sequence $x_{k}$ generated by the BFGS algorithm converges to the minimizer $x^{*}$ of $f$.
 
 ## Convergence Rate
 
 **Assumption 2**
-The Hessian matrix $\nabla f^{2}$ is Lipschitz continuous at $x^{*}$, that is,
+The Hessian matrix $\nabla^{2} f$ is Lipschitz continuous at $x^{*}$, that is,
 
 $$
-\Vert \nabla f^{2}(x) - \nabla f^{2}(x^{*})\Vert \leq L \Vert x-x^{*}\Vert,
+\Vert \nabla^{2} f(x) - \nabla^{2} f(x^{*})\Vert \leq L \Vert x-x^{*}\Vert,
 $$
 for all $x$ near $x^{*}$, where $L$ is a positive constant.
 
 ---
 
 **Theorem**
-Suppose that $f$ is twice continuously differentiable and that the iterates generated by the BFGS algorithm converged to the minimizer $x^{*}$ at which Assumption 2 holds. Suppose also that $\sum_{k=1}^{\infty}\Vert x_{k}-x^{*}\Vert < \infty$. Then $x_{k}$ converges to $x^{*}$ at a superlinear rate.
+Suppose that $f$ is twice continuously differentiable and that the iterates generated by the BFGS algorithm converge to the minimizer $x^{*}$ at which Assumption 2 holds. Suppose also that $\sum_{k=1}^{\infty}\Vert x_{k}-x^{*}\Vert < \infty$. Then $x_{k}$ converges to $x^{*}$ at a superlinear rate.
+
+## L-BFGS
+
+*Limited memory* quasi-Newton methods are useful for large problems where the Hessian matrix cannot be computed at a reasonable cost.
+
+Limited memory methods maintain a history of the last $m$ updates of:
+
+  - Position differences: $s_k = x_{k+1} - x_k$
+  - Gradient differences: $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$
+
+Use the limited history to compute $H_{k}\nabla f_{k}$. You don't store the full matrix $H_{k}$.
 
 ## Large-Scale Optimization
 
@@ -958,18 +961,6 @@ $$
 Inexact Newton methods *approximate* this equation using iterative methods for linear systems of equations.
 
 Compute $\tilde{p}_{k}$ such that the residual $r_{k}=\nabla^{2}f_{k}\tilde{p}_{k} + \nabla f_{k}$ is small.
-
-
-## L-BFGS
-
-*Limited memory* quasi-Newton methods are useful for large problems where the Hessian matrix cannot be computed at a reasonable cost.
-
-Limited memory methods maintain a history of the last $m$ updates of:
-
-  - Position differences: $s_k = x_{k+1} - x_k$
-  - Gradient differences: $y_k = \nabla f(x_{k+1}) - \nabla f(x_k)$
-
-Use the limited history to build a low-rank approximation of the inverse Hessian $H_{k}$.
 
 ## Summary
 
