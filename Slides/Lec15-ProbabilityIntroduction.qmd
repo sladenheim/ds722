@@ -21,32 +21,51 @@ Understand:
 - basic axioms of probability
 - independent events
 - conditional probability
-- Bayes Theorem
+- Bayes' Theorem
+- frequentist vs Bayesian approach
 
 ## Sample Spaces and Events
 
 The sample space $\Omega$ is the set of possible outcomes of an experiment. Points $\omega\in\Omega$ are called sample outcomes, realizations, or elements.
 
-Subsets, i.e., $A\subseteq\Omega$ are called events
+Subsets, i.e., $A\subseteq\Omega$ are called events.
 
 ---
 
 What is $\Omega$ if we toss a coin twice? What is the event $A$ that the first toss is heads?
 
+::: {.notes}
+$\Omega = \{ HH, HT, TH, TT\}$ and $A=\{HH, HT\}$.
+:::
+
 ---
 
-Let $\omega$ be the outcome of a measurement of temperature (in C). What is $\Omega$? What is the event that a measurement is strictly larger than 15 but less than or equal to 30?
+Let $\omega$ be the outcome of a measurement of temperature in degrees Celsius (°C). What is $\Omega$? 
 
+What is the event that a measurement is strictly larger than 15 but less than or equal to 30?
+
+::: {.notes}
+$\Omega = \mathbb{R}$ and $A=(15, 30]$.
+:::
 
 ---
 
-If we toss a coin forever, what is $\Omega$? What is the event that the first head appears on the second toss?
+If we toss a coin forever, what is $\Omega$? 
+
+What is the event that the first head appears on the second toss?
+
+::: {.notes}
+$\Omega = \{\omega = (\omega_{1},\omega_{2},\ldots, ): \omega_{i}\in \{H, T\}\}$.
+
+$E = \{(\omega_{1},\omega_{2},\ldots, ): \omega_{1} = T, \omega_{2}=T, \omega_{3}=H,\omega_{i}\in\{H, T\}~\text{for}~i>3 \}$.
+
+:::
 
 ## Notation
 
-Given an event $A$, let $A^{c} = \{ w\in\Omega: \omega \notin A\}$ denote the complement of $A$. The complement of $A$ are all the elements that are not in $A$.
+Given an event $A$, let $A^{c} = \{ \omega\in\Omega: \omega \notin A\}$ denote the complement of $A$. The complement of $A$ is the set of all elements not in $A$.
 
-The complement of the samples space $\Omega$ is the empty set $\emptyset$.
+The complement of the sample space $\Omega$ is the empty set $\emptyset$.
 
 ---
 
@@ -106,7 +125,7 @@ $$
 
 ## Probability
 
-We will assign a real number $\mathbb{P}(A)$ to every every $A$. This number is the probability (or probability measure) of $A$. 
+We will assign a real number $\mathbb{P}(A)$ to every $A$. This number is the probability (or probability measure) of $A$. 
 
 Such a function $\mathbb{P}$ is a probability measure if it satisfies the following three axioms.
 
@@ -125,6 +144,19 @@ $$
 \mathbb{P}\left(A\cup B\right) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A\cap B).
 $$
 
+::: {.notes}
+Write $A\cap B = (A\cap B^{c}) \cup (A\cap B) \cup (A^{c}\cap B)$
+then
+$$
+\begin{align}
+\mathbb{P}\left(A\cup B\right) &= \mathbb{P}((A\cap B^{c}) \cup (A\cap B) \cup (A^{c}\cap B)) \\
+&= \mathbb{P}(A\cap B^{c}) + \mathbb{P}(A\cap B) +  \mathbb{P}(A^{c}\cap B) + \mathbb{P}(A\cap B) - \mathbb{P}(A\cap B) \\
+&= \mathbb{P}((A\cap B^{c})\cup (A\cap B)) + \mathbb{P}((A^{c}\cap B)\cup (A\cap B)) - \mathbb{P}(A\cup B) \\
+&= \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A\cap B).
+\end{align}
+$$
+:::
+
 ## Probability on Finite Sample Spaces
 
 If $\Omega$ is finite and if each outcome $\omega$ is equally likely, then
@@ -137,7 +169,7 @@ $$
 
 The sample space of tossing a (6-sided) die twice consists of 36 elements: $\Omega = \{(i,j):~i,j\in\{1,2,3,4,5,6\} \}$.
 
-What is the probability that the sum of the dice is 7?
+What is the probability that the sum of the dice is 11?
 
 ## Independent Events
 
@@ -157,12 +189,32 @@ for every finite subset $J$ of $I$.
 
 ---
 
+**Example** 
+Toss a fair coin 10 times. Let $A$ be the event that at least one head occurs. Let $T_{j}$ be the event that tails occurs on the $j$-th toss. What is $\mathbb{P}(A)$?
+
+::: {.notes}
+$$
+\begin{align}
+\mathbb{P}(A) &= 1 - \mathbb{P}(A^{c}) \\
+&= 1 - \mathbb{P}(T_{1}\cap T_{2}\cap\cdots \cap T_{10}) \\
+&= 1 - \mathbb{P}(T_{1})\cdots \mathbb{P}(T_{10}) \\
+& = 1 - \left(\frac{1}{2}\right)^{10}\approx 0.999.
+\end{align}
+$$
+:::
+
+---
+
 Independence can arise by:
 
 1. Explicit assumption
 1. Derivation via the previous formula
 
 **Disjoint events each with positive probability can never be independent.**
+
+::: {.notes}
+$\mathbb{P}(A)\mathbb{P}(B) > 0$ but $\mathbb{P}(A\cap B) = \mathbb{P}(\emptyset) = 0$.
+:::
 
 ## Conditional Probability
 
@@ -178,15 +230,37 @@ In general $\mathbb{P}(A\vert B) \neq \mathbb{P}(B\vert A)$.
 
 ---
 
-A medical test for a disease $D$ has outcomes $+$ an $-$. The probabilities are
+A medical test for a disease $D$ has outcomes $+$ and $-$. The probabilities are
 
 
 |          | $D$      | $D^{c}$
 |----------|----------|----------
 | $+$      | 0.009    | 0.099
-| $-$      | 0.001    | .091
+| $-$      | 0.001    | 0.891
 
 Suppose you get a positive test result, what is the probability you have the disease?
+
+---
+
+::: {.notes}
+From the definition of conditional probability
+
+$$
+\mathbb{P}(+\vert D) = \frac{\mathbb{P}(+\cap D)}{\mathbb{P}(D)} = \frac{0.009}{0.009+0.001} = 0.9
+$$
+and
+$$
+\mathbb{P}(+\vert D^{c}) = \frac{\mathbb{P}(-\cap D^{c})}{\mathbb{P}(D)} = \frac{0.891}{0.891+0.0.099} \approx 0.9
+$$
+The test is accurate, sick people yield a positive 90 percent of the time and healthy people yield a negative about 90 percent of the time.
+
+The answer is
+$$
+\mathbb{P}(D\vert +) = \frac{\mathbb{P}(+\cap D)}{\mathbb{P}(+)} = \frac{0.009}{0.009+0.099} \approx 0.08
+$$
+The lesson here is that you need to compute the answer numerically. Don't trust your intution!
+:::
+
 
 ## Law of Total Probability
 
@@ -204,11 +278,19 @@ $$
 
 *Proof*
 
+::: {.notes}
+Defince $C_{j} = B\cap A_{j}$ and note that $C_{1},\dots, C_{k}$ are disjoint and $B=\cup_{j=1}^{k}C_{j}$, hence
+
+$$
+\mathbb{P}(B) = \sum_{j=1}^{k}\mathbb{P}(C_{j}) = \sum_{j=1}^{k}\mathbb{P}(B\cap A_{j}) = \sum_{j=1}^{k}\mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j}).
+$$
+:::
+
 ## Bayes' Theorem
 Let $A_1,\ldots, A_k$ be a partition of $\Omega$ such that $\mathbb{P}(A_{i})>0$ for each $i$. If $\mathbb{P}(B)>0$ then, for each $i=1,\ldots,k$
 
 $$
-\mathbb{P}(A_{i}) = \frac{\mathbb{P}(B\vert A_i)\mathbb{P}(A_i)}{\sum_{j} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}.
+\mathbb{P}(A_{i}\vert B) = \frac{\mathbb{P}(B\vert A_i)\mathbb{P}(A_i)}{\sum_{j=1}^{k} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}.
 $$
 
 ---
@@ -227,6 +309,49 @@ $$
 
 *Proof*
 
+::: {.notes}
+We apply the definition of conditional probability twice, followed by the law of total probability:
+
+$$
+\mathbb{P}(A_{i}\vert B) = \frac{\mathbb{P}(A_{i}\cap B)}{\mathbb{P}(B)} = \frac{\mathbb{P}(B\vert A_{i})\mathbb{P}(A_{i})}{\mathbb{P}(B)} = \frac{\mathbb{P}(B\vert A_{i})\mathbb{P}(A_{i})}{\sum_{j=1}^{k} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}
+$$
+:::
+
+
+## Frequentist vs Bayesian Probability
+
+Frequentist and Bayesian thinking are two different *interpretations*  of what probability fundamentally represents.
+
+**Frequentism**: Probability is objective and based on repeatable experiments. The probability of an event is the long-run relative frequency of repeatable random experiment.
+
+**Bayesian:** Probability is subjective and reflects personal belief, updated by data. The probability of an event quantifies a degree of belief in a hypothesis.
+
+The rules for computing probability remain the same in both.
+
+---
+
+### Philosophical Differences
+
+- **Frequentist:** Probability is objective and based on repeatable experiments.
+- **Bayesian:** Probability is subjective and reflects personal belief, updated by data.
+
+---
+
+| Aspect                | Frequentist Approach                                   | Bayesian Approach                                   |
+|-----------------------|-------------------------------------------------------|-----------------------------------------------------|
+| Parameters            | Fixed but unknown                                     | Treated as random variables with distributions      |
+| Inference             | Based on observed data only                           | Combines prior beliefs and observed data            |
+| Prior Information     | Not used                                              | Explicitly incorporated via prior distributions     |
+
+---
+
+### Example: Flipping a Coin
+
+
+- **Frequentist:** The probability of a coin landing heads being 50% means if you flip a coin an infinite number of times, the proportion of heads would converge to 0.5.
+- **Bayesian:** The probability of a coin landing on heads being 50% means they believe it is equally likely to land on heads as on tails. If they observe a series of flips, they update their initial belief (prior) to a new belief (posterior) using Bayes' theorem.
+ 
+
 ## Summary
 
 We covered 
@@ -235,6 +360,6 @@ We covered
 - basic axioms of probability
 - independent events
 - conditional probability
-- Bayes Theorem
+- Bayes' Theorem
 
 Make sure you understand the notation and the concepts involved. The rest of the probability lectures build off this material.
