@@ -116,7 +116,7 @@ A sequence of sets $A_1, A_2\ldots$ is monotone decreasing if $A_1\supseteq A_2 
 
 The indicator function of $A$ is defined as
 $$
-I_{A}(\omega) = I(\omega\in A) = 
+I_{A}(\omega) = 
 \begin{cases}
 1 & \text{if}~\omega\in A\\
 0 & \text{if}~\omega\notin A.
