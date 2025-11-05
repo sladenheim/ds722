@@ -45,7 +45,7 @@ Let $\Omega = \{(x, y): x^{2} + y^{2} \leq 1\}$ be the unit disk. Assume we have
 - $X(\omega) = x$
 - $Y(\omega) = y$
 - $Z(\omega) = x+y$
-- $W(\omega) = \sqrt{x^{2+y^{2}}}$
+- $W(\omega) = \sqrt{x^{2}+y^{2}}$
 
 ---
 
@@ -72,6 +72,15 @@ Flip a coin twice and let $X$ be the number of heads. Let's fill in the followin
 |----------|--------------|
 :::
 ::::
+
+::: {.notes}
+TT, TH, HT, HH
+.25, .25, .25, .25
+0, 1, 1, 2
+
+0, 1, 2
+.25, .5, .25
+:::
 
 
 ## Distribution and Probability Functions
@@ -190,6 +199,18 @@ $$
 
 What is the pmf for our example of flipping a coin twice?
 
+::: {.notes}
+$$
+f_{X}(x) = 
+\begin{cases}
+1/4 & x=0 \\
+1/2 & x=1 \\
+1/4 & x=2 \\
+0 & \text{otherwise}
+\end{cases}
+$$
+:::
+
 ---
 
 A random variable $X$ is *continuous* if there exists a function $f_{X}$ such that $f_{X}(x)\geq 0$ for all $x$, $\int_{-\infty}^{\infty}f_{X}(x)dx = 1$ and for every $a\leq b$,
@@ -212,8 +233,8 @@ and $f_{X}(x) = F^{\prime}_{X}(x)$ at all points $x$ at which $F_{X}$ is differe
 
 Let $F$ be the CDF for a random variable $X$. Then:
 
-1. $\mathbb{P}(X=x) = F(x) - F(x^{-1})$, \ 
-where $F(x^{-1}) = \lim_{y\rightarrow x^{-1}}F(y)$.
+1. $\mathbb{P}(X=x) = F(x) - F(x^{-})$, \ 
+where $F(x^{-}) = \lim_{y\rightarrow x^{-}}F(y)$.
 1. $\mathbb{P}(x<X\leq y) = F(y) - F(x)$.
 1. $\mathbb{P}(X>x) = 1 - F(x)$.
 1. If $X$ is continuous then
@@ -290,6 +311,14 @@ The variables $n$ and $p$ are fixed parameters, whereas $x$ is a particular valu
 
 Steph Curry's career free throw percentage is 92%. What is the chance that if Steph shoots 4 free throws, he will make exactly 3 of them?
 
+::: {.notes}
+$p=.92$, $1-p=.08$, $n=4$, $x=3$
+
+$$
+P(x=3) = {4\choose 3} (0.92)^3 \cdot (0.08)^{4-1} \approx 0.2492.
+$$
+:::
+
 ---
 
 Let's show a simulation of 1000 Steph Curry free throws.
@@ -345,6 +374,14 @@ Think of this as the probability distribution of the number of failures before t
 
 In the game Settlers of Catan you roll two dice and the number indicates which resource you can pick up. Let success be defined as rolling a 9, which allows you to pick up the resource ore. What is the probability that it will take more than 10 rolls to roll a 9?
 
+
+::: {.notes}
+$p = \frac{4}{36}$
+
+$$
+P(X>10) = (1-p)^{10} = \frac{8/9}^{10} \approx 0.314
+$$
+:::
 
 --- 
 
@@ -437,7 +474,19 @@ plt.show()
 
 ---
 
-A pizza restaurant receives an average of 20 delivery orders per hour. Assuming that this rate is independent What is the probability of receiving exactly 15 orders in a given hour? What is the probability of receiving more than 25 orders?
+A pizza restaurant receives an average of 20 delivery orders per hour. Assuming that this rate is independent and random. What is the probability of receiving exactly 15 orders in a given hour? What is the probability of receiving more than 25 orders?
+
+::: {.notes}
+$$
+\begin{align}
+P(X>25) &= 1 - P(X\leq 25) = \\
+&= 1 - \sum_{k=1}^{25}P(X=k) \\
+&= 1 - \sum_{k=1}^{25}e^{-20}20^{k}/(k!) \approx 1-0.894 \approx .106
+\end{align}
+$$
+
+Roughly 10 percent.
+:::
 
 ---
 
@@ -468,7 +517,7 @@ plt.figure(figsize=(10, 6))
 plt.hist(data, bins=30, edgecolor='black', density=True)
 plt.plot(x, pmf, 'o', color='r', label='Exact Poisson PMF')
 plt.title(f'Histogram of Trials ($\\lambda$ = {lam:.2f})')
-plt.xlabel('Number of orders in 20 minutes')
+plt.xlabel('Number of orders per hour')
 plt.ylabel('Frequency (Normalized)')
 plt.grid(True)
 plt.legend()
@@ -635,6 +684,16 @@ plt.show()
 
 An electronic component has a constant failure rate of 10% per year. Assuming the time until failure follows an exponential distribution, what is the probability that the part lasts more than 5 years?  
 
+::: {.notes}
+$\beta = 10$
+
+$$
+P(T>5) = \int_{5}^{\infty}\frac{1}{10}e^{-s/10}ds = e^{-0.1\cdot 5} \approx 0.605
+$$
+
+60 percent chance it lasts more than 5 years.
+:::
+
 ---
 
 ```{python}
@@ -693,7 +752,7 @@ The exponential distribution is a $\operatorname{Gamma}(1,\beta)$ distribution.
 
 ### t Distribution
 
-$X$ has a $t$ distribution with $\nu$ degrees of freedoom, $X\sim t_{\nu}$ if
+$X$ has a $t$ distribution with $\nu$ degrees of freedom, $X\sim t_{\nu}$ if
 
 $$
 f(x) = \frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)} \frac{1}{\left(1 + \frac{x^{2}}{\nu}\right)^{(\nu +1)/2}}.
@@ -772,13 +831,13 @@ $$
 If $(X,Y)$ have joint distribution with mass function $f_{X,Y}$, then the *marginal mass function* for $X$ is defined by
 
 $$
-f_{X}(x) = \sum_{y}\mathbb{P}(X=x, Y=y) = \sum{y}f(x,y).
+f_{X}(x) = \sum_{y}\mathbb{P}(X=x, Y=y) = \sum_{y}f(x,y).
 $$
 
 and the *marginal mass function* for $Y$ is
 
 $$
-f_{Y}(y) = \sum_{x}\mathbb{P}(X=x, Y=y) = \sum{x}f(x,y).
+f_{Y}(y) = \sum_{x}\mathbb{P}(X=x, Y=y) = \sum_{x}f(x,y).
 $$
 
 ---
@@ -789,7 +848,7 @@ $$
 f_{X}(x) = \int f(x,y)dy, \quad\text{and}\quad f_{Y}(y) = \int f(x,y)dx.
 $$
 
-The corresponding marginal distribution functions are $F_{X}$ and $F_{y}$.
+The corresponding marginal distribution functions are $F_{X}$ and $F_{Y}$.
 
 ## Independent Random Variables
 
@@ -827,7 +886,7 @@ if $f_{Y}(y)>0$.
 For continuous random variables, the *conditional probability density function* is
 
 $$
-f_{X\vert Y}(x\vert y) = \frac{f_{X,Y}(x,y)}{f_{Y}(y),}
+f_{X\vert Y}(x\vert y) = \frac{f_{X,Y}(x,y)}{f_{Y}(y)}
 $$
 
 assuming that $f_{Y}(y)>0$. Then,
@@ -949,7 +1008,29 @@ The steps for functions of several random variables are similar.
 
 ### Example
 
-Let $X\sim \operatorname{Uniform}(-1, 3)$. Find the PDF of $Y=X^{2}$.
+Let $f_{X}(x)=e^{-x}$ for $x>0$. Let $Y=r(x)=\log(x)$. Determine $F_Y(y)$ and $f_{Y}(y)$.
+
+::: {.notes}
+We have that $F_{X}(x) = \int_{0}^{x}e^{-s}ds = 1-e^{-x}$.
+
+The set $A_{y} = \{ x: x\leq e^{y} \}$ why?
+
+Then
+
+$$
+\begin{align}
+F_{Y}(y) &= \mathbb{P}(Y\leq y) = \mathbb{P}(\log(x)\leq y) \\
+&= \mathbb{P}(X\leq e^{y}) = F_{X}(e^{y})= 1- e^{-e^{y}} \\
+\end{align}
+$$
+
+Taking derivatives (FTC) we get
+
+$$
+f_{Y}(y) = e^{y}e^{-e^{y}}
+$$
+:::
+
 
 ## Summary
 
