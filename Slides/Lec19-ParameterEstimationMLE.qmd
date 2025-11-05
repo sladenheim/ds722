@@ -1,0 +1,740 @@
+---
+title: "Parameter Estimation"
+jupyter: python3
+---
+
+## Lecture Overview
+
+We have previously seen distributions which are described by parameters. 
+
+In this lecture we describe how to determine these parameters from sampled data.
+
+Parameter estimation is an umbrella term for a set of tools for statistical analysis.
+
+These techniques allow us to infer unknown population parameters based on a sample statistic.
+
+Parameter estimation is closely related to model fitting.
+
+## Lecture Objectives
+
+In this lecture we introduce:
+
+- Method of moments estimation
+- Maximum likelihood estimation
+- Bias and variance of estimators
+
+
+## Foundations of Sampling
+A *population* refers to the entire set of individuals or items that we are interested in studying. It is the complete group about which we want to draw conclusions.
+
+A *sample* is a subset of the population, selected for analysis. We collect data from the sample to make inferences about the population parameters.
+
+A *statistic* is a numerical value calculated from the sample data. It is used to estimate or infer properties about the population. Common examples include the sample mean and sample variance.
+
+--- 
+
+**Example**
+
+We are studying the variance of height among male students at BU. A sample size of 30 is shown below. 
+
+```{python}
+from scipy.stats import norm
+from scipy.stats import uniform
+from numpy.random import default_rng
+import matplotlib.pyplot as plt
+
+# specify the parameters
+mu = 70 
+sig = 3
+
+samp_size = 30
+rng = 0
+
+fig, ax = plt.subplots(1, 1, figsize = (14,1))
+
+# sample
+samp_x = norm.rvs(size = samp_size, loc = mu, scale = sig, random_state = rng)
+samp_y = [1 for x in samp_x]
+ax.scatter(samp_x, samp_y, marker = 'o', facecolors='none', edgecolors='red', linewidths = 1.5, s = 48)
+ax.set_title('height [inches]')
+ax.yaxis.set_visible(False)
+# remove the "box" around the plot
+for spine in [list(ax.spines.values())[i] for i in [0, 1, 3]]:
+    spine.set_visible(False)
+```
+
+We want to fit a normal distribution $\mathcal{N}(\mu, \sigma^2)$ to this data. Parameter estimation in this case would be finding the right values for the parameters $\mu$ and $\sigma$.
+
+## Parameter Estimation
+
+Parameter estimation is needed when we are given some data and we want to treat it as an _independent and identically distributed (or i.i.d.)_ sample from some population distribution.
+
+We will use $\theta$ (which can be a scalar or a vector) to represent the parameter(s).  
+
+__Example__: In the study of height of male students at BU, $\theta = (\mu, \sigma).$
+
+## Point Estimation
+
+A *point estimator* is a statistic that is used to estimate the unknown population parameter and whose realization is a single point.
+
+__Example__: The sample average of 71.3 inches is a point estimate of the average height of male students at BU.
+```{python}
+#| fig-align: center
+import numpy as np
+# to define the range of the figure
+xmin, xmax = (min(samp_x)-1, max(samp_x)+1)
+# compute the sample mean
+xmean = np.mean(samp_x)
+
+# make the plot
+fig, (ax, ax1) = plt.subplots(2, 1, figsize = (14,3))
+
+# show the sample
+ax.scatter(samp_x, samp_y, marker = 'o', facecolors='none', edgecolors='red', linewidths = 1.5, s = 48)
+ax.set_xlim(xmin, xmax)
+ax.set_title('height [inches]')
+ax.yaxis.set_visible(False)
+# remove the "box" around the plot
+for spine in [list(ax.spines.values())[i] for i in [0, 1, 3]]:
+    spine.set_visible(False)
+
+# show the mean
+ax1.scatter(xmean, 1, marker = 'o', facecolors = 'b', edgecolors='g', linewidths = 1.5, s = 64)
+ax1.set_xlim(xmin, xmax)
+ax1.text(66, np.sum(ax1.get_ylim())/2 - 0.01, 'Point Estimate', size = 16, color = 'b')
+ax1.yaxis.set_visible(False)
+ax1.xaxis.set_visible(False)
+# remove the "box" around the plot
+for spine in ax1.spines.values():
+    spine.set_visible(False)
+```
+
+---
+
+Given data $\{x^{(1)}, \dots, x^{(n)}\}$, a point estimator can be any function $g$ of the data:
+
+$$ \hat{\theta}_n = g\left(x^{(1)}, \dots, x^{(n)}\right). $$
+
+The hat notation ($\hat{\theta}$) indicates a point estimator of $\theta$.
+
+ _Any function qualifies as an estimator_. However, a good estimator is a function whose output is close to $\theta$.
+
+:::: {.fragment}
+Will the point estimate change if a different sample is selected?
+::::
+
+
+::: {.notes}
+Note that the above description does not require that $g$ returns a value that is close to the parameter(s) $\theta$. 
+
+The point estimate is a random variable!
+:::
+
+## Parametric Inference
+
+Consider a family of parametric models
+
+$$
+\mathcal{F} = \left\{ f(x;\theta): \theta\in\Theta \right\},
+$$
+
+where $\Theta\in\mathbb{R}^{k}$ is the parameter space and $\theta = (\theta_1,\ldots, \theta_{k})$ is the parameter.
+
+The problem of *inference* then reduces to the problem of estimating the parameter $\theta$.
+
+::: {.notes}
+The notation $f(x;\theta)$ represents a family of distributions. There is a different distribution (model) for each value of $\theta$. 
+
+The probability of $x$ under a distribution having parameter(s) $\theta$.
+:::
+
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters for the normal curves
+params = [
+    (2, 0.5),
+    (4, 0.5),
+    (5, 1),
+    (6, 2)
+]
+
+# Colorblind-friendly colors
+colors = ['#0072B2', '#D55E00', '#009E73', '#CC79A7']
+
+x = np.linspace(-1, 10, 400)
+fig, ax = plt.subplots(figsize=(10, 6))
+
+for (mu, sigma), color in zip(params, colors):
+    y = (1/(sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu)/sigma)**2)
+    ax.plot(x, y, label=f"$\mu={mu},\ \sigma={sigma}$", color=color, linewidth=2)
+
+ax.set_title("Normal Distributions with Different Parameters")
+ax.set_xlabel("x")
+ax.set_ylabel(r"$f(x;\theta)$")
+ax.legend(title="Parameters")
+ax.grid(True, alpha=0.3)
+plt.tight_layout()
+```
+
+::: {.notes}
+This graph shows the pdfs of several normal distributions from the same parametric family.
+
+Model fitting is finding the parameters $\theta$ given that we know some data $x$ under the assumption that this kind of distribution can describe the population.
+:::
+
+## Parameter of Interest
+
+Let $X\sim N(\mu,\sigma^{2})$, then the parameter is $\theta = (\mu, \sigma)$.
+
+If the goal is to estimate $\mu=T(\theta)$, where $T(\theta)$ is some function, then $\mu$ is the *parameter of interest* and $\sigma$ is the *nuisance parameter*.
+
+::: {.notes}
+The parameter of interest might be a complicated function of $\theta$.
+:::
+
+---
+
+**Example**
+
+Let $X_1,\ldots,X_{n}\sim N(\mu, \sigma^{2})$. Suppose that $X_{i}$ is the outcome of a blood test. Let $\tau$ be the fraction of the population whose test score is larger than $1$. How can we compute $\tau = T(\theta) = T(\mu, \sigma)$?
+
+::: {.notes}
+We have that
+
+$$
+\begin{align*}
+\tau &= \mathbb{P}(X>1) = 1 - \mathbb{P}(X\leq 1) = 1-\mathbb{P}\left( \frac{X-\mu}{\sigma}<\frac{1-\mu}{\sigma}\right) \\
+&=  1-\mathbb{P}\left( Z<\frac{1-\mu}{\sigma}\right) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)
+\end{align*}
+$$
+
+Thus $\tau = T(\theta) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)$.
+:::
+
+## Method of Moments
+
+One way to generate a parametric estimator is the **Method of Moments**.
+
+Recall the $k$th moment of a random variable $X$, whiT is
+
+$$
+\alpha_{k} = \mathbb{E}(X^{k}) = \int x^{k}f(x)dx,
+$$
+
+where $f(x)$ is the pdf of the random variable.
+
+::: {.notes}
+These estimators are not always optimal but easy to compute.
+:::
+
+---
+
+Assuming that $\theta = (\theta_{1},\ldots,\theta_{k})$, the $j$th moment is
+
+$$
+\alpha_{j}(\theta) = \mathbb{E}_{\theta}(X^{j}) = \int x^{j}f(x;\theta)dx.
+$$
+
+The $j$th sample moment is given by the formula
+
+$$
+\hat{\alpha}_{j} = \frac{1}{n}\sum_{i=1}^{n} X_{i}^{j}.
+$$
+
+---
+
+The *method of moments estimator* $\hat{\theta}_{n}$ is defined to be the value of $\theta$ such that
+
+$$
+\begin{align*}
+\hat{\alpha}_{1}(\hat{\theta}_{n}) &= \hat{\alpha}_{1}, \\
+\hat{\alpha}_{2}(\hat{\theta}_{n}) &= \hat{\alpha}_{2}, \\
+ &\vdots  \\
+\hat{\alpha}_{k}(\hat{\theta}_{n}) &= \hat{\alpha}_{k}. \\
+\end{align*}
+$$
+
+This is a system of $k$ equations in $k$ unknowns.
+
+::: {.notes}
+Solving this system yields the method of moment estimator.
+:::
+
+---
+
+**Example: Bernoulli**
+
+Let $X_{1},\ldots X_{n}\sim \operatorname{Bernoulli}(p)$. Compute the point estimator $\hat{p}$ using the method of moments.
+
+::: {.notes}
+Recall that $\alpha_{1} = \mathbb{E}(X)=p$ and $\hat{\alpha}_{1}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$. Equating these two values gives
+
+$$
+\hat{p}_{n} = \frac{1}{n}\sum_{i=1}^{n}X_{i}.
+$$
+:::
+
+
+---
+
+**Example: Normal**
+
+Let $X_{1},\ldots X_{n}\sim N(\mu,\sigma^{2})$. Compute the point estimate $\hat{\theta} = (\hat{\mu}, \hat{\sigma})$ using the method of moments.
+
+::: {.notes}
+Recall that $\alpha_{1} = \mathbb{E}_{\theta}(X_{1})=\mu$ and  $\alpha_{2} = \mathbb{E}_{\theta}(X_{1}^{2})=\mathbb{V}_{\theta}(X_{1}) +\mathbb{E}_{\theta}(X_{1})^{2} = \sigma^{2} + \mu^{2}$. Then we have the system of equations
+
+$$
+\begin{align*}
+\hat{\mu} = \frac{1}{n}\sum_{i=1}^{n}X_{i},
+\hat{\sigma}^{2} + \hat{\mu}^{2} = \frac{1}{n}\sum_{i=1}^{n}X_{i}^{2}.
+\end{align*}
+$$
+
+We have that $\hat{mu} = \bar{X}_{n}$ and $\hat{\sigma}^{2}=\frac{1}{n}\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}$ 
+:::
+
+## Maximum Likelihood
+
+The most common method for estimating parameters in a parametric model is the *maximum likelihood method*.
+
+In the following slides we assume that $X_{1},\ldots,X_{n}$ are IID with pdf $f(x;\theta)$.
+
+## Likelihood
+
+The *likelihood function* is defined by
+
+$$
+\mathcal{L}_{n}(\theta) = \prod_{i=1}^{n}f(X_{i};\theta).
+$$
+
+The likelihood function is the joint density of the data and is treated as a function of the parameter $\theta$.
+
+The **maximum likelihood estimator** (MLE) $\hat{\theta}_{n}$ is the value of $\theta$ that maximizes $\mathcal{L}_{n}(\theta)$.
+
+## Properties of the Logarithm
+
+Recall the following properties of the logarithm function:
+
+1. $\log(ab) = \log(a) + \log(b)$
+1. $\log(a/b) = \log(a) - \log(b)~(b\neq 0)$
+1. $\log(a^{p}) = p\log(a)$
+
+## Log Likelihood
+
+The log-likelihood function is defined by
+
+$$
+\ell_{n}(\theta) = \log(\mathcal{L}_{n}(\theta)).
+$$
+
+How does applying the $\log$ function change the form of the likelihood function?
+
+:::: {.fragment}
+Why would we want to take the log of the likelihood?
+::::
+
+## MLE Bernoulli
+
+Suppose that $X_{1},\ldots, X_{n}\sim \operatorname{Bernoulli}(p)$. What is the maximum likelihood estimator $\hat{p}_{n}$?
+
+::: {.notes}
+The pdf is $f(x;p) = p^{x}(1-p)^{1-x}$ for $x=0,1$. The likelihood is
+
+$$
+\mathcal{L}_{n}(p) = \prod_{i=1}^{n}f(X_{i};p) = \prod_{i=1}^{n}p^{X_{i}}(1-p)^{1-X_{i}} = p^{S}(1-p)^{n-S},
+$$
+where $S=\sum_{i=1}^{n}X_{i}$.
+
+Taking the log gives
+
+$$
+\ell_{n}(p) = S\log{(p)} + (n-S)\log{(1-p)}.
+$$
+Then
+$$
+0=\frac{d}{dp}\ell_{n}(p) = \frac{S}{p} - (n-S)\frac{1}{1-p}
+$$
+implies
+$$
+\begin{align}
+\frac{S}{p} &= \frac{n-S}{1-p} \\
+S-Sp &= np-Sp \\
+p &= \frac{S}{n}
+\end{align}
+$$
+:::
+
+## MLE Linear Regression
+The goal in the regression problem is to make predictions for the target variable $y$ given some input variable $x$ by using training data $\{(x_{i}, y_{i})\}_{i=1}^{n}$.
+
+We assume a linear model $y_{i} = f(x;\beta_{0},\beta_{1}) =  \beta_{0} + \beta_{1}x_{i}$.
+
+We express the uncertainty of the target values $y$ by assuming that given $x$, the corresponding value of $y$ has a mean value equal to $f(x;\beta_{0},\beta_{1})$ and variance $\sigma^{2}$.
+
+::: {.notes}
+Assume that each observation of $y_{i}$ is independent.
+:::
+
+---
+
+This means
+
+$$
+\mathbb{P}(y\vert X=x, \beta_{0},\beta_{1},\sigma^{2})\sim\mathcal{N}(f(x;\beta_{0},\beta_{1}), \sigma^{2}).
+$$
+
+
+::: {.notes}
+In particular, the PDF is
+
+$$
+\mathbb{P}(y\vert X=x, \beta_{0},\beta_{1},\sigma^{2}) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y-(\beta_{0}+\beta_{1}x)^{2}}{2\sigma^{2}}}
+$$
+:::
+
+
+## Linear Regression Likelihood
+
+How can we form the likelihood function for our model?
+
+:::: {.fragment}
+The likelihood is the product of the probability density functions for the training data
+
+$$
+\begin{align}
+\mathcal{L}_{\beta_{0},\beta_{1}, \sigma^{2}} &= \prod_{i=1}^{n}p(y_{i}|X=x_{i};\beta_{0},\beta_{1},\sigma^{2}) \\
+\end{align}
+$$
+::::
+
+::: {.notes}
+Thus
+
+$$
+\mathcal{L}_{n}(\beta_{0},\beta_{1}, \sigma^{2}) = \prod_{i=1}^{n}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y_{i}-(\beta_{0}+\beta_{1}x_{i})^{2}}{2\sigma^{2}}}
+$$
+:::
+
+::: {.notes}
+How can we find our parameters now?
+:::
+
+## Linear Regression Log-Likelihood 
+What is the log-likelihood of $\ell_{n}(\beta_{0}, \beta_{1},\sigma^{2})$?
+
+:::: {.fragment}
+$$
+\ell_{n}(\beta_{0}, \beta_{1},\sigma^{2}) = 
+$$
+::::
+
+::: {.notes}
+The log-likehood is
+$$
+\frac{-1}{2\sigma^{2}}\sum_{i=1}^{n}(y_{i}-(\beta_{0}+\beta_{1}x_{i}))^{2} -\frac{n}{2}\log(\sigma^{2})-\frac{n}{2}\log(2\pi).
+$$
+:::
+
+## Linear Regression Log-Likelihood Gradient
+What is the gradient of $\ell_{n}(\beta_{0}, \beta_{1})$?
+
+::: {.notes}
+$$
+\begin{align}
+\frac{\partial{\ell_{n}}}{\partial \beta_{0}} &= \\
+\frac{\partial{\ell_{n}}}{\partial \beta_{1}} &= \\
+\frac{\partial{\ell_{n}}}{\partial \sigma} &= \\
+\end{align}
+$$
+:::
+
+## Bias and Variance
+
+We use two criteria to describe an estimator:
+
+- **bias**
+- **variance**
+
+Bias measures the difference between the expected value of the estimator and the true value of the parameter.
+
+Variance measures how much the estimator can vary as a function of the data sample.
+
+---
+
+### Bias
+
+The bias of an estimator is defined as
+
+$$
+\operatorname{bias}(\hat{\theta}) = \mathbb{E}(\hat{\theta}) - \theta,
+$$
+
+where the expectation is over the data and $\theta$ is the true parameter value.
+
+An estimator is *unbiased* if $\operatorname{bias}(\hat{\theta})=0$.
+
+---
+
+**Example: Bernoulli**
+Let $X_{i}\sim\operatorname{Bernoulli}(p)$. Let $\hat{p}_{n} = \frac{1}{n}\sum_{i}^{n}x^{(n)}$ denote the MLE of $p$. Is $\hat{p}_{n}$ biased or unbiased?
+
+::: {.notes}
+$$
+\begin{align}
+\operatorname{bias}(\hat{p}_{n}) &= \mathbb{E}(\hat{p}_{n}) - p \\
+&= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}x^{(i)} \right) - p \\
+&= \frac{1}{n}\sum_{i=1}^{n}\mathbb{E}(x^{(i)}) - p \\
+&= \frac{1}{n}\sum_{i-1}^{n}p - p \\
+&= p-p=0.
+\end{align}
+$$
+:::
+
+---
+
+### Variance
+
+The variance of an estimator is
+
+$$
+\mathbb{V}(\hat{\theta}) = \mathbb{V}(g(x_{1},x_{2},\ldots, x_{n})),
+$$
+where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
+
+---
+
+What is the variance of $\hat{p}_{n}$?
+
+::: {.notes}
+$$\operatorname{Var}\left(\hat{p}_n\right) = \mathbb{V}\left( \frac{1}{n} \sum_{i=1}^m x^{(i)} \right)
+=\frac{1}{n^2}\mathbb{V}\left( \sum_{i=1}^n x^{(i)} \right) $$
+
+$$ = \frac{1}{n^2} n \operatorname{Var}\left(x^{(1)}\right)
+= \frac{1}{n}\theta (1-\theta).$$
+
+This has a desirable property: as the number of data points $n$ increases, the variance of the estimate decreases.
+:::
+
+
+## Mean Squared Error
+
+Consider two estimators, $g$ and $h$, each of which are used as estimates of a certain parameter $\theta$.
+
+Let us say that these estimators show the following distributions:
+
+```{python}
+#| fig-align: center
+from scipy.stats import norm
+from scipy.stats import uniform
+from numpy.random import default_rng
+
+rng = default_rng(12)
+
+# just some numbers that make a nice plot
+mu = 1050
+sig = 209
+# MSE of estimator of k having dist (mu, sigma) is sigma^2 + (mu - k)^2
+mse1 = sig**2
+#
+offset = 200
+mu2 = mu + offset
+sig2 = 54
+mse2 = (offset**2) + (sig2**2)
+# print(mse1, mse2)
+#
+samp_size = 15
+#
+# gaussian curve
+fig, ax = plt.subplots(1, 1, figsize = (14,3))
+x = np.linspace(norm.ppf(0.001, loc = mu, scale = sig), norm.ppf(0.999, loc = mu, scale = sig), 100)
+ax.plot(x, norm.pdf(x, loc = mu, scale = sig),'b-', lw = 5, alpha = 0.6, label = '$g$')
+x = np.linspace(norm.ppf(0.001, loc = mu2, scale = sig2), norm.ppf(0.999, loc = mu2, scale = sig2), 100)
+ax.plot(x, norm.pdf(x, loc = mu2, scale = sig2),'r-', lw = 5, alpha = 0.6, label = '$h$')
+xmin, xmax = (x[0], x[-1])
+plt.legend(loc = 'best')
+# sample plot
+# turn off y axis entirely
+ax.yaxis.set_visible(False)
+#
+# vertical line
+ymin, ymax = ax.get_ylim()
+plt.vlines(x = mu, ymin = ymin, ymax = ymax-.003, color = 'k')
+plt.text(mu, ymax-0.003, r'$\theta$', size = 20, ha = 'center', va = 'bottom')
+plt.show()
+```
+
+---
+
+The figure shows that estimator $h$ has low variance, but is biased. Meanwhile, estimator $g$ is unbiased, but has high variance.
+
+Which is better?
+
+---
+
+The mean squared error (MSE) measures the "average distance squared" between the estimator and the true value: 
+
+$$
+\small{\operatorname{MSE}\left(\hat{\theta}_m\right) = \mathbb{E}\left(\left(\hat{\theta}_m - \theta\right)^2\right)}.
+$$
+
+The MSE is a good single number for evaluating an estimator, because it turns out that:
+    
+$$\small{\operatorname{MSE}\left(\hat{\theta}_m\right) = \operatorname{bias}\left(\hat{\theta}_m\right)^2 + \operatorname{Var}\left(\hat{\theta}_m\right)}.
+$$
+
+## Properties of MOM Estimators
+
+Let $\hat{\theta}_{n}$ denote the method of moments estimator. We have the following properties
+
+1. The estimate $\hat{\theta}_{n}$ exists with probability tending to $1$.
+1. The estimate is consistent: $\hat{\theta}_{n}\overset{P}\longrightarrow \theta$.
+
+## Properties of MLE Estimators
+
+Let $\hat{\theta}_{n}$ denote the maximum likelihood estimator. We have the following properties
+
+1. The MLE is consistent: $\hat{\theta}_{n}\overset{P}\longrightarrow \theta_{\star}$, where $\theta_{\star}$ is the true value of the parameter $\theta$.
+1. The MLE is equivariant: if $\hat{\theta}_{n}$ is the MLE of $\theta$, then $g(\hat{\theta}_{n})$ is the MLE of $g(\theta)$.
+1. The MLE is asympotically optimal or efficient. This means that among all well-behaved estimators, that the MLE has the smallest variance for large enough samples.
+
+
+## Example: Swipe Left or Right?
+Assume you have data from a dating app which allows users to swipe left to reject, and swipe right to accept a date. Each swipe is drawn independently from a Bernoulli distribution with unknown parameter $p$, the chance of a right swipe. How can we use our data to estimate the unknown parameter?
+
+```{python}
+#| echo: true
+
+# True probability of a right swipe
+true_theta = 0.37
+
+# Number of swipes per simulation
+n = 100
+
+# Number of simulations
+num_simulations = 1000
+
+# Store estimated thetas
+estimated_thetas = []
+
+
+# Perform simulations
+for _ in range(num_simulations):
+    swipes = np.random.binomial(1, true_theta, n)
+    estimated_theta = np.mean(swipes)
+    estimated_thetas.append(estimated_theta)
+
+```
+
+---
+
+
+```{python}
+#| fig-align: center
+# Plot histogram of estimated thetas
+plt.figure(figsize=(8, 6))
+plt.hist(estimated_thetas, bins=30, color='lightgreen', edgecolor='black')
+plt.axvline(true_theta, color='red', linestyle='dashed', linewidth=2, label=f'True θ = {true_theta}')
+plt.title('Distribution of Estimated θ (True θ = 0.37)')
+plt.xlabel('Estimated θ')
+plt.ylabel('Frequency')
+plt.legend()
+plt.grid(True)
+plt.savefig("theta_simulation_037.png")
+plt.show()
+```
+
+## Example: Netflix
+
+You see your friend watching an interesting show on Netflix. A show that you hope to binge watch during a long weekend. You see that your friend is watching episode 9. To figure out if you can binge watch it, you need to estimate the total number of episodes. 
+
+How can we determine the total number of episodes using:
+
+- Method of Moments
+- Maximum likelihood estimation
+
+---
+
+Assumptions:
+
+- Episodes start from 1 and end at $N$
+- The probability of witnessing a particular episode is uniform, i.e., $\frac{1}{N}$
+
+We need to determine $N$, a parameter of the discrete uniform distribution.
+
+---
+
+### Uniform Discrete Distribution
+
+Recall that the pdf of the discrete uniform distribution is
+
+$$
+f(x) =
+\begin{cases}
+1/N & \text{for}~x=1,\ldots,N \\
+0 & \text{otherwise}.
+\end{cases}
+$$
+
+---
+
+### Method of Moments
+
+We have 1 sample of episodes for this problem, what is the sample mean?
+
+What is the mean of the discrete distribution?
+
+What is the MOM estimator?
+
+::: {.notes}
+The sample mean is 9.
+
+The mean of the discrete distribution is $\frac{N+1}{2}$.
+
+Note that
+
+$$
+\mathbb{E}(X) = \sum_{k=1}^{N}kf(k) = \frac{1}{N}\sum_{k=1}^{N}k = \frac{1}{N}\frac{(N+1)N}{2} = \frac{N+1}{2}. 
+$$
+
+We have to solve:
+
+$$
+\frac{\hat{N}+1}{2} = 9 \quad \Rightarrow \quad \hat{N}=17.
+$$
+:::
+
+---
+
+### MLE
+
+For MLE, we need to formulate the likelihood. What is the likelihood?
+
+:::: {.fragment}
+$$
+f(X; N) = \frac{1}{N}, \quad \text{for } N \geq 60.
+$$
+::::
+
+:::: {.fragment}
+What is the MLE? Do you need to take the log-likelihood?
+::::
+
+::: {.notes}
+Answer: NO. The likelihood is maximized at $\hat{N}=9$.
+:::
+
+
+## Summary
+
+In this lecture we learned:
+
+- defined population, sample, statistic, estimators
+- method of moments 
+- maximum likelihood estimation
+- bias and variance of estimators
+
