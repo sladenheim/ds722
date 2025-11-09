@@ -11,13 +11,337 @@ This lecture introduces key concepts in probability and statistics related to th
 - **variance**, and 
 - **moments**. 
 
-These foundational tools enable us to describe and characterize the shapes of probability distributions
+These foundational tools enable us to describe and characterize the shapes of probability distributions.
 
 ## Lecture Objectives
 
+- Review random variables and distributions
 - Understand the definition and interpretation of expectation (mean) and variance.
 - Introduce conditional expectation and variance
 - Introduce higher-order moments.
+
+## Random Variables
+
+Random variables and distributions are the mathematical formulations that we use to understand probability.
+
+A *random variable* $X$ is just a function that maps elements of the sample space $\Omega$ to a real number $\mathbb{R}$.
+
+A random variable can be:
+
+1. discrete
+1. continuous
+
+---
+
+**Discrete Example**
+Flip a coin 2 times, $\Omega = \{HH,HT,TH,TT\}$. Define a function $X(\omega)$ which counts the number of heads. This is a random variable.
+
+:::: {.fragment}
+What is another random variable you define based on this sample space?
+::::
+
+::: {.notes}
+Count the number of tails, count the number of times heads appears twice.
+:::
+
+---
+
+**Continuous Example**
+The height of a student at BU is a continuous random variable. The *population* is the set of students. The sample space $\Omega$ is the range of possible heights. The random variable $X(\omega)$ is the height of a particular student.
+
+::: {.notes}
+In this case $X$ is the identity mapping.
+
+Could alternatively consider $X$ being the average of 5 students. The sample space is then all possible combinations of student heights in vectors of length 5.
+:::
+
+## Notation
+
+What does the notation $\mathbb{P}(X = x)$ and $\mathbb{P}(X\leq x)$ mean?
+
+:::: {.incremental}
+1. $\mathbb{P}(X = x)$ is the probability that the random variable $X$ takes on the exact value of $x$.
+1. $\mathbb{P}(X \leq x)$ is the probability that the random variable $X$ is less than or equal to the value $x$.
+::::
+
+## Distributions
+
+Random variables give rise to *distributions*. A *distribution* describes how likely it is for the random variable to achieve each of its possible values.
+
+We use two mathematical functions to describe distributions:
+
+1. Cumulative Distribution Function (CDF)
+1. Probability Mass/Density Function (PMF/PDF)
+
+The PMF or PDF is a distribution. The CDF is the sum or integral of the PMF/PDF.
+
+## Cumulative Distribution
+Given a random variable $X$, the *cumulative distribution function* (CDF) is the function
+
+$$
+F_{X}: \mathbb{R}\rightarrow [0, 1] 
+$$
+defined by
+
+$$
+F_{X}(x) = \mathbb{P}(X\leq x).
+$$
+
+The CDF contains all the information about the random variable.
+
+---
+
+Flip a fair coin twice and let $X$ be the number of heads. Then 
+
+- $\mathbb{P}(X=0)= 1/4$, 
+- $\mathbb{P}(X=1) = 1/2$, and 
+- $\mathbb{P}(X=2) = 1/4$. 
+
+The CDF is
+
+$$
+F_{X}(x) = 
+\begin{cases}
+0 & x < 0 \\
+1/4 & 0\leq x < 1 \\
+3/4 & 1\leq x < 2 \\
+1 & x\geq 2.
+\end{cases}
+$$
+
+## Probability Mass Function
+For discrete variables, the *probability mass function* (PMF) of $X$ is defined by $f_{X}(x) = \mathbb{P}(X=x)$.
+
+Thus, $f_{X}(x)\geq 0$ for all $x\in\mathbb{R}$ and $\sum_{i}f_{X}(x_{i})=1$.
+
+The CDF of $X$ is related to $f_{X}$ by
+
+$$
+F_{X}(x) = \mathbb{P}(X\leq x) = \sum_{x_{i}\leq x}f_{X}(x_{i}).
+$$
+
+---
+
+For the coin flipping example
+
+::: {.notes}
+$$
+f_{X}(x) = 
+\begin{cases}
+1/4 & x=0 \\
+1/2 & x=1 \\
+1/4 & x=2 \\
+0 & \text{otherwise}
+\end{cases}
+$$
+:::
+
+## Probability Density Function
+The PDF is a function that describes the distribution of the continuous random variable $X$. It gives the density such that probabilities over intervals are obtained via integration.
+
+The PDF is a function $f_{X}(x)$ such that $f_{X}(x)\geq 0$ for all $x$, $\int_{-\infty}^{\infty} f_{X}(x) \, dx = 1$, and for every $a\leq b$,
+
+$$
+\mathbb{P}(a < X < b) = \int_{a}^{b} f_{X}(x) \, dx.
+$$
+
+
+## PMFs of Common Discrete Distributions
+
+| Distribution   | PMF Formula                                                                 | Parameters                          | Range of Values                      |
+|----------------|------------------------------------------------------------------------------|-------------------------------------|------------------------------|
+| Uniform        | $P(X = x) = \frac{1}{n}$                                                 | $n$: number of outcomes         | $x = 1, 2, \dots, n$     |
+| Bernoulli      | $P(X = x) = p^x (1 - p)^{1 - x}$                                         | $p \in [0,1]$: success probability | $x \in \{0, 1\}$         |
+| Binomial       | $P(X = x) = \binom{n}{x} p^x (1 - p)^{n - x}$                            | $n$: trials, $p$: success probability | $x = 0, 1, \dots, n$     |
+| Geometric      | $P(X = x) = (1 - p)^{x - 1} p$                                           | $p \in (0,1]$: success probability | $x = 1, 2, 3, \dots$     |
+| Poisson        | $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$                          | $\lambda > 0$: average rate     | $x = 0, 1, 2, \dots$     |
+
+---
+
+## PDFs of Common Continuous Distributions
+
+| Distribution   | PDF Formula                                                                 | Parameters                                      | Range of Values                        |
+|----------------|------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------|
+| Uniform        | $f(x) = \frac{1}{b - a}$                                                 | $a < b$: interval bounds                    | $x \in [a, b]$             |
+| Gaussian (Normal) | $f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{ -\frac{(x - \mu)^2}{2\sigma^2} }$ | $\mu$: mean, $\sigma > 0$: std. dev.     | $x \in (-\infty, \infty)$  |
+| Exponential    | $f(x) = \lambda e^{ -\lambda x }$                                       | $\lambda > 0$: rate parameter               | $x \in [0, \infty)$        |
+
+
+## Bivariate Distributions
+
+Given a pair of discrete random variables $X$ and $Y$, the joint mass function is defined as
+
+$$
+f(x, y) = \mathbb{P}(X=x, Y=y).
+$$
+
+We can be more specific and write $f_{X,Y}$.
+
+::: {.notes}
+Likelihood of two events happening at the same time!
+:::
+
+---
+
+In the continuous case, a PDF for the random variable $(X, Y)$ is a function $f(x, y)$ such that
+
+1. $f(x, y) \geq 0$ for all $(x, y)$,
+1. $\int_{-\infty}^{\infty}\int_{-\infty}^{\infty} f(x,y) \, dx \, dy = 1$, and
+1. for any set $A\subset \mathbb{R}\times \mathbb{R}$, $\mathbb{P}((X,Y)\in A) = \iint_{A} f(x,y) \, dx \, dy$.
+
+In the discrete or continuous case the joint CDF is
+
+$$
+F_{X,Y}(x,y) = \mathbb{P}(X\leq x, Y\leq y).
+$$
+
+## Marginal Distributions
+
+If $(X,Y)$ have joint distribution with mass function $f_{X,Y}$, then the *marginal mass function* for $X$ is defined by
+
+$$
+f_{X}(x) = \sum_{y}\mathbb{P}(X=x, Y=y) = \sum_{y} f_{X,Y}(x,y).
+$$
+
+and the *marginal mass function* for $Y$ is
+
+$$
+f_{Y}(y) = \sum_{x}\mathbb{P}(X=x, Y=y) = \sum_{x} f_{X,Y}(x,y).
+$$
+
+::: {.notes}
+Represents the probability distribution of one random variable alone, obtained by summing (or integrating out) the other variables.
+
+Favorite sports by gender.
+:::
+
+---
+
+For continuous random variables, the marginal density functions are
+
+$$
+f_{X}(x) = \int f_{X,Y}(x,y) \, dy, \quad\text{and}\quad f_{Y}(y) = \int f_{X,Y}(x,y) \, dx.
+$$
+
+
+## Independent Random Variables
+
+Two random variables $X$ and $Y$ are *independent* if for every $A$ and $B$,
+
+$$
+\mathbb{P}(X\in A, Y\in B) = \mathbb{P}(X\in A)\mathbb{P}(Y\in B).
+$$
+
+If this condition is not satisfied then $X$ and $Y$ are *dependent*.
+
+---
+
+Let $X$ and $Y$ have joint PDF $f_{X,Y}$, then $X$ and $Y$ are independent if and only if 
+
+$$
+f_{X,Y}(x,y) = f_{X}(x)f_{Y}(y),
+$$
+
+for all values $x$ and $y$.
+
+## Conditional Distributions
+
+For discrete random variables, the *conditional probability mass function* is
+
+$$
+\small
+f_{X\mid Y}(x\mid y) = \mathbb{P}(X=x\mid Y=y) = \frac{\mathbb{P}(X=x, Y=y)}{\mathbb{P}(Y=y)} = \frac{f_{X,Y}(x,y)}{f_{Y}(y)},
+$$
+
+if $f_{Y}(y)>0$.
+
+---
+
+For continuous random variables, the *conditional probability density function* is
+
+$$
+f_{X\mid Y}(x\mid y) = \frac{f_{X,Y}(x,y)}{f_{Y}(y)},
+$$
+
+assuming that $f_{Y}(y)>0$. Then,
+
+$$
+ \mathbb{P}(X\in A\mid Y=y) = \int_{A} f_{X\mid Y}(x\mid y) \, dx.
+$$
+
+## Multivariate Distributions and IID Samples
+
+Given $n$ random variables $X_{i}$, the *random vector* is defined as $X=(X_{1},\ldots, X_{n})$.
+
+Let $f_{X_{1},\ldots,X_{n}}(x_{1},\ldots, x_{n})$ denote the multivariate PDF. The random variables are independent if
+
+$$
+f_{X_{1},\ldots, X_{n}}(x_{1},\ldots, x_{n}) = \prod_{i=1}^{n} f_{X_{i}}(x_{i}).
+$$
+
+---
+
+If $X_{1},\ldots, X_{n}$ are independent and each has the same marginal distribution with CDF $F$, we say that $X_{1},\ldots, X_{n}$ are independent and identically distributed (IID) and we write
+
+$$
+X_{1},\ldots, X_{n}\sim F.
+$$
+
+If $F$ has density $f$, we may also say $X_{1},\ldots, X_{n}$ are IID with density $f$. The variables $X_{1},\ldots, X_{n}$ are called a *random sample* of size $n$ from $F$.
+
+
+## Transformations of Random Variables
+
+Suppose that $X$ is a random variable with PDF $f_{X}$ and CDF $F_{X}$. Let $Y=r(X)$ be a function of $X$. 
+
+The new variable $Y$ is a *transformation* of $X$. 
+
+How do we compute the PDF and CDF of $Y$?
+
+---
+
+To find $f_{Y}$ follow these three steps:
+
+1. For each $y$, find the set $A_{y}=\{x:~r(x)\leq y\}$.
+1. Find the CDF
+$$
+\small
+\begin{align}
+F_{Y}(y) &= \mathbb{P}(Y\leq y) =  \mathbb{P}(r(X)\leq y) \\
+&= \mathbb{P}(\{x:~r(x)\leq y\}) \\
+&= \int_{A_{y}}f_{X}(x)dx.
+\end{align} 
+$$
+1. The PDF is $f_{Y}(y) = F^{\prime}_{Y}(y)$.
+
+The steps for functions of several random variables are similar.
+
+---
+
+### Example
+
+Let $f_{X}(x)=e^{-x}$ for $x>0$. Let $Y=r(X)=\log(X)$. Determine $F_Y(y)$ and $f_{Y}(y)$.
+
+::: {.notes}
+We have that $F_{X}(x) = \int_{0}^{x}e^{-s}ds = 1-e^{-x}$.
+
+The set $A_{y} = \{ x: x\leq e^{y} \}$ why?
+
+Then
+
+$$
+\begin{align}
+F_{Y}(y) &= \mathbb{P}(Y\leq y) = \mathbb{P}(\log(x)\leq y) \\
+&= \mathbb{P}(X\leq e^{y}) = F_{X}(e^{y})= 1- e^{-e^{y}} \\
+\end{align}
+$$
+
+Taking derivatives (FTC) we get
+
+$$
+f_{Y}(y) = e^{y}e^{-e^{y}}
+$$
+:::
 
 ## Expectation
 
@@ -29,14 +353,14 @@ The expected value (mean) of $X$ is defined to be
 $$
 \mathbb{E}(X) = 
 \begin{cases}
-\sum_{x}xf(x) & \text{if $X$ is discrete}, \\
-\int_{x}xf(x) & \text{if $X$ is continuous} ,\\
+\sum_{x} x f_{X}(x) & \text{if $X$ is discrete}, \\
+\int_{-\infty}^{\infty} x f_{X}(x) \, dx & \text{if $X$ is continuous} \\
 \end{cases}
 $$
 
 assuming that the sum or integral is well defined.
 
-We will later see that the mean $E(X) = \mu = \mu_{X}$ is the **first moment**.
+We will later see that the mean $\mathbb{E}(X) = \mu = \mu_{X}$ is the **first moment**.
 
 ---
 
@@ -50,18 +374,18 @@ Let $X\sim\operatorname{Bernoulli}(p)$, what is $\mathbb{E}(X)$?
 
 Let $X\sim\operatorname{Uniform}(-1, 3)$, what is $\mathbb{E}(X)$?
 
----
+<!-- ---
 
 ### Example: Cauchy Distribution
 
-Recall that a random variable has a Cauchy distribution if it has density $f_{X}(x) = \frac{\pi}{1+x^{2}}$. What is the mean of the Cauchy distribution?
+Recall that a random variable has a Cauchy distribution if it has density $f_{X}(x) = \frac{\pi}{1+x^{2}}$. What is the mean of the Cauchy distribution? -->
 
 ## The Rule of the Lazy Statistician
 
 Let $Y=r(X)$, then
 
 $$
-E(Y) = E(r(X)) = \int r(x)f_{X}(x)dx.
+\mathbb{E}(Y) = \mathbb{E}(r(X)) = \int_{-\infty}^{\infty} r(x) f_{X}(x) \, dx.
 $$
 
 ---
@@ -74,8 +398,6 @@ I_{A}(x) =
 1 & \text{if $x\in A$}, \\
 0 & \text{if $x\notin A$}.
 \end{cases}
-$$
-
 Observe that
 
 $$
@@ -87,11 +409,27 @@ $$
 We have defined probability as a *special case* of expectation.
 ::::
 
+::: {.notes}
+Unifies probability and expectation under the same mathematical framework.
+:::
+
 ---
 
 ### Example
 
-Let $(X, Y)$ have a jointly uniform distribution on the unit square. Let $Z=r(X,Y) = X^{2} + Y^{2}$. Compute $E(Z)$.
+Let $(X, Y)$ have a jointly uniform distribution on the unit square. Let $Z=r(X,Y) = X^{2} + Y^{2}$. Compute $\mathbb{E}(Z)$.
+
+::: {.notes}
+$$
+\begin{aligned}
+Z &= X^{2} + Y^{2}, \\
+\mathbb{E}[Z] &= \mathbb{E}[X^{2}] + \mathbb{E}[Y^{2}], \\
+\mathbb{E}[X^{2}] &= \int_{0}^{1} x^{2} \, dx = \left.\frac{x^{3}}{3}\right|_{0}^{1} = \frac{1}{3}, \\
+\mathbb{E}[Y^{2}] &= \int_{0}^{1} y^{2} \, dy = \frac{1}{3}, \\
+\therefore \quad \mathbb{E}[Z] &= \frac{1}{3} + \frac{1}{3} = \frac{2}{3}.
+\end{aligned}
+$$
+:::
 
 ---
 
@@ -118,10 +456,10 @@ $$
 The variance measures the *spread* of a distribution.
 
 **Definition**
-Let $X$ be a random variable with mean $\mu$. The variance of $\mathbb{V}(X)=\sigma^{2}=\sigma_{X}^{2}$ is defined by
+Let $X$ be a random variable with mean $\mu$. The variance of $X$, $\mathbb{V}(X)=\sigma^{2}=\sigma_{X}^{2}$, is defined by
 
 $$
-\mathbb{V}(X) = \mathbb{E}(X-\mu)^{2} = \int(x-\mu)^{2}f_{X}(x)dx,
+\mathbb{V}(X) = \mathbb{E}\big[(X-\mu)^{2}\big] = \int_{-\infty}^{\infty} (x-\mu)^{2} f_{X}(x) \, dx,
 $$
 
 assuming this value exists. 
@@ -178,11 +516,11 @@ $$
 If $X$ and $Y$ are random variables, the covariance (and correlation) between $X$ and $Y$ measure how strong the linear relationship is between $X$ and $Y$.
 
 **Definition**
-Let $X$ and $Y$ be random variables with means $\mu_{x}$ and $\mu_{Y}$ and standard deviations $\sigma_{X}$ and $\sigma_{Y}$. Define the **covariance** between $X$ and $Y$ by
+Let $X$ and $Y$ be random variables with means $\mu_{X}$ and $\mu_{Y}$ and standard deviations $\sigma_{X}$ and $\sigma_{Y}$. Define the **covariance** between $X$ and $Y$ by
 
 $$
 \small
-\operatorname{Cov}(X,Y)=\mathbb{E}\left((X-\mu_{x})(Y-\mu_{Y})\right).
+\operatorname{Cov}(X,Y)=\mathbb{E}\left((X-\mu_{X})(Y-\mu_{Y})\right).
 $$
 
 ## Correlation
@@ -224,9 +562,8 @@ $$
 
 ## Expectation and Variance of Important RVs
 
-| Distribution              | Mean $\mathbb{E}[X]$         | Variance $\text{Var}(X)$           |
+| Distribution              | Mean $\mathbb{E}[X]$         | Variance $\mathbb{V}(X)$           |
 |---------------------------|------------------------------|------------------------------------|
-| Point Mass at $a$     | $a$                          | $0$                                |
 | Bernoulli($p$)        | $p$                          | $p(1 - p)$                         |
 | Binomial($n, p$)      | $np$                         | $np(1 - p)$                        |
 | Geometric($p$)        | $\frac{1}{p}$                | $\frac{1 - p}{p^2}$                |
@@ -260,10 +597,10 @@ The variance-covariance matrix $\Sigma$ of a random vector $X$ is defined as
 
 $$
 \small
-\mathbb{V}(X) = 
+\mathbb{V}(X) = \Sigma =
 \begin{bmatrix}
 \mathbb{V}(X_{1}) & \operatorname{Cov}(X_{1}, X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
-\operatorname{Cov}(X_{2}, X_{1}) & \mathbb{V}(X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
+\operatorname{Cov}(X_{2}, X_{1}) & \mathbb{V}(X_{2}) & \cdots & \operatorname{Cov}(X_{2}, X_{k}) \\
 \vdots & \vdots & \vdots & \vdots \\
 \operatorname{Cov}(X_{k}, X_{1})  & \operatorname{Cov}(X_{k}, X_{2}) & \cdots  & \mathbb{V}(X_{k}) \\
 \end{bmatrix}
@@ -271,9 +608,72 @@ $$
 
 What is a property you can immediately identify from this matrix?
 
+<!-- ---
+
+If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{T}X) = a^{T}\mu$ and $\mathbb{V}(a^{T}X) = a^{T}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{T}$ 
+-->
+
+## The Multivariate Normal
+
+A random vector $X = (X_{1},\ldots, X_{k})$ has a multivariate normal distribution $X\sim N(\mu, \Sigma)$ if
+
+$$
+\small
+f(\mathbf{x}; \mu, \Sigma) = \frac{1}{(2\pi)^{k/2}\vert \Sigma \vert^{1/2}}\operatorname{exp}\left\{-\frac{1}{2}(\mathbf{x}-\mu)^{T}\Sigma^{-1}(\mathbf{x}-\mu) \right\},
+$$
+
+where $\mu\in\mathbb{R}^{k}$ is the vector of means of each $X_{i}$, $\Sigma\in\mathbb{R}^{k\times k}$ is the symmetric positive definite covariance matrix, and $\vert \Sigma \vert$ is the determinant of $\Sigma$.
+
 ---
 
-If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{T}X) = a^{T}\mu$ and $\mathbb{V}(a^{T}X) = a^{T}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{T}$
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import multivariate_normal
+from mpl_toolkits.mplot3d import Axes3D
+
+# Set seaborn style
+sns.set(style="white")
+
+# Mean and covariance matrix
+mean = [0, 0]
+cov = [[1, 0.5], [0.5, 1]]
+
+# Create grid
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+pos = np.dstack((X, Y))
+
+# Multivariate normal distribution
+rv = multivariate_normal(mean, cov)
+Z = rv.pdf(pos)
+
+# Create figure and subplots
+fig = plt.figure(figsize=(14, 6))
+fig.tight_layout(pad=0.5)
+
+
+# 2D Contour plot
+ax1 = fig.add_subplot(1, 2, 1)
+contour = ax1.contour(X, Y, Z, cmap='viridis')
+ax1.set_title('2D Contour Plot')
+ax1.set_xlabel('X')
+ax1.set_ylabel('Y')
+ax1.set_xlim(-3, 3)
+ax1.set_ylim(-3, 3)
+
+# 3D Surface plot
+ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+surf = ax2.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
+ax2.set_title('3D Surface Plot')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
+ax2.set_zlabel('Probability Density')
+
+plt.show()
+```
 
 ## Conditional Expectation
 
@@ -283,10 +683,10 @@ Suppose that $X$ and $Y$ are random variables. What is the mean of $Y$ among tho
 The conditional expectation of $Y$ given $X=x$ is 
 
 $$
-\mathbb{E}(Y\vert X=x) = 
+\mathbb{E}(Y\mid X=x) = 
 \begin{cases}
-\sum y f_{Y\vert X}(y\vert x) & \text{discrete case},\\
-\int y f_{Y\vert X}(y\vert x) dy & \text{continuous case}.
+\sum y f_{Y\mid X}(y\mid x) & \text{discrete case},\\
+\int y f_{Y\mid X}(y\mid x) \, dy & \text{continuous case}.
 \end{cases}
 $$
 ::::
@@ -299,7 +699,7 @@ $$
 For random variables $X$ and $Y$, assuming the expectations exist, we have that
 
 $$
-\mathbb{E}(\mathbb{E}(Y\vert X)) = \mathbb{E}(Y)\quad\text{and}\quad \mathbb{E}(\mathbb{E}(X\vert Y)) = \mathbb{E}(X).
+\mathbb{E}(\mathbb{E}(Y\mid X)) = \mathbb{E}(Y)\quad\text{and}\quad \mathbb{E}(\mathbb{E}(X\mid Y)) = \mathbb{E}(X).
 $$
 
 ## Conditional Variance
@@ -307,16 +707,16 @@ $$
 The conditional variance is defined as
 
 $$
-\mathbb{V}(Y\vert X=x) = \int (y-\mu(x))^{2}f(y\vert x)dy,
+\mathbb{V}(Y\mid X=x) = \int (y-\mu(x))^{2} f_{Y\mid X}(y\mid x) \, dy,
 $$
-where $\mu(x)=\mathbb{E}(Y\vert X=x)$.
+where $\mu(x)=\mathbb{E}(Y\mid X=x)$.
 
 ---
 
 For random variables $X$ and $Y$
 
 $$
-\mathbb{V}(Y) = \mathbb{E}(\mathbb{V}(Y\vert X)) + \mathbb{V}(\mathbb{E}((Y\vert X))).
+\mathbb{V}(Y) = \mathbb{E}(\mathbb{V}(Y\mid X)) + \mathbb{V}(\mathbb{E}(Y\mid X)).
 $$
 
 :::: {.fragment}
@@ -329,11 +729,11 @@ Draw a county at random from the USA. Then draw $n$ people at random from this c
 
 Given $Q=q$, we have that $X\sim\operatorname{Binomial}(n,q)$.
 
-In this case, what is $\mathbb{E}(X\vert Q=q)$ and $\mathbb{V}(X\vert Q=q)$?
+In this case, what is $\mathbb{E}(X\mid Q=q)$ and $\mathbb{V}(X\mid Q=q)$?
 
 :::: {.fragment}
 $$
-\mathbb{E}(X\vert Q=q) = nq, \quad \mathbb{V}(X\vert Q=q)=nq(1-q).
+\mathbb{E}(X\mid Q=q) = nq, \quad \mathbb{V}(X\mid Q=q)=nq(1-q).
 $$
 ::::
 
@@ -344,16 +744,34 @@ Suppose now that $Q\sim\operatorname{Uniform}(0,1)$. A distribution that is cons
 $$
 \begin{align}
 Q&\sim\operatorname{Uniform}(0,1), \\
-X\vert Q=q&\sim\operatorname{Binomial}(n,q).
+X\mid Q=q&\sim\operatorname{Binomial}(n,q).
 \end{align}
 $$
 
-We can now used what we learned in class to compute $\mathbb{E}(X)$ and $\mathbb{V}(X)$.
+We can now use what we learned in class to compute $\mathbb{E}(X)$ and $\mathbb{V}(X)$.
+
+---
+
+::: {.notes}
+$$ \mathbb{E}(X) =  \mathbb{E}(\mathbb{E}(X\mid Q)) = n\mathbb{E}(Q) = n/2$$ 
+
+$$
+\mathbb{V}(X) = \mathbb{E}(\mathbb{V}(X\mid Q)) + \mathbb{V}(\mathbb{E}(X\mid Q)) 
+$$
+
+$$
+\mathbb{E}(\mathbb{V}(X\mid Q)) = \mathbb{E}(nQ(1-Q)) = n\int_{0}^{1} q(1-q) \, dq = n/6
+$$
+
+$$
+\mathbb{V}(\mathbb{E}(X\mid Q)) = \mathbb{V}(nQ) = n^{2}\mathbb{V}(Q) = n^{2}\int_{0}^{1}\big(q-\tfrac{1}{2}\big)^{2} \, dq = n^{2}/12.
+$$
+:::
 
 
 ## Moments
 
-The $k$th moment of $X$ is defined to be $\mathbb{E}(X^{k})$ assuming that $\mathbb{E}(\vert X\vert^{k})<\infty$.
+The $k$th moment of $X$ is defined to be $\mathbb{E}(X^{k})$ assuming that $\mathbb{E}(\lvert X\rvert^{k})<\infty$.
 
 :::: {.incremental}
 - What is the first moment? 
@@ -381,7 +799,7 @@ Moment generating functions are used for finding moments, finding the distributi
 The **moment generating function** (Laplace Transform) of $X$ is defined by
 
 $$
-\phi_{X}(t) = \mathbb{E}(e^{tX}) = \int e^{tx}f_{X}(x)dx.
+\psi_{X}(t) = \mathbb{E}(e^{tX}) = \int e^{tx}f_{X}(x)dx.
 $$
 
 ---
