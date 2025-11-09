@@ -162,7 +162,7 @@ plt.show()
 
 **Theorem**
 
-Let $X$ have CDF $F$ and let $Y$ have CDF $G$. If $F(x)=G(X)$ for all $x$, then $\mathbb{P}(X\in A)=\mathbb{P}(Y\in A)$ for all $A$.
+Let $X$ have CDF $F$ and let $Y$ have CDF $G$. If $F(x)=G(x)$ for all $x$, then $\mathbb{P}(X\in A)=\mathbb{P}(Y\in A)$ for all $A$.
 
 ---
 
