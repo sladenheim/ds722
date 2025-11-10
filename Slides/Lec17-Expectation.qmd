@@ -164,7 +164,7 @@ $$
 |----------------|------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------|
 | Uniform        | $f(x) = \frac{1}{b - a}$                                                 | $a < b$: interval bounds                    | $x \in [a, b]$             |
 | Gaussian (Normal) | $f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{ -\frac{(x - \mu)^2}{2\sigma^2} }$ | $\mu$: mean, $\sigma > 0$: std. dev.     | $x \in (-\infty, \infty)$  |
-| Exponential    | $f(x) = \lambda e^{ -\lambda x }$                                       | $\lambda > 0$: rate parameter               | $x \in [0, \infty)$        |
+| Exponential    | $f(x) = \beta e^{ -\beta x }$                                       | $\beta > 0$: rate parameter               | $x \in [0, \infty)$        |
 
 
 ## Bivariate Distributions
@@ -220,6 +220,7 @@ Favorite sports by gender.
 For continuous random variables, the marginal density functions are
 
 $$
+\small
 f_{X}(x) = \int f_{X,Y}(x,y) \, dy, \quad\text{and}\quad f_{Y}(y) = \int f_{X,Y}(x,y) \, dx.
 $$
 
@@ -368,11 +369,38 @@ We will later see that the mean $\mathbb{E}(X) = \mu = \mu_{X}$ is the **first m
 
 Let $X\sim\operatorname{Bernoulli}(p)$, what is $\mathbb{E}(X)$?
 
+::: {.notes}
+Recall that
+$$
+f_{X}(x) = p^{x}(1-p)^{1-x}
+$$
+$$
+\mathbb{E}(X) = \sum_{x=0}^{1}xf(x) = 0\cdot(1-p) + 1\cdot p = p.
+$$
+:::
+
 ---
 
 ### Example: Uniform Distribution
 
 Let $X\sim\operatorname{Uniform}(-1, 3)$, what is $\mathbb{E}(X)$?
+
+::: {.notes}
+Recall 
+$$
+f_{X}(x) = 
+\begin{cases}
+\frac{1}{4} & -1\leq x \leq 3 \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+$$
+\mathbb{E}(X) = \int_{-1}^{3}\frac{1}{4}dx = \frac{1}{4}(3 -(-1))= 1 = (a+b)/2.
+$$
+
+How can we show this in general?
+:::
 
 <!-- ---
 
@@ -398,6 +426,8 @@ I_{A}(x) =
 1 & \text{if $x\in A$}, \\
 0 & \text{if $x\notin A$}.
 \end{cases}
+$$
+
 Observe that
 
 $$
@@ -438,7 +468,7 @@ $$
 If $X_{1},\ldots, X_{n}$ are random variables and $a_{1},\ldots, a_{n}$ are constants, then
 
 $$
-\mathbb{E}\left(\sum_{i}a_{i}X_{i}\right)= \sum_{i}a_{i}\mathbb{E}(X_{i}).
+\mathbb{E}\left(\sum_{i=1}^{n}a_{i}X_{i}\right)= \sum_{i=1}^{n}a_{i}\mathbb{E}(X_{i}).
 $$
 
 What kind of operator is the expectation?
@@ -448,7 +478,7 @@ What kind of operator is the expectation?
 Let $X_{1},\ldots, X_{n}$ be independent random variables, then
 
 $$
-\mathbb{E}\left(\prod_{i}X_{i}\right) = \prod_{i}\mathbb{E}(X_{i}).
+\mathbb{E}\left(\prod_{i=1}^{n}X_{i}\right) = \prod_{i=1}^{n}\mathbb{E}(X_{i}).
 $$
 
 ## Variance
@@ -476,7 +506,7 @@ Assuming the variance is well-defined, it has the following properties
 1. If $a$ and $b$ are constants, then $\mathbb{V}(aX+b) = a^{2}\mathbb{V}(X)$.
 1. If $X_{1},\ldots, X_{n}$ are independent and $a_{1},\ldots, a_{n}$ are constants, then 
 $$
-\mathbb{V}\left(\sum_{i}a_{i}X_{i}\right) = \sum_{i}a_{i}^{2}\mathbb{V}(X_{i}).
+\mathbb{V}\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}\mathbb{V}(X_{i}).
 $$
 
 ---
@@ -485,19 +515,29 @@ $$
 
 Let $X\sim\operatorname{Binomial}(n,p)$, what is $\mathbb{V}(X)$?
 
+::: {.notes}
+$$
+\mathbb{E}(X_{i}) = p, \quad \mathbb{E}(X_{i}^{2}) = (p\cdot 1^2) + (1-p)\cdot o^{2} = p
+$$
+
+Then $\mathbb{V}(X_{i}) = p - p^{2} = p(1-p)$.
+
+Sum these up and get $np(1-p)$. $\mathbb{V}=0$ if $p=0,1$.
+:::
+
 ## Sample Mean and Variance
 
 If $X_{1},\ldots, X_{n}$ are random variables, we define the **sample mean** to be
 
 $$
 \small
-\bar{X}_{n} = \frac{1}{n}\sum_{i}X_{i},
+\bar{X}_{n} = \frac{1}{n}\sum_{i=1}^{n}X_{i},
 $$
 and the **sample variance** to be
 
 $$
 \small
-S_{n}^{2} = \frac{1}{n-1}\sum_{i}(X_{i}-\bar{X}_{n})^{2}.
+S_{n}^{2} = \frac{1}{n-1}\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}.
 $$
 
 The denominator has $n-1$ so that $\mathbb{E}(S_{n}^{2})= \sigma^{2}$.
@@ -557,7 +597,7 @@ $$
 More generally for random variables $X_{1},\ldots, X_{n}$, 
 
 $$
-\mathbb{V}\left(\sum_{i}a_{i}X_{i}\right) = \sum_{i}a_{i}^{2}\mathbb{V}(X_{i}) + 2 \sum_{i} \sum_{j>i}\operatorname{Cov}(X_{i},X_{j}).
+\mathbb{V}\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}\mathbb{V}(X_{i}) + 2 \sum_{i=1}^{n} \sum_{j>i}^{n}\operatorname{Cov}(X_{i},X_{j}).
 $$
 
 ## Expectation and Variance of Important RVs
@@ -570,7 +610,7 @@ $$
 | Poisson($\lambda$)    | $\lambda$                    | $\lambda$  |
 | Uniform($a, b$)       | $\frac{a + b}{2}$            | $\frac{(b - a)^2}{12}$             |
 | Normal($\mu, \sigma^2$) | $\mu$                      | $\sigma^2$                         |
-| Exponential($\lambda$) | $\frac{1}{\lambda}$         | $\frac{1}{\lambda^2}$              |                       
+| Exponential($\beta$) | $\beta$         | $\beta^2$              |                       
 
 ## Random Vectors
 
