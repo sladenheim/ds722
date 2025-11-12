@@ -823,13 +823,31 @@ The mean.
 - What is the second moment?
 
 :::: {.fragment}
-The variance.
+The variance + mean squared.
 ::::
 ::::
 
 :::: {.fragment}
 The third and fourth moments are called the skewness and the kurtosis.
 ::::
+
+::: {.notes}
+Skewness measures the asymmetry of a distribution about its mean. It is defined as the standardized third central moment:
+
+$$
+\text{skewness} = \gamma_1 = \frac{\mathbb{E}\big[(X-\mu)^3\big]}{\sigma^3}.
+$$
+
+Interpretation: $\gamma_1>0$ indicates right-skew (long right tail), $\gamma_1<0$ indicates left-skew (long left tail), and $\gamma_1\approx 0$ suggests approximate symmetry.
+
+Kurtosis measures the "tailedness" or peakiness of a distribution and is the standardized fourth central moment:
+
+$$
+\text{kurtosis} = \beta_2 = \frac{\mathbb{E}\big[(X-\mu)^4\big]}{\sigma^4}.
+$$
+
+Excess kurtosis $=\beta_2-3$ is commonly used so that the normal distribution has excess kurtosis 0. Positive excess kurtosis (leptokurtic) implies heavier tails / more extreme outliers; negative excess kurtosis (platykurtic) implies lighter tails / fewer outliers; zero (mesokurtic) matches the normal.
+:::
 
 ## Moment Generating Functions
 
