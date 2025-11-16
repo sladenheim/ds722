@@ -43,7 +43,7 @@ Since $X>0$
 $$
 \begin{align}
 E(X) &= \int_{0}^{\infty}xf(x)dx = \int_{0}^{t}xf(x) dx + \int_{t}^{\infty} xf(x) dx \\
-&\geq \int_{t}^{\infty}xf(x)dx\leq t\int_{t}^{\infty}f(x)dx = \mathbb{P}(X>t).
+&\geq \int_{t}^{\infty}xf(x)dx\geq t\int_{t}^{\infty}f(x)dx = t\mathbb{P}(X>t).
 \end{align}
 $$
 :::
@@ -338,7 +338,7 @@ Let $X_{1},\ldots,X_{n}$ be IID with mean $\mu$ and variance $\sigma^{2}$. Let $
 
 $$
 \small
-Z_{n} = \frac{\bar{X}_{n}-\mu}{\sqrt{\mathbb{V}(\bar{X}_{n})}} = \frac{\sqrt{n(\bar{X}_{n}-\mu)}}{\sigma} \leadsto Z,
+Z_{n} = \frac{\bar{X}_{n}-\mu}{\sqrt{\mathbb{V}(\bar{X}_{n})}} = \frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} \leadsto Z,
 $$
 
 where $Z\sim\mathcal{N}(0,1)$. In other words
