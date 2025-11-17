@@ -63,7 +63,7 @@ for spine in [list(ax.spines.values())[i] for i in [0, 1, 3]]:
     spine.set_visible(False)
 ```
 
-We want to fit a normal distribution $\mathcal{N}(\mu, \sigma^2)$ to this data. Parameter estimation in this case would be finding the right values for the parameters $\mu$ and $\sigma$.
+We want to fit a normal distribution $N(\mu, \sigma^2)$ to this data. Parameter estimation in this case would be finding the right values for the parameters $\mu$ and $\sigma$.
 
 ## Parameter Estimation
 
@@ -385,7 +385,7 @@ Assume that each observation of $y_{i}$ is independent.
 This means
 
 $$
-Y\,|\,X=x\;\sim\;\mathcal{N}(f(x;\beta_{0},\beta_{1}), \sigma^{2}).
+Y\,|\,X=x\;\sim\;N(f(x;\beta_{0},\beta_{1}), \sigma^{2}).
 $$
 
 
