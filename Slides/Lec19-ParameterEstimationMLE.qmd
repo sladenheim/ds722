@@ -11,7 +11,7 @@ In this lecture we describe how to determine these parameters from sampled data.
 
 Parameter estimation is an umbrella term for a set of tools for statistical analysis.
 
-These techniques allow us to infer unknown population parameters based on a sample statistic.
+These techniques allow us to infer unknown population parameters based on sample data.
 
 Parameter estimation is closely related to model fitting.
 
@@ -138,7 +138,7 @@ $$
 \mathcal{F} = \left\{ f(x;\theta): \theta\in\Theta \right\},
 $$
 
-where $\Theta\in\mathbb{R}^{k}$ is the parameter space and $\theta = (\theta_1,\ldots, \theta_{k})$ is the parameter.
+where $\Theta\subset\mathbb{R}^{k}$ is the parameter space and $\theta = (\theta_1,\ldots, \theta_{k})$ is the parameter vector.
 
 The problem of *inference* then reduces to the problem of estimating the parameter $\theta$.
 
@@ -219,7 +219,7 @@ Thus $\tau = T(\theta) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)$.
 
 One way to generate a parametric estimator is the **Method of Moments**.
 
-Recall the $k$th moment of a random variable $X$, whiT is
+Recall the $k$th moment of a random variable $X$ is
 
 $$
 \alpha_{k} = \mathbb{E}(X^{k}) = \int x^{k}f(x)dx,
@@ -228,7 +228,7 @@ $$
 where $f(x)$ is the pdf of the random variable.
 
 ::: {.notes}
-These estimators are not always optimal but easy to compute.
+These estimators are not always optimal but are easy to compute.
 :::
 
 ---
@@ -251,24 +251,24 @@ The *method of moments estimator* $\hat{\theta}_{n}$ is defined to be the value 
 
 $$
 \begin{align*}
-\hat{\alpha}_{1}(\hat{\theta}_{n}) &= \hat{\alpha}_{1}, \\
-\hat{\alpha}_{2}(\hat{\theta}_{n}) &= \hat{\alpha}_{2}, \\
+\alpha_{1}(\hat{\theta}_{n}) &= \hat{\alpha}_{1}, \\
+\alpha_{2}(\hat{\theta}_{n}) &= \hat{\alpha}_{2}, \\
  &\vdots  \\
-\hat{\alpha}_{k}(\hat{\theta}_{n}) &= \hat{\alpha}_{k}. \\
+\alpha_{k}(\hat{\theta}_{n}) &= \hat{\alpha}_{k}. \\
 \end{align*}
 $$
 
 This is a system of $k$ equations in $k$ unknowns.
 
 ::: {.notes}
-Solving this system yields the method of moment estimator.
+Solving this system yields the method of moments estimator.
 :::
 
 ---
 
 **Example: Bernoulli**
 
-Let $X_{1},\ldots X_{n}\sim \operatorname{Bernoulli}(p)$. Compute the point estimator $\hat{p}$ using the method of moments.
+Let $X_{1},\ldots, X_{n}\sim \operatorname{Bernoulli}(p)$. Compute the point estimator $\hat{p}$ using the method of moments.
 
 ::: {.notes}
 Recall that $\alpha_{1} = \mathbb{E}(X)=p$ and $\hat{\alpha}_{1}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$. Equating these two values gives
@@ -283,7 +283,7 @@ $$
 
 **Example: Normal**
 
-Let $X_{1},\ldots X_{n}\sim N(\mu,\sigma^{2})$. Compute the point estimate $\hat{\theta} = (\hat{\mu}, \hat{\sigma})$ using the method of moments.
+Let $X_{1},\ldots, X_{n}\sim N(\mu,\sigma^{2})$. Compute the point estimate $\hat{\theta} = (\hat{\mu}, \hat{\sigma})$ using the method of moments.
 
 ::: {.notes}
 Recall that $\alpha_{1} = \mathbb{E}_{\theta}(X_{1})=\mu$ and  $\alpha_{2} = \mathbb{E}_{\theta}(X_{1}^{2})=\mathbb{V}_{\theta}(X_{1}) +\mathbb{E}_{\theta}(X_{1})^{2} = \sigma^{2} + \mu^{2}$. Then we have the system of equations
@@ -295,7 +295,7 @@ $$
 \end{align*}
 $$
 
-We have that $\hat{mu} = \bar{X}_{n}$ and $\hat{\sigma}^{2}=\frac{1}{n}\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}$ 
+We have that $\hat{\mu} = \bar{X}_{n}$ and $\hat{\sigma}^{2}=\frac{1}{n}\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}$ 
 :::
 
 ## Maximum Likelihood
@@ -343,7 +343,7 @@ Why would we want to take the log of the likelihood?
 Suppose that $X_{1},\ldots, X_{n}\sim \operatorname{Bernoulli}(p)$. What is the maximum likelihood estimator $\hat{p}_{n}$?
 
 ::: {.notes}
-The pdf is $f(x;p) = p^{x}(1-p)^{1-x}$ for $x=0,1$. The likelihood is
+The pmf is $f(x;p) = p^{x}(1-p)^{1-x}$ for $x\in\{0,1\}$. The likelihood is
 
 $$
 \mathcal{L}_{n}(p) = \prod_{i=1}^{n}f(X_{i};p) = \prod_{i=1}^{n}p^{X_{i}}(1-p)^{1-X_{i}} = p^{S}(1-p)^{n-S},
@@ -385,7 +385,7 @@ Assume that each observation of $y_{i}$ is independent.
 This means
 
 $$
-\mathbb{P}(y\vert X=x, \beta_{0},\beta_{1},\sigma^{2})\sim\mathcal{N}(f(x;\beta_{0},\beta_{1}), \sigma^{2}).
+Y\,|\,X=x\;\sim\;\mathcal{N}(f(x;\beta_{0},\beta_{1}), \sigma^{2}).
 $$
 
 
@@ -393,7 +393,7 @@ $$
 In particular, the PDF is
 
 $$
-\mathbb{P}(y\vert X=x, \beta_{0},\beta_{1},\sigma^{2}) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y-(\beta_{0}+\beta_{1}x)^{2}}{2\sigma^{2}}}
+p(y\,|\,X=x, \beta_{0},\beta_{1},\sigma^{2}) = \frac{1}{\sqrt{2\pi}\sigma}\exp\!\left(-\frac{(y-(\beta_{0}+\beta_{1}x))^{2}}{2\sigma^{2}}\right)
 $$
 :::
 
@@ -416,7 +416,7 @@ $$
 Thus
 
 $$
-\mathcal{L}_{n}(\beta_{0},\beta_{1}, \sigma^{2}) = \prod_{i=1}^{n}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y_{i}-(\beta_{0}+\beta_{1}x_{i})^{2}}{2\sigma^{2}}}
+\mathcal{L}_{n}(\beta_{0},\beta_{1}, \sigma^{2}) = \prod_{i=1}^{n}\frac{1}{\sqrt{2\pi}\sigma}\exp\!\left(-\frac{(y_{i}-(\beta_{0}+\beta_{1}x_{i}))^{2}}{2\sigma^{2}}\right)
 $$
 :::
 
@@ -425,16 +425,11 @@ How can we find our parameters now?
 :::
 
 ## Linear Regression Log-Likelihood 
-What is the log-likelihood of $\ell_{n}(\beta_{0}, \beta_{1},\sigma^{2})$?
+What is the log-likelihood $\ell_{n}(\beta_{0}, \beta_{1},\sigma^{2})$?
 
-:::: {.fragment}
-$$
-\ell_{n}(\beta_{0}, \beta_{1},\sigma^{2}) = 
-$$
-::::
 
 ::: {.notes}
-The log-likehood is
+The log-likelihood is
 $$
 \frac{-1}{2\sigma^{2}}\sum_{i=1}^{n}(y_{i}-(\beta_{0}+\beta_{1}x_{i}))^{2} -\frac{n}{2}\log(\sigma^{2})-\frac{n}{2}\log(2\pi).
 $$
@@ -444,12 +439,20 @@ $$
 What is the gradient of $\ell_{n}(\beta_{0}, \beta_{1})$?
 
 ::: {.notes}
+
+The term we care about is
 $$
-\begin{align}
-\frac{\partial{\ell_{n}}}{\partial \beta_{0}} &= \\
-\frac{\partial{\ell_{n}}}{\partial \beta_{1}} &= \\
-\frac{\partial{\ell_{n}}}{\partial \sigma} &= \\
-\end{align}
+\Vert y - X\beta \Vert_{2}^{2},
+$$
+which we know the gradient is
+
+$$
+-2X^{T}(y-X\beta).
+$$
+When this is zero we obtain the familiar LSQ solution
+
+$$
+\beta = (X^{\top}X)^{-1}X^{\top}y.
 $$
 :::
 
@@ -481,15 +484,15 @@ An estimator is *unbiased* if $\operatorname{bias}(\hat{\theta})=0$.
 ---
 
 **Example: Bernoulli**
-Let $X_{i}\sim\operatorname{Bernoulli}(p)$. Let $\hat{p}_{n} = \frac{1}{n}\sum_{i}^{n}x^{(n)}$ denote the MLE of $p$. Is $\hat{p}_{n}$ biased or unbiased?
+Let $X_{i}\sim\operatorname{Bernoulli}(p)$. Let $\hat{p}_{n} = \frac{1}{n}\sum_{i=1}^{n}X_{i}$ denote the MLE of $p$. Is $\hat{p}_{n}$ biased or unbiased?
 
 ::: {.notes}
 $$
 \begin{align}
 \operatorname{bias}(\hat{p}_{n}) &= \mathbb{E}(\hat{p}_{n}) - p \\
-&= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}x^{(i)} \right) - p \\
-&= \frac{1}{n}\sum_{i=1}^{n}\mathbb{E}(x^{(i)}) - p \\
-&= \frac{1}{n}\sum_{i-1}^{n}p - p \\
+&= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}X_{i} \right) - p \\
+&= \frac{1}{n}\sum_{i=1}^{n}\mathbb{E}(X_{i}) - p \\
+&= \frac{1}{n}\sum_{i=1}^{n}p - p \\
 &= p-p=0.
 \end{align}
 $$
@@ -502,7 +505,7 @@ $$
 The variance of an estimator is
 
 $$
-\mathbb{V}(\hat{\theta}) = \mathbb{V}(g(x_{1},x_{2},\ldots, x_{n})),
+\mathbb{V}(\hat{\theta}) = \mathbb{V}(g(x^{(1)},x^{(2)},\ldots, x^{(n)})),
 $$
 where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
 
@@ -511,11 +514,12 @@ where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
 What is the variance of $\hat{p}_{n}$?
 
 ::: {.notes}
-$$\operatorname{Var}\left(\hat{p}_n\right) = \mathbb{V}\left( \frac{1}{n} \sum_{i=1}^m x^{(i)} \right)
-=\frac{1}{n^2}\mathbb{V}\left( \sum_{i=1}^n x^{(i)} \right) $$
+$$\operatorname{Var}\left(\hat{p}_n\right) = \mathbb{V}\left( \frac{1}{n} \sum_{i=1}^n X_{i} \right)
+=\frac{1}{n^2}\mathbb{V}\left( \sum_{i=1}^n X_{i} \right) $$
 
-$$ = \frac{1}{n^2} n \operatorname{Var}\left(x^{(1)}\right)
-= \frac{1}{n}\theta (1-\theta).$$
+$$ = \frac{1}{n^2} \sum_{i=1}^n \operatorname{Var}(X_{i})
+= \frac{1}{n^2} \cdot n\, p (1-p)
+= \frac{p(1-p)}{n}. $$
 
 This has a desirable property: as the number of data points $n$ increases, the variance of the estimate decreases.
 :::
@@ -579,12 +583,12 @@ Which is better?
 The mean squared error (MSE) measures the "average distance squared" between the estimator and the true value: 
 
 $$
-\small{\operatorname{MSE}\left(\hat{\theta}_m\right) = \mathbb{E}\left(\left(\hat{\theta}_m - \theta\right)^2\right)}.
+\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = \mathbb{E}\left(\left(\hat{\theta}_n - \theta\right)^2\right)}.
 $$
 
 The MSE is a good single number for evaluating an estimator, because it turns out that:
     
-$$\small{\operatorname{MSE}\left(\hat{\theta}_m\right) = \operatorname{bias}\left(\hat{\theta}_m\right)^2 + \operatorname{Var}\left(\hat{\theta}_m\right)}.
+$$\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = \operatorname{bias}\left(\hat{\theta}_n\right)^2 + \operatorname{Var}\left(\hat{\theta}_n\right)}.
 $$
 
 ## Properties of MOM Estimators
@@ -600,15 +604,19 @@ Let $\hat{\theta}_{n}$ denote the maximum likelihood estimator. We have the foll
 
 1. The MLE is consistent: $\hat{\theta}_{n}\overset{P}\longrightarrow \theta_{\star}$, where $\theta_{\star}$ is the true value of the parameter $\theta$.
 1. The MLE is equivariant: if $\hat{\theta}_{n}$ is the MLE of $\theta$, then $g(\hat{\theta}_{n})$ is the MLE of $g(\theta)$.
-1. The MLE is asympotically optimal or efficient. This means that among all well-behaved estimators, that the MLE has the smallest variance for large enough samples.
+1. The MLE is asymptotically optimal or efficient. This means that among all well-behaved estimators, the MLE has the smallest variance for large enough samples.
 
 
 ## Example: Swipe Left or Right?
 Assume you have data from a dating app which allows users to swipe left to reject, and swipe right to accept a date. Each swipe is drawn independently from a Bernoulli distribution with unknown parameter $p$, the chance of a right swipe. How can we use our data to estimate the unknown parameter?
 
-```{python}
-#| echo: true
+---
 
+
+```{python}
+#| fig-align: center
+import numpy as np
+rng = np.random.default_rng(42)
 # True probability of a right swipe
 true_theta = 0.37
 
@@ -624,27 +632,20 @@ estimated_thetas = []
 
 # Perform simulations
 for _ in range(num_simulations):
-    swipes = np.random.binomial(1, true_theta, n)
+    swipes = rng.binomial(1, true_theta, n)
     estimated_theta = np.mean(swipes)
     estimated_thetas.append(estimated_theta)
 
-```
-
----
-
-
-```{python}
 #| fig-align: center
 # Plot histogram of estimated thetas
 plt.figure(figsize=(8, 6))
-plt.hist(estimated_thetas, bins=30, color='lightgreen', edgecolor='black')
+plt.hist(estimated_thetas, bins=30, color='cyan', edgecolor='black')
 plt.axvline(true_theta, color='red', linestyle='dashed', linewidth=2, label=f'True θ = {true_theta}')
 plt.title('Distribution of Estimated θ (True θ = 0.37)')
 plt.xlabel('Estimated θ')
 plt.ylabel('Frequency')
 plt.legend()
 plt.grid(True)
-plt.savefig("theta_simulation_037.png")
 plt.show()
 ```
 
@@ -670,7 +671,7 @@ We need to determine $N$, a parameter of the discrete uniform distribution.
 
 ### Uniform Discrete Distribution
 
-Recall that the pdf of the discrete uniform distribution is
+Recall that the pmf of the discrete uniform distribution is
 
 $$
 f(x) =
@@ -716,7 +717,7 @@ For MLE, we need to formulate the likelihood. What is the likelihood?
 
 :::: {.fragment}
 $$
-f(X; N) = \frac{1}{N}, \quad \text{for } N \geq 60.
+f(X; N) = \frac{1}{N}, \quad \text{for } N \geq 9.
 $$
 ::::
 
