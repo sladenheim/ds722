@@ -74,12 +74,12 @@ where $B_{1}$ and $B_{2}$ are bowls 1 and 2, respectively, and $V$ and $C$ are v
 
 We can then consider events
 
-- $A = \{ (B_{1},V), (B_{1},C)\}$, the event the cookie came from bow 1
+- $A = \{ (B_{1},V), (B_{1},C)\}$, the event the cookie came from bowl 1
 - $B = \{ (B_{1},V), (B_{2},V)\}$, the event the cookie is vanilla
 
 
 :::: {.fragment}
-What does $\mathbb{P}(A\mid B)$ represent?
+In words, what does $\mathbb{P}(A\mid B)$ represent?
 ::::
 
 ::: {.notes}
@@ -94,9 +94,9 @@ $$
 
 We now have three probabilities we need to determine:
 
-- $\small \mathbb{P}(\text{Bowl 1})$ which is one bowl out of two, so 1/2.
-- $\small \mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})$ which is 30 out of 40 cookies, so 3/4.
-- $\small \mathbb{P}(\text{Vanilla})$ which is a little tougher, since it's the combined probability of Vanillas from either bowl. What can we do?
+- $\small \mathbb{P}(\text{Bowl 1})$ which is one bowl out of two, is  1/2.
+- $\small \mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})$ which is 30 out of 40 cookies, is 3/4.
+- $\small \mathbb{P}(\text{Vanilla})$ is a little tougher. It's the combined probability of Vanillas from either bowl. What can we do?
 
 ::: {.notes}
 $$\small \begin{align*}
@@ -118,7 +118,7 @@ we have
 
 $$
 \small \begin{align*}
-\mathbb{P}(\text{first bowl} \vert \text{Vanilla})\ & = \frac{\mathbb{P}(\text{Vanilla} \vert \text{first bowl})\mathbb{P}(\text{first bowl})}{\mathbb{P}(\text{Vanilla})}\\
+\mathbb{P}(\text{Bowl 1} \vert \text{Vanilla})\ & = \frac{\mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})\mathbb{P}(\text{Bowl 1})}{\mathbb{P}(\text{Vanilla})}\\
 & = \frac{(3/4)(1/2)}{5/8} = 3/5.
 \end{align*}
 $$
@@ -130,7 +130,7 @@ The main way Bayes' Rule is used in Bayesian statistics is as a way to update th
 For $\small \mathbb{P}(D)>0$,
 
 $$
-\small \mathbb{P}(H \,\vert\, D)\; =  \frac{\mathbb{P}(H)\mathbb{P}(D\,\vert\,H) \; }{\mathbb{P}(D)}. 
+\small \mathbb{P}(H \,\vert\, D)\; =  \frac{\mathbb{P}(D\,\vert\,H)\mathbb{P}(H) \; }{\mathbb{P}(D)}. 
 $$
 
 ---
@@ -149,7 +149,7 @@ The *prior* is often the trickiest portion of the Bayes' Rule to pin down.
 Sometimes it can be computed exactly as in the cookie bowl problem, where we were equally likely to pick each bowl. 
 
 :::: {.fragment}
-But what if we chose bowls proportionally to their size? We would need to include that into our analysis. 
+But what if we chose bowls proportional to their size? We would need to include that into our analysis. 
 ::::
 
 :::: {.fragment}
@@ -159,7 +159,7 @@ Other times, people might disagree about which background information is relevan
 
 ## Likelihood
 
-The *likelihood* is usually well defined and can be computed directly. In the cookie problem we know the numbers of different cookies in each bowl, so we can compute the probabilities under each hypothesis.
+The *likelihood* is usually well defined and can be computed directly. In the cookie problem, we know the numbers of different cookies in each bowl, so we can compute the probabilities under each hypothesis.
 
 
 ## Total Probability
@@ -210,6 +210,10 @@ table
 ---
 
 Next, we add the prior probabilities of each hypothesis. Our prior is that it was equally likely to get a vanilla cookie from either bowl.
+
+::: {.notes}
+Link up $H_{1}$ notation and $
+:::
 
 ```{python}
 #| echo: true
@@ -267,12 +271,14 @@ table['posterior'] = table['unnormalized'] / prob_data
 table
 ```
 
+::: {.notes}
 The posterior probability of the first bowl, given that we observed a vanilla cookie, is 0.6, the same as when we used Bayes' theorem directly before. 
 
 Notice that the posteriors add up to 1 (as we should expect given mutually exclusive and collectively exhaustive hypotheses).
+:::
 
 ## Monty Hall
-Recall from homework our Monty Hall problem with starving tigers.
+Recall from homework our Monty Hall problem.
 
 Let's use the Bayesian framework to understand this problem.
 
@@ -283,7 +289,8 @@ we pick door 1, monty open's door 3.
 
 ---
 
-Each door starts with an equal prior probability of holding the prize:
+Each door starts with an equal prior probability of holding the prize.
+
 ```{python}
 #| echo: true
 table = pd.DataFrame(index=['Door 1', 'Door 2', 'Door 3'])
@@ -296,7 +303,10 @@ What is our *data* in this scenario?
 ::::
 
 :::: {.fragment}
-What are the *hypotheses*? And what is the *likelihood* of the data under each hypothesis? 
+We must determine:
+
+- what are the *hypotheses*?
+- what is the *likelihood* of the data under each hypothesis? 
 ::::
 
 ::: {.notes}
