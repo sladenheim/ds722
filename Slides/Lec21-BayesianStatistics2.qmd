@@ -1,0 +1,785 @@
+---
+title: "Bayesian Statistics 2"
+jupyter: python3
+---
+
+## Lecture Overview
+
+We have previously seen: 
+
+1. Bayesian statistics uses probability to quantify uncertainty about unknowns and updates prior beliefs to posterior beliefs using Bayes' theorem as new data arrive.
+1. The problem of *statistical inference* for estimating parameters of probability distributions.
+
+Today we cover Bayesian statistics in more depth with a focus on Bayesian inference.
+
+## Lecture Objectives
+
+- Review Bayesian Method
+- Discuss Bayesian inference
+- Discuss credible and confidence intervals
+
+## Bayes
+
+The main way Bayes' Rule is used in Bayesian statistics is as a way to update the probability of a hypothesis $H$, given some data $D$.
+
+For $\small \mathbb{P}(D)>0$,
+
+$$
+\small \mathbb{P}(H \,\vert\, D)\; =  \frac{\mathbb{P}(D\,\vert\,H)\mathbb{P}(H) \; }{\mathbb{P}(D)}. 
+$$
+
+---
+
+What are the terms for
+
+:::: {.incremental}
+- $\mathbb{P}(H)$?
+- $\mathbb{P}(H \vert D)$?
+- $\mathbb{P}(D \vert H)$?
+- $\mathbb{P}(D)$?
+::::
+
+::: {.notes}
+- $\mathbb{P}(H)$ is the probability of the hypothesis before we see the data, called the **prior** probability.
+- $\mathbb{P}(H \vert D)$ is the probability of the hypothesis after we see the data, called the **posterior** probability.
+- $\mathbb{P}(D \vert H)$ is the probability of the data under the hypothesis, called the **likelihood**.
+- $\mathbb{P}(D)$ is the **total probability of the data** under any hypothesis (it is also known as the **normalizing constant**).
+:::
+
+## Frequentist Inference
+
+The frequentist point of view is based on
+
+- Probability refers to limiting relative frequencies and objective properties of the real world.
+- Parameters are fixed, unknown constants.
+- Statistical procedures should be designed to have well-defined long run frequency properties.
+
+::: {.notes}
+Can't make probability statements about parameters.
+
+When we do parameter estimation we are finding the fixed, unknown constant of the distribution
+:::
+
+## Bayesian Inference
+
+The Bayesian point of view is based on
+
+- Probability describes degree of belief.
+- We *can* make probability statements about parameters, even though they are fixed constants.
+- We make inferences about a parameter $\theta$ by producing its probability distribution for $\theta$. 
+
+::: {.notes}
+Inferences, i.e., point estimates, etc. are extracted from this distribution!
+
+Discuss the controversy.
+
+Classical statistics puts more emphasis on frequentism whereas data mining and machine learning communities embrace the Bayesian methods.
+
+Strengths and weaknesses to both approaches.
+:::
+
+## Bayes with Parameters
+
+Bayesian inference is carried out in the following way:
+
+
+1. Choose $f(\theta)$ as the prior distribution. 
+1. Choose a statistical model $f(x\mid \theta)$ that reflects our beliefs about $x$ given $\theta$.
+1. After observing data $X_{1},\ldots, X_{n}$ we update our beliefs and calculate $f(\theta\mid X_{1},\ldots,X_{n})$.
+
+
+::: {.notes}
+1. This expresses our belief about the parameter $\theta$.
+1. This is our prior, we have switched from $f(x;\theta)$ to $f(x\mid \theta)$.
+1. The posterior
+:::
+
+## Discrete Setting
+
+Suppose $\theta$ is a discrete parameter and let $X$ denote a single discrete observation. Let's compute the posterior
+
+$\mathbb{P}(\Theta = \theta \mid X = x) =$
+
+::: {.notes}
+$$
+\begin{align}
+\mathbb{P}(\Theta = \theta \mid X = x) &= \frac{\mathbb{P}(X=x,\Theta=\theta)}{\mathbb{P}(X=x)} \\
+&= \frac{\mathbb{P}(X=x\mid \Theta=\theta) \mathbb{P}(\Theta=\theta)}{\sum_{\theta} \mathbb{P}(X=x\mid \Theta=\theta) \mathbb{P}(\Theta=\theta)}
+\end{align}
+$$
+:::
+
+## Continuous Setting
+
+For continuous variables we replace $\mathbb{P}$ with density functions so that
+$f(\theta\mid x) =$
+
+::: {.notes}
+$$
+f(\theta\mid x) = \frac{f(x\mid\theta)f(\theta)}{\int f(x\mid\theta)f(\theta)d\theta}
+$$
+:::
+
+---
+
+Suppose we have $n$ IID observations $X_{1},\ldots, X_{n}$, how can we transform
+
+$f(x_{1},\ldots, x_{n}\mid \theta)=$
+
+::: {.notes}
+$$f(x_{1},\ldots, x_{n}\mid \theta)=\prod_{i=1}^{n}f(x_{i}\mid\theta)=\mathcal{L}_{n}(\theta)$$
+:::
+
+---
+
+Consequently
+
+$$
+f(\theta\mid x) = \frac{\mathcal{L}_{n}(\theta)f(\theta)}{\int f(x\mid\theta)f(\theta)d\theta} = \frac{\mathcal{L}_{n}(\theta)f(\theta)}{c_{n}} \propto \mathcal{L}_{n}(\theta)f(\theta),
+$$
+
+where
+
+$$
+c_{n} = \int \mathcal{L}_{n}(\theta)f(\theta) d\theta
+$$
+
+is the normalizing constant.
+
+::: {.notes}
+This again says that the posterior is proportional to the likelihood times the prior.
+
+Note that:
+
+- the constant does not depend on $\theta$, we integrate it out 
+- can recover this constant later on.
+:::
+
+## Gamma Function
+
+The gamma function is defined by
+
+$$
+\Gamma(\alpha) = \int_{0}^{\infty}y^{\alpha-1}e^{-y}dy.
+$$
+
+It is defined for complex numbers $\alpha$ with positive real parts.
+
+This function appears in the Gamma distribution, Chi-Square distribution, and Beta distributions.
+
+Interestingly for positive real integers $n$ $\Gamma(n)=n!$.
+
+::: {.notes}
+$\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$, $\Gamma(1/2)=\sqrt{pi}$.
+:::
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import gamma
+
+# Define x values (avoid non-positive integers where Gamma has poles)
+x = np.linspace(0.1, 5, 400)
+y = gamma(x)
+
+plt.figure(figsize=(8, 5))
+
+# Plot Gamma function with thicker line
+plt.plot(x, y, label=r'$\Gamma(x)$', color='blue', linewidth=3)
+
+# Add labels and title with bold fonts
+plt.title("Gamma Function", fontsize=18, fontweight='bold')
+plt.xlabel("x", fontsize=16, fontweight='bold')
+plt.ylabel(r'$\Gamma(x)$', fontsize=16, fontweight='bold')
+
+# Add legend with bold text
+plt.legend(fontsize=14, frameon=False)
+
+# # Grid with thicker lines
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import gamma
+
+# Define grid in complex plane
+re = np.linspace(-5, 5, 400)
+im = np.linspace(-5, 5, 400)
+X, Y = np.meshgrid(re, im)
+Z = X + 1j*Y
+
+# Compute Gamma values using SciPy (NumPy-friendly)
+G = gamma(Z)
+
+# Magnitude and phase
+magnitude = np.abs(G)
+phase = np.angle(G)
+
+# Normalize phase for coloring
+phase_normalized = (phase + np.pi) / (2*np.pi)
+
+plt.figure(figsize=(8, 8))
+
+# Phase coloring with thicker contour overlay
+im_plot = plt.imshow(
+    phase_normalized,
+    extent=(-5, 5, -5, 5),
+    origin='lower',
+    cmap='hsv',
+    alpha=0.8
+)
+
+# Contours with thicker lines
+plt.contour(X, Y, np.log(1 + magnitude), levels=20, colors='black', linewidths=2)
+
+# Access current axes
+ax = plt.gca()
+
+# Make spines thicker
+for spine in ax.spines.values():
+    spine.set_linewidth(2.5)
+
+# Make ticks thicker and labels larger
+ax.tick_params(axis='both', which='major', width=2.5, length=7, labelsize=14)
+ax.tick_params(axis='both', which='minor', width=2.5, length=4)
+
+# Add labels and title with bold fonts
+plt.title("Gamma Function in the Complex Plane", fontsize=18, fontweight='bold')
+plt.xlabel("Re(z)", fontsize=16, fontweight='bold')
+plt.ylabel("Im(z)", fontsize=16, fontweight='bold')
+
+# Colorbar with bold label and thicker ticks
+cbar = plt.colorbar(im_plot)
+cbar.set_label("Phase (arg Γ(z))", fontsize=14, fontweight='bold')
+cbar.ax.tick_params(width=2.5, length=7, labelsize=12)
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Gamma Distribution
+
+A random variable $X\sim\operatorname{Gamma}(\alpha, \beta)$ if
+
+$$
+f(x) = \frac{1}{\beta^{\alpha}\Gamma(\alpha)}x^{\alpha-1}e^{-x/\beta},
+$$
+
+where $\alpha,\beta>0$. 
+
+Observe that if $X\sim\operatorname{Gamma}(1,\beta)$ we recover the exponential distribution.
+
+::: {.notes}
+The Gamma distribution generalizes several key probability models (exponential, chi-squared), captures time waiting processes, and underpins many statistical, engineering, and scientific applications.
+
+Occurs in Bayesian inference as conjugate priors
+
+Used in reliability analysis and survival models to describes lifetimes of systems
+
+:::
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import gamma
+
+# Define x values
+x = np.linspace(0, 20, 500)
+
+# Define shape parameters and scale
+alphas = [1, 2, 5]
+betas = [1, 2]
+
+# Plot the gamma distribution PDFs
+plt.figure(figsize=(10, 6))
+
+for a in alphas:
+    for b in betas:
+        y = gamma.pdf(x, a=a, scale=b)
+        plt.plot(x, y, linewidth=3, label=fr'$\alpha$={a}, $\beta$={b}')
+
+# Access current axes
+ax = plt.gca()
+
+# Make spines thicker
+for spine in ax.spines.values():
+    spine.set_linewidth(2.5)
+
+# Make ticks thicker and labels larger
+ax.tick_params(axis='both', which='major', width=2.5, length=7, labelsize=14)
+ax.tick_params(axis='both', which='minor', width=2.5, length=4)
+
+# Add labels and title with bold fonts
+plt.title('Gamma Distribution PDF for Different Shape Parameters', fontsize=18, fontweight='bold')
+plt.xlabel('x', fontsize=16, fontweight='bold')
+plt.ylabel('Probability Density', fontsize=16, fontweight='bold')
+
+# Add legend with bold text
+plt.legend(fontsize=14, title='Parameters', title_fontsize=14, frameon=False)
+
+# Grid with thicker lines
+plt.grid(True, linewidth=1.5)
+
+plt.tight_layout()
+plt.show()
+```
+
+
+
+## Beta Distribution
+
+The random variable $X\sim\operatorname{Beta}(\alpha, \beta)$ if 
+
+$$
+f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha-1}(1-x)^{\beta -1}, \quad 0 < x < 1,
+$$
+
+where $\alpha,\beta>0$.
+
+The mean and variance of the $\operatorname{Beta}$ distribution are
+
+$$
+\mathbb{E}(X) = \frac{\alpha}{\alpha+\beta},\quad \mathbb{V}(X) = \frac{\alpha\beta}{(\alpha+\beta)^{2}(\alpha+\beta+1)}.
+$$
+
+::: {.notes}
+It is defined on $[0, 1]$ so it can be used to model random variables that represent fractions.
+
+The beta distribution is the *conjugate prior* for the Bernoulli and Binomial distributions.
+
+If you start with a beta prior and observe binomial (Bernoulli) data, your posterior distribution is also beta.
+
+If $\alpha=\beta=1$, then $f(x) = 1$.
+:::
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import beta
+
+# Define x values from 0 to 1
+x = np.linspace(0, 1, 500)
+
+# Define parameter sets
+params = [
+    (0.5, 0.5),
+    (2, 2),
+    (5, 1),
+    (1, 3)
+]
+
+# Set up plot
+plt.figure(figsize=(10, 6))
+
+# Plot each beta distribution with thicker lines
+for a, b in params:
+    y = beta.pdf(x, a, b)
+    plt.plot(x, y, linewidth=3, label=f'α={a}, β={b}')
+
+# Access current axes
+ax = plt.gca()
+
+# Make spines thicker
+for spine in ax.spines.values():
+    spine.set_linewidth(2.5)
+
+# Make ticks thicker and labels larger
+ax.tick_params(axis='both', which='major', width=2.5, length=7, labelsize=14)
+ax.tick_params(axis='both', which='minor', width=2.5, length=4)
+
+# Add labels and title with bold fonts
+plt.title('Beta Distributions', fontsize=18, fontweight='bold')
+plt.xlabel('x', fontsize=16, fontweight='bold')
+plt.ylabel('PDF', fontsize=16, fontweight='bold')
+
+# Add legend with bold text
+plt.legend(title='Parameters', fontsize=14, title_fontsize=14, frameon=False)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Conjugate Priors
+
+Let $X_{1},\ldots, X_{n}\sim\operatorname{Bernoulli}(\theta)$ be IID. Let's assume a uniform prior $f(\theta)=1$. Let's calculate the posterior
+
+$f(\theta\mid x_{1},\ldots,x_{n})\propto \mathcal{L}_{n}(\theta)f(\theta)$
+
+::: {.notes}
+$$
+\begin{align}
+\mathcal{L}_{n}(\theta)f(\theta) &= \prod_{i=1}^{n} \theta^{x_{i}}(1-\theta)^{1-x_{i}} \\
+&= \theta^{s}(1-\theta)^{n-s} \\
+&= \theta^{s+1-1}(1-\theta)^{n-s+1-1}
+\end{align}
+$$
+
+where $s=\sum_{i=1}^{n}x_{i}$.
+
+Observe that the posterior is a Beta distribution if we set $\alpha=s+1$ and $\beta=n-s+1$. 
+:::
+
+---
+
+
+---
+
+We showed that for a uniform prior $f(\theta)=1$ and Bernoulli data, that the posterior distribution 
+$$
+\small
+f(\theta\mid  x_{1},\ldots, x_{n}) = \frac{\Gamma(n+2)}{\Gamma(s+1)\Gamma(n-s+1)}\theta^{(s+1)-1}(1-\theta)^{(n-s+1)-1}.
+$$
+
+Equivalently, we can write that 
+$$\theta\mid x_{1},\ldots, x_{n}\sim\operatorname{Beta}(s+1,n-s+1),
+$$ 
+where $s=\sum_{i=1}^{n}x_{i}$.
+
+::: {.notes}
+Observe that we recovered the normalizing constant $\frac{\Gamma(n+2)}{\Gamma(s+1)\Gamma(n-s+1)}$ in this process!
+:::
+
+---
+
+Recall that a uniform prior $f(\theta)=1$ is equivalent to a Beta distribution with $\alpha=\beta=1$.
+
+If we were to choose a prior of the form $\theta\sim\operatorname{Beta}(\alpha,\beta)$, we could show that
+
+$$
+\theta\mid x_{1},\ldots, x_{n}\sim \operatorname{Beta}(\alpha+s, \beta+n-s).
+$$
+
+We say that a prior distribution is a *conjugate prior* when the prior and posterior come from the same family of distribution.
+
+## Bayesian Point Estimates
+
+Once we have computed a posterior distribution, what can we do?
+
+We can compute a point estimate using the posterior distribution.
+
+To calculate the mean $\bar{\theta}$ of the posterior we calculate
+
+$$
+\bar{\theta} = \int \theta f(\theta\mid x_{1},\ldots x_{n})d\theta = \frac{\int\theta f(\theta\mid x_{1},\ldots x_{n})d\theta}{\int\mathcal{L}_{n}(\theta)f(\theta)d\theta}.
+$$
+
+## Biased Coins
+Consider an experiment with a possibly biased coin. We will consider $\Theta = \mathbb{P}(H)$. Suppose that before conducting the experiment we believe that all values of $\theta$ are equally likely.
+
+What does this tell us about $\Theta$?
+
+::: {.notes}
+$\Theta\sim\operatorname{Uniform}(0,1)$.
+:::
+
+---
+
+Suppose we now toss the coin 5 times and observe 1 head. Determine the posterior distribution for $\theta$ given this data.
+
+We need to compute $f(\theta\mid x_{1},\ldots, x_{5})$.
+
+What is the likelihood $f(x_{1},\ldots, x_{5}\mid\theta)$?
+
+::: {.notes}
+The likelihood is a binomial distribution so we have
+
+$$
+f(x_{1},\ldots, x_{5}\mid\theta) = \binom{5}{1}\theta^{1}(1-\theta)^{5-1} = 5\theta(1-\theta)^{4} = c\theta(1-\theta)^{4}
+$$
+
+This tells us that the posterior $\theta\mid x_{1},\ldots, x_{5}\sim\operatorname{Beta}(2,5)$.
+:::
+
+---
+
+Let's plot the posterior distribution.
+
+:::: {.fragment}
+What is the most likely value for $\Theta=\mathbb{P}(H)$?
+::::
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import beta
+
+# Define x values from 0 to 1
+x = np.linspace(0, 1, 500)
+
+# Set up plot
+plt.figure(figsize=(10, 6))
+
+y = beta.pdf(x, 2, 5)
+
+# Plot with thicker lines and markers
+plt.plot(x, y, linewidth=3, color='blue', label='Beta(2,5)')
+plt.plot(0.2, beta.pdf(0.2, 2, 5), 'r*', markersize=15, markeredgewidth=2)
+
+# Make spines thicker
+ax = plt.gca()
+for spine in ax.spines.values():
+    spine.set_linewidth(2.5)
+
+# Make ticks thicker and larger
+ax.tick_params(axis='both', which='major', width=2.5, length=7, labelsize=14)
+ax.tick_params(axis='both', which='minor', width=2.5, length=4)
+
+# Add labels and title with bold fonts
+plt.title('Beta(2,5)', fontsize=18, fontweight='bold')
+plt.xlabel('x', fontsize=16, fontweight='bold')
+plt.ylabel('PDF', fontsize=16, fontweight='bold')
+
+# Add legend with bold text
+plt.legend(fontsize=14, frameon=False)
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+The red star is the *maximum a posteriori probability (MAP)*. The MAP is 0.20, which we can calculate by maximizing $\theta(1-\theta)^{4}$.
+
+
+What is the mean?
+
+::: {.notes}
+The mean is $\frac{2}{2+5}=\frac{2}{7}$.
+:::
+
+## Bayesian Credible Intervals
+
+Using the posterior distribution we can also determine a Bayesian credible interval.
+
+The credible interval contains *most* of the posterior probability distribution.
+
+For example, suppose we want to determine an interval $[a, b]$ in which we are 90% confident that the parameter $\theta$ lies, i.e., $\mathbb{P}(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = 0.90$
+
+---
+
+The quantity to calculate is
+
+$$
+\small
+\mathbb{P}(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = \int_{a}^{b}f(\theta\mid x_{1},\ldots, x_{n})d\theta = 0.90,
+$$
+where $a,b$ are such that
+
+$$
+\small
+\int_{-\infty}^{a}f(\theta\mid x_{1},\ldots, x_{n})d\theta = \int_{b}^{\infty}f(\theta\mid x_{1},\ldots, x_{n})d\theta = \frac{0.1}{2} = 0.05.
+$$
+
+
+---
+
+We need to determine values $a$ and $b$ for which
+
+$$
+\int_{-\infty}^{a}f(\theta\mid x_{1,\ldots, x_{n}})d\theta = \int_{b}^{\infty}f(\theta\mid x_{1,\ldots, x_{n}})d\theta = \frac{\alpha}{2}.
+$$
+
+::: {.notes}
+$$
+1 = \int_{-\infty}^{\infty}f(\theta\mid x_{1,\ldots, x_{n}})d\theta = \int_{-\infty}^{a}f(\theta\mid x_{1,\ldots, x_{n}})d\theta + \int_{a}^{b}f(\theta\mid x_{1,\ldots, x_{n}})d\theta + \int_{b}^{\infty}f(\theta\mid x_{1,\ldots, x_{n}})d\theta
+$$
+:::
+
+## Frequentist Confidence Intervals
+
+Confidence intervals provide an alternative to using a point estimator $\hat{\theta}$ when we wish to estimate an unknown population parameter $\theta$. 
+
+A confidence interval is a random interval, calculated from a sample of data, that contains $\theta$ with some specified probability.
+
+That is, a 90% confidence interval for $\theta$ is a random interval that contains $\theta$ with probability 0.90.
+
+---
+
+Assume that a population is normally distributed with mean $\mu$ and variance $\sigma^2$. For instance, we can think of SAT scores for students in Massachusetts.
+
+To estimate the true value of $\mu$ we repeat the sampling process 20 times and compute the confidence interval for parameter $\mu$ for each sample. 
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+from scipy.stats import uniform
+from numpy.random import default_rng
+import scipy.stats as stats
+
+rng = default_rng(13)
+
+# Data from 2020 for SAT scores nationwide from above link
+mu = 1050
+sig = 216
+#
+# gaussian curve
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (10,5), gridspec_kw={'height_ratios': [2, 7]})
+x = np.linspace(norm.ppf(0.001, loc = mu, scale = sig), norm.ppf(0.999, loc = mu, scale = sig), 100)
+xmin, xmax = (x[0], x[-1])
+ax1.plot(x, norm.pdf(x, loc = mu, scale = sig),'k-', lw = 5, alpha = 0.6)
+#
+# points under the curve
+pop_x = norm.rvs(size = 1000, loc = mu, scale = sig)
+pop_y = [uniform.rvs(size = 1, scale = norm.pdf(x_coord, loc = mu, scale = sig)) for x_coord in pop_x]
+ax1.scatter(pop_x, pop_y, marker = '.', alpha = 0.5, color = 'darkblue')
+ax1.yaxis.set_major_locator(plt.NullLocator())
+ax1.set_ylabel('Density', size = 16)
+ax1.text(1400, np.sum(ax1.get_ylim())/2, 'Population', size = 16, color = 'darkblue')
+ax1.set_xlim(xmin, xmax)
+# xmin, xmax = ax1.get_xlim()
+#
+# samples
+#
+def contains(mu, M, f):
+    return (M < (mu + f) and M > (mu - f))
+
+samp_size = 15
+t_stat = stats.t.ppf(1-0.05, samp_size - 1)
+for samp in range (20):
+    samp_x = norm.rvs(size = samp_size, loc = mu, scale = sig, random_state = rng)
+    M = np.mean(samp_x)
+    std_err = np.std(samp_x) / np.sqrt(samp_size)
+    if contains(mu, M, t_stat * std_err):
+        col = 'g'
+    else:
+        col = 'orange'
+    #
+    ax2.scatter(M, samp, marker = 'o', facecolors = col, edgecolors=col, linewidths = 1.5, s = 64)
+    ax2.errorbar(M, samp, xerr = t_stat * std_err, fmt = 'None', ecolor = col, elinewidth = 1.5, capsize = 10, capthick = 1.5)
+#
+ax2.set_xlim(xmin, xmax)
+ax2.set_ylim(-1, 22)
+#
+ax2.vlines(mu, -1, 20, colors = 'darkblue')
+ax2.text(mu, 21, r'$\mu$', size = 20, color = 'darkblue', ha = 'center', va = 'center')
+#ax2.text(M+f, 1.75, r'$M + f$', size = 20, color = 'g', ha = 'left', va = 'center')
+#ax2.text(M-f, 1.75, r'$M - f$', size = 20, color = 'g', ha = 'right', va = 'center');
+ax2.yaxis.set_visible(False)
+ax2.xaxis.set_visible(False)
+for spine in ax2.spines.values():
+    spine.set_visible(False)
+#
+#ax1.set_title('SAT Scores', size=18)
+plt.tight_layout(h_pad = -2)
+plt.show()
+```
+
+::: {.notes}
+Note: 
+
+- The confidence intervals dance around and their sizes vary.
+- The orange intervals do not contain the population mean $\mu.$
+- Roughly 90% of the confidence intervals do contain the true mean.
+
+Now that we understand how to interpret confidence intervals, the next question is how to compute them.
+:::
+
+## Mean of a Normal Distribution
+
+Let $x^{(1)}, x^{(2)},, ..., x^{(n)}$ be a random sample from a population that has a _**normal distribution with unknown mean**_ $\mu$ _**and known variance**_ $\sigma^2$. <br>
+Denote the _**sample mean**_ as
+
+$$
+M = \overline{X} = \frac{1}{n} \sum_{i=1}^n x^{(i)}.
+$$ 
+
+---
+
+Let $z(\alpha)$ be the number for which the area under the standard normal density function to the right of $z(\alpha)$ is $\alpha$ with $0 \leq \alpha \leq 1$. 
+
+Note that the symmetry of the standard normal density function about zero implies that $z(1-\alpha) = -z(\alpha)$.
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+# Define alpha
+alpha = 0.05
+
+# Compute z(alpha) such that P(Z > z) = alpha
+z_alpha = norm.ppf(1 - alpha)
+
+# Generate x values and corresponding standard normal PDF values
+x = np.linspace(-4, 4, 1000)
+y = norm.pdf(x)
+
+# Create the plot
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(x, y, label='Standard Normal Density', color='blue')
+
+# Shade the area to the right of z_alpha
+x_shade = np.linspace(z_alpha, 4, 500)
+y_shade = norm.pdf(x_shade)
+ax.fill_between(x_shade, y_shade, color='orange', alpha=0.6, label=f'Area = {alpha}')
+
+# Annotate z_alpha
+# ax.axvline(z_alpha, color='red', linestyle='--', label=f'z({alpha}) = {z_alpha:.2f}')
+# ax.text(z_alpha + 0.1, 0.02, f'z({alpha}) = {z_alpha:.2f}', color='red')
+
+# Labels and title
+ax.set_title(f'Standard Normal Distribution with Upper {alpha}% Tail Shaded', fontsize=14)
+ax.set_xlabel('z', fontsize=12)
+ax.set_ylabel('Density', fontsize=12)
+ax.legend()
+plt.show()
+
+```
+
+---
+
+If random variable $Z$ follows the standard normal distribution, then, by definition of $z(\alpha)$,
+
+$$\small{\mathbb{P}\left(-z(\alpha/2) \leq Z \leq z(\alpha/2)\right) = 1-\alpha.}$$
+
+$\frac{M - \mu}{\sigma/\sqrt{n}}$ has the standard normal distribution, so
+
+$$\small{\mathbb{P}\left(-z(\alpha/2) \leq \frac{M - \mu}{\sigma/\sqrt{n}} \leq z(\alpha/2)\right) = 1-\alpha.}$$
+
+Elementary manipulation of the inequalities gives 
+
+$$\small{\mathbb{P}\left(M - z(\alpha/2) \frac{\sigma}{\sqrt{n}} \leq \mu \leq M + z(\alpha/2)  \frac{\sigma}{\sqrt{n}} \right) = 1-\alpha.}$$
+
+---
+
+This implies that the probability that $\mu$ lies in the interval 
+
+$$\left[M - z(\alpha/2)  \frac{\sigma}{\sqrt{n}}, M + z(\alpha/2)  \frac{\sigma}{\sqrt{n}}\right]$$
+
+is approximately $1-\alpha.$ In other words, this is a _**$100(1-\alpha)\%$ confidence interval**_ for the population mean, $\mu$.
+
+
+## Summary
+
+In this lecture we covered:
+
+- Bayes' Theorem
+- Gamma and Beta distributions
+- Conjugate priors
+- Bayesian point estimates and credible intervals
