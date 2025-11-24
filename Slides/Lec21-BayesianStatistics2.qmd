@@ -112,6 +112,7 @@ $$
 ## Continuous Setting
 
 For continuous variables we replace $\mathbb{P}$ with density functions so that
+
 $f(\theta\mid x) =$
 
 ::: {.notes}
@@ -167,7 +168,7 @@ It is defined for complex numbers $\alpha$ with positive real parts.
 
 This function appears in the Gamma distribution, Chi-Square distribution, and Beta distributions.
 
-Interestingly for positive real integers $n$ $\Gamma(n)=n!$.
+Interestingly for positive real integers $n$, we have $\Gamma(n)=n!$.
 
 ::: {.notes}
 $\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$, $\Gamma(1/2)=\sqrt{pi}$.
@@ -268,6 +269,16 @@ plt.tight_layout()
 plt.show()
 ```
 
+::: {.notes}
+The colors come from the phase, this is the angle between the positive real axis and the line from the point to the origin (x,y) in the complex plane.
+
+The contour lines represent levels of log(1+magnitude) of complex number. Shows how the magnitude of $\Gamma(z)$ grows or shrinks. Near poles the magnitude blows up, tighlyt clustered contours. 
+
+Away from poles contours spread out showing smoother growth.
+
+Observe symmetry, rapid growth in widely spaced contours
+:::
+
 ---
 
 ## Gamma Distribution
@@ -285,7 +296,7 @@ Observe that if $X\sim\operatorname{Gamma}(1,\beta)$ we recover the exponential 
 ::: {.notes}
 The Gamma distribution generalizes several key probability models (exponential, chi-squared), captures time waiting processes, and underpins many statistical, engineering, and scientific applications.
 
-Occurs in Bayesian inference as conjugate priors
+Occurs in Bayesian inference as conjugate priors when the likelihood is Poisson
 
 Used in reliability analysis and survival models to describes lifetimes of systems
 
@@ -441,6 +452,20 @@ Observe that the posterior is a Beta distribution if we set $\alpha=s+1$ and $\b
 ---
 
 
+::: {.notes}
+$$
+\begin{align}
+\mathcal{L}_{n}(\theta)f(\theta) &= \prod_{i=1}^{n} \theta^{x_{i}}(1-\theta)^{1-x_{i}} \\
+&= \theta^{s}(1-\theta)^{n-s} \\
+&= \theta^{s+1-1}(1-\theta)^{n-s+1-1}
+\end{align}
+$$
+
+where $s=\sum_{i=1}^{n}x_{i}$.
+
+Observe that the posterior is a Beta distribution if we set $\alpha=s+1$ and $\beta=n-s+1$. 
+:::
+
 ---
 
 We showed that for a uniform prior $f(\theta)=1$ and Bernoulli data, that the posterior distribution 
@@ -474,13 +499,17 @@ We say that a prior distribution is a *conjugate prior* when the prior and poste
 
 Once we have computed a posterior distribution, what can we do?
 
+:::: {.fragment}
 We can compute a point estimate using the posterior distribution.
+::::
 
+:::: {.fragment}
 To calculate the mean $\bar{\theta}$ of the posterior we calculate
 
 $$
 \bar{\theta} = \int \theta f(\theta\mid x_{1},\ldots x_{n})d\theta = \frac{\int\theta f(\theta\mid x_{1},\ldots x_{n})d\theta}{\int\mathcal{L}_{n}(\theta)f(\theta)d\theta}.
 $$
+::::
 
 ## Biased Coins
 Consider an experiment with a possibly biased coin. We will consider $\Theta = \mathbb{P}(H)$. Suppose that before conducting the experiment we believe that all values of $\theta$ are equally likely.
@@ -511,12 +540,6 @@ This tells us that the posterior $\theta\mid x_{1},\ldots, x_{5}\sim\operatornam
 
 ---
 
-Let's plot the posterior distribution.
-
-:::: {.fragment}
-What is the most likely value for $\Theta=\mathbb{P}(H)$?
-::::
-
 ```{python}
 #| fig-align: center
 import numpy as np
@@ -527,7 +550,6 @@ from scipy.stats import beta
 x = np.linspace(0, 1, 500)
 
 # Set up plot
-plt.figure(figsize=(10, 6))
 
 y = beta.pdf(x, 2, 5)
 
@@ -558,10 +580,15 @@ plt.show()
 
 ---
 
+What is the most likely value for $\Theta=\mathbb{P}(H)$?
+
+:::: {.fragment}
 The red star is the *maximum a posteriori probability (MAP)*. The MAP is 0.20, which we can calculate by maximizing $\theta(1-\theta)^{4}$.
+::::
 
-
+:::: {.fragment}
 What is the mean?
+::::
 
 ::: {.notes}
 The mean is $\frac{2}{2+5}=\frac{2}{7}$.
@@ -593,7 +620,7 @@ $$
 
 ---
 
-We need to determine values $a$ and $b$ for which
+For a generic $\alpha$, we need to determine values $a$ and $b$ for which
 
 $$
 \int_{-\infty}^{a}f(\theta\mid x_{1,\ldots, x_{n}})d\theta = \int_{b}^{\infty}f(\theta\mid x_{1,\ldots, x_{n}})d\theta = \frac{\alpha}{2}.
@@ -638,7 +665,7 @@ mu = 1050
 sig = 216
 #
 # gaussian curve
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize = (10,5), gridspec_kw={'height_ratios': [2, 7]})
+fig, (ax1, ax2) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [2, 7]})
 x = np.linspace(norm.ppf(0.001, loc = mu, scale = sig), norm.ppf(0.999, loc = mu, scale = sig), 100)
 xmin, xmax = (x[0], x[-1])
 ax1.plot(x, norm.pdf(x, loc = mu, scale = sig),'k-', lw = 5, alpha = 0.6)
@@ -712,7 +739,10 @@ $$
 
 Let $z(\alpha)$ be the number for which the area under the standard normal density function to the right of $z(\alpha)$ is $\alpha$ with $0 \leq \alpha \leq 1$. 
 
+::: {.notes}
 Note that the symmetry of the standard normal density function about zero implies that $z(1-\alpha) = -z(\alpha)$.
+:::
+
 
 ```{python}
 #| fig-align: center
