@@ -1,0 +1,588 @@
+---
+title: "Markov Chains"
+jupyter: python3
+---
+
+## Lecture Overview
+
+In this lecture we start to cover sequences of dependent variables.
+
+In particular, we will introduce **Markov chains**.
+
+A Markov chain is a stochastic process for which the distribution $X_{t}$ depends only on $X_{t-1}$.
+
+Markov chains are fundamental building blocks of other methods, i.e., Markov Chain Monte Carlo and Hidden Markov methods.
+
+::: {.notes}
+We have predominantly considered IID sequences of random variables.
+:::
+
+## Lecture Objectives
+
+Define and cover
+
+- Stochastic process
+- Markov chains
+- Steady-state
+- Regular stochastic matrices
+- Detailed balance
+
+## Stochastic Process
+
+A *stochastic process* $\{X_{t}: t\in T \}$ is a collection of random variables.
+
+The variables $X_{t}$ take values in some set $\mathcal{X}$ called the *state space*.
+
+The set $T$ is called the *index set*.
+
+::: {.notes}
+The index set can be thought of as time. It can be discrete or continuous.
+:::
+
+---
+
+### Examples
+
+1. A sequence of IID random variables $\{X_{t}: t\in\{1,2,\ldots\} \}$.
+1. Let $\mathcal{X}=\{\text{sunny}, \text{rainy}\}$. Then $X_{t}$ is the random variable of the weather on day $t$. 
+1. Stock prices.
+
+::: {.notes}
+State space of stocks is positive prices.
+:::
+
+## Joint Density
+
+Recall that if $X_{1},\ldots, X_{n}$ are random variables, then
+
+$$
+\small
+\begin{align}
+f(x_{1},\ldots, x_{n}) &= f(x_{1})f(x_{2}\mid x_{1})\cdots f(x_{n}\mid x_{1},\ldots, x_{n-1})\\
+&= \prod_{i=1}^{n}f(x_{i}\mid \text{past}_{i}),
+\end{align}
+$$
+
+where $\text{past}_{i}=(x_{1},\ldots, x_{i-1})$.
+
+## Markov Chains
+
+A *Markov chain* is a stochastic process for which the distribution of $X_{t}$ depends only on $X_{t-1}$.
+
+The stochastic process $\{X_{n}: n\in T \}$ is a *Markov chain* if 
+$$
+\mathbb{P}(X_{n}=x\mid X_{0},\ldots, X_{n-1}) = \mathbb{P}(X_{n}=x\mid X_{n-1}).
+$$
+
+This implies
+
+$$
+\small
+f(x_{1},\ldots, x_{n}) = f(x_{1})f(x_{2}\mid x_{1})f(x_{3}\mid x_{2})\cdots f(x_{n}\mid x_{n-1}).
+$$
+
+::: {.notes}
+Assume state space is discrete and the index set is natural numbers.
+Most texts use $X_{n}$ to index.
+:::
+
+---
+
+We can represent a Markov chain with the following directed acyclic graph (DAG)
+
+$$
+X_{0}\boldsymbol{\rightarrow} X_{1}\boldsymbol{\rightarrow} X_{2}\boldsymbol{\rightarrow} \cdots X_{n}\boldsymbol{\rightarrow} \cdots
+$$
+
+Each variable has a single parent which is the previous observation.
+
+---
+
+The theory of Markov chains is rich and complex. Our goal is to answer the following question:
+
+**When does a Markov chain settle down into some sort of equilibrium?**
+
+
+## Weather in Boston
+Consider this simple weather model for Boston: 
+
+- If today is sunny, tomorrow will be sunny with probability 0.8, otherwise rainy.
+- If today is rainy, tomorrow will be rainy with probability 0.6, otherwise sunny.
+
+![State transition diagram](figures/Sunny_Rainy2.png)
+
+
+::: {.notes}
+The above *state-transition diagram* describes an example of a Markov chain.
+
+Markov chains help us reason about what might happen many days in the future for all possible starting conditions.
+
+:::
+
+## States of a Markov Chain
+
+_**A Markov chain is a mathematical model describing a system that evolves over discrete time steps on a set of states $\mathcal{X}$.**_ 
+
+At each step, the system occupies a specific state, which can represent any discrete category, such as a location, color, count, or parameter value. 
+
+__Example__: In the weather model, the possible states are _Sunny_ and _Rainy_, $\mathcal{X} = \{\text{Sunny}, \text{Rainy}\}.$
+
+---
+
+The basic idea of a Markov chain is that it moves from state to state _**probabilistically.**_  In any state, there are certain probabilities of moving to each of the other states. 
+
+__Notation__: We will denote the state that the Markov chain is in at time $n$ as $X_n$.  
+
+Since the Markov chain evolves probabilistically, $X_n$ is a random variable.
+
+## Markov Property
+
+Each time a Markov chain moves from the current state to the new state, the probability of that transition _**only depends on the current state.**_  
+
+Whatever states the chain was in previously do not matter.  
+
+The Markov property is required to define a Markov chain. 
+
+---
+
+Given a finite set of states $\mathcal{X}$, a process $X_0, X_1, \ldots$ is a Markov chain on $\mathcal{X}$ if, when the process is in state $j$, the probability that its next  state is $i$ depends only on $j$:
+
+$$
+\small
+\mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j, X_{n-1} = x_{n-1}, \dots, X_0 = x_0) =
+$$
+
+::: {.notes}
+$\mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j)$
+:::
+
+## Transition Matrix
+
+The transition matrix of the Markov chain is the matrix $P$ with 
+$$
+P_{ij}  = \mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j).
+$$
+
+__Remark__: $\small P_{ij}$ is the **transition probability** from state $\small j$ to state $\small i$.<br>
+
+$\small P$ has the following properties:
+
+1. $\small P_{ij} \geq 0 \quad \forall i, j$
+2. $\small \sum_i P_{ij} = 1 \quad \forall j$
+
+::: {.notes}
+The second property states that each column of $\small P$ sums to 1.  A matrix with this property is called a __stochastic__ matrix (or more specifically, a __column-stochastic matrix__)
+:::
+
+
+## A note on $P$
+
+Be aware that we are working with column stochastic matrices.
+
+Many other texts formulate Markov chains using row stochastic matrices.
+
+To move between the two you need only transpose the column stochastic matrix.
+
+## Weather Transition Matrix
+
+![](figures/Sunny_Rainy2.png){fig-align="center"}
+
+We can see that if at time $\small t=0$ the chain is in the "sunny" state, at time $\small t=1$ it will either be in a "sunny" state (with probability 0.8) or "rainy" state (with probability 0.2).
+
+This chain has transition matrix:
+
+$$
+P = 
+$$
+
+We can confirm that this is a stochastic matrix by observing that the columns sum to 1.
+
+::: {.notes}
+$$
+\begin{bmatrix}
+0.8 & 0.4 \\
+0.2 & 0.6 \\
+\end{bmatrix}
+$$
+:::
+
+---
+
+**Example**
+
+:::: {.columns}
+::: {.column width="50%"}
+![](figures/mc-example.png){fig-align="center"}
+:::
+::: {.column width="50%"}
+What is the transition matrix of the illustrated Markov chain with states $\{0, 1, 2, 3\}$?
+:::
+::::
+
+::: {.notes}
+$$\small{P = 
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0.7 & 0 & 1 & 0 \\
+0.3 & 0.6 & 0 & 0 \\
+0 & 0.4 & 0 & 1 
+\end{bmatrix}.}
+$$
+:::
+
+## N-Step Transition Matrix
+
+The n-step transition matrix of the Markov chain is the matrix 
+$P^{(n)}$ with $P_{ij}^{(n)}  = P(X_n = i\,\vert\,X_0 = j)$.
+
+Let's compute $P^{(n)}$ for the simple case of $n = 2$:
+
+$P^{(2)}_{ij} = P(X_2 = i\,\vert\,X_0 = j)$
+
+::: {.notes}
+$$
+\begin{align}
+\sum_k P(X_2 = i\,\vert\,X_1 = k, X_0 = j)\,P(X_1 = k\,\vert\,X_0 = j) &= \sum_k P(X_2 = i\,\vert\,X_1 = k)\,P(X_1 = k\,\vert\,X_0 = j) \\
+&= \sum_{k}P_{ik}P_{kj}
+\end{align}
+$$
+
+Using law of total probability and markov property
+:::
+
+---
+
+We showed that $P(X_2 = i\,\vert\,X_0 = j) = P^{(2)}_{ij} = P^2_{ij}$, i.e., the two-step transition probabilities are given by $P^{(2)} = P^{2}$.
+
+The $n$-step transition probabilities are given by
+
+$$
+P^{(n)} = P^{n}.
+$$
+
+---
+
+![](figures/Sunny_Rainy2.png){fig-align="center"}
+
+If at time $t=0$ the chain is in a "sunny" state, at time $t=2$ it will either be in "sunny" state (with probability 0.72) or a "rainy" state (with probability 0.28).
+
+We can confirm that by computing $P^2$:
+
+$$\small{P^2  = 
+\begin{bmatrix}
+0.8 & 0.4 \\
+0.2 & 0.6 \\
+\end{bmatrix}  \begin{bmatrix}
+0.8 & 0.4 \\
+0.2 & 0.6 \\
+\end{bmatrix} = 
+\begin{bmatrix}
+0.72 & 0.56  \\
+0.28 & 0.44 \\
+\end{bmatrix}.}
+$$
+
+
+## Distributions Over States
+
+Suppose the initial state of a Markov chain is not known with certainty. We describe it by a _**probability distribution over possible states**_. 
+
+This distribution is represented by the column vector $\mathbf{x}_0$, whose _**entries are nonnegative and sum to 1**_.
+
+Specifically, $X_0$ is a random variable with distribution $P(X_0 = i) = \mathbf{x}_{0,i}$.
+
+---
+
+As the chain evolves over time, the distribution at time $n$ is denoted by $\mathbf{x}_n$. The entries of $\mathbf{x}_n$ are also nonnegative and sum to 1. Any vector satisfying these properties is known as a __probability vector__.
+
+Vector $\mathbf{x}_0$ is known as the __initial (state) distribution__ and $\mathbf{x}_n$ is called the __distribution at time__ $n.$
+
+## Forward Kolmogorov 
+
+The __Forward Kolmogorov Equation__ tells us that taking one step forward in time corresponds to multiplying $\small P$ times $\small \mathbf{x}_n$. This follows from the law of total probability:
+
+$$\small
+\begin{align}
+\mathbf{x}_{n+1,i} = P(X_{n+1} = i) &= 
+\sum_j P(X_{n+1} = i\,\vert\,X_n = j)\,P(X_n = j)\\
+&= \sum_j P_{ij} \mathbf{x}_{n,j} \\
+&= (P\mathbf{x}_n)_{i}.
+\end{align}
+$$
+ 
+This means that $\mathbf{x}_n = P^n \mathbf{x}_0$.
+
+::: {.notes}
+That is, if we know the initial probability distribution at time 0, we can find the distribution at any later time using powers of the matrix $P$.
+:::
+
+---
+
+__Example__: If an arbitrary day in Boston has an 80% chance of being sunny, we can calculate whether it will be sunny two days later.
+
+We consider an initial probability distribution over states:
+    
+$$
+\small \mathbf{x}_0 = \begin{bmatrix}0.8\\0.2\end{bmatrix}. 
+$$
+
+Then to compute the distribution two days later $\mathbf{x}_2,$ we compute:
+
+$$\small 
+\mathbf{x}_2 = P^2\mathbf{x}_0 = 
+\begin{bmatrix}
+0.72 & 0.56  \\
+0.28 & 0.44 \\
+\end{bmatrix} \, \begin{bmatrix}0.8\\0.2\end{bmatrix} = \begin{bmatrix}0.688\\0.312\end{bmatrix}.
+$$
+
+## Vote Prediction
+
+Suppose you live in a country with three political parties $P$, $Q$, and $R$.
+ We use $P_k, Q_k,$ and $R_k$ to denote the percentage of voters voting for that party in election $k$.
+
+:::: {.columns}
+::: {.column width="40%"}
+![](figures/vote_prediction.png){fig-align="center"}
+:::
+::: {.column width="60%"}
+Suppose that initially 40% of citizens vote for party $P$,
+30% vote for party $Q$, and 30% vote for party $R.$
+
+We will predict the vote distribution in the next two elections.
+:::
+::::
+
+::: {.notes}
+Voters will change parties from one election to the next as shown in the figure. 
+:::
+
+## Vote Prediction
+
+:::: {.columns}
+::: {.column width="40%"}
+![](figures/vote_prediction.png){fig-align="center"}
+:::
+::: {.column width="60%"}
+What is the transition matrix?
+
+:::
+:::
+
+::: {.notes}
+The initial state distribution is $\small{\mathbf{x}_0=\begin{bmatrix} 0.4\\ 0.3 \\ 0.3\end{bmatrix}.}$
+
+The transition matrix is given by 
+$$
+P = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}.
+$$
+:::
+
+---
+
+Let's compute $\mathbf{x}_1$ and $\mathbf{x}_2$.
+
+::: {.notes}
+The vote distribution in the next two elections is given by $\mathbf{x}_1$ and $\mathbf{x}_2:$
+$$
+\mathbf{x}_1 = P\mathbf{x}_0 = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}\begin{bmatrix} 0.4\\ 0.3 \\ 0.3\end{bmatrix} = \begin{bmatrix} 0.3\\ 0.4 \\ 0.3\end{bmatrix}.
+$$
+
+$$
+\mathbf{x}_{2} = P\mathbf{x}_{1} = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}
+\begin{bmatrix} 0.3\\ 0.4 \\ 0.3\end{bmatrix}
+=
+\begin{bmatrix}0.24 \\ 0.42 \\ 0.34\end{bmatrix}.
+$$
+:::
+
+## Long Term Behavior
+
+Let's consider the long run behavior of Boston weather. 
+
+![](figures/Sunny_Rainy2.png){fig-align="center"}
+
+We know that the one-step transition matrix for this problem is
+
+$$\small P = \begin{bmatrix}0.8 & 0.4\\0.2 & 0.6\end{bmatrix}$$
+
+Can we say anything interesting about the weather in 100 or 1,000 days?
+
+Let us assume that day 0 is sunny, and let the chain "run" for a while:
+
+::: {.notes}
+We can calculate the probability of a sunny day in 2 days or in 10 days by using the powers of $P$. 
+:::
+
+---
+
+```{python}
+import numpy as np
+
+# day 0 is sunny
+x = np.array([1, 0])
+
+# P is one-step transition matrix
+P = np.array([[0.8, 0.4], [0.2, 0.6]])
+
+for i in range(13):
+    print (f'On day {i}, state is {x}')
+    x = P @ x
+```
+
+## Steady State
+
+This model seems to be converging to a particular vector: $\small{\begin{bmatrix} 2/3 \\ 1/3 \end{bmatrix}}$.
+
+What happens if the chain reaches this vector?
+
+::: {.notes}
+$$\begin{bmatrix}0.8 & 0.4\\0.2 & 0.6\end{bmatrix} \begin{bmatrix} 2/3 \\ 1/3 \end{bmatrix} = \begin{bmatrix} 2/3 \\ 1/3 \end{bmatrix}.
+$$
+:::
+
+---
+
+A vector $\mathbf{x}$ for which $P \mathbf{x} = \mathbf{x}$ is called a steady state of the Markov chain corresponding to $P$.
+
+Have we seen a similar formula before?
+
+## Existence of a Steady State
+
+Does every Markov chain have a steady state?
+
+
+:::: {.fragment}
+However, if the chain has a finite set of states, then it can be represented by a column stochastic matrix $P$.
+
+Did we see any other examples of column stochastic matrices this semester? What did we learn about their eigenvalues?
+::::
+
+:::: {.fragment}
+Perron-Frobenius tells us that 1 is always an eigenvalue of $P$. The associated eigenvector $\mathbf{x}$ is the steady-state probability vector.
+::::
+
+::: {.notes}
+In general, no.
+:::
+
+---
+
+**Theorem** Every finite-state Markov chain has at least one steady state.
+
+::: {.notes}
+How would we calculate a steady state?
+
+Solve the linear system $(P-I)\mathbf{x}=0$ or use numpy to find the eigenvalue/eigenvector pairs.
+:::
+
+## Detailed Balance
+
+A Markov chain satisfies detailed balance with respect to $\boldsymbol{\pi}$ if
+
+$$ 
+\pi_i P_{ji} = \pi_j P_{ij}\;\;\; \forall i, j. 
+$$
+
+__Remark__: The above equations are called the  __detailed balance equations.__
+
+**Theorem** If a Markov chain satisfies detailed balance with respect to $\boldsymbol{\pi}$, then $\boldsymbol{\pi}$ is one of its steady states.
+
+## Traffic Flow Analogy
+
+- Imagine NYC and its surroundings as a graph:
+
+    * Each borough or suburb is a node.
+    * Bridges, tunnels, and direct roads are edges.
+    * Example: Manhattan connects to Jersey City (Holland Tunnel) and Fort Lee (GW Bridge).
+
+---
+
+- Cars represent little elements of probability.
+- Steady state: The number of cars in each borough stays constant over time.
+- Detailed balance: For each connection (e.g., Holland Tunnel), the rate of cars entering equals the rate of cars exiting.
+
+## Detailed Balance Example
+
+![](figures/mc-example-4.jpeg){fig-align="center"}
+
+Let's calculate:
+
+1. What is the transition matrix $P$?
+1. Is the vector $\boldsymbol{\pi}= [6/11, 3/11, 2/11]^{\top}$ a steady state?
+1. Is the chain in detailed balance?
+
+---
+
+### Transition Matrix
+
+:::: {.columns}
+::: {.column width="40%"}
+![](figures/mc-example-4.jpeg){fig-align="center"}
+:::
+::: {.column width="50%"}
+$P=$
+:::
+::::
+
+
+::: {.notes}
+
+$$
+\begin{bmatrix}
+0.8&0.2&0.3 \\
+0.1&0.6&0.3\\
+0.1&0.2&0.4
+\end{bmatrix}
+$$
+
+:::
+
+---
+
+### Steady State
+
+Compute
+
+$P\mathbf{x} =$
+
+::: {.notes}
+$$
+\begin{bmatrix}0.8&0.2&0.3\\0.1&0.6&0.3\\0.1&0.2&0.4\end{bmatrix} \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}= \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}
+$$
+:::
+
+---
+
+### Detailed Balance
+
+We need to check that $\pi_i P_{ji} = \pi_j P_{ij}$ for all $i$, $j$ where $\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}$.
+
+::: {.notes}
+To check if it is in detailed balance, we need to confirm that $\pi_i P_{ji} = \pi_j P_{ij}$ for all $i$, $j$ for
+$\small{P = \begin{bmatrix}0.8&0.2&0.3\\0.1&0.6&0.3\\0.1&0.2&0.4\end{bmatrix}}$ and $\small{\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}}.$
+
+We do not need to check cases where $i=j.$ For example, for $i=1$ and $j=1,$ the detailed balance equation is $\small{\pi_1 P_{1,1} = \pi_1 P_{1,1}}$ is always true.
+
+- $\small{i=1}$ and $\small{j=2}:$ $\small{\frac{6}{11} \cdot 0.1 \stackrel{}{=} \frac{3}{11} \cdot 0.2}$
+- $\small{i=1}$ and $\small{j=3}:$ $\small{\frac{6}{11} \cdot 0.1 = \frac{2}{11} \cdot 0.3}$
+- $\small{i=2}$ and $\small{j=3}:$ $\small{\frac{3}{11} \cdot 0.2  =  \frac{2}{11} \cdot 0.3}$
+:::
+
+## Regular Markov Chains
+
+A Markov chain is a *regular* Markov chain if some matrix power of the transition matrix $P^k$ contains only strictly positive entries. 
+
+::: {.notes}
+For a *regular* Markov chain, the steady-state vector is unique.
+:::
+
+## Summary
+
+We covered:
+
+- Stochastic processes 
+- Markov chains
+- Steady state behavior
+- Detailed balance
+- Regular Markov chains
