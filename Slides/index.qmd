@@ -1,0 +1,66 @@
+---
+title: "DS722 — Mathematical Foundations of Data Science"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+"A mathematician, on the other hand, has no material to work with but ideas, and so his patterns are likely to last longer, since ideas wear less with time than words." -- G.H. Hardy, _A Mathematician's Apology_
+
+## Preface {.unnumbered}
+
+Welcome to DS722 _Mathematical Foundations of Data Science_!
+
+These are the course lecture notes for DS722, _Mathematical Foundations of Data Science_.
+
+If you have suggestions, feel free to create a Github issue. If you find typos or
+errors, please create an issue, or better yet, submit a pull request.
+
+
+## Format {.unnumbered}
+
+This course notes site is built using [Quarto](https://quarto.org/) and all the
+source pages are in Quarto markdown files. Each link below opens a reveal.js deck.
+
+## Linear Algebra
+
+- [Vectors and Matrices I](Lec00-VectorsMatrices1.html)
+- [Vectors and Matrices II](Lec01-VectorsMatrices2.html)
+- [Orthogonality and Projections](Lec02-OrthogonalityProjections.html)
+- [QR Factorization](Lec03-QRFactorization.html)
+- [Least Squares](Lec04-LeastSquares.html)
+- [Linear Systems and LU Factorization](Lec05-LinearSystems.html)
+- [Eigenvalues](Lec06-Eigenvalues.html)
+- [Singular Value Decomposition](Lec07-SVD.html)
+
+## Calculus
+
+- [Derivatives I](Lec08-Derivatives1.html)
+- [Derivatives II](Lec09-Derivatives2.html)
+- [Integration](Lec10-Integration.html)
+
+## Optimization
+
+- [Optimization](Lec11-Optimization1.html)
+- [First Order Methods](Lec12-Optimization2.html)
+- [Second Order Methods](Lec13-Optimization3.html)
+- [Quasi-Newton Methods](Lec14-Optimization4.html)
+
+## Probability and Statistics
+
+- [Introduction to Probability](Lec15-ProbabilityIntroduction.html)
+- [Random Variables and Distributions](Lec16-RandomVariables.html)
+- [Expectation, Variance, and Moments](Lec17-Expectation.html)
+- [Inequalities and Limit Theorems](Lec18-InequalitiesLimitTheorems.html)
+- [Parameter Estimation (MLE)](Lec19-ParameterEstimationMLE.html)
+- [Bayesian Statistics I](Lec20-BayesianStatistics1.html)
+- [Bayesian Statistics II](Lec21-BayesianStatistics2.html)
+<!-- 
+## Stochastic Processes
+
+- [Markov Chains](Lec22-MarkovChains.html)
+
+## Review
+
+- [Midterm Review](LecYY-MidtermReview.html) -->

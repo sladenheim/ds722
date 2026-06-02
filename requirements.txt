@@ -1,0 +1,13 @@
+# Python environment used by the GitHub Action to execute the Quarto slides.
+# torch is installed separately in the workflow (CPU-only wheel) to avoid the
+# large CUDA download.
+jupyter
+numpy
+matplotlib
+scipy
+seaborn
+pandas
+scikit-learn
+plotly
+pillow
+ipython

@@ -2,6 +2,7 @@ project:
   title: "MathFoundationsDS"
   output-dir: _slides
   render:
+    - index.qmd
     - MathFoundationsDS.qmd
     - Lec00-VectorsMatrices1.qmd
     - Lec01-VectorsMatrices2.qmd
@@ -26,9 +27,9 @@ project:
     - Lec20-BayesianStatistics1.qmd
     - Lec21-BayesianStatistics2.qmd
     - Lec22-MarkovChains.qmd
-    - Lec23-HiddenMarkovModels.qmd
-    - Lec24-SamplingAlgorithms.qmd
-    - LecYY-MidtermReview.qmd
+    # - Lec23-HiddenMarkovModels.qmd   # empty file; re-add once it has content
+    # - Lec24-SamplingAlgorithms.qmd   # empty file; re-add once it has content
+    # - LecYY-MidtermReview.qmd
 
 format:
   revealjs:
