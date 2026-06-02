@@ -69,9 +69,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-mpl.rcParams['text.usetex'] = True
-mpl.rcParams['text.latex.preamble'] = r'\usepackage{{amsmath}}'
-
 # Define the matrix
 A = np.array([[4, -1], [2, 1]])
 
@@ -112,10 +109,9 @@ ax.quiver(0, 0, u[0], u[1], angles='xy', scale_units='xy', scale=1,
 ax.legend(loc='upper left')
 
 # Add a textbox showing matrix A
-# Add a textbox showing matrix A
-matrix_text = r"$A = \begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$"
+matrix_text = "A = [[ 4, -1],\n       [ 2,  1]]"
 ax.text(0.05, 0.35, matrix_text, transform=ax.transAxes,
-        fontsize=14, verticalalignment='top', bbox=dict(boxstyle="round,pad=0.3", facecolor="lightyellow", edgecolor="gray"))
+        fontsize=14, fontfamily='monospace', verticalalignment='top', bbox=dict(boxstyle="round,pad=0.3", facecolor="lightyellow", edgecolor="gray"))
 
 plt.show()
 
