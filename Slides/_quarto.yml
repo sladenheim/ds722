@@ -1,5 +1,5 @@
 project:
-  title: "MathFoundationsDS"
+  type: website
   output-dir: _slides
   render:
     - index.qmd
@@ -29,11 +29,58 @@ project:
     - Lec22-MarkovChains.qmd
     # - Lec23-HiddenMarkovModels.qmd   # empty file; re-add once it has content
     # - Lec24-SamplingAlgorithms.qmd   # empty file; re-add once it has content
-    # - LecYY-MidtermReview.qmd
+    - LecYY-MidtermReview.qmd
+
+website:
+  title: "DS722"
+  navbar:
+    background: primary
+    left:
+      - href: index.qmd
+        text: Home
+      - href: MathFoundationsDS.qmd
+        text: Overview
+      - text: "Linear Algebra"
+        menu:
+          - { href: Lec00-VectorsMatrices1.qmd,        text: "Vectors & Matrices I" }
+          - { href: Lec01-VectorsMatrices2.qmd,        text: "Vectors & Matrices II" }
+          - { href: Lec02-OrthogonalityProjections.qmd, text: "Orthogonality & Projections" }
+          - { href: Lec03-QRFactorization.qmd,         text: "QR Factorization" }
+          - { href: Lec04-LeastSquares.qmd,            text: "Least Squares" }
+          - { href: Lec05-LinearSystems.qmd,           text: "Linear Systems & LU" }
+          - { href: Lec06-Eigenvalues.qmd,             text: "Eigenvalues" }
+          - { href: Lec07-SVD.qmd,                     text: "Singular Value Decomposition" }
+      - text: "Calculus"
+        menu:
+          - { href: Lec08-Derivatives1.qmd, text: "Derivatives I" }
+          - { href: Lec09-Derivatives2.qmd, text: "Derivatives II" }
+          - { href: Lec10-Integration.qmd,  text: "Integration" }
+      - text: "Optimization"
+        menu:
+          - { href: Lec11-Optimization1.qmd, text: "Optimization" }
+          - { href: Lec12-Optimization2.qmd, text: "First-Order Methods" }
+          - { href: Lec13-Optimization3.qmd, text: "Second-Order Methods" }
+          - { href: Lec14-Optimization4.qmd, text: "Quasi-Newton Methods" }
+      - text: "Probability & Statistics"
+        menu:
+          - { href: Lec15-ProbabilityIntroduction.qmd,   text: "Introduction to Probability" }
+          - { href: Lec16-RandomVariables.qmd,           text: "Random Variables" }
+          - { href: Lec17-Expectation.qmd,               text: "Expectation & Moments" }
+          - { href: Lec18-InequalitiesLimitTheorems.qmd, text: "Inequalities & Limit Theorems" }
+          - { href: Lec19-ParameterEstimationMLE.qmd,    text: "Parameter Estimation (MLE)" }
+          - { href: Lec20-BayesianStatistics1.qmd,       text: "Bayesian Statistics I" }
+          - { href: Lec21-BayesianStatistics2.qmd,       text: "Bayesian Statistics II" }
+      # - text: "Stochastic & Review"
+      #   menu:
+      #     - { href: Lec22-MarkovChains.qmd,   text: "Markov Chains" }
+      #     - { href: LecYY-MidtermReview.qmd,  text: "Midterm Review" }
+    right:
+      - icon: github
+        href: https://github.com/sladenheim/ds722
 
 format:
   revealjs:
-    footer: "DS722 - Ladenheim"
+    footer: "[DS722 — Ladenheim](index.html)"
     scrollable: true
     slide-number: c/t
     show-slide-number: all
@@ -41,4 +88,6 @@ format:
     html-math-method: mathjax
     echo: true
     code-fold: true
-
+  html:
+    theme: cosmo
+    toc: false
