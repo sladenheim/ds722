@@ -3,6 +3,7 @@ title: "DS722 — Mathematical Foundations of Data Science"
 author: "Scott Ladenheim"
 format:
   html:
+    theme: cosmo
     toc: false
     page-layout: full
 ---

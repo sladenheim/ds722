@@ -79,6 +79,9 @@ website:
       - icon: github
         href: https://github.com/sladenheim/ds722
 
+# Project-level format is revealjs ONLY. Listing html here too would make every
+# deck render to both formats, colliding on the same .html output. HTML pages
+# (the landing page) opt in via `format: html` in their own front matter.
 format:
   revealjs:
     footer: "[DS722 — Ladenheim](index.html)"
@@ -89,6 +92,3 @@ format:
     html-math-method: mathjax
     echo: true
     code-fold: true
-  html:
-    theme: cosmo
-    toc: false
