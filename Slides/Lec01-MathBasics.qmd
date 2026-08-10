@@ -1,46 +1,169 @@
 ---
-title: "Vectors and Matrices"
+title: "Math Basics"
 jupyter: python3
 ---
 
 ## Lecture Overview
 
-Data is (often) stored in arrays.
+In this lecture we introduce:
 
-Linear algebra is the theoretical framework that allows us to manipulate and understand these data objects.
-
-Examples:
-
-:::: {.incremental}
-- 1-D array (vector)
-- 2-D array (matrix)
-- 3-D array (tensor)
-::::
-
-::: {.notes}
-Draw a figure for each.
-:::
+- mathematical notation used throughout the course
+- sets and functions
+- notation from calculus and probability
+- a brief review of logic
+- proofs
 
 ## Lecture Objectives
 
-- Introduce notation for vectors and matrices
-- Understand vector and matrix operations
-- Understand forward propagation in neural networks
+- Get comfortable with symbols like $\sum_{i=1}^{n}$, $\prod_{i=1}^{n}$, etc.
+- Understand necessary and sufficient conditions
+- Proof by induction, proof by contradiction
+- Understand vector notation
 
-## Neural Networks
+## Mathematical Notation
 
-![](figures/NeuralNetwork.png){fig-align="center"}
+Imagine you're reading a textbook (or paper) about neural networks and you read the following:
 
-::: {.notes}
-Mention that by the end of the lecture you will understand how forward propagation is accomplished via matrix multiplication.
-:::
-
-## Notation
-
-A column vector of length $m$, $\mathbf{x}\in\mathbb{R}^{m}$, is a 1-dimensional (1-D) array of real numbers
+Let $x\in\mathbb{R}^{n}$ be a vector, let $W\in\mathbb{R}^{m\times n}$ be a matrix of weights, and let $b\in\mathbb{R}^{m}$ be a vector. Given a non-linear activation function $\sigma$, the output of a single layer of a neural network is given by
 
 $$
-\mathbf{x} =
+a = \sigma(Wx + b),
+$$
+
+where $a_{i} = \sigma\left(\sum_{j=1}^{n}w_{ij}x_j + b_i\right)$ for $i=1,\ldots,m$.
+
+::: {.notes}
+A major goal of this course is to get you comfortable working with mathematical objects. Underlying this is the need to understand mathematical notation.
+
+Without an understanding of the notation, this is just symbols on a page.
+
+Break down the notation
+:::
+
+---
+
+The important information to take away from this formula is:
+
+- $x\in\mathbb{R}^{n}$ says that $x$ is a vector (array) consisting of $n$ real numbers and $x_{j}$ denotes the $j$th entry. 
+- $a$ and $b$ are vectors consisting of $m$ real numbers and $a_{i}, b_{i}$ denotes the $i$th element of each vector.
+- $W$ is a matrix (2-D array) with $m$ rows and $n$ columns, and $w_{ij}$ denotes the element in the $i$th row and $j$th column.
+- The input to the nonlinear function $\sigma$ is a vector of length $m$ and the output is also a vector of length $m$ (this function is applied element-wise). 
+
+:::: {.fragment}
+What does $\sum_{j=1}^{n} w_{ij}x_j$ mean?
+::::
+
+## Summation Notation
+
+The summation symbol $\sum$ is used to denote the sum of a sequence of numbers. 
+
+The expression $\sum_{j=1}^{n} w_{ij}x_j$ means to sum the products $w_{ij}x_j$ for $j$ ranging from 1 to $n$.
+
+Given $z=Wx$, where $W=\begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$ and $x=\begin{bmatrix} 5 \\ 6 \end{bmatrix}$, compute 
+
+$z_{2} =$
+
+::: {.notes}
+$z_{2} = \sum_{j=1}^{2} w_{2j}x_j = w_{21}x_1 + w_{22}x_2 = 3\cdot5 + 4\cdot6 = 15 + 24 = 39$
+:::
+
+## Product Notation
+
+The product symbol $\prod$ is used to denote the product of a sequence of numbers. For example
+
+$$
+\prod_{i=1}^{n} a_i = a_1 \cdot a_2 \cdot \ldots \cdot a_n.
+$$
+
+If $a_{i}= i$, what is $\prod_{i=1}^{5} a_{i}$?
+
+---
+
+When we cover parameter estimation, we will see the product symbol used to denote the product of probabilities for independent events, e.g.,
+
+$$
+L(\theta) = \prod_{i=1}^{n} p(x_i | \theta).
+$$
+
+Here $\theta$ denotes a parameter of a probability distribution and $p(x_i | \theta)$ is the probability of observing $x_i$ given the parameter $\theta$. The product symbol is used here because we are assuming that the observations $x_1, x_2, \ldots, x_n$ are independent.
+
+## Sets
+
+A *set* is a collection of objects. The objects in the collection are called *elements*. We use curly bracket notation to denote a set, e.g.,
+
+- $S = \{1, 2, 3\}$ is a set of 3 numbers
+- $\mathbb{R}^{n}$ is the set of all $n$-dimensional vectors of real numbers
+- $V = \{v_{1}, v_{2}, \ldots, v_{m}: v_{i}\in\mathbb{R}^{n} \}$ is a set of $m$ vectors in $\mathbb{R}^{n}$.
+- $P_{n} = \{p(x): p(x) = a_{0} + a_{1}x + \ldots + a_{n}x^{n}, a_{i}\in\mathbb{R}\}$ is the set of all polynomials of degree at most $n$.
+
+## Common Sets
+
+The following are standard notations used to denote various sets we work with:
+
+- $\mathbb{N}=\{1, 2, 3, \ldots\}$: the set of natural numbers
+- $\mathbb{Z}=\{\ldots, -2, -1, 0, 1, 2, \ldots\}$: the set of integers
+- $\mathbb{Q}=\{a/b : a, b\in\mathbb{Z}, b\neq 0\}$: the set of rational numbers
+- $\mathbb{R}$: the set of all real numbers
+- $\mathbb{C}= \{ a + bi : a, b \in \mathbb{R}, i^2 = -1 \}$: the set of complex numbers
+
+## Subsets
+
+Let $A$ denote a set. A set $B$ is a *subset* of $A$ if every element of $B$ is also an element of $A$. We write this as $B \subseteq A$.
+
+Note that if $B \subseteq A$ and $A \subseteq B$, then $A = B$.
+
+The *empty set*, denoted $\emptyset$, is the set that contains no elements. The empty set is a subset of every set.
+
+Let $U$ denote the *universal set*, i.e., the set of all elements under consideration. The complement of a set $A\subseteq U$, denoted $A^c$, is the set of all elements of $U$ that are not in $A$,
+
+$$
+A^{c} = \{x\in U : x\notin A\}.
+$$
+
+## Set Union
+
+The union of two sets $A$ and $B$, denoted $A \cup B$, is the set of all elements that are in $A$ or in $B$ (or in both).
+
+## Set Intersection
+
+The intersection of two sets $A$ and $B$, denoted $A \cap B$, is the set of all elements that are in both $A$ and $B$.
+
+## Set Difference
+
+The difference of two sets $A$ and $B$, denoted $A \setminus B$, is the set of all elements that are in $A$ but not in $B$.
+
+A set difference is equivalent to the intersection of a set with the complement of another set, i.e., $A \setminus B = A \cap B^c$.
+
+## Functions
+
+A function $f$ maps elements from a set $X$ (the domain) to elements in a set $Y$ (the co-domain). We write this as $f: X \rightarrow Y$. The **range** of a function is the set $\{f(x) : x\in X\}\subseteq Y$.
+
+Note that for each $x \in X$, there is a unique $y \in Y$ such that $f(x) = y$.
+
+A few examples of the types of functions we will encounter:
+
+- scalar functions of one variable $f: \mathbb{R} \rightarrow \mathbb{R}$, e.g., $f(x) = x^2 + 3x + 2$.
+- scalar functions of $n$ variables $f: \mathbb{R}^{n} \rightarrow \mathbb{R}$, e.g., $f(x) = \sum_{i=1}^{n} a_{i}x_{i}$ where $a_{i}\in\mathbb{R}$.
+- vector-valued functions of $n$ variables $f: \mathbb{R}^{n} \rightarrow \mathbb{R}^{m}$, e.g., $f(x) = Ax + b$ where $A\in\mathbb{R}^{m\times n}$ and $b\in\mathbb{R}^{m}$.
+
+## Course Overview
+
+Recall that the main topics of the course are
+
+1. Linear Algebra
+2. Optimization
+3. Probability and Statistics
+
+We'll introduce notation and definitions that we'll use throughout the remainder of the course. 
+
+We will provide much more detail on these topics as we progress through the course.
+
+## Vectors
+
+A column vector of length $m$, $x\in\mathbb{R}^{m}$, is a 1-dimensional (1-D) array of real numbers
+
+$$
+x =
 \begin{bmatrix}
 x_1 \\
 x_2 \\
@@ -52,10 +175,10 @@ $$
 The $i$th element of the vector is denoted $x_i$.
 
 ::: {.notes}
-Mention that we will often see vectors of dimension $n$. Mention that we won't always use the boldface notation, but that whether something is a vector will be clear from the context.
+Mention that we will often see vectors of dimension $n$.
 :::
 
----
+## Matrices
 
 A matrix with $m$ rows and $n$ columns, $A\in\mathbb{R}^{m\times n}$, is a 2-D array of numbers 
 $$
@@ -69,744 +192,297 @@ a_{m1} &a_{m2} & \cdots & a_{mn} \\
 \end{bmatrix}.
 $$
 
-The element at row $i$ and column $j$ is denoted $a_{ij}$. A column vector is matrix of size $m\times 1$.
+The element at row $i$ and column $j$ is denoted $a_{ij}$. A column vector is a matrix of size $m\times 1$.
+
+## Derivatives
+
+A derivative measures how a function changes as its input changes. For a function $f: \mathbb{R} \rightarrow \mathbb{R}$, the derivative at a point $x$ is defined as
+
+$$
+f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}.
+$$
+
+We will introduce derivatives for functions of multiple variables and discuss their applications in optimization and machine learning.
 
 ---
 
-The transpose, $A^{T}$, of a matrix $A\in\mathbb{R}^{m\times n}$ is the $n\times m$ matrix
-
-$$
-\small
-A^{T} =
-\begin{bmatrix}
-a_{11} & a_{21} & \cdots & a_{m1} \\
-a_{12} & a_{22} & \cdots & a_{m2} \\
-\vdots & \vdots & \ddots & \vdots \\
-a_{1n} &a_{2n} & \cdots & a_{nm} \\
-\end{bmatrix}.
-$$
-
-The transpose of a column vector $\mathbf{x}$ is a row vector. A row vector is a matrix of size $1\times m$.
-
----
-
-A matrix is square when $m=n$. 
-
-A square matrix is symmetric if $A=A^{T}$.
-
-::: {.notes}
-Mention the importance of symmetric matrices.
-
-Plays a huge role in linear algebra, in particular the study of eigenvalues, and in optimization.
-
-Write an example.
-:::
-
-## Vectors
-
-Given $\alpha, \beta\in\mathbb{R}$ and $\mathbf{x}, \mathbf{y}\in\mathbb{R}^{m}$, a linear combination is defined as
-
-$$
-\alpha \mathbf{x} + \beta\mathbf{y} =
-\begin{bmatrix}
-\alpha x_1 + \beta y_1\\
-\alpha x_2 + \beta y_2 \\
-\vdots \\
-\alpha x_m + \beta y_m
-\end{bmatrix}
-.
-$$
-
-## Span
-
-Let $S = \{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$, be a set of vectors where $\mathbf{v}_i\in\mathbb{R}^m$. The $\operatorname{span}(S)$ is the set of all linear combinations of vectors in the set $S$.
-
-$$
-\operatorname{span}(S) = \left\{ \alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 + \cdots + \alpha_n \mathbf{v}_n \right\}, \quad \alpha_i\in\mathbb{R}.
-$$
-
-::: {.notes}
-Use $\mathbf{u} = [1, 2]$ and $\mathbf{v} = [4, 1]$.
-:::
-
-## Geometric Interpretation
-
-The sum of $\mathbf{u} = [1, 2]$ and $\mathbf{v} = [4, 1]$ is plotted in @fig-vector-addition. 
-The sum $\mathbf{u} + \mathbf{v} = [5, 3]$ is obtained by placing the tip of one vector to the tail of the other vector. 
+Below is a plot of the function $f(x) = x^2$ and its tangent line at $x = 1$. The slope of the tangent line represents the derivative of the function at that point.
 
 ```{python}
-#| label: fig-vector-addition
-#| fig-cap: "Vector addition"
-import matplotlib.pyplot as plt
-import numpy as np
-fig = plt.figure()
-ax = plt.gca()
-u = np.array([1, 2])
-v = np.array([4, 1])
-w = np.array([5, 3])
-V = np.array([u, v, w])
-origin = np.array([[0, 0, 0], [0, 0, 0]])
-plt.quiver(*origin, V[:, 0], V[:, 1], 
-           color=['r', 'r', 'b'], 
-           angles='xy', 
-           scale_units='xy', 
-           scale=1)
-ax.set_xlim([-1, 6])
-ax.set_ylim([-1, 4])
-ax.text(1.3, 1.9, '$u$', size=16)
-ax.text(4.3, 1.2, '$v$', size=16)
-ax.text(5.3, 2.9, '$u+v$', size=16)
-plt.plot([1, 5], [2, 3], 'g--')
-plt.plot([4, 5], [1, 3], 'g--')
-ax.grid()
-plt.show()
-```
-
----
-
-```{python}
-#| label: fig-vector-span
-#| fig-cap: "Span of 2 vectors"
+#| fig-align: "center"
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
-# Define vectors u and v
-u = np.array([1, 2, 0])
-v = np.array([4, 1, 0])
+f = lambda x: x**2
+a = 1
+fprime_a = 2 * a  # derivative of x^2 at x=a is 2a
 
-# Create a grid of points for the plane
-s = np.linspace(-1, 1, 100)
-t = np.linspace(-1, 1, 100)
-S, T = np.meshgrid(s, t)
+x = np.linspace(-0.5, 2.5, 300)
+tangent = lambda x: f(a) + fprime_a * (x - a)
 
-# Calculate the points on the plane
-plane_points = np.outer(S.flatten(), u) + np.outer(T.flatten(), v)
-plane_points = plane_points.reshape(S.shape[0], S.shape[1], 3)
-
-# Create a 3D plot
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-# Plot the plane using plot_surface for a more continuous look
-ax.plot_surface(plane_points[:, :, 0], plane_points[:, :, 1], plane_points[:, :, 2], color='lightblue', alpha=0.3)
-
-# Plot the vectors u and v
-ax.quiver(0, 0, 0, u[0], u[1], u[2], color='blue', label='u')
-ax.quiver(0, 0, 0, v[0], v[1], v[2], color='blue', label='v')
-
-# Set labels
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_zlabel('Z')
-
-# Set limits
-ax.set_xlim([-5, 5])
-ax.set_ylim([-5, 5])
-ax.set_zlim([-5, 5])
-
-# Add legend
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(x, f(x), label=r'$f(x) = x^2$', color='steelblue', linewidth=2)
+ax.plot(x, tangent(x), label=rf'Tangent at $a={a}$: slope $= f^\prime({a}) = {fprime_a}$',
+        color='tomato', linewidth=2, linestyle='--')
+ax.plot(a, f(a), 'ko', zorder=5)
+ax.set_xlim(-0.5, 2.5)
+ax.set_ylim(-0.5, 5)
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
 ax.legend()
-
-# Show plot
+ax.set_title(r"Derivative as slope of tangent line at $a = 1$")
+plt.tight_layout()
 plt.show()
 ```
 
-## Vector Spaces
+## Integrals
 
-A vector space is a set $V$ such that for any 2 elements $\mathbf{u},\mathbf{v}\in V$, and any scalars, $\alpha$ and $\beta$, then $\alpha\mathbf{u} + \beta\mathbf{v}\in V$. 
+An integral is a mathematical object that represents the signed area under a curve. For a function $f: \mathbb{R} \rightarrow \mathbb{R}$, the definite integral from $a$ to $b$ is denoted as
 
-In addition, a vector space must satisfy the following properties
+$$
+\int_{a}^{b} f(x) dx.
+$$
 
-:::: {.incremental}
-1. $\mathbf{u} + (\mathbf{v} + \mathbf{w}) = (\mathbf{u} + \mathbf{v}) + \mathbf{w}$ (associativity).
-1. $\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$ (commutativity).
-1. There exists $\mathbf{0}\in V$ such that $\mathbf{v} + \mathbf{0} = \mathbf{v}$ for all $\mathbf{v}\in V$ (identity element).
-1. For every $\mathbf{v}\in V$, there exists $-\mathbf{v}\in V$ such that $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$ (inverse).
-1. $\alpha(\beta\mathbf{v}) = (\alpha\beta)\mathbf{v}$
-1. $1\mathbf{v} = \mathbf{v}$
-1. $\alpha(\mathbf{u} + \mathbf{v}) = \alpha\mathbf{u} + \alpha\mathbf{v}$
-1. $(\alpha + \beta)\mathbf{v} = \alpha\mathbf{v} + \beta\mathbf{v}$
+We will later see how integrals are the inverse operation of derivatives.
+
+When we cover topics in probability and statistics we will see that integrals of probability density functions give probabilities.
+
+---
+
+```{python}
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+a, b = -1, 1
+x = np.linspace(-4, 4, 1000)
+pdf = (1 / np.sqrt(2 * np.pi)) * np.exp(-0.5 * x**2)
+prob = 0.5 * (math.erf(b / np.sqrt(2)) - math.erf(a / np.sqrt(2)))
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(x, pdf, color='navy', linewidth=2, label=r'$\mathcal{N}(0,1)$ PDF')
+
+mask = (x >= a) & (x <= b)
+ax.fill_between(x[mask], 0, pdf[mask], color='skyblue', alpha=0.5,
+                label=rf'$P({a} \leq X \leq {b})$')
+ax.axvline(a, color='gray', linestyle='--', linewidth=1)
+ax.axvline(b, color='gray', linestyle='--', linewidth=1)
+ax.set_title(rf'Standard Normal: $P({a} \leq X \leq {b}) \approx {prob:.3f}$')
+ax.set_xlabel('$x$')
+ax.set_ylabel('Density')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Probability
+
+Let $\Omega = \{H, T\}$ denote the sample space of flipping a coin. We define the probability of each outcome as $P(H) = 0.5$ and $P(T) = 0.5$. 
+
+The probability of an event $A \subseteq \Omega$ is denoted by $P(A)$.
+
+Recall that any probability measure $P$ must satisfy the following axioms:
+
+1. $P(A) \geq 0$ for all events $A \subseteq \Omega$
+2. $P(\Omega) = 1$ 
+3. If $A_1, A_2, \ldots$ are mutually exclusive events, i.e., $A_{i}\cap A_{j}=\emptyset~\forall i\neq j$, then $$P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)$$
+
+## Logic
+
+Logic is the study of reasoning and argumentation. In mathematics, we use logic to construct proofs and establish the truth of statements.
+
+We will review aspects of *deductive reasoning*, which is the process of reasoning from one or more statements (premises) to reach a logically certain conclusion.
+
+## Symbolic Logic
+
+We generally use symbols to represent logical statements and operations. We generically refer to statements using letters like, $P$ and $Q$. 
+
+Below are some symbols we will use to represent logical operations:
+
+- $\neg P$: negation of statement $P$ (not $P$)
+- $P \wedge Q$: conjunction of statements $P$ and $Q$ (both $P$ and $Q$ are true)
+- $P \vee Q$: disjunction of statements $P$ and $Q$ (either $P$ or $Q$ is true)
+- $P \implies Q$: implication (if $P$ is true, then $Q$ is true)
+- $P \iff Q$: biconditional ($P$ is true if and only if $Q$ is true)
+
+::: {.notes}
+Biconditional, $P$ and $Q$ have the same truth value, $P\implies Q$ and $Q \implies P$ are both true.
+:::
+
+## Equivalent Statements
+
+You may recall that $P\implies Q$ is equivalent to $\neg P \vee Q$ and $\neg Q \implies \neg P$.
+
+How can we show something like this?
+
+:::: {.fragment}
+A truth table
+::::
+
+## Truth Table: $P \implies Q$ vs. $\neg Q \implies \neg P$
+
+| $P$ | $Q$ | $\neg P$ | $\neg Q$ | $P \implies Q$ | $\neg Q \implies \neg P$ |
+|:---:|:---:|:--------:|:--------:|:--------------:|:------------------------:|
+| T   | T   |          |          |                |                          |
+| T   | F   |          |          |                |                          |
+| F   | T   |          |          |                |                          |
+| F   | F   |          |          |                |                          |
+
+::: {.notes}
+The completed table:
+
+| $P$ | $Q$ | $\neg P$ | $\neg Q$ | $P \implies Q$ | $\neg Q \implies \neg P$ |
+|:---:|:---:|:--------:|:--------:|:--------------:|:------------------------:|
+| T   | T   | F        | F        | T              | T                        |
+| T   | F   | F        | T        | F              | F                        |
+| F   | T   | T        | F        | T              | T                        |
+| F   | F   | T        | T        | T              | T                        |
+
+The last two columns agree in every row, so $P \implies Q$ and its contrapositive $\neg Q \implies \neg P$ are logically equivalent.
+
+The only way an implication is false is when the hypothesis is true and the conclusion is false (row 2). Rows 3 and 4 are the "vacuously true" cases: when $P$ is false, $P \implies Q$ says nothing and is true by default.
+:::
+
+## Deductive Reasoning
+
+Here is an example of deductive reasoning:
+
+> It will either rain or snow tomorrow.\
+> It's too warm for snow.\
+> Therefore, it will rain tomorrow.
+
+We arrive at a conclusion based on the assumption that the statements, called *premises*, are true. 
+
+:::: {.fragment}
+But is this true? 
+::::
+
+:::: {.fragment}
+For the examples of proofs that we wish to work through, we will generally have statements of the form:
+
+If $P$, then $Q$, or equivalently, $P \implies Q$.
 ::::
 
 ::: {.notes}
-Mention that a vector space doesn't just have to be vectors! It works for matrices and polynomials!
+Well, if the conclusion is not true, then at least one of the premises must be false. For example, if it snows, then the second premise is false. If it neither rains nor snows, then the first premise is false.
+
+We judge the correctness of the argument if the conclusion is forced to be true by the premises. 
+If the premises are true, then we can be sure that the conclusion is also true. 
+We say an argument is valid if the premises cannot all be true without the conclusion being true as well.
 :::
+
+## $P \implies Q$
+
+The statement $P \implies Q$ is true if either $P$ is false or $Q$ is true.
+
+We equivalently have:
+
+- $P$ is *sufficient* for $Q$ (if $P$ is true, then $Q$ must be true)
+- $Q$ is *necessary* for $P$ (if $Q$ is false, then $P$ must be false)
 
 ---
 
-A set of vectors $F = \{ \mathbf{f}_1, \ldots, \mathbf{f}_n \}$ spans a vectors space $V$ if every vector $\mathbf{v}\in V$ can be expressed as a linear combination of the elements in F, i.e.,
+Consider the following statement:
 
-$$
-\mathbf{v} = \sum_{i=1}^{n}\alpha_i \mathbf{f}_i.
-$$
+Suppose that $a$ and $b$ are real numbers. Prove that if $0<a<b$, then $a^2 < b^2$.  
+
+*Proof*
 
 ::: {.notes}
-Mention $\mathbb{R}^{n}$.
+We have that
+
+$$
+0 < a < b \implies 0 < a^2 < ab < b^2 \implies a^2 < b^2.
+$$
 :::
 
-## Linear Independence
+:::: {.fragment}
+Note that the statement $0<a<b$ is sufficient to guarantee $a^2 < b^2$ and that $a^2 < b^2$ is necessary for $0<a<b$.
+::::
 
-A set of $n$ vectors $S =\{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$ is linearly dependent if there exists scalars $\alpha_1,\ldots, \alpha_n$ not all zero such that 
-$$
-\sum_{i=1}^{n} \alpha_i \mathbf{v}_i = 0.
-$$
+## Proof by Contradiction
+
+A proof by contradiction is a method of proving a statement by assuming the opposite of what you want to prove and showing that this assumption leads to a contradiction.
+
+Consider the following statement: $\sqrt{2} \notin \mathbb{Q} = \{a/b : a,b\in\mathbb{Z}, b\neq 0 \}$, i.e., $\sqrt{2}$ is irrational.  
+
+*Proof*
 
 ::: {.notes}
-Let $v_{1}=[2, 4]$ and $v_{2}=[1, 2]$, then $v_{1}-2v_{2} = 0$.
+Assume to the contrary that $\sqrt{2} = a/b$ for some integers $a$ and $b$ with no common factors. Then $2 = a^2/b^2 \implies a^2 = 2b^2$. This implies that $a^2$ is even, which means that $a$ must be even. Let $a = 2k$ for some integer $k$. Then we have $4k^{2} = 2b^{2} \implies b^{2} = 2k^{2}$, which implies that $b$ is also even. But this contradicts our assumption that $a$ and $b$ have no common factors. Therefore, our assumption that $\sqrt{2}$ is rational must be false, and we conclude that $\sqrt{2}$ is irrational.
 :::
+
+## Proof by Induction
+
+Proof by induction is a method of proving statements that are true for all natural numbers. It consists of two steps:
+
+:::: {.incremental}
+1. Base Case: Show that the statement is true for the first natural number (usually $n=1$).
+2. Inductive Step: Assume that the statement is true for some arbitrary natural number $k$, and then show that it must also be true for $k+1$.
+::::
 
 ---
 
-The vectors in the set $S= \{\mathbf{v}_{1}, \ldots, \mathbf{v}_{n}\}$ are linearly independent if they are not linearly dependent, i.e., the equation
-$$
-\alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n = 0,
-$$
-is only satisfied when $\alpha_i = 0$ for $i=1,\ldots,n$.
+Prove that $\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$ for all $n\in\mathbb{N}$.  
+
+*Proof*
 
 ::: {.notes}
-Give standard basis as example for $\mathbb{R}^{2}$ and $[1, 1]$ and $[1, -1]$. 
+Let $n=1$, then 
+$$
+1 = \frac{1(1+1)}{2} = 1.
+$$
+
+Assume this is true for $n=k$, i.e., $\sum_{i=1}^{k} i = \frac{k(k+1)}{2}$. Then for $n=k+1$, we have
+
+$$
+\sum_{i=1}^{k+1} i = \sum_{i=1}^{k} i + k+1 = \frac{k(k+1)}{2} + k+1 = \frac{k(k+1) + 2(k+1)}{2} = \frac{(k+1)(k+2)}{2}.
+$$
 :::
 
-## Basis
+## Necessary and Sufficient Conditions
 
-A basis for a vector $V$ is a set of vectors $B = \{\mathbf{b}_1, \ldots, \mathbf{b}_n\}$ that spans $V$ and is linearly independent.
+A **necessary condition** for a statement to be true is a condition that *must* be satisfied for the statement to hold.
 
-Let $\mathbf{e}_{k}\in\mathbb{R}^{n}$ denote a vector with a 1 in the $k$-th entry and zero everywhere else, then
+Example: If a number is even, then it is divisible by 2. Being divisible by 2 is a necessary condition for a number to be even.
 
-$$
-\{\mathbf{e}_1, \ldots, \mathbf{e}_n\}
-$$
+A **sufficient condition** for a statement to be true is a condition that, if satisfied, *guarantees* the statement holds.
 
-is called the standard basis.
-
-## Inner Products
-
-The inner product of two columns vectors $\mathbf{x}, \mathbf{y}\in\mathbb{R}^m$ is the product of the transpose of $\mathbf{x}$ by $\mathbf{y}$
-
-$$
-\mathbf{x}^{T}\mathbf{y} = \sum_{i=1}^{m}x_iy_i.
-$$
-
-The notation $(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{T}\mathbf{y}$ is also used to denote the inner product.
+Example: If a number is divisible by 4, then it is even. Being divisible by 4 guarantees that a number is even.
 
 ::: {.notes}
-Mention that an inner product is a more general idea and can be extended to work for functions. This leads to the ideas of orthogonal function and function spaces which are hugely important in quantum mechanics, signal processing, and machine learning.
-
-Show a picture of row vector times column vector.
+Necessary and sufficient conditions will be important throughout the course, but in particular when we discuss optimization where we are interested in conditions which guarantee that we have found a minimum or maximum of a function.
 :::
 
 ---
 
-The Euclidean length of $\mathbf{x}$ is denoted $\Vert \mathbf{x} \Vert_2$ and is the square root of the inner product of $\mathbf{x}$ with itself
+It is possible to have a condition that is *both* necessary and sufficient. 
 
-$$
-\Vert \mathbf{x} \Vert_2 = \sqrt{\mathbf{x}^{T}\mathbf{x}} = \left(\sum_{i=1}^{m}\vert x_i\vert^{2}\right)^{1/2}.
-$$
+For example, a number is even if and only if it is divisible by 2. In this case, being divisible by 2 is both a necessary and sufficient condition for a number to be even.
 
-The cosine of the angle $\theta$ between $\mathbf{x}$ and $\mathbf{y}$ can be expressed in terms of the inner product:
-
-$$
-\cos(\theta) = \frac{\mathbf{x}^{T}\mathbf{y}}{\Vert \mathbf{x}\Vert_2 \Vert \mathbf{y}\Vert_2}.
-$$
-
-::: {.notes}
-Reference word embeddings.
-:::
-
-## Single Neuron
-
-![](figures/Neuron.png){fig-align="center"}
-
-
-## A Matrix Times a Vector
-
-Let $\mathbf{x}\in\mathbb{R}^{n}$ and let $A\in\mathbb{R}^{m\times n}$, then the matrix-vector product $\mathbf{b}=A\mathbf{x}\in\mathbb{R}^{m}$ is defined as
-
-$$
-b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
-$$
-
-::: {.notes}
-Each entry is an inner product between a row of $A$ and the vector $x$.
-:::
+The *only if* part of the statement is the necessary condition, and the *if* part of the statement is the sufficient condition.
 
 ---
 
-Let $\mathbf{a}_j\in\mathbb{R}^{m}$ denote the $j$th column of $A$, then
+It is possible for a condition to be necessary but not sufficient, or sufficient but not necessary.
+
+For example, a function is differentiable at a point $x$ if 
 
 $$
-\mathbf{b} = \sum_{j=1}^{n}x_j \mathbf{a}_{j}.
+f^\prime(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}
 $$
+exists. Differentiability is a sufficient condition for continuity, but *not* a necessary condition. 
 
-::: {.notes}
-Draw a picture of linear combinations of the columns of $A$.
-:::
-
----
-
-Let $\mathbf{x}\in\mathbb{R}^{m}$ and $A\in\mathbb{R}^{m\times n}$, how can you interpret $\mathbf{x}^{T}A$?
-
----
-
-The map $\mathbf{x} \rightarrow A\mathbf{x}$ is linear, i.e.,
-
-$$
-\begin{align*}
-A(\mathbf{x} + \mathbf{y}) &= A\mathbf{x} + A\mathbf{y} \\
-A(\alpha \mathbf{x}) &= \alpha A \mathbf{x}
-\end{align*}
-$$
-
-## Range  
-
-The range of a matrix $A\in\mathbb{R}^{m\times n}$, range($A$), is the set of vectors that can be expressed as $A\mathbf{x}$ for some $\mathbf{x}$.
-
-**Theorem:** $\operatorname{range}(A)$ is the vector space spanned by the columns of $A$.
-
-The $\operatorname{range}(A)$ is alternatively referred to as the column space.
-
-::: {.notes}
-Can introduce this with set notation. Use the picture as your proof.
-:::
-
-## Nullspace
-
-The nullspace of $A\in\mathbb{R}^{m\times n}$ is the set of vectors $\mathbf{x}\in\mathbb{R}^{n}$ that satisfy $A\mathbf{x} = 0$, where $0$ is the $0$-vector in $\mathbb{R}^{m}$.
-
-## Neural Networks
-
-![](figures/NeuralNetwork.png){fig-align="center"}
-
-## A Matrix Times a Matrix
-
-Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matrix-matrix product $C = AB \in\mathbb{R}^{m \times p}$ is defined as
-
-$$
-c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}.
-$$
-
-::: {.notes}
-Mention interpretation as linear combination of columns of $A$ with weights in $B$ and linear combination of the rows in $B$ with weights in $A$.
-:::
-
-## Batches in Neural Networks
-
-![](figures/NeuralNetwork.png){fig-align="center"}
-
-## Outer Products
-
-The outer product is a matrix-matrix product between an $m$-dimensional column vector $\mathbf{u}$ with an $n$-dimensional row vector $\mathbf{v}$, the result is an $m\times n$ (rank 1) matrix
-
-$$
-\begin{bmatrix}
-u_1 \\
-u_2 \\
-\vdots \\
-u_m
-\end{bmatrix}
-\begin{bmatrix}
-v_1 & v_2 & \cdots & v_n
-\end{bmatrix}
-=
-\begin{bmatrix}
-v_1u_1 & \cdots & v_nu_1 \\
-v_1u_2 & & v_nu_2 \\
-\vdots & & \vdots \\
-v_1u_m & \cdots & v_nu_m \\
-\end{bmatrix}
-$$
-
-::: {.notes}
-Demo a simple outer product $[1, 2]$ and $[3, 4]$. Write the $uv^{T}$ notation.
-:::
-
-## Rank
-
-The column rank of a matrix is the dimension of its column space.
-
-The row rank of a matrix is the dimension of its row space.
-
-**Theorem:** Row rank always equals column rank.
-
-We refer to this single number as the rank of a matrix.
-
-A matrix $A\in\mathbb{R}^{m\times n}$ of full rank is one that has the maximal possible rank, i.e., $\min(m, n)$.
-
-## Determinant
-
-The determinant of a square matrix $A\in\mathbb{R}^{n\times n}$ is
-
-$$
-\operatorname{det}(A) = \sum_{j=1}^{n}(-1)^{i+j}a_{ij}M_{ij},
-$$
-
-where $M_{ij}=\operatorname{det}(A_{ij})$ and $A_{ij}$ is an $n-1\times n-1$ matrix obtained by removing the $i$th row and the $j$th column.
-
-::: {.notes}
-
-We compute the determinant of the matrix:
-
-$$
-A = \begin{bmatrix}
-1 & 2 & 3 \\
-0 & 4 & 5 \\
-1 & 0 & 6
-\end{bmatrix}
-$$
-
-Using cofactor expansion along the first row:
-
-$$
-\begin{align*}
-\operatorname{det}(A) &= 1 \cdot \begin{vmatrix} 4 & 5 \\ 0 & 6 \end{vmatrix}
-- 2 \cdot \begin{vmatrix} 0 & 5 \\ 1 & 6 \end{vmatrix}
-+ 3 \cdot \begin{vmatrix} 0 & 4 \\ 1 & 0 \end{vmatrix} \\
-&= 1(4 \cdot 6 - 0 \cdot 5) - 2(0 \cdot 6 - 1 \cdot 5) + 3(0 \cdot 0 - 1 \cdot 4) \\
-&= 1(24) - 2(-5) + 3(-4) \\
-&= 24 + 10 - 12 \\
-&= 22
-\end{align*}
-$$
-
-:::
-
-## Inverse
-
-A nonsingular or invertible matrix is a square matrix of full rank.
-
-The inverse of an invertible matrix $A$ is denoted by $A^{-1}$ and satisfies $AA^{-1} = A^{-1}A = I$, where $I$ is the identity matrix.
-
----
-
-Note that $(A^{T})^{-1} = A^{-T}$. Why?
-
-::: {.notes}
-$(AA^{-1})^{T} = (A^{-1})^{T}A^{T} = I$
-
-Mention the students will prove $(AB)^{T} = B^{T}A^{T}$ in homework.
-:::
-
----
-
-**Theorem**
-
-For $A\in\mathbb{R}^{n\times n}$ the following conditions are equivalent:
-
-1. $A$ has an inverse $A^{-1}$
-1. $\operatorname{rank}(A) = n$
-1. $\operatorname{range}(A) = \mathbb{R}^{n}$
-1. $\operatorname{null}(A) = {0}$
-1. $0$ is not an eigenvalue of $A$
-1. $0$ is not a singular value of $A$
-1. $\operatorname{det}(A) \neq 0$
-
-## Vector Norms
-
-The notions of size and distance in a vector space are captured by norms.
-
-A norm is a function $\Vert\cdot\Vert: \mathbb{R}^{m} \rightarrow \mathbb{R}$ that assigns a length to each vector. This function satisfies for all vectors $\mathbf{x},\mathbf{y}$
-
-1. $\Vert \mathbf{x} \Vert \geq 0$, and $\Vert \mathbf{x}\Vert = 0$ only if $\mathbf{x}=0$
-1. $\Vert \mathbf{x} + \mathbf{y} \Vert \leq \Vert \mathbf{x} \Vert + \Vert\mathbf{y} \Vert$
-1. $\Vert \alpha\mathbf{x} \Vert = \vert \alpha\vert \Vert\mathbf{x} \Vert$
-
-
-## p-norms
-
-The most important class of vectors norms are the p-norms
-
-$$
-\Vert \mathbf{x} \Vert_{p} = \left( \sum_{i=1}^{m}\vert x_i\vert^{p}\right)^{1/p}.
-$$
-
----
-
-When $p=2$ we have the Euclidean distance:
-
-$$
-\Vert \mathbf{x} \Vert_{2} = \left( \sum_{i=1}^{m}\vert x_i\vert^{2}\right)^{1/2}.
-$$
-
---- 
-
-```{python}
-#| label: fig-2-norm
-#| fig-cap: "Unit Ball under the 2-Norm"
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Create points on the boundary of the unit ball under 2-norm
-theta = np.linspace(0, 2 * np.pi, 500)
-x = np.cos(theta)
-y = np.sin(theta)
-
-# Plot the boundary and fill the interior
-plt.figure(figsize=(8, 8))
-plt.fill(x, y, color='grey', alpha=0.5)
-plt.plot(x, y, color='black')
-
-# Darken the x and y axis lines
-plt.axhline(0, color='black', linewidth=2)
-plt.axvline(0, color='black', linewidth=2)
-
-plt.title('Unit Ball under 2-Norm')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.grid(True)
-plt.axis('equal')
-plt.show()
-```
-
----
-
-When $p=1$ we have the Manhattan distance:
-
-$$
-\Vert \mathbf{x} \Vert_{1} = \sum_{i=1}^{m}\vert x_i\vert.
-$$
-
----
-
-```{python}
-#| label: fig-1-norm
-#| fig-cap: "Unit Ball under 1-Norm"
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Define the vertices of the unit ball under 1-norm (diamond shape)
-x_1norm = np.array([0, 1, 0, -1, 0])
-y_1norm = np.array([1, 0, -1, 0, 1])
-
-# Plot the boundary and fill the interior
-plt.figure(figsize=(8, 8))
-plt.fill(x_1norm, y_1norm, color='grey', alpha=0.5)
-plt.plot(x_1norm, y_1norm, color='black')
-
-# Darken the x and y axis lines
-plt.axhline(0, color='black', linewidth=2)
-plt.axvline(0, color='black', linewidth=2)
-
-plt.title('Unit Ball under 1-Norm')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.grid(True)
-plt.axis('equal')
-plt.show()
-```
-
----
-
-When $p\rightarrow\infty$ we have the infinity norm:
-$$
-\Vert \mathbf{x} \Vert_{\infty} = \max_{1\leq i \leq m} \vert x_i\vert.
-$$
-
----
-
-```{python}
-#| label: fig-inf-norm
-#| fig-cap: "Unit Ball under the Infinity-Norm"
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Define the vertices of the unit ball under infinity norm (square shape)
-x_inf = np.array([1, 1, -1, -1, 1])
-y_inf = np.array([1, -1, -1, 1, 1])
-
-# Plot the boundary and fill the interior
-plt.figure(figsize=(8, 8))
-plt.fill(x_inf, y_inf, color='grey', alpha=0.5)
-plt.plot(x_inf, y_inf, color='black')
-
-# Darken the x and y axis lines
-plt.axhline(0, color='black', linewidth=2)
-plt.axvline(0, color='black', linewidth=2)
-
-plt.title('Unit Ball under Infinity-Norm')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.grid(True)
-plt.axis('equal')
-plt.show()
-
-```
-
-## Matrix Norms Induced by Vector Norms
-
-Let $A\in\mathbb{R}^{m\times n}$, the induced matrix norm is defined as
-
-$$
-\Vert A \Vert_{(m,n)} = \sup_{\mathbf{x}\in\mathbb{R}^{n},~\mathbf{x}\neq 0}\frac{\Vert A\mathbf{x}\Vert_{(m)}}{\Vert \mathbf{x}\Vert_{(n)}}.
-$$
-
-::: {.notes}
-Mention that matrix norms are an essential tool for
-
-1. convergence analysis of algorithms
-1. Regularization terms
-1. Bounding errors
-1. Measuring sensitivity to changes in input
-:::
-
----
-
-The following are commonly used matrix norms
-
-1. $\Vert A \Vert_1 = \max_{1\leq j\leq n}\sum_{i=1}^{m} \vert a_{ij}\vert$
-1. $\Vert A \Vert_2 = \sigma_{\text{max}}(A)$, where $\sigma_{\text{max}}(A)$ is the largest singular value ^[We will cover singular values in later lectures.].
-1. $\Vert A \Vert_\infty = \max_{1\leq i\leq m}\sum_{j=1}^{n} \vert a_{ij}\vert$
-
-::: {.notes}
-1. 1-norm is max column sum
-1. Infinity norm is max row sum
-:::
-
----
-
-```{python}
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Define the matrix
-A = np.array([[1, 2], [0, 2]])
-
-# Define the unit circle
-theta = np.linspace(0, 2 * np.pi, 100)
-unit_circle = np.array([np.cos(theta), np.sin(theta)])
-
-# Transform the unit circle using the matrix A
-transformed_circle = A @ unit_circle
-
-# Find the vector on the unit circle that is amplified the most
-u, s, vh = np.linalg.svd(A)
-max_vector = vh[0]
-
-# Transform the max vector
-transformed_max_vector = A @ max_vector
-
-# Plot the original unit circle
-plt.plot(unit_circle[0], unit_circle[1], 'b--', label='Unit Circle')
-
-# Plot the transformed unit circle
-plt.plot(transformed_circle[0], transformed_circle[1], 'r-', label='Transformed Unit Circle')
-
-# Plot the max vector and its transformed image
-plt.plot([0, max_vector[0]], [0, max_vector[1]], 'g-', label='Max Vector')
-plt.plot([0, transformed_max_vector[0]], [0, transformed_max_vector[1]], 'k-', label='Transformed Max Vector')
-
-# Add labels and legend
-plt.xlabel('x')
-plt.ylabel('y')
-plt.axhline(0, color='black',linewidth=0.5)
-plt.axvline(0, color='black',linewidth=0.5)
-plt.grid(color = 'gray', linestyle = '--', linewidth = 0.5)
-plt.legend()
-plt.title('Image of the Unit Ball under the Matrix 2-Norm')
-plt.axis('equal')
-
-# Show the plot
-plt.show()
-```
-
-## Condition Number
-
-The condition number of a matrix is
-
-$$
-\kappa(A) = \Vert A \Vert \Vert A^{-1} \Vert.
-$$
-
-It is a measure of how sensitive the solution of a linear system is to changes in the input.
-
-::: {.notes}
-Mention that this tells you how numerically stable your computations are. You can expect to lose $\log(\kappa(A))$ digits in a computation. A
-:::
-
-## SPD Matrices
-
-A symmetric matrix $B$ is positive definite (SPD) if
-
-$$
-\mathbf{x}^{T}B\mathbf{x} > 0\quad \forall \mathbf{x}\neq 0.
-$$
-
-
-A symmetric matrix $B$ is positive semidefinite if
-
-$$
-\mathbf{x}^{T}B\mathbf{x} \geq 0\quad \forall \mathbf{x}\neq 0.
-$$
-
-If $B$ is SPD then $\Vert \mathbf{x}\Vert_{B}^{2} = \mathbf{x}^{T}B\mathbf{x}$ is a well-defined norm.
-
-
-## Frobenius Norm
-
-The Frobenius norm is defined as
-
-$$
-\Vert A \Vert_F = \left(\sum_{j=1}^{n}\sum_{i=1}^{m}\vert a_{ij}\vert^{2}\right)^{1/2} = \left(\sum_{j=1}^{n}\Vert \mathbf{a}_{j}\Vert_{2}^{2}\right)^{1/2}.
-$$
-
-The trace operator, $\operatorname{tr}(A) = \sum_{i=1}^{m}a_{ii}$
-
-
-$$
-\Vert A \Vert_F = \sqrt{\operatorname{tr}(A^{T}A)} = \sqrt{\operatorname{tr}(AA^{T})}.
-$$
-
-## Cauchy-Schwarz and H&ouml;lder Inequalities
-
-Let $p$ and $q$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, with $1\leq p,q\leq \infty$, then the H&ouml;lder inequality states that for any vectors $\mathbf{x}$ and $\mathbf{y}$
-
-$$
-\vert x^{T}y\vert \leq \Vert \mathbf{x}\Vert_{p}\Vert\mathbf{y}\Vert_{q}.
-$$
-
-The Cauchy-Schwarz inequality is a special case when $p=q=2$:
-
-$$
-\vert x^{T}y\vert \leq \Vert \mathbf{x}\Vert_{2}\Vert\mathbf{y}\Vert_{2}.
-$$
-
-## Complex Numbers
-
-As data scientists we predominantly work with the set of real numbers $\mathbb{R}$.
-
-However, the theoretical results that we discuss in this course work also apply for the set of complex numbers $\mathbb{C}$, i.e., numbers of the form $z=a+ib$, where $i=\sqrt{-1}$.
-
-The conjugate of a complex number is $\bar{z} = a-ib$. For real numbers $\bar{z}=z$.
-
----
-
-For vectors and matrices with complex numbers, we use the $^{*}$ notation to indicate the Hermitian conjugate. Given
-
-$$
-A = 
-\begin{bmatrix}
-a_{11} & a_{12}\\
-a_{21} & a_{22}\\
-a_{31} & a_{32}\\
-\end{bmatrix},
-$$
-the Hermitian conjugate is
-$$
-A^{*} = \bar{A}^{T} = 
-\begin{bmatrix}
-\bar{a}_{11} & \bar{a}_{21} & \bar{a}_{31}\\
-\bar{a}_{12} & \bar{a}_{22} & \bar{a}_{32}\\
-\end{bmatrix}
-$$
+A function can be continuous at a point without being differentiable at that point. The function $f(x) = \vert x\vert$ at $x=0$ is an example of a function that is continuous at $x=0$ but not differentiable at $x=0$.
 
 ## Summary
 
-We introduced:
+Today we introduced:
 
-:::: {.incremental}
-1. Key notation and terminology for vectors and matrices
-1. Vector spaces, Span, and Basis 
-1. Matrix-vector and matrix-matrix products
-1. How a neural network uses matrix operations for forward propagation
-1. Vector and matrix norms
-::::
+- mathematical notation used throughout the course
+- sets and functions
+- notation from calculus and probability
+- a brief review of logic
+- proofs by induction and contradiction
+
+Next time we will begin our dive into Linear Algebra, starting with vectors and matrices.
