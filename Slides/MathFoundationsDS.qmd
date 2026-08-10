@@ -49,10 +49,55 @@ In DS722 we'll explore:
 - Optimization
 - Probability and Statistics
 
+:::: {.fragment}
+Why these specific subjects?
+::::
+
 ::: {.notes}
 Mention each topic builds upon itself. It is essential to understand the early material in order to understand the later material.
 
 Discuss what is covered in each section.
+:::
+
+## Neural Networks
+
+Let's consider a neural network. Neural networks are a type of machine learning model that are inspired by the structure and function of the human brain. 
+
+To understand how these models work requires a solid understanding of all three components of our course, namely, 
+
+- linear algebra
+- optimization
+- probability/statistics
+
+---
+
+![Neural Network Architecture](figures/NeuralNetwork.png){fig-align="center"}
+
+::: {.notes}
+Consider a scenario where we are predicting whether a picture is cute/note cute.
+
+Formulas to cover:
+
+Forward propagation:
+$$
+a_{i}^{(l)} = \sigma\left(\sum_{j} w_{ij}^{(l)} a_{j}^{(l-1)} + b_i^{(l)}\right)
+$$
+
+Loss function:
+
+$$
+\mathcal{L}(y, \hat{y}) = -\sum_{i} y_i \log(\hat{y}_i),
+$$
+where $y$ is the true label and $\hat{y}$ is the predicted label. This loss is called the cross-entropy loss. It measures the difference between the true label and the predicted label.
+
+Probability/statistics is used to interpret the output of the neural network and understand its uncertainty. For example, we can use Bayesian methods to estimate the uncertainty in the predictions made by the neural network.
+
+Back propagation:
+
+$$
+\frac{\partial \mathcal{L}}{\partial w_{ij}^{(l)}} = \delta_i^{(l)} a_j^{(l-1)},
+$$
+where the error term $\delta_i^{(l)}$ is computed using the chain rule of calculus and represents how much the loss changes with respect to the weights.
 :::
 
 ## Course Staff{.smaller}
@@ -63,25 +108,25 @@ Discuss what is covered in each section.
 
 ![](figures/ladenheim.jpg){width="300px" fig-align="center"}
 
-* **OH:** WF 10:00-11:00am 
+* **OH:** M 3-4PM, Tu 10-11AM 
 * **Location:** CDS 1545
 * **Email:** saladenh &lt;at&gt; bu &lt;dot&gt; edu
 :::
 
 ::: {.column width="48%"}
-**Yuke Zhang** 
+**Yuke Zhange** 
 
 ![](figures/zhang.jpeg){width="210px" fig-align="center"}
 
-* **OH:** TuTh 10:00-11:00am
-* **Location:**  CDS 14th floor common area
+* **OH:** TBD
+* **Location:**  TBD
 * **Email:** yukez &lt;at&gt; bu &lt;dot&gt; edu
 :::
 ::::
 
 ## Course Resources
 
-- Piazza: [piazza.com/bu/fall2025/ds722](https://piazza.com/bu/fall2025/ds722)
+- Piazza: [piazza.com/bu/fall2026/ds722](https://piazza.com/bu/fall2026/ds722)
 - [Gradescope](https://www.gradescope.com/)
 
 ::: {.notes}
@@ -107,19 +152,17 @@ Highlight which books are predominantly used. Mention that suggested reading is 
 
 Your grade is comprised of:
 
-- Homework (20%)
-- Discussion participation (10%)
-- Midterm (35%)
-- Final (35%)
+- Homework (15%)
+- Discussion quizzes (25%)
+- Discussion attendance (5%)
+- Midterm (25%)
+- Final (30%)
 
 ## Homework
 
-- There are 8 total homework assignments.
+- There are weekly problem sets with roughly 5 questions per assignment.
 
-- Your lowest homework grade is dropped.
-
-- Students are allotted a total of 5 late homework days throughout the semester, with a maximum of 2 days
-allowed per assignment. Late submissions beyond this policy will not be accepted.
+- Students are allotted a total of 5 late homework days throughout the semester, with a maximum of 2 days allowed per assignment. Late submissions beyond this policy will not be accepted.
 
 ::: {.notes}
 Mention that HW will be more theoretical.
@@ -127,13 +170,18 @@ Mention that HW will be more theoretical.
 
 ## Discussions
 
-- Each week there are discussion sections. 
+- There are 12 discussion sections that occur each Thursday. 
 
-- Attendance will be recorded weekly during the 12 scheduled discussion sections. Students may miss up to 3
-sessions and still receive full participation credit. 
+- Attendance is recorded. Students may miss up to 3 sessions and still receive full participation credit. 
 
 - If more than 3 discussions are missed, participation credit
 will be prorated based on the percentage of sessions attended.
+
+- During the semester will be 6 discussion quizzes consisting of 4 questions worth 20 points. 2 questions will be based on problems in the problem set. The other 2 questions will be unseen problems. 
+
+- Non-quiz discussions sessions will work through computational problems using Jupytre notebooks. 
+
+## Discussion Quizzes
 
 ::: {.notes}
 Mention that discussions will be more computational.
@@ -242,18 +290,13 @@ You will gain more experience doing this during the first discussion.
 
 ## Generative AI Policy
 
-This course follows the **CDS Generative AI Assistance (GAIA) Policy**. 
-
-Please read and understand the policy:  
-[bu.edu/cds-faculty/culture-community/gaia-policy](https://www.bu.edu/cds-faculty/culture-community/gaia-policy)
-
-You must disclose how you use tools like ChatGPT in your work.
+Your are not prevented from using Generative AI tools to help with your homework. However, since you are tested on the material in discussions and exams, it is best practice to work on the problems yourselves first in order to better understand the material.
 
 ---
 
 ### Your Responsibility
 
-- You’re encouraged to use AI tools to explore and understand course material.
+- You may use AI tools to explore and understand course material.
 - AI should *support* your learning, not *replace* it.
 - Your insights and problem-solving skills are what truly count.
   
@@ -262,8 +305,6 @@ Relying too heavily on tools without mastering concepts may affect your performa
 **Use AI as a learning aid—not a substitute for thinking.**
 
 ::: {.notes}
-Mention that you ran most of the problems through ChatGPT and there are a good percentage that it is not able to solve. I'll know if you are using it.
-
 It is a very useful tool for helping you code/plot/visualize in discussion.
 :::
 
@@ -272,26 +313,22 @@ It is a very useful tool for helping you code/plot/visualize in discussion.
 Discussion with classmates is permitted,  
 but copying answers or plagiarizing is strictly prohibited.
 
-Your submitted work must be entirely your own.  
+Your submitted work must your own.  
 All members of the class—including teaching staff—must uphold the [Academic Code of Conduct](http://www.bu.edu/dos/policies/student-responsibilities/)
 
-## Searching for Solutions Online
-
-Before turning to the internet, ask yourself:
+## Getting Help
 
 1. **Stuck on where to begin?**  
    Reach out to a TF or post on Piazza. You’ll often get helpful guidance quickly.
 
 1. **Trying to validate your solution?**  
-   Can you find a way to verify it independently? That’s a powerful learning opportunity.
+   Can you find a way to verify your solution without google or AI assistance? That’s a powerful learning opportunity.
 
-1. **Short on time and tempted to search?**  
-   Consider this:
-   - It’s intellectually dishonest.  
-   - You’ll need to solve similar problems on exams.  
-   - You may skip one homework without penalty.
+1. **Visit me in office hours.**  
+   I’m happy to discuss your approach, clarify concepts, and provide feedback.
 
-It's better to submit what you have and plan ahead for future assignments.
+
+## 
 
 ## Math is Fun
   
@@ -301,3 +338,15 @@ Feel free to ask questions, share your thoughts, and challenge ideas.
 Your curiosity is the key to a great learning experience!
 
 _You’re not just here to absorb knowledge—you’re here to apply it, explore it, and transform it._
+
+
+## Next Class
+
+We will introduce:
+
+- Mathematical notation 
+- Logic 
+- Proofs
+- Vectors
+
+Have a nice weekend!
