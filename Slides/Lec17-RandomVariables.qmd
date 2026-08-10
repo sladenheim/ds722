@@ -921,7 +921,7 @@ A random vector $X = (X_{1},\ldots X_{n})$ has a multivariate normal distributio
 
 $$
 \small
-f(\mathbf{x}; \mu, \Sigma) = \frac{1}{(2\pi)^{k/2}\vert \Sigma \vert^{1/2}}\operatorname{exp}\left\{-\frac{1}{2}(\mathbf{x}-\mu)^{T}\Sigma^{-1}(\mathbf{x}-\mu) \right\},
+f(\mathbf{x}; \mu, \Sigma) = \frac{1}{(2\pi)^{k/2}\vert \Sigma \vert^{1/2}}\operatorname{exp}\left\{-\frac{1}{2}(\mathbf{x}-\mu)^{\top}\Sigma^{-1}(\mathbf{x}-\mu) \right\},
 $$
 
 where $\mu\in\mathbb{R}^{n}$ is the vector of means of each $X_{i}$, $\Sigma\in\mathbb{R}^{n\times n}$ is the symmetric positive definite covariance matrix, and $\vert \Sigma \vert$ is the determinant of $\Sigma$.

@@ -428,7 +428,7 @@ Suppose that $f:\mathbb{R}^{n}\rightarrow \mathbb{R}$ is twice continuously diff
 
 $$
 \small
-f(x+p) = f(x) + \nabla f(x)^{T}p + \frac{1}{2}p^{T}\nabla^{2} f(x+tp)p,
+f(x+p) = f(x) + \nabla f(x)^{\top}p + \frac{1}{2}p^{\top}\nabla^{2} f(x+tp)p,
 $$
 for some $t\in(0,1)$.
 
@@ -443,7 +443,7 @@ If $x^{*}$ is a local minimizer and $f$ is continuously differentiable in an ope
 ## Second Order Necessary Conditions
 
 **Theorem**
-If $x^{*}$ is a local minimizer and $f$ and $\nabla^{2} f$ exists and is continuously differentiable in an open neighborhood of $x^{*}$, then $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive semidefinite, i.e., $p^{T}\nabla^{2} f(x^{*})p \geq 0~\forall p$.
+If $x^{*}$ is a local minimizer and $f$ and $\nabla^{2} f$ exists and is continuously differentiable in an open neighborhood of $x^{*}$, then $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive semidefinite, i.e., $p^{\top}\nabla^{2} f(x^{*})p \geq 0~\forall p$.
 
 
 
@@ -452,7 +452,7 @@ If $x^{*}$ is a local minimizer and $f$ and $\nabla^{2} f$ exists and is continu
 Sufficient conditions are conditions on the derivatives of $f$ that guarantee that $x^{*}$ is a local minimizer.
 
 **Theorem**
-Suppose that $\nabla^{2} f$ is continuous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive definite, i.e., $p^{T}\nabla^{2} f(x^{*})p > 0~\forall p$. Then $x^{*}$ is a local minimizer of $f$.
+Suppose that $\nabla^{2} f$ is continuous in an open neighborhood of $x^{*}$ and that $\nabla f(x^{*})=0$ and $\nabla^{2} f(x^{*})$ is positive definite, i.e., $p^{\top}\nabla^{2} f(x^{*})p > 0~\forall p$. Then $x^{*}$ is a local minimizer of $f$.
 
 ## From Local to Global
 

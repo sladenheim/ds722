@@ -15,7 +15,6 @@ This lecture sets the stage for our future understanding of
 - Singular Value Decomposition (PCA)
 ::::
 
-
 ## Lecture Objectives
 
 - Define orthogonal vectors and orthogonal matrices
@@ -80,25 +79,25 @@ plt.show()
 
 ## Notation
 
-A vector $\mathbf{v}$ is a unit vector (normalized) if $\Vert \mathbf{v}\Vert_2 = 1$.
+A vector $v$ is a unit vector (normalized) if $\Vert v\Vert_2 = 1$.
 
 Recall that 
 
-- the transpose of a matrix $Q$ with elements $(Q)_{ij}$ is the matrix $Q^{T}$, where $(Q^{T})_{ij} = (Q)_{ji}$
-- a matrix $Q\in\mathbb{R}^{m\times m}$ is symmetric if $Q=Q^{T}$
+- the transpose of a matrix $Q$ with elements $(Q)_{ij}$ is the matrix $Q^{\top}$, where $(Q^{\top})_{ij} = (Q)_{ji}$
+- a matrix $Q\in\mathbb{R}^{m\times m}$ is symmetric if $Q=Q^{\top}$
 
 ## Orthogonal Vectors
 
-Two vectors $\mathbf{q}_1$ and $\mathbf{q}_2$ are orthogonal when
+Two vectors $q_1$ and $q_2$ are orthogonal when
 
 $$
-\mathbf{q}_{2}^{T}\mathbf{q}_1 = 0.
+q_{2}^{\top}q_1 = 0.
 $$
 
-A set of vectors $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots, \mathbf{q}_n \}$ are orthogonal if every pair of vectors is orthogonal, i.e.,
+A set of vectors $S = \{q_1, q_2, \ldots, q_n \}$ are orthogonal if every pair of vectors is orthogonal, i.e.,
 
 $$
-\mathbf{q}_{i}^{T}\mathbf{q}_{j} = 0 \quad \text{for all} \quad i\neq j.
+q_{i}^{\top}q_{j} = 0 \quad \text{for all} \quad i\neq j.
 $$
 
 A set of vectors $S$ is orthonormal if every vector in S is orthogonal and is a unit vector.
@@ -119,7 +118,7 @@ The vectors $\begin{bmatrix} 1 & 0 & 1\end{bmatrix}$ and $\begin{bmatrix} 1 & 1 
 
 ### Inner Product Geometry
 
-Let $\mathbf{x},\mathbf{y}\in\mathbb{R}^{2}$, how can we picture the inner product $(\mathbf{x},\mathbf{y}) = \mathbf{y}^{T}\mathbf{x}$?
+Let $x,y\in\mathbb{R}^{2}$, how can we picture the inner product $(x,y) = y^{\top}x$?
 
 
 ---
@@ -139,10 +138,10 @@ proj_y_on_x = proj_scalar * x
 
 # Plot the vectors
 plt.figure(figsize=(6,6))
-plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{x}$')
-plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', scale=1, color='b', label=r'$\mathbf{y}$')
+plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$x$')
+plt.quiver(0, 0, y[0], y[1], angles='xy', scale_units='xy', scale=1, color='b', label=r'$y$')
 plt.quiver(0, 0, proj_y_on_x[0], proj_y_on_x[1], angles='xy', scale_units='xy', scale=1, color='g',
-           label=r'$\mathrm{proj}_{\mathbf{x}}\mathbf{y} = \frac{\mathbf{x}^T\mathbf{y}}{\mathbf{x}^T\mathbf{x}}\mathbf{x}$')
+           label=r'$\mathrm{proj}_{x}y = \frac{x^{\top}y}{x^{\top}x}x$')
 
 # Compute the cosine of the angle between x and y
 cos_theta = np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
@@ -160,7 +159,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.grid(True)
 plt.legend()
-plt.title(r'Inner Product and Projection of $\mathbf{y}$ onto $\mathbf{x}$')
+plt.title(r'Inner Product and Projection of $y$ onto $x$')
 
 plt.show()
 ```
@@ -174,16 +173,16 @@ The vectors in an orthogonal set $S$ are linearly independent.
 
 Inner products can be used to decompose arbitrary vectors into orthogonal components.
 
-Consider a set $S = \{\mathbf{q}_1, \mathbf{q}_2, \ldots \mathbf{q}_n \}$ of $m$-dimensional orthonormal vectors and let $\mathbf{v}$ be an arbitrary vector.
+Consider a set $S = \{q_1, q_2, \ldots q_n \}$ of $m$-dimensional orthonormal vectors and let $v$ be an arbitrary vector.
 
-The quantity $\mathbf{q}_{j}^T\mathbf{v}$ is a scalar and we can use these as the coefficients of a linear combination of vectors $\mathbf{q}_{i}$ in order to express $\mathbf{v}$.
+The quantity $q_{j}^{\top}v$ is a scalar and we can use these as the coefficients of a linear combination of vectors $q_{i}$ in order to express $v$.
 
 --- 
 
 Observe that the vector 
 
 $$
-\mathbf{r} = \mathbf{v} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2} - \cdots - (\mathbf{q}_{n}^T\mathbf{v})\mathbf{q}_{n}
+r = v - (q_{1}^{\top}v)q_{1} - (q_{2}^{\top}v)q_{2} - \cdots - (q_{n}^{\top}v)q_{n}
 $$
 
 is orthogonal to $S$.
@@ -193,7 +192,7 @@ is orthogonal to $S$.
 Consequently we can always express
 
 $$
-\mathbf{v} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}^T\mathbf{v})\mathbf{q}_{i} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}\mathbf{q}_{i}^T)\mathbf{v}. 
+v = r + \sum_{i=1}^{n}(q_{i}^{\top}v)q_{i} = r + \sum_{i=1}^{n}(q_{i}q_{i}^{\top})v. 
 $$
 
 
@@ -202,7 +201,7 @@ $$
 Consider the vector and orthonormal set
 
 $$
-\mathbf{v} = 
+v = 
 \begin{bmatrix}
 1 \\
 -1 \\
@@ -227,7 +226,7 @@ $$
 Let's calculate the decomposition
 
 $$
-\mathbf{r} = \mathbf{v} - (\mathbf{q}_{1}^T\mathbf{v})\mathbf{q}_{1} - (\mathbf{q}_{2}^T\mathbf{v})\mathbf{q}_{2}.
+r = v - (q_{1}^{\top}v)q_{1} - (q_{2}^{\top}v)q_{2}.
 $$
 
 ---
@@ -236,9 +235,9 @@ $$
 
 ## Orthogonal Matrices
 
-A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{T}Q = QQ^{T} = I$.
+A matrix $Q\in\mathbb{R}^{m\times m}$ is orthogonal if $Q^{\top}Q = QQ^{\top} = I$.
 
-Equivalently, $Q^{T} = Q^{-1}$, i.e., $Q^{T}$ is the inverse of $Q$.
+Equivalently, $Q^{\top} = Q^{-1}$, i.e., $Q^{\top}$ is the inverse of $Q$.
 
 If the matrix $Q\in\mathbb{C}^{m\times m}$ and $Q^{*}Q = QQ^{*} = I$, we say the matrix is *unitary*.
 
@@ -259,17 +258,17 @@ There are two kinds of projectors:
 
 ---
 
-Imagine we shine a light onto the subspace $\operatorname{range}(P)$ from a particular direction, then $P\mathbf{v}$ is the shadow projected by the vector $\mathbf{v}$.
+Imagine we shine a light onto the subspace $\operatorname{range}(P)$ from a particular direction, then $Pv$ is the shadow projected by the vector $v$.
 
-If $\mathbf{v}\in\operatorname{range}(P)$, then $P\mathbf{v}$ lies precisely on its own shadow. Let $\mathbf{v} = P\mathbf{x}$, then
+If $v\in\operatorname{range}(P)$, then $Pv$ lies precisely on its own shadow. Let $v = Px$, then
 
 $$
-P\mathbf{v} = P^{2}\mathbf{x} = P\mathbf{x} = \mathbf{v}.
+Pv = P^{2}x = Px = v.
 $$
 
 ---
 
-What direction does the light shine if $\mathbf{v}\neq P\mathbf{v}$?
+What direction does the light shine if $v\neq Pv$?
 
 ```{python}
 #| label: fig-oblique-projection
@@ -318,16 +317,16 @@ An orthogonal projector is one that projects onto a subspace $S_1$ along a space
 *Orthogonal projectors are NOT orthogonal matrices*
 
 **Theorem**
-A projector $P$ is orthogonal if and only if $P=P^{T}$.
+A projector $P$ is orthogonal if and only if $P=P^{\top}$.
 
 ## Projection with an Orthonormal Basis
 
-Let $\{\mathbf{q}_{1},\ldots,\mathbf{q}_{n} \}$ be a set of  $n$ orthonormal vectors in $\mathbb{R}^{m}$. Recall that any vector 
-$\mathbf{v}$ has the decomposition
+Let $\{q_{1},\ldots,q_{n} \}$ be a set of  $n$ orthonormal vectors in $\mathbb{R}^{m}$. Recall that any vector 
+$v$ has the decomposition
 $$
-\mathbf{v} = \mathbf{r} + \sum_{i=1}^{n}(\mathbf{q}_{i}\mathbf{q}_{i}^{*})\mathbf{v},
+v = r + \sum_{i=1}^{n}(q_{i}q_{i}^{*})v,
 $$
-where $\mathbf{r}$ is orthogonal to $\{\mathbf{q}_1,\ldots,\mathbf{q}_{n} \}$.
+where $r$ is orthogonal to $\{q_1,\ldots,q_{n} \}$.
 
 ---
 
@@ -337,37 +336,37 @@ $$
 Q = 
 \begin{bmatrix}
 \vert & & \vert \\
-\mathbf{q}_{1} & \cdots& \mathbf{q_{n}} \\
+q_{1} & \cdots& q_{n} \\
 \vert & & \vert \\
 \end{bmatrix},
 $$
 
-then $QQ^{T}$ is an orthogonal projector onto $\operatorname{range}(Q)$. 
+then $QQ^{\top}$ is an orthogonal projector onto $\operatorname{range}(Q)$. 
 
 *Any* product of this form is a projector onto the column space of $Q$ as long as its columns are orthonormal.
 
-Note that $I-QQ^{T}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{range}(Q)$.
+Note that $I-QQ^{\top}$ is also an orthogonal projector and projects onto the space orthogonal to $\operatorname{range}(Q)$.
 
 ---
 
 Here is an important example of an orthogonal projector:
 
 $$
-P_{q} = \mathbf{q}\mathbf{q}^{T}. 
+P_{q} = qq^{\top}. 
 $$
 
 
-The matrix $P_{q}$ is a rank one orthogonal projector that isolates the component of a vector in the direction of $\mathbf{q}$.
+The matrix $P_{q}$ is a rank one orthogonal projector that isolates the component of a vector in the direction of $q$.
 
 ---
 
-Can we reconstruct $QQ^{T}$ from $P_{q_i}$?
+Can we reconstruct $QQ^{\top}$ from $P_{q_i}$?
 
 ---
 
 Here is another important example of an orthogonal projector:
 $$
-P_{\perp q} = I-\mathbf{q}\mathbf{q}^{T}. 
+P_{\perp q} = I-qq^{\top}. 
 $$
 
 The matrix $P_{\perp q}$ is the rank $m-1$ orthogonal projector which eliminates components of a vector in the direction of $q$.
@@ -377,10 +376,10 @@ It is the complementary projector of $P_{q}$.
 
 ## Example
 
-Consider the following vector $\mathbf{v} = \begin{bmatrix} 1 & 2 \end{bmatrix}$ and orthonormal vector $\mathbf{q}_{1}=
+Consider the following vector $v = \begin{bmatrix} 1 & 2 \end{bmatrix}$ and orthonormal vector $q_{1}=
 \frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \end{bmatrix}$.
 
-Let's visualize the orthogonal projection of $\mathbf{v}$ onto $q_{1}$ and the orthogonal complement
+Let's visualize the orthogonal projection of $v$ onto $q_{1}$ and the orthogonal complement
 
 ---
 
@@ -403,14 +402,14 @@ Pq_perp = np.eye(2) - Pq
 proj_v_perp = Pq_perp @ v
 
 # Plot the original vector v
-plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$\mathbf{v}$')
+plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, color='r', label=r'$v$')
 
 # Plot the projections of Pq @ v and (I-Pq) @ v
-plt.quiver(0, 0, proj_v_q1[0], proj_v_q1[1], angles='xy', scale_units='xy', scale=1, color='c', label=r'$P_{q_{1}}\mathbf{v}$')
-plt.quiver(0, 0, proj_v_perp[0], proj_v_perp[1], angles='xy', scale_units='xy', scale=1, color='m', label=r'$(I-P_{q_{1}})\mathbf{v}$')
+plt.quiver(0, 0, proj_v_q1[0], proj_v_q1[1], angles='xy', scale_units='xy', scale=1, color='c', label=r'$P_{q_{1}}v$')
+plt.quiver(0, 0, proj_v_perp[0], proj_v_perp[1], angles='xy', scale_units='xy', scale=1, color='m', label=r'$(I-P_{q_{1}})v$')
 
 # Plot the vector q_1 
-plt.quiver(0, 0, q1[0], q1[1], angles='xy', scale_units='xy', scale=1, color='g', label=r'$\mathbf{q}_1$')
+plt.quiver(0, 0, q1[0], q1[1], angles='xy', scale_units='xy', scale=1, color='g', label=r'$q_1$')
 
 # Set the limits and labels
 plt.xlim(-2, 2)
@@ -419,39 +418,39 @@ plt.axhline(0, color='grey', lw=0.5)
 plt.axvline(0, color='grey', lw=0.5)
 plt.grid(True)
 plt.legend(loc='upper left')
-plt.title(r'Projection of vector $\mathbf{v}$')
+plt.title(r'Projection of vector $v$')
 plt.xlabel('x')
 plt.ylabel('y')
 
 inner_product = np.dot(proj_v_q1, proj_v_perp)
 
-plt.text(-0.5, -1.5, f"$\\text{{Inner product between }} P_{{\\mathbf{{q}}_1}} \\mathbf{{v}} \\text{{ and }} (I - P_{{\\mathbf{{q}}_1}}) \\mathbf{{v}}: {inner_product:.2f}$", fontsize=12, bbox=dict(facecolor='white', alpha=0.5))
+plt.text(-0.5, -1.5, f"$\\text{{Inner product between }} P_{{q_1}} v \\text{{ and }} (I - P_{{q_1}}) v: {inner_product:.2f}$", fontsize=12, bbox=dict(facecolor='white', alpha=0.5))
 
 # Show the plot
 plt.show()
 ```
 
-## Projection with $\mathbf{a}$
+## Projection with $a$
 
-For an arbitrary non-unit vector $\mathbf{a}$, the analogous operators are
+For an arbitrary non-unit vector $a$, the analogous operators are
 
 $$
-P_{a} = \frac{\mathbf{a}\mathbf{a}^{T}}{\mathbf{a}^{T}\mathbf{a}},
+P_{a} = \frac{aa^{\top}}{a^{\top}a},
 $$
 
 and
 
 $$
-P_{\perp a} = I-\frac{\mathbf{a}\mathbf{a}^{T}}{\mathbf{a}^{T}\mathbf{a}}. 
+P_{\perp a} = I-\frac{aa^{\top}}{a^{\top}a}. 
 $$
 
 ## Projection with an Arbitrary Basis
 
-It is also possible to construct an orthogonal projector onto a subspace of $\mathbb{R}^{m}$ from an arbitrary basis. Suppose that we have a linearly independent set of vectors $\{\mathbf{a}_1,\ldots, \mathbf{a}_{n} \}$ spanning this subspace.
+It is also possible to construct an orthogonal projector onto a subspace of $\mathbb{R}^{m}$ from an arbitrary basis. Suppose that we have a linearly independent set of vectors $\{a_1,\ldots, a_{n} \}$ spanning this subspace.
 
-Let $\mathbf{v}$ be an arbitrary vector in $\mathbb{R}^{m}$ and let $\mathbf{y}\in\operatorname{range}(A)$ be the orthogonal projection of $\mathbf{v}$ into the column space.
+Let $v$ be an arbitrary vector in $\mathbb{R}^{m}$ and let $y\in\operatorname{range}(A)$ be the orthogonal projection of $v$ into the column space.
 
-The difference $\mathbf{y}-\mathbf{v}$ is orthogonal to $\operatorname{range}(A)$.
+The difference $y-v$ is orthogonal to $\operatorname{range}(A)$.
 
 Can you visualize this?
 
@@ -460,43 +459,43 @@ Can you visualize this?
 By the definition of orthogonality it must be true that for all $j=1,\ldots,n$
 
 $$
-\mathbf{a}_{j}^{T}(\mathbf{y}-\mathbf{v}) = 0.
+a_{j}^{\top}(y-v) = 0.
 $$
 
-If we write $\mathbf{y} = A\mathbf{x}$, then equivalently
+If we write $y = Ax$, then equivalently
 
 $$
-A^{T}(A\mathbf{x}-\mathbf{v}) = 0.
+A^{\top}(Ax-v) = 0.
 $$
 
 ---
 
-The matrix $A$ has n linearly independent columns, so it must have full rank. This implies that $A^{T}A$ is invertible, thus we can show
+The matrix $A$ has n linearly independent columns, so it must have full rank. This implies that $A^{\top}A$ is invertible, thus we can show
 
 ::: {.notes}
 Assume that $A$ has full rank, then we know that $Ax=0$ if and only if $x=0$. Now,
-if $A^{T}Ax=0$ then we must show $x=0$. Consider
+if $A^{\top}Ax=0$ then we must show $x=0$. Consider
 
 $$
-0 = x^{T}A^{T}Ax = (Ax)^{T}Ax = \Vert Ax\Vert_{2}^{2}. 
+0 = x^{\top}A^{\top}Ax = (Ax)^{\top}Ax = \Vert Ax\Vert_{2}^{2}. 
 $$
 Since the above is a norm, we must have that $Ax=0$, which implies $x=0$.
 :::
 
 $$
-\mathbf{x} = (A^{T}A)^{-1}A^{T}\mathbf{v}.
+x = (A^{\top}A)^{-1}A^{\top}v.
 $$
 
-Consequently, $\mathbf{y} = A(A^{T}A)^{-1}A^{T}\mathbf{v}$ and so for an arbitrary basis, the orthogonal projector onto $\operatorname{range}(A)$ is
+Consequently, $y = A(A^{\top}A)^{-1}A^{\top}v$ and so for an arbitrary basis, the orthogonal projector onto $\operatorname{range}(A)$ is
 
 $$
-P = A(A^{T}A)^{-1}A^{T}.
+P = A(A^{\top}A)^{-1}A^{\top}.
 $$
 
 
 ## Example
 
-Let's visualize the projection of the vector $\mathbf{v} = [1, 2, 3]^{T}$ onto the range of
+Let's visualize the projection of the vector $v = [1, 2, 3]^{\top}$ onto the range of
 
 $$
 A =
@@ -532,14 +531,14 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 # Plot the original vector v
-ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label=r'$\mathbf{v}$')
+ax.quiver(0, 0, 0, v[0], v[1], v[2], color='r', label=r'$v$')
 
 # Plot the projection of v onto the column space of A
-ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label=r'$A(A^{T}A)^{-1}A^{T}\mathbf{v}$')
+ax.quiver(0, 0, 0, proj_v[0], proj_v[1], proj_v[2], color='b', label=r'$A(A^{\top}A)^{-1}A^{\top}v$')
 
 # Plot the basis vectors of the column space of A
 for i, vec in enumerate(basis_vectors):
-    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'$\mathbf{{a}}_{{{i+1}}}$')
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'$a_{{{i+1}}}$')
 
 # Plot the plane spanned by the column space of A
 x = np.linspace(-1, 2, 10)

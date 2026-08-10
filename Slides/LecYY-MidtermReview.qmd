@@ -32,7 +32,7 @@ Important to know:
 ### Inner Product
 Let $x,y\in\mathbb{R}^{n}$ then
 $$
-x\cdot y = x^T y = \sum_{i=1}^n x_i y_i.
+x\cdot y = x^{\top} y = \sum_{i=1}^n x_i y_i.
 $$
 
 
@@ -94,23 +94,23 @@ $$
 
 **Example**
 
-Assume that $A\in\mathbb{R}^{m\times m}$ has the factorization $A=LDU$. Show that if $A$ is symmetric ($A=A^{T}$), then $U=L^{T}$.
+Assume that $A\in\mathbb{R}^{m\times m}$ has the factorization $A=LDU$. Show that if $A$ is symmetric ($A=A^{\top}$), then $U=L^{\top}$.
 
 ::: {.notes}
 $$
-A=LDU \qquad\Rightarrow\qquad A^T=U^T D L^T,
+A=LDU \qquad\Rightarrow\qquad A^{\top}=U^{\top} D L^{\top},
 $$
-and if $A=A^T$ then
+and if $A=A^{\top}$ then
 $$
-LDU=U^T D L^T.
+LDU=U^{\top} D L^{\top}.
 $$
-Assuming the usual normalization ($L$ unit lower-triangular, $U$ unit upper-triangular, $D$ diagonal), the LU factorization with this normalization is unique. Comparing the two factorizations of $A$ (one with factors $L,D,U$, the other with $U^T,D,L^T$) forces
+Assuming the usual normalization ($L$ unit lower-triangular, $U$ unit upper-triangular, $D$ diagonal), the LU factorization with this normalization is unique. Comparing the two factorizations of $A$ (one with factors $L,D,U$, the other with $U^{\top},D,L^{\top}$) forces
 $$
-U^T=L\quad\text{and}\quad L^T=U,
+U^{\top}=L\quad\text{and}\quad L^{\top}=U,
 $$
 hence
 $$
-U=L^T.
+U=L^{\top}.
 $$
 :::
 
@@ -142,7 +142,7 @@ Q=\begin{bmatrix}
 \end{bmatrix}
 $$
 
-Verify that $Q^{T}Q=I$ (equivalently, its columns are orthonormal).
+Verify that $Q^{\top}Q=I$ (equivalently, its columns are orthonormal).
 
 
 ## Projections
@@ -157,7 +157,7 @@ Important to know:
 **Projection matrix.**
 A matrix $P \in \mathbb{R}^{n\times n}$ is a projection if $P^2 = P$ (idempotent).
 - Projection onto the column space of $A$ ($A \in \mathbb{R}^{n\times k}$, full column rank):
-    $P = A (A^T A)^{-1} A^T$.
+    $P = A (A^{\top} A)^{-1} A^{\top}$.
 - In general an (oblique) projector maps $\mathbb{R}^n$ onto a subspace $S$ along some complementary subspace $N$; $\operatorname{range}(P)=S$ and $\operatorname{null}(P)=N$.
 
 **Complementary projector.**
@@ -167,9 +167,9 @@ It projects onto the complementary subspace (the subspace along which $P$ projec
 - $P + P_c = I$, $P P_c = 0$, $P_c^2 = P_c$.
 
 **Orthogonal projector.**
-A projector $P$ is orthogonal iff it is symmetric as well: $P = P^T$ and $P^2 = P$.
+A projector $P$ is orthogonal iff it is symmetric as well: $P = P^{\top}$ and $P^2 = P$.
 - If $Q \in \mathbb{R}^{n\times k}$ has orthonormal columns spanning $S$, the orthogonal projector onto $S$ is
-    $P = Q Q^T$.
+    $P = Q Q^{\top}$.
 - For an orthogonal projector: $\operatorname{range}(P)=S$ and $\operatorname{null}(P)=S^\perp$. Orthogonal projectors minimize Euclidean distance to the subspace.
 :::
 
@@ -196,7 +196,7 @@ Let $A\in\mathbb{R}^{m\times n}$
 1. for $j=1,\ldots, n$
 1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
 1. $\quad\quad$ for $i=1,\ldots, j-1$
-1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{T}\mathbf{a}_{j}$ 
+1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{\top}\mathbf{a}_{j}$ 
 1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
 1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
 1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
@@ -227,18 +227,18 @@ b=\begin{bmatrix}
 \end{bmatrix}.
 $$
 
-Compute the least squares solution $\hat{x}$ that minimizes $\|Ax-b\|_2$. Solve the normal equations $A^{T}A\hat{x}=A^{T}b$, and report $\hat{x}$, the residual $r=b-A\hat{x}$, and $\|r\|_2$.
+Compute the least squares solution $\hat{x}$ that minimizes $\|Ax-b\|_2$. Solve the normal equations $A^{\top}A\hat{x}=A^{\top}b$, and report $\hat{x}$, the residual $r=b-A\hat{x}$, and $\|r\|_2$.
 
 ---
 
 **Solution**
 
 ::: {.notes}
-Compute the normal equations: $A^T A \hat{x} = A^T b$.
+Compute the normal equations: $A^{\top} A \hat{x} = A^{\top} b$.
 
 $$
-A^T A = \begin{bmatrix}2 & 1 \\ 1 & 6\end{bmatrix}, \qquad
-A^T b = \begin{bmatrix}3 \\ 7\end{bmatrix}.
+A^{\top} A = \begin{bmatrix}2 & 1 \\ 1 & 6\end{bmatrix}, \qquad
+A^{\top} b = \begin{bmatrix}3 \\ 7\end{bmatrix}.
 $$
 
 Solve

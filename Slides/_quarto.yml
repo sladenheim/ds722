@@ -4,31 +4,31 @@ project:
   render:
     - index.qmd
     - MathFoundationsDS.qmd
-    - Lec00-VectorsMatrices1.qmd
-    - Lec01-VectorsMatrices2.qmd
-    - Lec02-OrthogonalityProjections.qmd
-    - Lec03-QRFactorization.qmd
-    - Lec04-LeastSquares.qmd
-    - Lec05-LinearSystems.qmd
-    - Lec06-Eigenvalues.qmd
-    - Lec07-SVD.qmd
-    - Lec08-Derivatives1.qmd
-    - Lec09-Derivatives2.qmd
-    - Lec10-Integration.qmd
-    - Lec11-Optimization1.qmd
-    - Lec12-Optimization2.qmd
-    - Lec13-Optimization3.qmd
-    - Lec14-Optimization4.qmd
-    - Lec15-ProbabilityIntroduction.qmd
-    - Lec16-RandomVariables.qmd
-    - Lec17-Expectation.qmd
-    - Lec18-InequalitiesLimitTheorems.qmd
-    - Lec19-ParameterEstimationMLE.qmd
-    - Lec20-BayesianStatistics1.qmd
-    - Lec21-BayesianStatistics2.qmd
-    - Lec22-MarkovChains.qmd
-    # - Lec23-HiddenMarkovModels.qmd   # empty file; re-add once it has content
-    # - Lec24-SamplingAlgorithms.qmd   # empty file; re-add once it has content
+    - Lec01-MathBasics.qmd
+    - Lec02-VectorsMatrices.qmd
+    - Lec03-OrthogonalityProjections.qmd
+    - Lec04-QRFactorization.qmd
+    - Lec05-LeastSquares.qmd
+    - Lec06-LinearSystems.qmd
+    - Lec07-Eigenvalues.qmd
+    - Lec08-SVD.qmd
+    - Lec09-Derivatives1.qmd
+    - Lec10-Derivatives2.qmd
+    - Lec11-Integration.qmd
+    - Lec12-Optimization1.qmd
+    - Lec13-Optimization2.qmd
+    - Lec14-Optimization3.qmd
+    - Lec15-Optimization4.qmd
+    - Lec16-ProbabilityIntroduction.qmd
+    - Lec17-RandomVariables.qmd
+    - Lec18-Expectation.qmd
+    - Lec19-InequalitiesLimitTheorems.qmd
+    - Lec20-ParameterEstimationMLE.qmd
+    - Lec21-BayesianStatistics1.qmd
+    - Lec22-BayesianStatistics2.qmd
+    - Lec23-MarkovChains.qmd
+    # - Lec24-HiddenMarkovModels.qmd   # empty file; re-add once it has content
+    # - Lec25-SamplingAlgorithms.qmd   # empty file; re-add once it has content
     # - LecYY-MidtermReview.qmd
 
 website:
@@ -42,35 +42,35 @@ website:
         text: Overview
       - text: "Linear Algebra"
         menu:
-          - { href: Lec00-VectorsMatrices1.qmd,        text: "Vectors & Matrices I" }
-          - { href: Lec01-VectorsMatrices2.qmd,        text: "Vectors & Matrices II" }
-          - { href: Lec02-OrthogonalityProjections.qmd, text: "Orthogonality & Projections" }
-          - { href: Lec03-QRFactorization.qmd,         text: "QR Factorization" }
-          - { href: Lec04-LeastSquares.qmd,            text: "Least Squares" }
-          - { href: Lec05-LinearSystems.qmd,           text: "Linear Systems & LU" }
-          - { href: Lec06-Eigenvalues.qmd,             text: "Eigenvalues" }
-          - { href: Lec07-SVD.qmd,                     text: "Singular Value Decomposition" }
+          - { href: Lec01-MathBasics.qmd,        text: "Math Basics" }
+          - { href: Lec02-VectorsMatrices.qmd,        text: "Vectors & Matrices" }
+          - { href: Lec03-OrthogonalityProjections.qmd, text: "Orthogonality & Projections" }
+          - { href: Lec04-QRFactorization.qmd,         text: "QR Factorization" }
+          - { href: Lec05-LeastSquares.qmd,            text: "Least Squares" }
+          - { href: Lec06-LinearSystems.qmd,           text: "Linear Systems & LU" }
+          - { href: Lec07-Eigenvalues.qmd,             text: "Eigenvalues" }
+          - { href: Lec08-SVD.qmd,                     text: "Singular Value Decomposition" }
       - text: "Calculus"
         menu:
-          - { href: Lec08-Derivatives1.qmd, text: "Derivatives I" }
-          - { href: Lec09-Derivatives2.qmd, text: "Derivatives II" }
-          - { href: Lec10-Integration.qmd,  text: "Integration" }
+          - { href: Lec09-Derivatives1.qmd, text: "Derivatives I" }
+          - { href: Lec10-Derivatives2.qmd, text: "Derivatives II" }
+          - { href: Lec11-Integration.qmd,  text: "Integration" }
       - text: "Optimization"
         menu:
-          - { href: Lec11-Optimization1.qmd, text: "Optimization" }
-          - { href: Lec12-Optimization2.qmd, text: "First-Order Methods" }
-          - { href: Lec13-Optimization3.qmd, text: "Second-Order Methods" }
-          - { href: Lec14-Optimization4.qmd, text: "Quasi-Newton Methods" }
+          - { href: Lec12-Optimization1.qmd, text: "Optimization" }
+          - { href: Lec13-Optimization2.qmd, text: "First-Order Methods" }
+          - { href: Lec14-Optimization3.qmd, text: "Second-Order Methods" }
+          - { href: Lec15-Optimization4.qmd, text: "Quasi-Newton Methods" }
       - text: "Probability & Statistics"
         menu:
-          - { href: Lec15-ProbabilityIntroduction.qmd,   text: "Introduction to Probability" }
-          - { href: Lec16-RandomVariables.qmd,           text: "Random Variables" }
-          - { href: Lec17-Expectation.qmd,               text: "Expectation & Moments" }
-          - { href: Lec18-InequalitiesLimitTheorems.qmd, text: "Inequalities & Limit Theorems" }
-          - { href: Lec19-ParameterEstimationMLE.qmd,    text: "Parameter Estimation (MLE)" }
-          - { href: Lec20-BayesianStatistics1.qmd,       text: "Bayesian Statistics I" }
-          - { href: Lec21-BayesianStatistics2.qmd,       text: "Bayesian Statistics II" }
-          - { href: Lec22-MarkovChains.qmd,              text: "Markov Chains" }
+          - { href: Lec16-ProbabilityIntroduction.qmd,   text: "Introduction to Probability" }
+          - { href: Lec17-RandomVariables.qmd,           text: "Random Variables" }
+          - { href: Lec18-Expectation.qmd,               text: "Expectation & Moments" }
+          - { href: Lec19-InequalitiesLimitTheorems.qmd, text: "Inequalities & Limit Theorems" }
+          - { href: Lec20-ParameterEstimationMLE.qmd,    text: "Parameter Estimation (MLE)" }
+          - { href: Lec21-BayesianStatistics1.qmd,       text: "Bayesian Statistics I" }
+          - { href: Lec22-BayesianStatistics2.qmd,       text: "Bayesian Statistics II" }
+          - { href: Lec23-MarkovChains.qmd,              text: "Markov Chains" }
       # - text: "Stochastic & Review"
       #   menu:
       #     

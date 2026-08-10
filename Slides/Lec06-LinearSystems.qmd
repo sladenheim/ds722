@@ -352,7 +352,7 @@ $$
 \end{bmatrix},
 $$
 
-then $L_{k} = I-\ell_{k}e_{k}^{T}$, where $e_{k}$ is the column vector with 1 in position $k$ and $0$ elsewhere.
+then $L_{k} = I-\ell_{k}e_{k}^{\top}$, where $e_{k}$ is the column vector with 1 in position $k$ and $0$ elsewhere.
 
 ---
 
@@ -361,22 +361,22 @@ Let's compute $L_{1}$ using this formula from our example.
 
 ---
 
-Note that $e_{k}^{T}\ell_{k} = 0$. As a result
+Note that $e_{k}^{\top}\ell_{k} = 0$. As a result
 
 $$
 \small
-L_{k}(I+\ell_{k}e_{k}^{T})= (I-\ell_{k}e_{k}^{T})(I+\ell_{k}e_{k}^{T}) = I - \ell_{k}e_{k}^{T}\ell_{k}e_{k}^{T} = I.
+L_{k}(I+\ell_{k}e_{k}^{\top})= (I-\ell_{k}e_{k}^{\top})(I+\ell_{k}e_{k}^{\top}) = I - \ell_{k}e_{k}^{\top}\ell_{k}e_{k}^{\top} = I.
 $$
 
-This shows that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$.
+This shows that $(I+\ell_{k}e_{k}^{\top})=L_{k}^{-1}$.
 
 ## Computing $L$
 
-Using the facts that $(I+\ell_{k}e_{k}^{T})=L_{k}^{-1}$ and $e_{k}^{T}\ell_{k+1}=0$, let's compute 
+Using the facts that $(I+\ell_{k}e_{k}^{\top})=L_{k}^{-1}$ and $e_{k}^{\top}\ell_{k+1}=0$, let's compute 
 
 $$
 \small
-L_{k}^{-1}L_{k+1}^{-1} = (I+\ell_{k}e_{k}^{T})(I+\ell_{k+1}e_{k+1}^{T}) = I + \ell_{k}e_{k}^{T} + \ell_{k+1}e_{k+1}^{T}.
+L_{k}^{-1}L_{k+1}^{-1} = (I+\ell_{k}e_{k}^{\top})(I+\ell_{k+1}e_{k+1}^{\top}) = I + \ell_{k}e_{k}^{\top} + \ell_{k+1}e_{k+1}^{\top}.
 $$
 
 This shows that the product $L_{k}^{-1}L_{k+1}^{-1}$ is just the unit lower-triangular matrix with the entries of both $L_{k}^{-1}$ and $L_{k+1}^{-1}$ inserted in their usual places below the diagonal.
@@ -493,14 +493,14 @@ This algorithm requires $\sim m^{2}$ flops.
 Let $A=QR$, then we can write the linear system $A\mathbf{x}=\mathbf{b}$ as $QR\mathbf{x} = \mathbf{b},$ or
 
 $$
-R\mathbf{x} = Q^{T}\mathbf{b}.
+R\mathbf{x} = Q^{\top}\mathbf{b}.
 $$
 
 The method for solving linear systems by QR factorization is
 
 :::: {.incremental}
 1. Compute $A=QR$.
-1. Compute $\mathbf{y} = Q^{T}\mathbf{b}$.
+1. Compute $\mathbf{y} = Q^{\top}\mathbf{b}$.
 1. Solve $R\mathbf{x}=\mathbf{y}$ using backward substitution.
 ::::
 

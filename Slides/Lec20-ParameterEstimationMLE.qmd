@@ -447,7 +447,7 @@ $$
 which we know the gradient is
 
 $$
--2X^{T}(y-X\beta).
+-2X^{\top}(y-X\beta).
 $$
 When this is zero we obtain the familiar LSQ solution
 

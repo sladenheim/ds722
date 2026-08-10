@@ -614,7 +614,7 @@ $$
 
 ## Random Vectors
 
-The mean of a random vector $X=[X_{1},\ldots, X_{k}]^{T}$ is a vector
+The mean of a random vector $X=[X_{1},\ldots, X_{k}]^{\top}$ is a vector
 
 $$
 \mu =
@@ -650,7 +650,7 @@ What is a property you can immediately identify from this matrix?
 
 <!-- ---
 
-If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{T}X) = a^{T}\mu$ and $\mathbb{V}(a^{T}X) = a^{T}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{T}$ 
+If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{\top}X) = a^{\top}\mu$ and $\mathbb{V}(a^{\top}X) = a^{\top}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{\top}$ 
 -->
 
 ## The Multivariate Normal
@@ -659,7 +659,7 @@ A random vector $X = (X_{1},\ldots, X_{k})$ has a multivariate normal distributi
 
 $$
 \small
-f(\mathbf{x}; \mu, \Sigma) = \frac{1}{(2\pi)^{k/2}\vert \Sigma \vert^{1/2}}\operatorname{exp}\left\{-\frac{1}{2}(\mathbf{x}-\mu)^{T}\Sigma^{-1}(\mathbf{x}-\mu) \right\},
+f(\mathbf{x}; \mu, \Sigma) = \frac{1}{(2\pi)^{k/2}\vert \Sigma \vert^{1/2}}\operatorname{exp}\left\{-\frac{1}{2}(\mathbf{x}-\mu)^{\top}\Sigma^{-1}(\mathbf{x}-\mu) \right\},
 $$
 
 where $\mu\in\mathbb{R}^{k}$ is the vector of means of each $X_{i}$, $\Sigma\in\mathbb{R}^{k\times k}$ is the symmetric positive definite covariance matrix, and $\vert \Sigma \vert$ is the determinant of $\Sigma$.

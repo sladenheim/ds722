@@ -36,7 +36,7 @@ The method is called DFP and is related to BFGS.
 To derive the BFGS method, we introduce the quadratic model of the objective function
 
 $$
-m_{k}(p) = f_{k} + \nabla f_{k}^{T}(p) + \frac{1}{2}p^{T}B_{k}p.
+m_{k}(p) = f_{k} + \nabla f_{k}^{\top}(p) + \frac{1}{2}p^{\top}B_{k}p.
 $$
 
 Here, $B_{k}\in\mathbb{R}^{n\times n}$ is SPD. The minimizer $p_{k}=B_{k}^{-1}\nabla f_{k}$ is used as a search direction and $x_{k+1}=x_{k}+\alpha_{k}p_{k}$.
@@ -48,7 +48,7 @@ We don't want to reconstruct $B_{k+1}$ from scratch at each iteration. The idea 
 Suppose we have a new iterate $x_{k+1}$ and wish to construct a new quadratic model
 
 $$
-m_{k+1}(p) = f_{k+1} + \nabla f_{k+1}^{T}(p) + \frac{1}{2}p^{T}B_{k+1}p.
+m_{k+1}(p) = f_{k+1} + \nabla f_{k+1}^{\top}(p) + \frac{1}{2}p^{\top}B_{k+1}p.
 $$
 
 What requirements should we impose on $B_{k+1}$ using information from the previous step?
@@ -104,7 +104,7 @@ $s_{k}$ is the displacement, and $y_{k}$ is the change of gradients.
 Given $s_{k}$ and $y_{k}$, the secant equation requires that $B_{k+1}$ maps $s_{k}$ to $y_{k}$. This is possible only if 
 
 $$
-s_{k}^{T}y_{k} > 0~(\text{curvature condition}).
+s_{k}^{\top}y_{k} > 0~(\text{curvature condition}).
 $$
 
 For convex problems this is always true. 
@@ -120,7 +120,7 @@ To determine $B_{k+1}$ uniquely, the following minimization problem is solved
 $$
 \begin{align}
 &\min_{B} \Vert B- B_{k}\Vert \\
-\text{subject to}~&B=B^{T}~\text{and}~Bs_{k}=y_{k}.
+\text{subject to}~&B=B^{\top}~\text{and}~Bs_{k}=y_{k}.
 \end{align}
 $$
 
@@ -143,14 +143,14 @@ Solving the optimization problem using this norm leads to an update rule for $B_
 The DFP update is
 
 $$
-B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{T})B_{k}(I-\rho_{k}s_{k}y_{k}^{T}) + \rho_{k}y_{k}y_{k}^{T}.
+B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{\top})B_{k}(I-\rho_{k}s_{k}y_{k}^{\top}) + \rho_{k}y_{k}y_{k}^{\top}.
 $$
-where $\rho_{k} = \frac{1}{y_{k}^{T}s_{k}}$.
+where $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
 
 The inverse of $B_{k}$, denoted $H_{k}=B_{k}^{-1}$ can be determined using the Sherman-Morrison-Woodbury formula to obtain
 
 $$
-H_{k+1} = H_{k} - \frac{H_{k}y_{k}y_{k}^{T}H_{k}}{y_{k}^{T}H_{k}y_{k}} + \frac{s_{k}s_{k}^{T}}{y_{k}^{T}s_{k}}.
+H_{k+1} = H_{k} - \frac{H_{k}y_{k}y_{k}^{\top}H_{k}}{y_{k}^{\top}H_{k}y_{k}} + \frac{s_{k}s_{k}^{\top}}{y_{k}^{\top}s_{k}}.
 $$
 
 ## BFGS Update
@@ -160,14 +160,14 @@ The BFGS update is derived by solving the minimization problem
 $$
 \begin{align}
 &\min_{H} \Vert H- H_{k}\Vert \\
-\text{subject to}~&H=H^{T}~\text{and}~Hy_{k}=s_{k}.
+\text{subject to}~&H=H^{\top}~\text{and}~Hy_{k}=s_{k}.
 \end{align}
 $$
 
 This leads to the update rule
 
 $$
-H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{T})H_{k}(I-\rho_{k}y_{k}s_{k}^{T}) + \rho_{k}s_{k}s_{k}^{T}.
+H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top}) + \rho_{k}s_{k}s_{k}^{\top}.
 $$
 
 
@@ -179,8 +179,8 @@ Given starting point $x_{0}$, $\varepsilon>0$, and $H_{0}$.
 1. while $\Vert \nabla f_{k} \Vert < \varepsilon$
 1. $\quad$ Compute $p_{k} = -H_{k}\nabla f_{k}$ and $x_{k+1} = x_{k} + \alpha_{k}p_{k}$
 1. $\quad$ Compute $s_{k} = x_{k+1}-x_{k}$ and $y_{k} = \nabla f_{k+1}-\nabla f_{k}$
-1. $\quad$ $\rho_{k} = \frac{1}{y_{k}^{T}s_{k}}$.
-1. $\quad$ $H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{T})H_{k}(I-\rho_{k}y_{k}s_{k}^{T})+\rho_{k}s_{k}s_{k}^{T}$
+1. $\quad$ $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
+1. $\quad$ $H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top})+\rho_{k}s_{k}s_{k}^{\top}$
 1. $\quad k\leftarrow k+1$
 
 ## Rosenbrock's Function
@@ -372,7 +372,7 @@ We make the following assumptions:
 1. The level set $\mathcal{L}= \{x\in\mathbb{R}^{n}\vert f(x)\leq f(x_{0})\}$ is convex, and there exist positive constants $m$ and $M$ such that
 
 $$
-m\Vert z\Vert^{2} \leq z^{T}\nabla^{2}f(x)z \leq M \Vert z\Vert^{2},
+m\Vert z\Vert^{2} \leq z^{\top}\nabla^{2}f(x)z \leq M \Vert z\Vert^{2},
 $$
 for all $z\in\mathbb{R}^{n}$ and $x\in\mathcal{L}$.
 

@@ -27,41 +27,42 @@ source pages are in Quarto markdown files. Each link below opens a reveal.js dec
 
 ## Linear Algebra
 
-- [Vectors and Matrices I](Lec00-VectorsMatrices1.html)
-- [Vectors and Matrices II](Lec01-VectorsMatrices2.html)
-- [Orthogonality and Projections](Lec02-OrthogonalityProjections.html)
-- [QR Factorization](Lec03-QRFactorization.html)
-- [Least Squares](Lec04-LeastSquares.html)
-- [Linear Systems and LU Factorization](Lec05-LinearSystems.html)
-- [Eigenvalues](Lec06-Eigenvalues.html)
-- [Singular Value Decomposition](Lec07-SVD.html)
+- [Math Basics](Lec01-MathBasics.html)
+- [Vectors and Matrices](Lec02-VectorsMatrices.html)
+- [Orthogonality and Projections](Lec03-OrthogonalityProjections.html)
+- [QR Factorization](Lec04-QRFactorization.html)
+- [Least Squares](Lec05-LeastSquares.html)
+- [Linear Systems and LU Factorization](Lec06-LinearSystems.html)
+- [Eigenvalues](Lec07-Eigenvalues.html)
+- [Singular Value Decomposition](Lec08-SVD.html)
 
 ## Calculus
 
-- [Derivatives I](Lec08-Derivatives1.html)
-- [Derivatives II](Lec09-Derivatives2.html)
-- [Integration](Lec10-Integration.html)
+- [Derivatives I](Lec09-Derivatives1.html)
+- [Derivatives II](Lec10-Derivatives2.html)
+- [Integration](Lec11-Integration.html)
 
 ## Optimization
 
-- [Optimization](Lec11-Optimization1.html)
-- [First Order Methods](Lec12-Optimization2.html)
-- [Second Order Methods](Lec13-Optimization3.html)
-- [Quasi-Newton Methods](Lec14-Optimization4.html)
+- [Optimization](Lec12-Optimization1.html)
+- [First Order Methods](Lec13-Optimization2.html)
+- [Second Order Methods](Lec14-Optimization3.html)
+- [Quasi-Newton Methods](Lec15-Optimization4.html)
 
 ## Probability and Statistics
 
-- [Introduction to Probability](Lec15-ProbabilityIntroduction.html)
-- [Random Variables and Distributions](Lec16-RandomVariables.html)
-- [Expectation, Variance, and Moments](Lec17-Expectation.html)
-- [Inequalities and Limit Theorems](Lec18-InequalitiesLimitTheorems.html)
-- [Parameter Estimation (MLE)](Lec19-ParameterEstimationMLE.html)
-- [Bayesian Statistics I](Lec20-BayesianStatistics1.html)
-- [Bayesian Statistics II](Lec21-BayesianStatistics2.html)
+- [Introduction to Probability](Lec16-ProbabilityIntroduction.html)
+- [Random Variables and Distributions](Lec17-RandomVariables.html)
+- [Expectation, Variance, and Moments](Lec18-Expectation.html)
+- [Inequalities and Limit Theorems](Lec19-InequalitiesLimitTheorems.html)
+- [Parameter Estimation (MLE)](Lec20-ParameterEstimationMLE.html)
+- [Bayesian Statistics I](Lec21-BayesianStatistics1.html)
+- [Bayesian Statistics II](Lec22-BayesianStatistics2.html)
+
 <!-- 
 ## Stochastic Processes
 
-- [Markov Chains](Lec22-MarkovChains.html)
+- [Markov Chains](Lec23-MarkovChains.html)
 
 ## Review
 
