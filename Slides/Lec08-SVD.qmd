@@ -30,7 +30,7 @@ The SVD is motivated by the geometric fact:
 
 Let $S$ be the unit sphere in $\mathbb{R}^{n}$, then for any $A\in\mathbb{R}^{m\times n}$ with $m\geq n$, the image $AS$ is a hyperellipse.
 
-A *hyperellipse* in $\mathbb{R}^{m}$ is the surface obtained by stretching the unit sphere in $\mathbb{R}^{m}$ by some factors $\sigma_{1},\ldots,\sigma_{m}$ (possibly 0) in some orthonormal directions $u_{1}\ldots,u_{m}\in\mathbb{R}^{m}$. 
+A *hyperellipse* in $\mathbb{R}^{m}$ is the surface obtained by stretching the unit sphere in $\mathbb{R}^{m}$ by some factors $\sigma_{1},\ldots,\sigma_{m}$ (possibly 0) in some orthonormal directions $u_{1},\ldots,u_{m}\in\mathbb{R}^{m}$.
 
 The vectors $\{\sigma_{i}u_{i}\}$ are the principal semiaxes of the hyperellipse.
 
@@ -165,7 +165,7 @@ $$
 A = U\Sigma V^{*},
 $$
 
-where $U\in\mathbb{C}^{m \times m}$ is unitary, $V\in\mathbb{C}^{n\times n}$ is unitary, and $\Sigma\in\mathbb{C}^{m\times n}$.
+where $U\in\mathbb{C}^{m \times m}$ is unitary, $V\in\mathbb{C}^{n\times n}$ is unitary, and $\Sigma\in\mathbb{R}^{m\times n}$.
 
 The matrix $U$ is created by adjoining $\hat{U}$ with $m-n$ orthonormal columns.
 
@@ -220,7 +220,7 @@ Below is a table of differences between the SVD and eigenvalue decompositions:
 | SVD            | Eigendecomposition |
 |----------------|----------------|
 | $A=U\Sigma V^{*}$  | $A=X\Lambda X^{-1}$ |
-| Orthonormal bases  | Non-orthonormal bases |
+| Orthonormal bases  | Non-orthonormal bases (in general) |
 | Always exists  | May or may not exist |
 
 
@@ -441,13 +441,13 @@ $$
 The importance of this specific rank-one decomposition is that the $\nu$th partial sum captures as much of the energy of $A$ as possible.
 
 **Theorem**
-For any $\nu$ with $0\leq \nu \leq r$, define
+For any $\nu$ with $0\leq \nu \leq p$, define
 
 $$
 A_{\nu} = \sum_{j=1}^{\nu}\sigma_{j}u_{j}v_{j}^{*};
 $$
 
-if $\nu=p=\min\{m,n\}$ define $\sigma_{n+1}=0$. Then
+if $\nu=p=\min\{m,n\}$ define $\sigma_{p+1}=0$. Then
 
 $$
 \small
@@ -525,7 +525,7 @@ Why is the eigendecomposition of this form with $V$ and $V^{\top}$?
 
 
 :::: {.fragment}
-Recall from the previous lecture that since the matrix $S$ is symmetric the eigenvectors are unitary.
+Recall from the previous lecture that since the matrix $S$ is symmetric, its eigenvectors can be chosen to be orthonormal &mdash; so the matrix $V$ they form is orthogonal (unitary).
 ::::
 
 :::: {.fragment}
