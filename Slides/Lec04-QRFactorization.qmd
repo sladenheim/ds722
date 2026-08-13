@@ -183,7 +183,7 @@ H =
 \end{bmatrix}
 $$
 
-reflects 2-D vectors across the y-axis and is also orthonormal.
+reflects 2-D vectors across the y-axis and is also orthogonal.
 
 ---
 
@@ -214,14 +214,14 @@ $$
 A = \hat{Q}\hat{R},
 $$
 
-where $\hat{Q}\in\mathbb{R}^{m\times n}$ is orthogonal and $R\in\mathbb{R}^{n\times n}$ is upper triangular.
+where $\hat{Q}\in\mathbb{R}^{m\times n}$ has orthonormal columns and $\hat{R}\in\mathbb{R}^{n\times n}$ is upper triangular.
 
 ---
 
 For many applications we are interested in the successive column spaces of a matrix $A$, i.e.,
 
 $$
-\langle a_1 \rangle \subseteq \langle a_1, a_2 \rangle, \subseteq \langle a_1, a_2, a_3 \rangle \subseteq \ldots,
+\langle a_1 \rangle \subseteq \langle a_1, a_2 \rangle \subseteq \langle a_1, a_2, a_3 \rangle \subseteq \ldots,
 $$
 
 where $\langle \cdots \rangle$ denotes the subspace spanned by the vectors within the bracket.
@@ -303,12 +303,11 @@ If we divide $v_{j}$ by $\Vert v_{j}\Vert_2$, then we have an orthonormal $q_{j}
 
 ---
 
-The previous set of equations for the vectors $a_{j}$ as
+The previous set of equations for the vectors $a_{j}$ can be rewritten as
 
 $$
 \begin{align*}
 q_{1} &= \frac{a_{1}}{r_{11}} \\
-q_{2} &= \frac{a_{2}-r_{12}a_{1}}{r_{22}} \\
 q_{2} &= \frac{a_{2}-r_{12}q_{1}}{r_{22}} \\
 &\vdots \\
 q_{n} &= \frac{a_{n}-\sum_{i=1}^{n-1}r_{in}q_{i}}{r_{nn}}.
@@ -320,19 +319,19 @@ $$
 Based on the previous slide and the formula
 
 $$
-v_{j} = a_{j} - (q_{1}^{\top}a_{j})q_{1} - (q_{2}^{\top}a_{j})q_{2} - \cdots - - (q_{j-1}^{\top}a_{j})q_{j-1}.
+v_{j} = a_{j} - (q_{1}^{\top}a_{j})q_{1} - (q_{2}^{\top}a_{j})q_{2} - \cdots - (q_{j-1}^{\top}a_{j})q_{j-1}.
 $$
 
 we know that
 
 $$
-r_{ij} = q_{i}^{\top}a_{j}\quad (i\neq j),
+r_{ij} = q_{i}^{\top}a_{j}\quad (i< j),
 $$
 
 and
 
 $$
-\vert r_{jj}\vert = \left\Vert a_{j} - \sum_{i=1}^{j-1}r_{ij}q_{j} \right\Vert_{2}.
+\vert r_{jj}\vert = \left\Vert a_{j} - \sum_{i=1}^{j-1}r_{ij}q_{i} \right\Vert_{2}.
 $$
 
 
@@ -499,7 +498,7 @@ $$
 A = QR,
 $$
 
-where $Q\in\mathbb{R}^{m\times m}$ is orthonormal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
+where $Q\in\mathbb{R}^{m\times m}$ is orthogonal and $R\in\mathbb{R}^{m\times n}$ is upper triangular.
 
 The matrix $Q$ is created by appending an additional $m-n$ orthonormal columns to $\hat{Q}$.
 
@@ -526,7 +525,7 @@ The key idea behind this is projections.
 We will show that
 
 $$
-q_{1} = \frac{P_{1}a_{1}}{\Vert P_1a_{1}\Vert_2}, q_{2} = \frac{P_{2}a_{2}}{\Vert P_2a_{1}\Vert_2}, \ldots, q_{n} = \frac{P_{n}a_{n}}{\Vert P_{n}a_{n}\Vert_2},
+q_{1} = \frac{P_{1}a_{1}}{\Vert P_1a_{1}\Vert_2}, q_{2} = \frac{P_{2}a_{2}}{\Vert P_2a_{2}\Vert_2}, \ldots, q_{n} = \frac{P_{n}a_{n}}{\Vert P_{n}a_{n}\Vert_2},
 $$
 
 where each $P_{j}$ is an orthogonal projector.
@@ -536,7 +535,7 @@ where each $P_{j}$ is an orthogonal projector.
 Recall the following formula
 
 $$
-q_{j} = a_{j} -\sum_{i=1}^{j-1}(q_{i}^{\top}a_{j})q_{i}.
+v_{j} = a_{j} -\sum_{i=1}^{j-1}(q_{i}^{\top}a_{j})q_{i}.
 $$
 
 Let's consider the case when $j=2$.
@@ -545,7 +544,7 @@ Let's consider the case when $j=2$.
 
 Observe that
 $$
-q_{2} = a_{2} - (q_{1}^{\top}a_{2})q_{1} = (I-q_{}q_{1}^{\top})a_{2}.
+v_{2} = a_{2} - (q_{1}^{\top}a_{2})q_{1} = (I-q_{1}q_{1}^{\top})a_{2}.
 $$
 
 The projector $(I-q_{1}q_{1}^{\top})$ eliminates the component of $a_2$ in the direction of $q_{1}$.
@@ -555,8 +554,10 @@ The projector $(I-q_{1}q_{1}^{\top})$ eliminates the component of $a_2$ in the d
 For the general case we have that
 
 $$
-q_{j} = (I - \sum_{i=1}^{j-1}q_{i}q_{i}^{\top})a_{j}.
+v_{j} = \left(I - \sum_{i=1}^{j-1}q_{i}q_{i}^{\top}\right)a_{j} = P_{j}a_{j},
 $$
+
+and normalizing gives $q_{j} = v_{j}/\Vert v_{j}\Vert_2$, matching the formula above.
 
 
 ---
@@ -717,7 +718,7 @@ print("Orthogonality error (Modified Gram-Schmidt):", error_mgs)
 1. $\quad\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
 1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
 :::
-::: {.column width=50"%"}
+::: {.column width="50%"}
 Inner loop flops
 
 * Line 7: $m$ multiplications and $m-1$ additions 
