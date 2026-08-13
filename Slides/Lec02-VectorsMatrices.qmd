@@ -179,13 +179,13 @@ $$
 
 ## Inner Products
 
-The inner product of two column vectors $x, y\in\mathbb{R}^m$ is the product of the transpose of $x$ by $y$
+The inner product of two column vectors $x, y\in\mathbb{R}^m$ is the product of the transpose of $y$ by $x$
 
 $$
-x^{\top}y = \sum_{i=1}^{m}x_iy_i.
+y^{\top}x = \sum_{i=1}^{m}x_iy_i.
 $$
 
-The notation $(x, y) = x^{\top}y$ is also used to denote the inner product.
+The notation $(x, y) = y^{\top}x$ is also used to denote the inner product.
 
 ::: {.notes}
 Mention that an inner product is a more general idea and can be extended to work for functions. This leads to the ideas of orthogonal function and function spaces which are hugely important in quantum mechanics, signal processing, and machine learning.
@@ -204,7 +204,7 @@ $$
 The cosine of the angle $\theta$ between $x$ and $y$ can be expressed in terms of the inner product:
 
 $$
-\cos(\theta) = \frac{x^{\top}y}{\Vert x\Vert_2 \Vert y\Vert_2}.
+\cos(\theta) = \frac{y^{\top}x}{\Vert x\Vert_2 \Vert y\Vert_2} = \frac{(x, y)}{\Vert x\Vert_2 \Vert y\Vert_2}.
 $$
 
 ::: {.notes}
@@ -643,6 +643,25 @@ A **subspace** of a vector space $V$ is a subset $W \subseteq V$ that is itself 
 - The column space of a matrix $A\in\mathbb{R}^{m\times n}$ is a subspace of $\mathbb{R}^m$.
 
 A subspace must always contain the zero vector and be closed under addition and scalar multiplication.
+
+---
+
+Two subspaces associated with a matrix $A\in\mathbb{R}^{m\times n}$ come up constantly:
+
+- The **range** (or **column space**) of $A$ is the span of its columns,
+$$
+\operatorname{range}(A) = \{Ax : x\in\mathbb{R}^{n}\} \subseteq \mathbb{R}^{m}.
+$$
+- The **null space** (or **kernel**) of $A$ is the set of vectors it maps to zero,
+$$
+\operatorname{null}(A) = \{x\in\mathbb{R}^{n} : Ax = 0\} \subseteq \mathbb{R}^{n}.
+$$
+
+Both $\operatorname{range}(A)$ and $\operatorname{null}(A)$ are subspaces.
+
+::: {.notes}
+$\operatorname{range}(A)\subseteq\mathbb{R}^m$ lives in the codomain, while $\operatorname{null}(A)\subseteq\mathbb{R}^n$ lives in the domain &mdash; the two subspaces don't even live in the same space unless $A$ is square.
+:::
 
 ## Rank
 
