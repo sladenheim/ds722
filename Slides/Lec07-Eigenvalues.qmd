@@ -153,7 +153,7 @@ $$
 \det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
 $$
 
-where $M_{ij}$ is the $m-1\times m-1$ *minor* formed by deleting row $i$ and column $j$ from $A$.
+where $M_{ij}$ is the $(m-1)\times(m-1)$ *minor* formed by deleting row $i$ and column $j$ from $A$.
 
 ---
 
@@ -417,21 +417,13 @@ Another term for nondefective is *diagonalizable*.
 
 The trace and the determinant are related to the eigenvalues.
 
-The trace of a matrix $A$ is 
+The trace of a matrix $A$ is
 
 $$
 \operatorname{tr}(A) = \sum_{i=1}^{m}a_{ii}.
-$$ 
-
----
-
-The determinant is
-
-$$
-\det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
 $$
 
-where $M_{ij}$ is the $m-1\times m-1$ minor formed by deleting row $i$ and column $j$ from $A$.
+Recall from before that $\det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij})$.
 
 ---
 
@@ -468,7 +460,7 @@ A symmetric matrix is unitarily diagonalizable and its eigenvalues are real.
 
 **Theorem**
 
-A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{\top} = A^{\top}A$.
+A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{*} = A^{*}A$.
 
 ## PageRank
 
@@ -539,7 +531,7 @@ The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the 
 - To ensure no dangling nodes a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{m}$ and $0<d <1$.
 - The matrix $\tilde{G}$ is **column stochastic**. 
 - The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
-    - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues are less than 1.
+    - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues have modulus less than 1.
     - The eigenvector has all positive entries.
 - The power method, i.e., $G^{k}z\rightarrow x$ as $k\rightarrow\infty$ can be used to approximate the PageRank.
 
