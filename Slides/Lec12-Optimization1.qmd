@@ -72,8 +72,8 @@ $$
 
 A constrained optimization problem is
 $$
-\min_{x} f(x) \qquad\text{subject to}\quad 
-\begin{array}{l}
+\min_{x} f(x) \qquad\text{subject to}\quad
+\begin{array}{ll}
 c_i(x) = 0 & i\in\mathcal{E}, \\
 c_{i}(x) \geq 0 & i\in\mathcal{I},
 \end{array}
@@ -87,10 +87,10 @@ Consider the following example of a constrained optimization problem:
 
 $$
 \small
-\min (x_1 - 2)^{2} + (x_2 -1)^{2} \qquad\text{s.t}\quad 
-\begin{array}{l}
+\min (x_1 - 2)^{2} + (x_2 -1)^{2} \qquad\text{s.t}\quad
+\begin{array}{ll}
 -x_{1}^{2} + x_2 &\geq 0 \\
--x_1 - x_2 + 2 &\geq 0. 
+-x_1 - x_2 + 2 &\geq 0.
 \end{array}
 $$
 
@@ -147,7 +147,7 @@ plt.plot(x_min, y_min, 'r*', markersize=15)
 plt.text(x_min, y_min, '  Minimum', verticalalignment='bottom', horizontalalignment='right')
 
 ## Plot feasible lines
-plt.plot(x1, 2-x2, color='gray')
+plt.plot(x1, 2 - x1, color='gray')
 plt.plot(x1_feasible, x1_feasible**2, color='gray')
 
 
@@ -528,7 +528,7 @@ Gradient descent is called a first order method because it relies solely on firs
 
 ## Newton's Method
 
-Newton's method is a line search method where $B_{k}=-\nabla^{2} f_{k}$ so that $p_{k}=-(\nabla^{2} f_{k})^{-1}\nabla f_{k}$. The iterative update is
+Newton's method is a line search method where $B_{k}=\nabla^{2} f_{k}$ so that $p_{k}=-(\nabla^{2} f_{k})^{-1}\nabla f_{k}$. The iterative update is
 $$
 x_{k+1} = x_{k} -\alpha_{k}(\nabla^{2} f_{k})^{-1}\nabla f_{k}.
 $$
@@ -537,7 +537,7 @@ Newton's method is called a second order method because it relies on second-orde
 
 ## Quasi-Newton Methods
 
-Quasi-Newton methods are line search methods where $B_{k}\approx-\nabla^{2} f_{k}$. The search direction is then $p_{k}=-B_{k}^{-1}\nabla f_{k}$. The iterative update is
+Quasi-Newton methods are line search methods where $B_{k}\approx\nabla^{2} f_{k}$. The search direction is then $p_{k}=-B_{k}^{-1}\nabla f_{k}$. The iterative update is
 
 $$
 x_{k+1} = x_{k} -\alpha_{k}B_{k}^{-1}\nabla f_{k}.
@@ -680,8 +680,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Sequence definition
-k = np.arange(0, 20)
-x_k = 1 / 2**(2**k)
+# Note: use float (not int) exponentiation -- 2**(2**k) overflows int64
+# for k >= 6, which silently wraps around and corrupts the values.
+k = np.arange(0, 10, dtype=float)
+x_k = 1 / 2.0**(2.0**k)
 
 fig, axs = plt.subplots(1, 2, figsize=(12,4))
 
@@ -722,15 +724,15 @@ xk_linear = (1/2)**k_linear
 k_superlinear = np.arange(1, 15)
 xk_superlinear = 1 / k_superlinear**k_superlinear
 
-k_quadratic = np.arange(0, 11)
-xk_quadratic = 1 / 2**(2**k_quadratic)
+k_quadratic = np.arange(0, 10, dtype=float)
+xk_quadratic = 1 / 2.0**(2.0**k_quadratic)
 
 fig, axs = plt.subplots(1, 2, figsize=(14,5))
 
 # Standard plot: overlay all sequences
 axs[0].plot(k_linear, xk_linear, 'o-', label='Linear: $(1/2)^k$')
 axs[0].plot(k_superlinear, xk_superlinear, 's-', label='Superlinear: $1/k^k$')
-axs[0].plot(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2k}$')
+axs[0].plot(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2^k}$')
 axs[0].axhline(0, color='gray', linestyle='--')
 axs[0].set_xlabel('Iteration $k$')
 axs[0].set_ylabel('$x_k$')
@@ -741,7 +743,7 @@ axs[0].grid(True)
 # Semilog plot: overlay all sequences
 axs[1].semilogy(k_linear, xk_linear, 'o-', label='Linear: $(1/2)^k$')
 axs[1].semilogy(k_superlinear, xk_superlinear, 's-', label='Superlinear: $1/k^k$')
-axs[1].semilogy(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2k}$')
+axs[1].semilogy(k_quadratic, xk_quadratic, '^-', label='Quadratic: $1/2^{2^k}$')
 axs[1].axhline(0, color='gray', linestyle='--')
 axs[1].set_xlabel('Iteration $k$')
 axs[1].set_ylabel('$x_k$')
