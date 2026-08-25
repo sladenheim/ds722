@@ -57,6 +57,10 @@ heights_init = f(xs_init)
 init_area = np.sum(heights_init * dx_init)
 init_error = abs(exact_area - init_area)
 
+# Fixed axis ranges, shared by the base figure and every frame
+x_min, x_max = a - 0.1, b + 0.1
+y_min, y_max = -0.05, 1.15
+
 # Precompute frames for animation
 frames = []
 for n in range(4, 61, 2):
@@ -71,17 +75,21 @@ for n in range(4, 61, 2):
             go.Scatter(
                 x=x_plot, y=y_plot, mode='lines',
                 line=dict(color='blue'),
-                name='f(x) = sin(x)', showlegend=True if n == 4 else False
+                showlegend=False
             ),
             go.Bar(
                 x=xs, y=heights, width=dx,
                 marker_color='skyblue', opacity=0.7,
-                name='Riemann Bars', showlegend=True if n == 4 else False
+                showlegend=False
             )
         ],
         name=str(n),
         layout=go.Layout(
-            title_text=f"n = {n} | Approx = {approx_area:.4f} | Error = {error:.4f} | True Value = {exact_area:.4f}"
+            title_text=f"n = {n} | Approx = {approx_area:.4f} | Error = {error:.4f} | True Value = {exact_area:.4f}",
+            # Re-assert the axis ranges on every frame so the plotting area
+            # never rescales mid-animation.
+            xaxis=dict(range=[x_min, x_max], autorange=False),
+            yaxis=dict(range=[y_min, y_max], autorange=False)
         )
     ))
 
@@ -89,23 +97,39 @@ for n in range(4, 61, 2):
 fig = go.Figure(
     data=[
         go.Scatter(x=x_plot, y=y_plot, mode='lines',
-                   name='f(x) = sin(x)', line=dict(color='blue')),
+                   line=dict(color='blue'), showlegend=False),
         go.Bar(x=xs_init, y=heights_init, width=dx_init,
-               marker_color='skyblue', opacity=0.7, name='Riemann Bars')
+               marker_color='skyblue', opacity=0.7, showlegend=False)
     ],
     frames=frames
 )
 
 # Add slider and play/pause controls
+#
+# Note: each frame has a different number of Riemann bars (n changes every
+# frame), so there is no meaningful way to *morph* one bar chart into the
+# next -- Plotly's default transition tries to interpolate the bars anyway,
+# which produces the jittery/wobbly effect. Setting all transition durations
+# to 0 makes frames swap cleanly instead, and pinning the axis ranges (with
+# autorange off, on the base layout *and* on every frame) keeps the plotting
+# area from resizing. The legend is off entirely: a legend that only shows on
+# the first frame changes the width of the plotting area when it disappears,
+# which is what made the x-axis look like it changed length.
 fig.update_layout(
     title=f"n = {init_n} | Approx = {init_area:.4f} | Error = {init_error:.4f} | True Value = {exact_area:.4f}",
+    xaxis=dict(range=[x_min, x_max], autorange=False, constrain='domain'),
+    yaxis=dict(range=[y_min, y_max], autorange=False),
     updatemenus=[{
         'type': 'buttons',
         'buttons': [
             {'label': 'Play', 'method': 'animate',
-             'args': [None, {"frame": {"duration": 500, "redraw": True}, "fromcurrent": True}]},
+             'args': [None, {"frame": {"duration": 500, "redraw": True},
+                              "transition": {"duration": 0},
+                              "fromcurrent": True}]},
             {'label': 'Pause', 'method': 'animate',
-             'args': [[None], {"frame": {"duration": 0}, "mode": "immediate"}]}
+             'args': [[None], {"frame": {"duration": 0, "redraw": False},
+                                "transition": {"duration": 0},
+                                "mode": "immediate"}]}
         ]
     }],
     sliders=[{
@@ -113,13 +137,14 @@ fig.update_layout(
             {'method': 'animate', 'label': str(n),
              'args': [[str(n)],
                       {"frame": {"duration": 0, "redraw": True},
+                       "transition": {"duration": 0},
                        "mode": "immediate"}]}
             for n in range(4, 61, 2)
         ],
         'currentvalue': {'prefix': 'n = '}
     }],
-    showlegend=True,
-    transition={'duration': 300, 'easing': 'cubic-in-out'},
+    showlegend=False,
+    transition={'duration': 0},
 )
 
 fig.show()
@@ -150,6 +175,47 @@ The function $f$ is called the integrand.
 1. If $g(x)\leq f(x)$ for $a\leq x\leq b$, then $$\small\int_{a}^{b}g(x)dx \leq \int_{a}^{b}f(x)dx$$
 1. If $m\leq f(x)\leq M$ for  $a\leq x\leq b$, then $$\small m(b-a)\leq \int_{a}^{b}f(x)dx \leq M(b-a)$$
 1. $\left\vert \int_{a}^{b} f(x) dx \right\vert \leq \int_{a}^{b}\vert f(x)\vert dx$
+
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+
+f = lambda x: 1 + 0.5*np.sin(3*x)
+a, b = 0.0, 2.0
+xs = np.linspace(a, b, 1000)
+ys = f(xs)
+m, M = ys.min(), ys.max()
+true_area, _ = integrate.quad(f, a, b)
+lower, upper = m*(b-a), M*(b-a)
+
+fig, ax = plt.subplots(figsize=(7, 4.5))
+ax.plot(xs, ys, color='C0', lw=2.5, label=r'$f(x)= 1 + \frac{1}{2}\sin{3x}$')
+ax.fill_between(xs, 0, ys, color='C0', alpha=0.25)
+ax.axhline(m, color='C3', ls='--', lw=2, label=f'$m={m:.2f}$')
+ax.axhline(M, color='C2', ls='--', lw=2, label=f'$M={M:.2f}$')
+ax.fill_between([a, b], 0, m, color='C3', alpha=0.15)
+ax.set_xlim(a - 0.05, b + 0.05)
+ax.set_ylim(0, M + 0.3)
+ax.set_xlabel('x', fontsize=14,)
+ax.set_ylabel('f(x)', fontsize=14,)
+ax.set_title(
+    f"$m(b-a)={lower:.2f} \\leq \\int_a^b f\\,dx={true_area:.2f} \\leq M(b-a)={upper:.2f}$",
+    fontsize=16,
+)
+ax.legend(fontsize=11)
+plt.tight_layout()
+plt.show()
+```
+
+The shaded area under $f$ is sandwiched between the area of the shorter rectangle (height $m$) and the taller rectangle (height $M$).
+
+::: {.notes}
+This is an illustration of property 3.
+:::
 
 ## Fundamental Theorem of Calculus
 
@@ -284,9 +350,44 @@ $$
 \int_{-\infty}^{\infty}f(x) dx = \int_{-\infty}^{a}f(x) dx + \int_{a}^{\infty}f(x) dx.
 $$
 
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+
+g = lambda x: np.exp(-x)
+T = 6
+xs = np.linspace(0, T, 500)
+xs_ext = np.linspace(T, T + 2, 100)
+val, _ = integrate.quad(g, 0, np.inf)
+partial, _ = integrate.quad(g, 0, T)
+
+fig, ax = plt.subplots(figsize=(7, 4.5))
+ax.plot(xs, g(xs), color='C0', lw=2.5, label=r'$f(x)=e^{-x}$')
+ax.plot(xs_ext, g(xs_ext), color='C0', lw=2.5, ls='--')
+ax.fill_between(xs, 0, g(xs), color='C0', alpha=0.25)
+ax.axhline(0, color='gray', lw=1)
+ax.annotate('', xy=(T + 1.8, 0.05), xytext=(T + 0.8, 0.05),
+            arrowprops=dict(arrowstyle='->', lw=2))
+ax.set_xlim(0, T + 2)
+ax.set_ylim(-0.05, 1.05)
+ax.set_xlabel('x', fontsize=14,)
+ax.set_ylabel('f(x)', fontsize=14,)
+ax.set_title(
+    f"$\\int_0^t f\\,dx={partial:.4f}\\ \\to\\ \\int_0^\\infty f\\,dx={val:.0f}$ as $t\\to\\infty$",
+    fontsize=16
+)
+ax.legend(fontsize=11)
+plt.tight_layout()
+plt.show()
+```
+
+As $t\rightarrow\infty$, the shaded area (the partial integral) converges to a finite value, even though the region extends forever.
 
 ## Substitution Rule
-
 
 If $u = g(x)$ is differentiable and $f$ is continuous wherever $u = g(x)$, then
 
@@ -441,64 +542,27 @@ $$
 
 ## Trigonometric Substitution
 
-Trigonometric substitution is a useful method for solving integrals of the form
+Trigonometric substitution handles integrals involving $\sqrt{a^2-x^2}$, $\sqrt{a^2+x^2}$, or $\sqrt{x^2-a^2}$ by setting $x=g(\theta)$ and changing the integral to
 
 $$
-\int \sqrt{a^{2} - x^{2}} dx.
+\int f(x) dx = \int f(g(\theta))g^{\prime}(\theta)d\theta.
 $$
 
-The idea is to use **inverse substitution**, setting $x=g(t)$ and then changing the integral
-
-$$
-\int f(x) dx = \int f(g(t))g^{\prime}(t)dt.
-$$
-
----
-
-| Expression                  | Substitution         | θ Range                        | Simplification           |
-|-----------------------------|----------------------|-------------------------------|--------------------------|
-| $\sqrt{a^2 - x^2}$          | $x = a\sin\theta$    | $[-\frac{\pi}{2}, \frac{\pi}{2}]$ | $\sqrt{a^2 - x^2} = a\cos\theta$ |
-| $\sqrt{a^2 + x^2}$          | $x = a\tan\theta$    | $(-\frac{\pi}{2}, \frac{\pi}{2})$ | $\sqrt{a^2 + x^2} = a\sec\theta$ |
-| $\sqrt{x^2 - a^2}$          | $x = a\sec\theta$    | $[0,\frac{\pi}{2})$ or $[\pi, \frac{3\pi}{2})$ | $\sqrt{x^2 - a^2} = a\tan\theta$ |
-
----
-
-**Example:**
-
-Evaluate $\int \frac{\sqrt{9-x^{2}}}{x^{2}}dx$.
+| Expression                  | Substitution         | Simplification           |
+|-----------------------------|-----------------------|---------------------------|
+| $\sqrt{a^2 - x^2}$          | $x = a\sin\theta$    | $\sqrt{a^2 - x^2} = a\cos\theta$ |
+| $\sqrt{a^2 + x^2}$          | $x = a\tan\theta$    | $\sqrt{a^2 + x^2} = a\sec\theta$ |
+| $\sqrt{x^2 - a^2}$          | $x = a\sec\theta$    | $\sqrt{x^2 - a^2} = a\tan\theta$ |
 
 ::: {.notes}
-Use the substitution $x = 3\sin\theta$, so $dx = 3\cos\theta d\theta$.
+**Example:** Evaluate $\int \frac{\sqrt{9-x^2}}{x^2}dx$.
 
-Then $\sqrt{9 - x^2} = \sqrt{9 - 9\sin^2\theta} = 3\cos\theta$.
-
-Substitute into the integral:
+With $x=3\sin\theta$, $\sqrt{9-x^2}=3\cos\theta$ and $dx=3\cos\theta\,d\theta$, so the integral becomes $\int \cot^2\theta\,d\theta = -\cot\theta-\theta+C$. Back-substituting $\theta=\arcsin(x/3)$ gives
 
 $$
-\int \frac{\sqrt{9-x^2}}{x^2} dx = \int \frac{3\cos\theta}{(3\sin\theta)^2} \cdot 3\cos\theta d\theta = \int \frac{3\cos\theta}{9\sin^2\theta} \cdot 3\cos\theta d\theta
-$$
-
-Simplify:
-
-$$
-= \int \frac{9\cos^2\theta}{9\sin^2\theta} d\theta = \int \frac{\cos^2\theta}{\sin^2\theta} d\theta = \int \cot^2\theta d\theta
-$$
-
-Recall $\cot^2\theta = \csc^2\theta - 1$, so:
-
-$$
-\int \cot^2\theta d\theta = \int (\csc^2\theta - 1) d\theta = -\cot\theta - \theta + C
-$$
-
-Back-substitute $x = 3\sin\theta \implies \sin\theta = x/3$, so $\theta = \arcsin(x/3)$ and $\cot\theta = \sqrt{9-x^2}/x$.
-
-Final answer:
-
-$$
-\int \frac{\sqrt{9-x^2}}{x^2} dx = -\frac{\sqrt{9-x^2}}{x} - \arcsin\left(\frac{x}{3}\right) + C
+\int \frac{\sqrt{9-x^2}}{x^2} dx = -\frac{\sqrt{9-x^2}}{x} - \arcsin\left(\frac{x}{3}\right) + C.
 $$
 :::
-
 
 ## Strategy for Integration
 
@@ -560,6 +624,56 @@ $$
 If you have specific limits, plug them in to evaluate the definite integral.
 :::
 
+---
+
+Just as a 1D Riemann sum approximates area with a stack of thin rectangles, a 2D Riemann sum approximates *volume* under a surface $f(x,y)$ with a grid of thin boxes:
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from scipy import integrate
+
+f = lambda x, y: np.sin(x)*np.cos(y)
+a, b = 0, np.pi
+c, d = 0, np.pi/2
+n, m = 10, 6
+dx, dy = (b - a)/n, (d - c)/m
+
+xs = a + (np.arange(n) + 0.5)*dx
+ys = c + (np.arange(m) + 0.5)*dy
+X, Y = np.meshgrid(xs, ys, indexing='ij')
+Z = f(X, Y)
+approx = np.sum(Z)*dx*dy
+true_val, _ = integrate.dblquad(lambda y, x: f(x, y), a, b, c, d)
+
+fig = plt.figure(figsize=(7.5, 5.5))
+ax = fig.add_subplot(111, projection='3d')
+xpos, ypos = X.ravel() - dx/2, Y.ravel() - dy/2
+zpos = np.zeros_like(xpos)
+dz = Z.ravel()
+colors = plt.cm.viridis((dz - dz.min())/(dz.max() - dz.min() + 1e-9))
+ax.bar3d(xpos, ypos, zpos, dx*0.9, dy*0.9, dz, color=colors, shade=True)
+ax.set_xlabel('x', fontsize=12, fontweight='bold', labelpad=10)
+ax.set_ylabel('y', fontsize=12, fontweight='bold', labelpad=10)
+ax.set_zlabel('f(x,y)', fontsize=12, fontweight='bold', labelpad=6)
+ax.set_title(
+    f"Riemann Sum $\\approx {approx:.3f}$  vs.  $\\iint f\\,dA={true_val:.3f}$",
+    fontsize=12, fontweight='bold'
+)
+plt.tight_layout()
+plt.show()
+```
+
+::: {.notes}
+Each box has base area $\Delta x \Delta y$ and height $f(x_{ij}^{*}, y_{ij}^{*})$; summing the box volumes and letting $m,n\rightarrow\infty$ gives the double integral, exactly as in the 1D case.
+:::
+
+---
+
+> **Looking ahead:** if $f(x,y)\geq 0$ is the **joint density** of two random variables $X$ and $Y$, then $P\big((X,Y)\in R\big) = \iint_{R}f(x,y)\,dx\,dy$ -- the same double integral, now interpreted as a probability. We'll return to joint distributions later in the course.
+
 ## Triple Integrals
 
 Triple and higher dimensional integrals are defined similarly. For a continuous function $f(x,y,z)$, the triple integral is denoted
@@ -578,18 +692,47 @@ We later introduce the notion of a **continuous random variable** $X$ and its co
 Determining the probability that a random variable falls within an interval is given by,
 
 $$
-\mathbb{P}(a\leq X \leq b) = \int_{a}^{b}f(x)dx.
+P(a\leq X \leq b) = \int_{a}^{b}f(x)dx.
 $$
-
 
 Expectation and variance are also defined via integration.
 
+---
+
+```{python}
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate
+
+pdf = lambda x: 12*x*(1 - x)**2
+xs = np.linspace(0, 1, 500)
+EX, _ = integrate.quad(lambda x: x*pdf(x), 0, 1)
+lo, hi = 0.3, 0.7
+prob, _ = integrate.quad(pdf, lo, hi)
+
+fig, ax = plt.subplots(figsize=(7, 4.5))
+ax.plot(xs, pdf(xs), color='C0', lw=2.5, label='$f(x)$ (pdf)')
+mask = (xs >= lo) & (xs <= hi)
+ax.fill_between(xs[mask], 0, pdf(xs[mask]), color='C0', alpha=0.35,
+                 label=f'$P({lo}\\leq X\\leq {hi})={prob:.3f}$')
+ax.axvline(EX, color='C3', ls='--', lw=2, label=f'$E(X)={EX:.2f}$')
+ax.set_xlim(0, 1)
+ax.set_ylim(0, pdf(xs).max()*1.15)
+ax.set_xlabel('x', fontsize=13, fontweight='bold')
+ax.set_ylabel('f(x)', fontsize=13, fontweight='bold')
+ax.set_title('Probability as Area Under a Density', fontsize=13, fontweight='bold')
+ax.legend(fontsize=11)
+plt.tight_layout()
+plt.show()
+```
+
 ## Expectation
 
-The expectation of a continuous random variable with pdf $f(x)$ is given by
+The expectation of a continuous random variable $X$ with pdf $f(x)$ is given by
 
 $$
-\mathbb{E}(X) = \int_{-\infty}^{\infty} x f(x) dx,
+E(X) = \int_{-\infty}^{\infty} x f(x) dx,
 $$
 where $f(x)$ is the probability density function of $X$.
 
@@ -597,15 +740,15 @@ where $f(x)$ is the probability density function of $X$.
 
 The variance of a continuous random variable $X$ with pdf $f(x)$ is given by:
 $$
-\mathbb{V}(X) = \int_{-\infty}^{\infty} (x - \mathbb{E}(X)^2) f(x) dx.
+V(X) = \int_{-\infty}^{\infty} (x - E(X))^2 f(x) dx.
 $$
 
 An alternative formula is
 $$
-\mathbb{V}(X) = \mathbb{E}(X^2) - (\mathbb{E}(X))^2,
+V(X) = E(X^2) - (E(X))^2,
 $$
 where
-$\mathbb{E}(X^2) = \int_{-\infty}^{\infty} x^2 f(x) dx$.
+$E(X^2) = \int_{-\infty}^{\infty} x^2 f(x) dx$.
 
 ## Summary
 
