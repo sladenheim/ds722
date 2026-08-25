@@ -128,15 +128,15 @@ The second derivative test helps determine the nature of a critical point $x_0$ 
 
 ## Gradient
 
-Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the gradient is a vector consisting of all partial derivatives of $f$:
+Given a real-valued function $f(x)$ with $x\in\mathbb{R}^{n}$, the gradient is a vector consisting of all partial derivatives of $f$:
 
 $$
-\nabla f(\mathbf{x}) = 
+\nabla f(x) = 
 \begin{bmatrix}
-\frac{\partial}{\partial x_{1}}f(\mathbf{x}) \\
-\frac{\partial}{\partial x_{2}}f(\mathbf{x}) \\
+\frac{\partial}{\partial x_{1}}f(x) \\
+\frac{\partial}{\partial x_{2}}f(x) \\
 \vdots \\
-\frac{\partial}{\partial x_{n}}f(\mathbf{x}) \\
+\frac{\partial}{\partial x_{n}}f(x) \\
 \end{bmatrix}.
 $$
 
@@ -163,16 +163,16 @@ $$
 
 ## Hessian
 
-Given a real-valued function $f(\mathbf{x})$ with $\mathbf{x}\in\mathbb{R}^{n}$, the *Hessian* is the symmetric matrix:
+Given a real-valued function $f(x)$ with $x\in\mathbb{R}^{n}$, the *Hessian* is the symmetric matrix:
 
 $$
 \small
-\nabla^{2} f(\mathbf{x}) = 
+\nabla^{2} f(x) = 
 \begin{bmatrix}
-\frac{\partial^{2}}{\partial x_{1}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{1}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{1}\partial x_{n}}f(\mathbf{x}) \\
-\frac{\partial^{2}}{\partial x_{2}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{2}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{2}\partial x_{n}}f(\mathbf{x})\\
+\frac{\partial^{2}}{\partial x_{1}\partial x_{1}}f(x) &  \frac{\partial^{2}}{\partial x_{1}\partial x_{2}}f(x) & \cdots & \frac{\partial^{2}}{\partial x_{1}\partial x_{n}}f(x) \\
+\frac{\partial^{2}}{\partial x_{2}\partial x_{1}}f(x) &  \frac{\partial^{2}}{\partial x_{2}\partial x_{2}}f(x) & \cdots & \frac{\partial^{2}}{\partial x_{2}\partial x_{n}}f(x)\\
 \vdots & \vdots & \ddots & \vdots \\ 
-\frac{\partial^{2}}{\partial x_{n}\partial x_{1}}f(\mathbf{x}) &  \frac{\partial^{2}}{\partial x_{n}\partial x_{2}}f(\mathbf{x}) & \cdots & \frac{\partial^{2}}{\partial x_{n}\partial x_{n}}f(\mathbf{x})\\
+\frac{\partial^{2}}{\partial x_{n}\partial x_{1}}f(x) &  \frac{\partial^{2}}{\partial x_{n}\partial x_{2}}f(x) & \cdots & \frac{\partial^{2}}{\partial x_{n}\partial x_{n}}f(x)\\
 \end{bmatrix}.
 $$
 
@@ -205,7 +205,7 @@ $$
 
 For multivariate functions, convexity is determined by the Hessian matrix:
 
-- If the Hessian $\nabla^2 f(\mathbf{x})$ is **positive semi-definite** for all $\mathbf{x}$, then $f$ is convex.
+- If the Hessian $\nabla^2 f(x)$ is **positive semi-definite** for all $x$, then $f$ is convex.
 - If the Hessian is **negative semi-definite**, then $f$ is concave.
 
 Convex functions are important in optimization because any local minimum is also a global minimum.
@@ -214,35 +214,35 @@ Convex functions are important in optimization because any local minimum is also
 
 For multivariate functions, use the Hessian matrix:
 
-- If the Hessian at $\mathbf{x}_0$ is **positive definite**, $f(\mathbf{x}_0)$ is a local minimum.
-- If the Hessian is **negative definite**, $f(\mathbf{x}_0)$ is a local maximum.
-- If the Hessian is **indefinite**, $\mathbf{x}_0$ is a saddle point.
+- If the Hessian at $x_0$ is **positive definite**, $f(x_0)$ is a local minimum.
+- If the Hessian is **negative definite**, $f(x_0)$ is a local maximum.
+- If the Hessian is **indefinite**, $x_0$ is a saddle point.
 
 
 ## Vector-Valued Functions
 
-A vector-valued function $\mathbf{f}: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a mapping from $n$-dimensional space to $m$-dimensional space
+A vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a mapping from $n$-dimensional space to $m$-dimensional space
 
 $$
-\mathbf{f}(\mathbf{x}) = 
+f(x) = 
 \begin{bmatrix}
-f_{1}(\mathbf{x}) \\
-f_{2}(\mathbf{x}) \\
+f_{1}(x) \\
+f_{2}(x) \\
 \vdots \\
-f_{m}(\mathbf{x}) \\
+f_{m}(x) \\
 \end{bmatrix}\in\mathbb{R}^{m}.
 $$
 
-The rules for differentiation apply to each of the functions $f_{i}(\mathbf{x})$.
+The rules for differentiation apply to each of the functions $f_{i}(x)$.
 
 ## Gradient of Vector-Valued Functions
 
-The gradient of a vector-valued function $\mathbf{f}: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a matrix
+The gradient of a vector-valued function $f: \mathbb{R}^{n}\rightarrow \mathbb{R}^{m}$ is a matrix
 
 $$
 \small
 J = 
-\nabla \mathbf{f}(\mathbf{x})
+\nabla f(x)
 =
 \begin{bmatrix}
 \frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{1}}{\partial x_{2}} & \cdots & \frac{\partial f_{1}}{\partial x_{n}} \\
@@ -256,17 +256,17 @@ This matrix is called the *Jacobian* and describes the rate of change of each ou
 
 ---
 
-**Example:** $\mathbf{f}(x_{1},x_{2}) = \begin{bmatrix} \sin(x_{1}x_{2}) \\ 4x_{1}^{2}e^{x_{1}x_{2}} \end{bmatrix}$
+**Example:** $f(x_{1},x_{2}) = \begin{bmatrix} \sin(x_{1}x_{2}) \\ 4x_{1}^{2}e^{x_{1}x_{2}} \end{bmatrix}$
 
 ::: {.notes}
 $$
 \begin{align*}
-\mathbf{f}(x_{1},x_{2}) &= 
+f(x_{1},x_{2}) &= 
 \begin{bmatrix}
 \sin(x_{1}x_{2}) \\
 4x_{1}^{2}e^{x_{1}x_{2}}
 \end{bmatrix} \\[1em]
-J = \nabla \mathbf{f}(x_{1},x_{2}) &=
+J = \nabla f(x_{1},x_{2}) &=
 \begin{bmatrix}
 \frac{\partial}{\partial x_{1}}\sin(x_{1}x_{2}) & \frac{\partial}{\partial x_{2}}\sin(x_{1}x_{2}) \\[0.5em]
 \frac{\partial}{\partial x_{1}}4x_{1}^{2}e^{x_{1}x_{2}} & \frac{\partial}{\partial x_{2}}4x_{1}^{2}e^{x_{1}x_{2}}
@@ -280,17 +280,17 @@ x_{2}\cos(x_{1}x_{2}) & x_{1}\cos(x_{1}x_{2}) \\[0.5em]
 $$
 :::
 
-## Gradient of $A\mathbf{x}$
+## Gradient of $Ax$
 
-Let $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$, where $A\in\mathbb{R}^{m\times n}$ and $\mathbf{x}\in\mathbb{R}^{n}$. What is $\frac{d\mathbf{f}}{d\mathbf{x}}$?
+Let $f(x) = Ax$, where $A\in\mathbb{R}^{m\times n}$ and $x\in\mathbb{R}^{n}$. What is $\frac{df}{dx}$?
 
 ## Jacobian Dimensions
 
 Observe that
 
 :::: {.incremental}
-- Jacobian of a scalar-valued function $f(\mathbf{x})$ where $\mathbf{x}\in\mathbb{R}^{n}$ is a vector $\nabla f(\mathbf{x})\in\mathbb{R}^{n}$.
-- Jacobian of a vector-valued function $\mathbf{f}(\mathbf{x})$ where $\mathbf{x}\in\mathbb{R}^{n}$ and $\mathbf{f}\in\mathbb{R}^{m}$ is a matrix $J\in\mathbb{R}^{m\times n}$.
+- Jacobian of a scalar-valued function $f(x)$ where $x\in\mathbb{R}^{n}$ is a vector $\nabla f(x)\in\mathbb{R}^{n}$.
+- Jacobian of a vector-valued function $f(x)$ where $x\in\mathbb{R}^{n}$ and $f\in\mathbb{R}^{m}$ is a matrix $J\in\mathbb{R}^{m\times n}$.
 - What is the Jacobian of a matrix-valued function?
 ::::
 
@@ -320,7 +320,7 @@ $$
 It is possible that we have a function mapping:
 
 $$
-\mathbf{f}: \mathbb{R}^{m\times n} \rightarrow \mathbb{R}^{p\times q}.
+f: \mathbb{R}^{m\times n} \rightarrow \mathbb{R}^{p\times q}.
 $$
 
 For a linear mapping we can express this as the multiplication of $4$th order tensor $T\in\mathbb{R}^{p\times q\times m\times n}$ with the matrices $A$ and $B$,
@@ -351,10 +351,10 @@ $$
 
 ## Gradient of Vector w.r.t. Matrix
 
-Let's compute $\frac{d\mathbf{f}}{dA}\in\mathbb{R}^{m\times m\times n}$ when $\mathbf{f}=A\mathbf{x}\in\mathbb{R}^{m}$, where $A\in\mathbb{R}^{m\times n}$, and $\mathbf{x}\in\mathbb{R}^{n}$. 
+Let's compute $\frac{df}{dA}\in\mathbb{R}^{m\times m\times n}$ when $f=Ax\in\mathbb{R}^{m}$, where $A\in\mathbb{R}^{m\times n}$, and $x\in\mathbb{R}^{n}$. 
 
 $$
-\frac{d\mathbf{f}}{dA}
+\frac{df}{dA}
 =
 \begin{bmatrix}
 \frac{\partial f_{1}}{\partial A}\\
@@ -366,12 +366,12 @@ $$
 
 ---
 
-Compute $\frac{df_{i}}{dA_{ij}}$:
+Compute $\frac{df_{k}}{dA_{ij}}$:
 
 ::: {.notes}
 $$
 \begin{align*}
-\mathbf{f} &= A\mathbf{x} \\
+f &= Ax \\
 f_{k} &= \sum_{l=1}^{n} A_{kl} x_{l} \\
 \frac{\partial f_{k}}{\partial A_{ij}} &= \frac{\partial}{\partial A_{ij}} \left( \sum_{l=1}^{n} A_{kl} x_{l} \right) \\
 &= \sum_{l=1}^{n} \frac{\partial A_{kl}}{\partial A_{ij}} x_{l} \\
@@ -403,21 +403,34 @@ Compute $\frac{dK_{pq}}{dR_{ij}}$
 
 
 
+## Numerator vs. Denominator Layout
+
+For $y=f(x)$ with $y\in\mathbb{R}^{m}$ and $x\in\mathbb{R}^{n}$, there are two common conventions for the shape of $\frac{dy}{dx}$:
+
+- **Numerator layout:** $\frac{dy}{dx}\in\mathbb{R}^{m\times n}$ (rows indexed by $y$, columns indexed by $x$). This is the convention used for the Jacobian above.
+- **Denominator layout:** $\frac{dy}{dx}\in\mathbb{R}^{n\times m}$, the transpose of the numerator-layout version.
+
+We use **numerator layout** throughout, since it is the convention most commonly used in neural network and automatic differentiation contexts: it lets Jacobians compose via ordinary left-to-right matrix multiplication, matching the chain rule (as in the forward/backward pass example below).
+
+::: {.notes}
+For the special case of the gradient of a scalar function $f(x)\in\mathbb{R}$, numerator layout would technically give a *row* vector. Instead, by the near-universal convention in optimization and machine learning, we write $\nabla f(x)$ as a *column* vector matching the shape of $x$ -- formally $\nabla f(x) := J_{f}(x)^{\top}$ -- so that updates like $x \leftarrow x - \alpha \nabla f(x)$ are well-defined. This is why the gradient identities below are column vectors, while the matrix/vector-valued identities follow numerator layout directly.
+:::
+
 ## Useful Identities for Computing Gradients
 
 $$
 \begin{align}
-\frac{\partial A\mathbf{x}}{\partial \mathbf{x}} &= A, \quad
-\frac{\partial \mathbf{x}^{\top}A}{\partial \mathbf{x}} = A^{\top}, \\
-\frac{\partial \mathbf{x}^{\top}\mathbf{a}}{\partial \mathbf{x}} &= \mathbf{a}^{\top}, \quad
-\frac{\partial \mathbf{a}^{\top}\mathbf{x}}{\partial \mathbf{x}} = \mathbf{a}^{\top}, \\
-\frac{\partial \mathbf{a}^{\top}X\mathbf{b}}{\partial X} &= \mathbf{a}\mathbf{b}^{\top}, \quad
-\frac{\partial \mathbf{x}^{\top}A\mathbf{x}}{\partial \mathbf{x}} = \mathbf{x}^{\top}(A + A^{\top}). \\
+\frac{\partial Ax}{\partial x} &= A, \quad
+\frac{\partial x^{\top}A}{\partial x} = A^{\top}, \\
+\frac{\partial x^{\top}a}{\partial x} &= a, \quad
+\frac{\partial a^{\top}x}{\partial x} = a, \\
+\frac{\partial a^{\top}Xb}{\partial X} &= ab^{\top}, \quad
+\frac{\partial x^{\top}Ax}{\partial x} = (A + A^{\top})x. \\
 \end{align}
 $$
 
 ::: {.notes}
-Numerator layout.
+The first two identities are genuine Jacobians (vector-valued output), in numerator layout. The last three are gradients of scalar-valued functions, written as column vectors by convention.
 :::
 
 ## Automatic Differentiation
@@ -426,10 +439,10 @@ Automatic differentiation is a set of techniques to numerically evaluate the der
 
 It is an efficient and accurate way to compute gradients by repeated use of the chain rule.
 
-Recall that if we have a function $h(x) = f(g(x))$ then
+Recall that for $f(g(x))$, the chain rule gives
 
 $$
-\frac{dh}{dx} = \frac{df}{dg}\frac{dg}{dx}.
+\frac{d}{dx}f(g(x)) = \frac{df}{dg}\frac{dg}{dx}.
 $$
 
 ---
@@ -493,15 +506,15 @@ The output of the neural network is
 
 <!-- $$
 \scriptsize
-z^{[2]} = g^{[2]}(W^{[2]}\mathbf{a}^{[1]} + \mathbf{b}^{[2]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}\mathbf{x} + \mathbf{b}^{[1]}) + b^{[2]}).
+z^{[2]} = g^{[2]}(W^{[2]}a^{[1]} + b^{[2]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}x + b^{[1]}) + b^{[2]}).
 $$ -->
 
 $$
 \scriptsize
-z^{[2]} = g^{[2]}(W^{[2]}\mathbf{z}^{[1]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}\mathbf{x})).
+z^{[2]} = g^{[2]}(W^{[2]}z^{[1]}) = g^{[2]}(W^{[2]}g^{[1]}(W^{[1]}x)).
 $$
 
-How do we compute the derivative of $z^{[2]}$ with respect to $\mathbf{x}$?
+How do we compute the derivative of $z^{[2]}$ with respect to $x$?
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -509,9 +522,9 @@ How do we compute the derivative of $z^{[2]}$ with respect to $\mathbf{x}$?
 $$
 \small
 \begin{align}
-h^{[1]} &= W^{[1]}\mathbf{x} \\
-\mathbf{z}^{[1]} &= g^{[1]}(h^{[1]})\\
-h^{[2]} &= W^{[2]}\mathbf{z}^{[1]} \\
+h^{[1]} &= W^{[1]}x \\
+z^{[1]} &= g^{[1]}(h^{[1]})\\
+h^{[2]} &= W^{[2]}z^{[1]} \\
 z^{[2]} &= g^{[2]}(h^{[2]})
 \end{align}
 $$
@@ -522,9 +535,9 @@ $$
 $$
 \scriptsize
 \begin{align}
-\frac{dh^{[1]}}{d\mathbf{x}} &= W^{[1]} \\
-\frac{d\mathbf{z}^{[1]}}{dh^{[1]}} &= \frac{dg^{[1]}}{dh^{[1]}} \\
-\frac{dh^{[2]}}{d\mathbf{z}^{[1]}} &= W^{[2]} \\
+\frac{dh^{[1]}}{dx} &= W^{[1]} \\
+\frac{dz^{[1]}}{dh^{[1]}} &= \frac{dg^{[1]}}{dh^{[1]}} \\
+\frac{dh^{[2]}}{dz^{[1]}} &= W^{[2]} \\
 \frac{dz^{[2]}}{dh^{[2]}} &= \frac{dg^{[2]}}{dh^{[2]}} \\
 \end{align}
 $$
@@ -534,11 +547,11 @@ $$
 
 ## Multivariate Taylor Series
 
-Let $f:\mathbb{R}^{n} \rightarrow \mathbb{R}$ be $k$-times differentiable function at the point $\mathbf{c}\in\mathbb{R}^{n}$ then
+Let $f:\mathbb{R}^{n} \rightarrow \mathbb{R}$ be $k$-times differentiable function at the point $c\in\mathbb{R}^{n}$ then
 
 $$
 \scriptsize
-f(\mathbf{x}) = f(\mathbf{c}) + \nabla f(\mathbf{c})^{\top}(\mathbf{x}-\mathbf{c}) + \frac{1}{2}(\mathbf{x}-\mathbf{c})^{\top}\nabla^{2}f(\mathbf{c})(\mathbf{x}-\mathbf{c}) + \mathcal{O}(\Vert \mathbf{x}-\mathbf{c}\Vert^{3}).
+f(x) = f(c) + \nabla f(c)^{\top}(x-c) + \frac{1}{2}(x-c)^{\top}\nabla^{2}f(c)(x-c) + \mathcal{O}(\Vert x-c\Vert^{3}).
 $$
 
 
