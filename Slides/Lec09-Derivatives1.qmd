@@ -504,16 +504,16 @@ $$
 
 ## Chain Rule
 
-For differentiable functions $f(x)$ and $g(x)$ 
+For differentiable functions $f(x)$ and $g(x)$
 
 $$
 f(g(x))^{\prime} = f^{\prime}(g(x))g^{\prime}(x).
 $$
 
-Alternatively if $h(x) = f(g(x))$ then
+Equivalently, in Leibniz notation,
 
 $$
-h^{\prime}(x) = \frac{dh}{dx} = \frac{df}{dg}\frac{dg}{dx}.
+\frac{d}{dx}f(g(x)) = \frac{df}{dg}\frac{dg}{dx}.
 $$
 
 ## Higher-Order Derivatives
@@ -599,17 +599,17 @@ $$
 
 ## Taylor's Theorem
 
-Let $k$ be an integer and let the function $f:\mathbb{R}\rightarrow \mathbb{R}$ be $k$ times differentiable at the point $c\in\mathbb{R}$. Then there exists a function $h_{k}:\mathbb{R}\rightarrow \mathbb{R}$ such that
+Let $k$ be an integer and let the function $f:\mathbb{R}\rightarrow \mathbb{R}$ be $k$ times differentiable at the point $c\in\mathbb{R}$. Then there exists a remainder function $r_{k}:\mathbb{R}\rightarrow \mathbb{R}$ such that
 
 $$
 \small
-f(x) = \sum_{n=0}^{k} \frac{f^{(n)}(c)(x-c)^{n}}{n!} + h_{k}(x)(x-c)^{k+1},
+f(x) = \sum_{n=0}^{k} \frac{f^{(n)}(c)(x-c)^{n}}{n!} + r_{k}(x)(x-c)^{k},
 $$
 and
 
 $$
 \small
-\lim_{x\rightarrow c}h_{k}(x) = 0.
+\lim_{x\rightarrow c}r_{k}(x) = 0.
 $$
 
 ## Summary
