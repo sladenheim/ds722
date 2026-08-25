@@ -137,11 +137,11 @@ Make sure to explain what is on Piazza and where things are located.
 
 All course materials are available online or through the BU library.
 
-- [Numerical Linear Algebra](https://www.stat.uchicago.edu/~lekheng/courses/309/books/Trefethen-Bau.pdf), Trefethen & Bau  
+- Numerical Linear Algebra, Trefethen & Bau  
 - [Mathematical Methods in Data Science (with Python)](https://mmids-textbook.github.io/index.html), Roch  
-- [Numerical Optimization](https://www.math.uci.edu/~qnie/Publications/NumericalOptimization.pdf), Nocedal \& Wright
+- Numerical Optimization, Nocedal \& Wright
 - [Mathematics for Machine Learning](https://mml-book.github.io/book/mml-book.pdf), Deisenroth, Faisal, Ong  
-- [All of Statistics: A concise course in statistical inference](https://bu.primo.exlibrisgroup.com/permalink/01BOSU_INST/u1o13f/alma99209143168401161), Wasserman  
+- All of Statistics: A concise course in statistical inference, Wasserman  
 - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html), Murphy
 
 ::: {.notes}
@@ -179,7 +179,7 @@ will be prorated based on the percentage of sessions attended.
 
 - During the semester will be 6 discussion quizzes consisting of 4 questions worth 20 points. 2 questions will be based on problems in the problem set. The other 2 questions will be unseen problems. 
 
-- Non-quiz discussions sessions will work through computational problems using Jupytre notebooks. 
+- Non-quiz discussions sessions will work through computational problems using Jupyter notebooks. 
 
 ## Discussion Quizzes
 
@@ -327,8 +327,6 @@ All members of the class—including teaching staff—must uphold the [Academic 
 1. **Visit me in office hours.**  
    I’m happy to discuss your approach, clarify concepts, and provide feedback.
 
-
-## 
 
 ## Math is Fun
   
