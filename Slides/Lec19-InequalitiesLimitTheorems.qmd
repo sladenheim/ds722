@@ -32,10 +32,10 @@ We cover:
 
 ## Markov's Inequality
 
-Let $X$ be a nonnegative random variable and suppose that $\mathbb{E}(X)<\infty$. For any $t>0$,
+Let $X$ be a nonnegative random variable and suppose that $E(X)<\infty$. For any $t>0$,
 
 $$
-\mathbb{P}(X > t) \leq \frac{\mathbb{E}(X)}{t}.
+P(X > t) \leq \frac{E(X)}{t}.
 $$
 
 ::: {.notes}
@@ -43,7 +43,7 @@ Since $X>0$
 $$
 \begin{align}
 E(X) &= \int_{0}^{\infty}xf(x)dx = \int_{0}^{t}xf(x) dx + \int_{t}^{\infty} xf(x) dx \\
-&\geq \int_{t}^{\infty}xf(x)dx\geq t\int_{t}^{\infty}f(x)dx = t\mathbb{P}(X>t).
+&\geq \int_{t}^{\infty}xf(x)dx\geq t\int_{t}^{\infty}f(x)dx = tP(X>t).
 \end{align}
 $$
 :::
@@ -56,24 +56,24 @@ The score distribution of an exam is modelled by a random variable $X$ with rang
 
 :::: {.fragment}
 
-$\mathbb{P}(X \geq 100) =$
+$P(X \geq 100) =$
 
 ::::
 
 
 ::: {.notes}
-If the average is $\mathbb{E}(X) = 50$, an upper bound on the proportion of students who score at least 100 should be 50\%, right? If more than 50\% of students scored 100 (or higher), the average would already be at least 50, since all scores must be nonnegative $\geq 0$. Mathematically, we just argued that:
+If the average is $E(X) = 50$, an upper bound on the proportion of students who score at least 100 should be 50\%, right? If more than 50\% of students scored 100 (or higher), the average would already be at least 50, since all scores must be nonnegative $\geq 0$. Mathematically, we just argued that:
 
 $$
-\mathbb{P}(X \geq 100) \leq \frac{\mathbb{E}[X]}{100} = \frac{50}{100} = \frac{1}{2}
+P(X \geq 100) \leq \frac{E[X]}{100} = \frac{50}{100} = \frac{1}{2}
 $$
 
 This sounds reasonable — if, say, 70\% of the class were to get 100 or higher, the average would already be at least 70, even if everyone else got a zero. The best bound we can get is 50\%, and that requires everyone else to get a zero.
 
-If the average is $\mathbb{E}(X) = 25$, an upper bound on the proportion of students who score at least 100 is:
+If the average is $E(X) = 25$, an upper bound on the proportion of students who score at least 100 is:
 
 $$
-\mathbb{P}(X \geq 100) \leq \frac{\mathbb{E}(X)}{100} = \frac{25}{100} = \frac{1}{4}
+P(X \geq 100) \leq \frac{E(X)}{100} = \frac{25}{100} = \frac{1}{4}
 $$
 :::
 
@@ -81,19 +81,19 @@ $$
 
 ## Chebyshev's Inequality
 
-Let $\mu=\mathbb{E}(X)$ and $\sigma^{2}=\mathbb{V}(X)$. Then
+Let $\mu=E(X)$ and $\sigma^{2}=V(X)$. Then
 
 $$
-\mathbb{P}(\vert X-\mu\vert \geq t)\leq \frac{\sigma^{2}}{t^{2}}\quad\text{and}\quad \mathbb{P}(\vert Z\vert \geq k)\leq \frac{1}{k^{2}},
+P(\vert X-\mu\vert \geq t)\leq \frac{\sigma^{2}}{t^{2}}\quad\text{and}\quad P(\vert Z\vert \geq k)\leq \frac{1}{k^{2}},
 $$
 
-where $Z=\frac{X-\mu}{\sigma}$. In particular $\mathbb{P}(\vert Z\vert > 2)\leq 1/4$ and $\mathbb{P}(\vert Z\vert > 3)\leq 1/9$.
+where $Z=\frac{X-\mu}{\sigma}$. In particular $P(\vert Z\vert > 2)\leq 1/4$ and $P(\vert Z\vert > 3)\leq 1/9$.
 
 ::: {.notes}
 Use Markov's inequality.
 
 $$
-\mathbb{P}(\vert X-\mu\vert \geq t) = \mathbb{P}(\vert X-\mu\vert^{2} \geq t^{2}) \leq \frac{\mathbb{E}\left((X-\mu)^{2}\right)}{t^{2}} = \frac{\sigma^{2}}{t^{2}}
+P(\vert X-\mu\vert \geq t) = P(\vert X-\mu\vert^{2} \geq t^{2}) \leq \frac{E\left((X-\mu)^{2}\right)}{t^{2}} = \frac{\sigma^{2}}{t^{2}}
 $$
 The second part follows by setting $t=k\sigma$.
 
@@ -118,12 +118,12 @@ May assume $X_{i}\sim\operatorname{Bernoulli}(p)$. We would intuitively expect t
 
 ---
 
-$\mathbb{P}(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq$
+$P(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq$
 
 
 ::: {.notes}
 $$
-\small\mathbb{P}(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq \mathbb{V}(\bar{X}_{n}){\varepsilon^{2}} = \frac{np(1-p)}{n^{2}\varepsilon^{2}}\leq \frac{1}{4n\varepsilon^{2}}
+\smallP(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq V(\bar{X}_{n}){\varepsilon^{2}} = \frac{np(1-p)}{n^{2}\varepsilon^{2}}\leq \frac{1}{4n\varepsilon^{2}}
 $$
 :::
 
@@ -132,10 +132,10 @@ $$
 Hoeffdings's inequalityt is similar to Markov's inequality, but is a *sharper* inequality.
 
 **Theorem**
-Let $X_{1},\ldots,X_{n}$ be independent observations such that $\mathbb{E}(X_{i})=0$ and $a_{i}\leq X_{i}\leq b_{i}$. Let $\varepsilon>0$. Then, for any $t>0$,
+Let $X_{1},\ldots,X_{n}$ be independent observations such that $E(X_{i})=0$ and $a_{i}\leq X_{i}\leq b_{i}$. Let $\varepsilon>0$. Then, for any $t>0$,
 
 $$
-\mathbb{P}\left(\sum_{i=1}^{n}X_{i}\geq \varepsilon\right) \leq e^{-t\varepsilon}\prod_{i=1}^{n}e^{t^{2}(b_{i}-a_{i})^{2}/8}.
+P\left(\sum_{i=1}^{n}X_{i}\geq \varepsilon\right) \leq e^{-t\varepsilon}\prod_{i=1}^{n}e^{t^{2}(b_{i}-a_{i})^{2}/8}.
 $$
 
 ---
@@ -143,19 +143,19 @@ $$
 Using Hoeffding's inequality, we can derive the following bound for $X_{1},\ldots,X_{n}\sim\operatorname{Bernoulli}(p)$. Let $\varepsilon>0$, then
 
 $$
-\mathbb{P}(\vert \bar{X}_{n}-p\vert > \varepsilon) \leq 2\varepsilon e^{-2ne^{2}},
+P(\vert \bar{X}_{n}-p\vert > \varepsilon) \leq 2\varepsilon e^{-2ne^{2}},
 $$
 
 where $\bar{X}_{n}=n^{-1}\sum_{i=1}^{n}X_{i}$.
 
 ---
 
-Recall that the Chebyshev' bound  $\mathbb{P}(\vert \bar{X}_{n}-p\vert > \varepsilon)$ when $n=100$ and $\varepsilon=0.2$ was 0.0625.
+Recall that the Chebyshev' bound  $P(\vert \bar{X}_{n}-p\vert > \varepsilon)$ when $n=100$ and $\varepsilon=0.2$ was 0.0625.
 
 Using the Hoeffding bound, we obtain
 
 $$
-\mathbb{P}(\vert \bar{X}_{n}-p\vert > 0.2) \leq 2e^{-2(100)/(0.2)^{2}} = 0.00067.
+P(\vert \bar{X}_{n}-p\vert > 0.2) \leq 2e^{-2(100)/(0.2)^{2}} = 0.00067.
 $$ -->
 
 
@@ -167,7 +167,7 @@ Mill's inequality is useful for bounding probability statements about Normal ran
 Let $Z\sim\mathcal{N}(0,1)$, then
 
 $$
-\mathbb{P}(\vert Z\vert > t)\leq \sqrt{\frac{2}{\pi}}\frac{e^{-t^{2}}}{t}.
+P(\vert Z\vert > t)\leq \sqrt{\frac{2}{\pi}}\frac{e^{-t^{2}}}{t}.
 $$
 
 ---
@@ -220,11 +220,11 @@ We can use Cauchy-Schwarz to obtain bounds on expected values.
 If $X,Y$ have finite variances, then
 
 $$
-\mathbb{E}(XY) \leq \sqrt{\mathbb{E}(X^{2})\mathbb{E}(Y^{2})}.
+E(XY) \leq \sqrt{E(X^{2})E(Y^{2})}.
 $$
 
 :::: {.fragment}
-You can prove this by expanding out $\mathbb{E}((X-\alpha Y)^{2})$ and setting $\alpha = \frac{\mathbb{E}(XY)^{2}}{\mathbb{E}(Y^{2})}$
+You can prove this by expanding out $E((X-\alpha Y)^{2})$ and setting $\alpha = \frac{E(XY)^{2}}{E(Y^{2})}$
 ::::
 
 
@@ -233,20 +233,20 @@ You can prove this by expanding out $\mathbb{E}((X-\alpha Y)^{2})$ and setting $
 If $g$ is a convex function, then
 
 $$
-\mathbb{E}(g(X))\geq g(\mathbb{E}(X)).
+E(g(X))\geq g(E(X)).
 $$
 
-If $g$ is concave, then $\mathbb{E}(g(X))\leq g(\mathbb{E}(X))$.
+If $g$ is concave, then $E(g(X))\leq g(E(X))$.
 
 ---
 
 **Proof**
 
 ::: {.notes}
-Let $L(x) = a+bx$ be the line, tangent to $g(x)$ at the point $\mathbb{E}(X)$. Since $G$ is convex, it lies above the line $L(x)$, so
+Let $L(x) = a+bx$ be the line, tangent to $g(x)$ at the point $E(X)$. Since $G$ is convex, it lies above the line $L(x)$, so
 
 $$
-\mathbb{E}(g(X))\geq\mathbb{E}(L(x)) = \mathbb{E}(a+bX) = a + b\mathbb{E}(X) = L(\mathbb{E(X)}) = g(\mathbb{E}(X)).
+E(g(X))\geqE(L(x)) = E(a+bX) = a + bE(X) = L(\mathbb{E(X)}) = g(E(X)).
 $$
 ::: -->
 
@@ -273,7 +273,7 @@ Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be anothe
 We say that $X_{n}$ converges to $X$ in probability, written $X\overset{P}\longrightarrow X$ if, for every $\varepsilon>0$,
 
 $$
-\mathbb{P}(\vert X_{n}-X\vert >\varepsilon) \rightarrow 0,
+P(\vert X_{n}-X\vert >\varepsilon) \rightarrow 0,
 $$
 
 as $n\rightarrow\infty$.
@@ -297,7 +297,7 @@ Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be anothe
 We say that $X_{n}$ converges to $X$ in quadratic mean, written $X_{n}\overset{qm}\longrightarrow X$ if
 
 $$
-\mathbb{E}((X_{n}-X)^{2})\rightarrow 0,
+E((X_{n}-X)^{2})\rightarrow 0,
 $$
 
 as $n\rightarrow\infty$. -->
@@ -338,13 +338,13 @@ Let $X_{1},\ldots,X_{n}$ be IID with mean $\mu$ and variance $\sigma^{2}$. Let $
 
 $$
 \small
-Z_{n} = \frac{\bar{X}_{n}-\mu}{\sqrt{\mathbb{V}(\bar{X}_{n})}} = \frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} \leadsto Z,
+Z_{n} = \frac{\bar{X}_{n}-\mu}{\sqrt{V(\bar{X}_{n})}} = \frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} \leadsto Z,
 $$
 
 where $Z\sim\mathcal{N}(0,1)$. In other words
 
 $$
-\lim_{n\rightarrow\infty}\mathbb{P}(Z_{n}\leq z) = \Phi(z) = \int_{-\infty}^{z}\frac{1}{2\pi}e^{-x^{2}/2}dx.
+\lim_{n\rightarrow\infty}P(Z_{n}\leq z) = \Phi(z) = \int_{-\infty}^{z}\frac{1}{2\pi}e^{-x^{2}/2}dx.
 $$
 
 ::: {.notes}
@@ -361,24 +361,24 @@ How can we compute the probability that the average number of errors $\bar{X}_{n
 
 ---
 
-We want to approximate $\mathbb{P}(\bar{X}_{n} < 5.5)$ using the CLT.
+We want to approximate $P(\bar{X}_{n} < 5.5)$ using the CLT.
 
 What do we need?
 
 :::: {.incremental}
-1. The mean $\mu = \mathbb{E}(X_{i})= \lambda = 5$
-1. The variance $\sigma^{2} = \mathbb{V}(X_{i}) = \lambda = 5$.
+1. The mean $\mu = E(X_{i})= \lambda = 5$
+1. The variance $\sigma^{2} = V(X_{i}) = \lambda = 5$.
 ::::
 
 :::: {.fragment}
 By the CLT we compute
 
-$\mathbb{P}(\bar{X}_{n} < 5.5) =$
+$P(\bar{X}_{n} < 5.5) =$
 ::::
 
 ::: {.notes}
 $$
-\mathbb{P}(\bar{X}_{n} < 5.5) = \mathbb{P}\left(\frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} < \frac{\sqrt{n}(5.5-\mu)}{\sigma} \right) \approx \mathbb{P}\left(Z < 2.5 \right) = 0.9938
+P(\bar{X}_{n} < 5.5) = P\left(\frac{\sqrt{n}(\bar{X}_{n}-\mu)}{\sigma} < \frac{\sqrt{n}(5.5-\mu)}{\sigma} \right) \approx P\left(Z < 2.5 \right) = 0.9938
 $$
 :::
 

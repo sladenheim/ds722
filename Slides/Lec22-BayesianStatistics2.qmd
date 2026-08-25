@@ -22,10 +22,10 @@ Today we cover Bayesian statistics in more depth with a focus on Bayesian infere
 
 The main way Bayes' Rule is used in Bayesian statistics is as a way to update the probability of a hypothesis $H$, given some data $D$.
 
-For $\small \mathbb{P}(D)>0$,
+For $\small P(D)>0$,
 
 $$
-\small \mathbb{P}(H \,\vert\, D)\; =  \frac{\mathbb{P}(D\,\vert\,H)\mathbb{P}(H) \; }{\mathbb{P}(D)}. 
+\small P(H \,\vert\, D)\; =  \frac{P(D\,\vert\,H)P(H) \; }{P(D)}. 
 $$
 
 ---
@@ -33,17 +33,17 @@ $$
 What are the terms for
 
 :::: {.incremental}
-- $\mathbb{P}(H)$?
-- $\mathbb{P}(H \vert D)$?
-- $\mathbb{P}(D \vert H)$?
-- $\mathbb{P}(D)$?
+- $P(H)$?
+- $P(H \vert D)$?
+- $P(D \vert H)$?
+- $P(D)$?
 ::::
 
 ::: {.notes}
-- $\mathbb{P}(H)$ is the probability of the hypothesis before we see the data, called the **prior** probability.
-- $\mathbb{P}(H \vert D)$ is the probability of the hypothesis after we see the data, called the **posterior** probability.
-- $\mathbb{P}(D \vert H)$ is the probability of the data under the hypothesis, called the **likelihood**.
-- $\mathbb{P}(D)$ is the **total probability of the data** under any hypothesis (it is also known as the **normalizing constant**).
+- $P(H)$ is the probability of the hypothesis before we see the data, called the **prior** probability.
+- $P(H \vert D)$ is the probability of the hypothesis after we see the data, called the **posterior** probability.
+- $P(D \vert H)$ is the probability of the data under the hypothesis, called the **likelihood**.
+- $P(D)$ is the **total probability of the data** under any hypothesis (it is also known as the **normalizing constant**).
 :::
 
 ## Frequentist Inference
@@ -98,20 +98,20 @@ Bayesian inference is carried out in the following way:
 
 Suppose $\theta$ is a discrete parameter and let $X$ denote a single discrete observation. Let's compute the posterior
 
-$\mathbb{P}(\Theta = \theta \mid X = x) =$
+$P(\Theta = \theta \mid X = x) =$
 
 ::: {.notes}
 $$
 \begin{align}
-\mathbb{P}(\Theta = \theta \mid X = x) &= \frac{\mathbb{P}(X=x,\Theta=\theta)}{\mathbb{P}(X=x)} \\
-&= \frac{\mathbb{P}(X=x\mid \Theta=\theta) \mathbb{P}(\Theta=\theta)}{\sum_{\theta} \mathbb{P}(X=x\mid \Theta=\theta) \mathbb{P}(\Theta=\theta)}
+P(\Theta = \theta \mid X = x) &= \frac{P(X=x,\Theta=\theta)}{P(X=x)} \\
+&= \frac{P(X=x\mid \Theta=\theta) P(\Theta=\theta)}{\sum_{\theta} P(X=x\mid \Theta=\theta) P(\Theta=\theta)}
 \end{align}
 $$
 :::
 
 ## Continuous Setting
 
-For continuous variables we replace $\mathbb{P}$ with density functions so that
+For continuous variables we replace $P$ with density functions so that
 
 $f(\theta\mid x) =$
 
@@ -366,7 +366,7 @@ where $\alpha,\beta>0$.
 The mean and variance of the $\operatorname{Beta}$ distribution are
 
 $$
-\mathbb{E}(X) = \frac{\alpha}{\alpha+\beta},\quad \mathbb{V}(X) = \frac{\alpha\beta}{(\alpha+\beta)^{2}(\alpha+\beta+1)}.
+E(X) = \frac{\alpha}{\alpha+\beta},\quad V(X) = \frac{\alpha\beta}{(\alpha+\beta)^{2}(\alpha+\beta+1)}.
 $$
 
 ::: {.notes}
@@ -512,7 +512,7 @@ $$
 ::::
 
 ## Biased Coins
-Consider an experiment with a possibly biased coin. We will consider $\Theta = \mathbb{P}(H)$. Suppose that before conducting the experiment we believe that all values of $\theta$ are equally likely.
+Consider an experiment with a possibly biased coin. We will consider $\Theta = P(H)$. Suppose that before conducting the experiment we believe that all values of $\theta$ are equally likely.
 
 What does this tell us about $\Theta$?
 
@@ -580,7 +580,7 @@ plt.show()
 
 ---
 
-What is the most likely value for $\Theta=\mathbb{P}(H)$?
+What is the most likely value for $\Theta=P(H)$?
 
 :::: {.fragment}
 The red star is the *maximum a posteriori probability (MAP)*. The MAP is 0.20, which we can calculate by maximizing $\theta(1-\theta)^{4}$.
@@ -600,7 +600,7 @@ Using the posterior distribution we can also determine a Bayesian credible inter
 
 The credible interval contains *most* of the posterior probability distribution.
 
-For example, suppose we want to determine an interval $[a, b]$ in which we are 90% confident that the parameter $\theta$ lies, i.e., $\mathbb{P}(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = 0.90$
+For example, suppose we want to determine an interval $[a, b]$ in which we are 90% confident that the parameter $\theta$ lies, i.e., $P(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = 0.90$
 
 ---
 
@@ -608,7 +608,7 @@ The quantity to calculate is
 
 $$
 \small
-\mathbb{P}(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = \int_{a}^{b}f(\theta\mid x_{1},\ldots, x_{n})d\theta = 0.90,
+P(\theta\in[a,b]\mid x_{1},\ldots, x_{n}) = \int_{a}^{b}f(\theta\mid x_{1},\ldots, x_{n})d\theta = 0.90,
 $$
 where $a,b$ are such that
 
@@ -786,15 +786,15 @@ plt.show()
 
 If random variable $Z$ follows the standard normal distribution, then, by definition of $z(\alpha)$,
 
-$$\small{\mathbb{P}\left(-z(\alpha/2) \leq Z \leq z(\alpha/2)\right) = 1-\alpha.}$$
+$$\small{P\left(-z(\alpha/2) \leq Z \leq z(\alpha/2)\right) = 1-\alpha.}$$
 
 $\frac{M - \mu}{\sigma/\sqrt{n}}$ has the standard normal distribution, so
 
-$$\small{\mathbb{P}\left(-z(\alpha/2) \leq \frac{M - \mu}{\sigma/\sqrt{n}} \leq z(\alpha/2)\right) = 1-\alpha.}$$
+$$\small{P\left(-z(\alpha/2) \leq \frac{M - \mu}{\sigma/\sqrt{n}} \leq z(\alpha/2)\right) = 1-\alpha.}$$
 
 Elementary manipulation of the inequalities gives 
 
-$$\small{\mathbb{P}\left(M - z(\alpha/2) \frac{\sigma}{\sqrt{n}} \leq \mu \leq M + z(\alpha/2)  \frac{\sigma}{\sqrt{n}} \right) = 1-\alpha.}$$
+$$\small{P\left(M - z(\alpha/2) \frac{\sigma}{\sqrt{n}} \leq \mu \leq M + z(\alpha/2)  \frac{\sigma}{\sqrt{n}} \right) = 1-\alpha.}$$
 
 ---
 

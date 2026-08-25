@@ -21,10 +21,10 @@ In this lecture we examine how we can use this interpretation to solve interesti
 
 ## Bayes' Theorem
 
-Let $A$ and $B$ be events such that $\mathbb{P}(B)>0$, then
+Let $A$ and $B$ be events such that $P(B)>0$, then
 
 $$
-\mathbb{P}(A\mid B) = \frac{\mathbb{P}(B\mid A)\mathbb{P}(A)}{\mathbb{P}(B)}.
+P(A\mid B) = \frac{P(B\mid A)P(A)}{P(B)}.
 $$
 
 
@@ -32,12 +32,12 @@ $$
 
 The probability
 
-- $\mathbb{P}(A\mid B)$ is called the posterior
-- $\mathbb{P}(A)$ is called the prior
-- $\mathbb{P}(B\mid A)$ is called the likelihood
-- $\mathbb{P}(B)$ total probability or evidence
+- $P(A\mid B)$ is called the posterior
+- $P(A)$ is called the prior
+- $P(B\mid A)$ is called the likelihood
+- $P(B)$ total probability or evidence
 
-This formula tells us that $\mathbb{P}(A\mid B)\propto \mathbb{P}(B\mid A)\mathbb{P}(A)$.
+This formula tells us that $P(A\mid B)\propto P(B\mid A)P(A)$.
 
 ## Cookies
 
@@ -79,14 +79,14 @@ We can then consider events
 
 
 :::: {.fragment}
-In words, what does $\mathbb{P}(A\mid B)$ represent?
+In words, what does $P(A\mid B)$ represent?
 ::::
 
 ::: {.notes}
 Rewrite these as
 
 $$
-\mathbb{P}(\text{Bowl 1} \vert \text{Vanilla}).
+P(\text{Bowl 1} \vert \text{Vanilla}).
 $$
 :::
 
@@ -94,14 +94,14 @@ $$
 
 We now have three probabilities we need to determine:
 
-- $\small \mathbb{P}(\text{Bowl 1})$ which is one bowl out of two, is  1/2.
-- $\small \mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})$ which is 30 out of 40 cookies, is 3/4.
-- $\small \mathbb{P}(\text{Vanilla})$ is a little tougher. It's the combined probability of Vanillas from either bowl. What can we do?
+- $\small P(\text{Bowl 1})$ which is one bowl out of two, is  1/2.
+- $\small P(\text{Vanilla} \vert \text{Bowl 1})$ which is 30 out of 40 cookies, is 3/4.
+- $\small P(\text{Vanilla})$ is a little tougher. It's the combined probability of Vanillas from either bowl. What can we do?
 
 ::: {.notes}
 $$\small \begin{align*}
- & \mathbb{P}(\text{Vanilla})  = \\
- & = \mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})\;\mathbb{P}(\text{Bowl 1}) +  \mathbb{P}(\text{Vanilla} \vert \text{Bowl 2})\mathbb{P}(\text{Bowl 2}) \\
+ & P(\text{Vanilla})  = \\
+ & = P(\text{Vanilla} \vert \text{Bowl 1})\;P(\text{Bowl 1}) +  P(\text{Vanilla} \vert \text{Bowl 2})P(\text{Bowl 2}) \\
 & = (3/4)(1/2)+(1/2)(1/2) =5/8 
 \end{align*}$$
 :::
@@ -110,15 +110,15 @@ $$\small \begin{align*}
 
 Using that
 
-- $\small \mathbb{P}(\text{Bowl 1}) = 1/2$,
-- $\small \mathbb{P}(\text{Vanilla} \vert \text{Bowl 1}) = 30/40$, and
-- $\small \mathbb{P}(\text{Vanilla}) = 5/8$,
+- $\small P(\text{Bowl 1}) = 1/2$,
+- $\small P(\text{Vanilla} \vert \text{Bowl 1}) = 30/40$, and
+- $\small P(\text{Vanilla}) = 5/8$,
 
 we have
 
 $$
 \small \begin{align*}
-\mathbb{P}(\text{Bowl 1} \vert \text{Vanilla})\ & = \frac{\mathbb{P}(\text{Vanilla} \vert \text{Bowl 1})\mathbb{P}(\text{Bowl 1})}{\mathbb{P}(\text{Vanilla})}\\
+P(\text{Bowl 1} \vert \text{Vanilla})\ & = \frac{P(\text{Vanilla} \vert \text{Bowl 1})P(\text{Bowl 1})}{P(\text{Vanilla})}\\
 & = \frac{(3/4)(1/2)}{5/8} = 3/5.
 \end{align*}
 $$
@@ -127,19 +127,19 @@ $$
 
 The main way Bayes' Rule is used in Bayesian statistics is as a way to update the probability of a hypothesis $H$, given some data $D$.
 
-For $\small \mathbb{P}(D)>0$,
+For $\small P(D)>0$,
 
 $$
-\small \mathbb{P}(H \,\vert\, D)\; =  \frac{\mathbb{P}(D\,\vert\,H)\mathbb{P}(H) \; }{\mathbb{P}(D)}. 
+\small P(H \,\vert\, D)\; =  \frac{P(D\,\vert\,H)P(H) \; }{P(D)}. 
 $$
 
 ---
 
 :::: {.incremental}
-- $\mathbb{P}(H)$ is the probability of the hypothesis before we see the data, called the **prior** probability.
-- $\mathbb{P}(H \vert D)$ is the probability of the hypothesis after we see the data, called the **posterior** probability.
-- $\mathbb{P}(D \vert H)$ is the probability of the data under the hypothesis, called the **likelihood**.
-- $\mathbb{P}(D)$ is the **total probability of the data** under any hypothesis (it is also known as the **normalizing constant**).
+- $P(H)$ is the probability of the hypothesis before we see the data, called the **prior** probability.
+- $P(H \vert D)$ is the probability of the hypothesis after we see the data, called the **posterior** probability.
+- $P(D \vert H)$ is the probability of the data under the hypothesis, called the **likelihood**.
+- $P(D)$ is the **total probability of the data** under any hypothesis (it is also known as the **normalizing constant**).
 ::::
 
 ## Prior 
@@ -181,7 +181,7 @@ Cookies:
 Over a set of *i* hypotheses, we say:
 
 $$
-\small \mathbb{P}(D) = \sum_i{P(H_i)P(D \vert H_i)}. 
+\small P(D) = \sum_i{P(H_i)P(D \vert H_i)}. 
 $$
 
 ## Bayesian Updates
@@ -226,7 +226,7 @@ table
 The likelihood of each hypothesis is the fraction of cookies in each bowl that is vanilla. For example, 
 
 $$
-\small \mathbb{P}(D\,\vert\,\text{Bowl 1}) = \frac{30}{40} = 0.75.
+\small P(D\,\vert\,\text{Bowl 1}) = \frac{30}{40} = 0.75.
 $$
 
 ```{python}
@@ -317,11 +317,11 @@ Without loss of generality, suppose we originally picked door 1. Now Monty opens
 
 ---
 
-Hypothesis 1: The prize is behind door 1. What is $\mathbb{P}(D\mid H_{1})$?
+Hypothesis 1: The prize is behind door 1. What is $P(D\mid H_{1})$?
 
-Hypothesis 2: The prize is behind door 2. What is $\mathbb{P}(D\mid H_{2})$?
+Hypothesis 2: The prize is behind door 2. What is $P(D\mid H_{2})$?
 
-Hypothesis 3: The prize is behind door 3. $\mathbb{P}(D\mid H_{3})$?
+Hypothesis 3: The prize is behind door 3. $P(D\mid H_{3})$?
 
 
 ::: {.notes}
@@ -336,9 +336,9 @@ Monty could not have opened a door with the prize behind it, so the probability 
 
 The likelihoods are:
 
-- $\mathbb{P}(D\mid H_{1}) = 0.5$
-- $\mathbb{P}(D\mid H_{2}) = 1$
-- $\mathbb{P}(D\mid H_{3}) = 0$
+- $P(D\mid H_{1}) = 0.5$
+- $P(D\mid H_{2}) = 1$
+- $P(D\mid H_{3}) = 0$
 
 ```{python}
 #| echo: true

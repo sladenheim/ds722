@@ -207,8 +207,8 @@ We have that
 
 $$
 \begin{align*}
-\tau &= \mathbb{P}(X>1) = 1 - \mathbb{P}(X\leq 1) = 1-\mathbb{P}\left( \frac{X-\mu}{\sigma}<\frac{1-\mu}{\sigma}\right) \\
-&=  1-\mathbb{P}\left( Z<\frac{1-\mu}{\sigma}\right) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)
+\tau &= P(X>1) = 1 - P(X\leq 1) = 1-P\left( \frac{X-\mu}{\sigma}<\frac{1-\mu}{\sigma}\right) \\
+&=  1-P\left( Z<\frac{1-\mu}{\sigma}\right) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)
 \end{align*}
 $$
 
@@ -222,7 +222,7 @@ One way to generate a parametric estimator is the **Method of Moments**.
 Recall the $k$th moment of a random variable $X$ is
 
 $$
-\alpha_{k} = \mathbb{E}(X^{k}) = \int x^{k}f(x)dx,
+\alpha_{k} = E(X^{k}) = \int x^{k}f(x)dx,
 $$
 
 where $f(x)$ is the pdf of the random variable.
@@ -236,7 +236,7 @@ These estimators are not always optimal but are easy to compute.
 Assuming that $\theta = (\theta_{1},\ldots,\theta_{k})$, the $j$th moment is
 
 $$
-\alpha_{j}(\theta) = \mathbb{E}_{\theta}(X^{j}) = \int x^{j}f(x;\theta)dx.
+\alpha_{j}(\theta) = E_{\theta}(X^{j}) = \int x^{j}f(x;\theta)dx.
 $$
 
 The $j$th sample moment is given by the formula
@@ -271,7 +271,7 @@ Solving this system yields the method of moments estimator.
 Let $X_{1},\ldots, X_{n}\sim \operatorname{Bernoulli}(p)$. Compute the point estimator $\hat{p}$ using the method of moments.
 
 ::: {.notes}
-Recall that $\alpha_{1} = \mathbb{E}(X)=p$ and $\hat{\alpha}_{1}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$. Equating these two values gives
+Recall that $\alpha_{1} = E(X)=p$ and $\hat{\alpha}_{1}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$. Equating these two values gives
 
 $$
 \hat{p}_{n} = \frac{1}{n}\sum_{i=1}^{n}X_{i}.
@@ -286,7 +286,7 @@ $$
 Let $X_{1},\ldots, X_{n}\sim N(\mu,\sigma^{2})$. Compute the point estimate $\hat{\theta} = (\hat{\mu}, \hat{\sigma})$ using the method of moments.
 
 ::: {.notes}
-Recall that $\alpha_{1} = \mathbb{E}_{\theta}(X_{1})=\mu$ and  $\alpha_{2} = \mathbb{E}_{\theta}(X_{1}^{2})=\mathbb{V}_{\theta}(X_{1}) +\mathbb{E}_{\theta}(X_{1})^{2} = \sigma^{2} + \mu^{2}$. Then we have the system of equations
+Recall that $\alpha_{1} = E_{\theta}(X_{1})=\mu$ and  $\alpha_{2} = E_{\theta}(X_{1}^{2})=V_{\theta}(X_{1}) +E_{\theta}(X_{1})^{2} = \sigma^{2} + \mu^{2}$. Then we have the system of equations
 
 $$
 \begin{align*}
@@ -474,7 +474,7 @@ Variance measures how much the estimator can vary as a function of the data samp
 The bias of an estimator is defined as
 
 $$
-\operatorname{bias}(\hat{\theta}) = \mathbb{E}(\hat{\theta}) - \theta,
+\operatorname{bias}(\hat{\theta}) = E(\hat{\theta}) - \theta,
 $$
 
 where the expectation is over the data and $\theta$ is the true parameter value.
@@ -489,9 +489,9 @@ Let $X_{i}\sim\operatorname{Bernoulli}(p)$. Let $\hat{p}_{n} = \frac{1}{n}\sum_{
 ::: {.notes}
 $$
 \begin{align}
-\operatorname{bias}(\hat{p}_{n}) &= \mathbb{E}(\hat{p}_{n}) - p \\
-&= \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}X_{i} \right) - p \\
-&= \frac{1}{n}\sum_{i=1}^{n}\mathbb{E}(X_{i}) - p \\
+\operatorname{bias}(\hat{p}_{n}) &= E(\hat{p}_{n}) - p \\
+&= E\left(\frac{1}{n}\sum_{i=1}^{n}X_{i} \right) - p \\
+&= \frac{1}{n}\sum_{i=1}^{n}E(X_{i}) - p \\
 &= \frac{1}{n}\sum_{i=1}^{n}p - p \\
 &= p-p=0.
 \end{align}
@@ -505,7 +505,7 @@ $$
 The variance of an estimator is
 
 $$
-\mathbb{V}(\hat{\theta}) = \mathbb{V}(g(x^{(1)},x^{(2)},\ldots, x^{(n)})),
+V(\hat{\theta}) = V(g(x^{(1)},x^{(2)},\ldots, x^{(n)})),
 $$
 where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
 
@@ -514,10 +514,10 @@ where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
 What is the variance of $\hat{p}_{n}$?
 
 ::: {.notes}
-$$\operatorname{Var}\left(\hat{p}_n\right) = \mathbb{V}\left( \frac{1}{n} \sum_{i=1}^n X_{i} \right)
-=\frac{1}{n^2}\mathbb{V}\left( \sum_{i=1}^n X_{i} \right) $$
+$$V\left(\hat{p}_n\right) = V\left( \frac{1}{n} \sum_{i=1}^n X_{i} \right)
+=\frac{1}{n^2}V\left( \sum_{i=1}^n X_{i} \right) $$
 
-$$ = \frac{1}{n^2} \sum_{i=1}^n \operatorname{Var}(X_{i})
+$$ = \frac{1}{n^2} \sum_{i=1}^n V(X_{i})
 = \frac{1}{n^2} \cdot n\, p (1-p)
 = \frac{p(1-p)}{n}. $$
 
@@ -583,12 +583,12 @@ Which is better?
 The mean squared error (MSE) measures the "average distance squared" between the estimator and the true value: 
 
 $$
-\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = \mathbb{E}\left(\left(\hat{\theta}_n - \theta\right)^2\right)}.
+\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = E\left(\left(\hat{\theta}_n - \theta\right)^2\right)}.
 $$
 
 The MSE is a good single number for evaluating an estimator, because it turns out that:
     
-$$\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = \operatorname{bias}\left(\hat{\theta}_n\right)^2 + \operatorname{Var}\left(\hat{\theta}_n\right)}.
+$$\small{\operatorname{MSE}\left(\hat{\theta}_n\right) = \operatorname{bias}\left(\hat{\theta}_n\right)^2 + V\left(\hat{\theta}_n\right)}.
 $$
 
 ## Properties of MOM Estimators
@@ -699,7 +699,7 @@ The mean of the discrete distribution is $\frac{N+1}{2}$.
 Note that
 
 $$
-\mathbb{E}(X) = \sum_{k=1}^{N}kf(k) = \frac{1}{N}\sum_{k=1}^{N}k = \frac{1}{N}\frac{(N+1)N}{2} = \frac{N+1}{2}. 
+E(X) = \sum_{k=1}^{N}kf(k) = \frac{1}{N}\sum_{k=1}^{N}k = \frac{1}{N}\frac{(N+1)N}{2} = \frac{N+1}{2}. 
 $$
 
 We have to solve:

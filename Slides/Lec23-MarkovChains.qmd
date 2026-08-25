@@ -72,7 +72,7 @@ A *Markov chain* is a stochastic process for which the distribution of $X_{t}$ d
 
 The stochastic process $\{X_{n}: n\in T \}$ is a *Markov chain* if 
 $$
-\mathbb{P}(X_{n}=x\mid X_{0},\ldots, X_{n-1}) = \mathbb{P}(X_{n}=x\mid X_{n-1}).
+P(X_{n}=x\mid X_{0},\ldots, X_{n-1}) = P(X_{n}=x\mid X_{n-1}).
 $$
 
 This implies
@@ -150,33 +150,33 @@ Given a finite set of states $\mathcal{X}$, a process $X_0, X_1, \ldots$ is a Ma
 
 $$
 \small
-\mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j, X_{n-1} = x_{n-1}, \dots, X_0 = x_0) =
+P(X_{n+1} = i \,\vert\, X_{n} = j, X_{n-1} = x_{n-1}, \dots, X_0 = x_0) =
 $$
 
 ::: {.notes}
-$\mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j)$
+$P(X_{n+1} = i \,\vert\, X_{n} = j)$
 :::
 
 ## Transition Matrix
 
-The transition matrix of the Markov chain is the matrix $P$ with 
+The transition matrix of the Markov chain is the matrix $T$ with 
 $$
-P_{ij}  = \mathbb{P}(X_{n+1} = i \,\vert\, X_{n} = j).
+T_{ij}  = P(X_{n+1} = i \,\vert\, X_{n} = j).
 $$
 
-__Remark__: $\small P_{ij}$ is the **transition probability** from state $\small j$ to state $\small i$.<br>
+__Remark__: $\small T_{ij}$ is the **transition probability** from state $\small j$ to state $\small i$.<br>
 
-$\small P$ has the following properties:
+$\small T$ has the following properties:
 
-1. $\small P_{ij} \geq 0 \quad \forall i, j$
-2. $\small \sum_i P_{ij} = 1 \quad \forall j$
+1. $\small T_{ij} \geq 0 \quad \forall i, j$
+2. $\small \sum_i T_{ij} = 1 \quad \forall j$
 
 ::: {.notes}
-The second property states that each column of $\small P$ sums to 1.  A matrix with this property is called a __stochastic__ matrix (or more specifically, a __column-stochastic matrix__)
+The second property states that each column of $\small T$ sums to 1.  A matrix with this property is called a __stochastic__ matrix (or more specifically, a __column-stochastic matrix__)
 :::
 
 
-## A note on $P$
+## A note on $T$
 
 Be aware that we are working with column stochastic matrices.
 
@@ -193,7 +193,7 @@ We can see that if at time $\small t=0$ the chain is in the *sunny* state, at ti
 This chain has transition matrix:
 
 $$
-P = 
+T = 
 $$
 
 
@@ -222,7 +222,7 @@ What is the transition matrix of the illustrated Markov chain with states $\{0, 
 ::::
 
 ::: {.notes}
-$$\small{P = 
+$$\small{T = 
 \begin{bmatrix}
 0 & 0 & 0 & 0 \\
 0.7 & 0 & 1 & 0 \\
@@ -235,17 +235,17 @@ $$
 ## N-Step Transition Matrix
 
 The n-step transition matrix of the Markov chain is the matrix 
-$P^{(n)}$ with $P_{ij}^{(n)}  = \mathbb{P}(X_n = i\,\vert\,X_0 = j)$.
+$T^{(n)}$ with $T_{ij}^{(n)}  = P(X_n = i\,\vert\,X_0 = j)$.
 
-Let's compute $P^{(n)}$ for the simple case of $n = 2$:
+Let's compute $T^{(n)}$ for the simple case of $n = 2$:
 
-$P^{(2)}_{ij} = \mathbb{P}(X_2 = i\,\vert\,X_0 = j)$
+$T^{(2)}_{ij} = P(X_2 = i\,\vert\,X_0 = j)$
 
 ::: {.notes}
 $$
 \begin{align}
-\sum_k \mathbb{P}(X_2 = i\,\vert\,X_1 = k, X_0 = j)\,\mathbb{P}(X_1 = k\,\vert\,X_0 = j) &= \sum_k \mathbb{P}(X_2 = i\,\vert\,X_1 = k)\,\mathbb{P}(X_1 = k\,\vert\,X_0 = j) \\
-&= \sum_{k}P_{ik}P_{kj}
+\sum_k P(X_2 = i\,\vert\,X_1 = k, X_0 = j)\,P(X_1 = k\,\vert\,X_0 = j) &= \sum_k P(X_2 = i\,\vert\,X_1 = k)\,P(X_1 = k\,\vert\,X_0 = j) \\
+&= \sum_{k}T_{ik}T_{kj}
 \end{align}
 $$
 
@@ -254,12 +254,12 @@ Using law of total probability and markov property
 
 ---
 
-We showed that $\mathbb{P}(X_2 = i\,\vert\,X_0 = j) = P^{(2)}_{ij} = P^2_{ij}$, i.e., the two-step transition probabilities are given by $P^{(2)} = P^{2}$.
+We showed that $P(X_2 = i\,\vert\,X_0 = j) = T^{(2)}_{ij} = T^2_{ij}$, i.e., the two-step transition probabilities are given by $T^{(2)} = T^{2}$.
 
 The $n$-step transition probabilities are given by
 
 $$
-P^{(n)} = P^{n}.
+T^{(n)} = T^{n}.
 $$
 
 ---
@@ -268,9 +268,9 @@ $$
 
 If at time $t=0$ the chain is in a *sunny* state, at time $t=2$ it will either be in *sunny* state (with probability 0.72) or a *rainy* state (with probability 0.28).
 
-We can confirm that by computing $P^2$:
+We can confirm that by computing $T^2$:
 
-$$\small{P^2  = 
+$$\small{T^2  = 
 \begin{bmatrix}
 0.8 & 0.4 \\
 0.2 & 0.6 \\
@@ -291,7 +291,7 @@ Suppose the initial state of a Markov chain is not known with certainty. We desc
 
 This distribution is represented by the column vector $\mathbf{x}_0$, whose _**entries are nonnegative and sum to 1**_.
 
-Specifically, $X_0$ is a random variable with distribution $\mathbb{P}(X_0 = i) = \mathbf{x}_{0,i}$.
+Specifically, $X_0$ is a random variable with distribution $P(X_0 = i) = \mathbf{x}_{0,i}$.
 
 ---
 
@@ -301,21 +301,21 @@ Vector $\mathbf{x}_0$ is known as the __initial (state) distribution__ and $\mat
 
 ## Forward Kolmogorov 
 
-The __Forward Kolmogorov Equation__ tells us that taking one step forward in time corresponds to multiplying $\small P$ times $\small \mathbf{x}_n$. This follows from the law of total probability:
+The __Forward Kolmogorov Equation__ tells us that taking one step forward in time corresponds to multiplying $\small T$ times $\small \mathbf{x}_n$. This follows from the law of total probability:
 
 $$\small
 \begin{align}
-\mathbf{x}_{n+1,i} = \mathbb{P}(X_{n+1} = i) &= 
-\sum_j \mathbb{P}(X_{n+1} = i\,\vert\,X_n = j)\,\mathbb{P}(X_n = j)\\
-&= \sum_j P_{ij} \mathbf{x}_{n,j} \\
-&= (P\mathbf{x}_n)_{i}.
+\mathbf{x}_{n+1,i} = P(X_{n+1} = i) &= 
+\sum_j P(X_{n+1} = i\,\vert\,X_n = j)\,P(X_n = j)\\
+&= \sum_j T_{ij} \mathbf{x}_{n,j} \\
+&= (T\mathbf{x}_n)_{i}.
 \end{align}
 $$
  
-This means that $\mathbf{x}_n = P^n \mathbf{x}_0$.
+This means that $\mathbf{x}_n = T^n \mathbf{x}_0$.
 
 ::: {.notes}
-That is, if we know the initial probability distribution at time 0, we can find the distribution at any later time using powers of the matrix $P$.
+That is, if we know the initial probability distribution at time 0, we can find the distribution at any later time using powers of the matrix $T$.
 :::
 
 ---
@@ -331,7 +331,7 @@ $$
 Then to compute the distribution two days later $\mathbf{x}_2,$ we compute:
 
 $$\small 
-\mathbf{x}_2 = P^2\mathbf{x}_0 = 
+\mathbf{x}_2 = T^2\mathbf{x}_0 = 
 \begin{bmatrix}
 0.72 & 0.56  \\
 0.28 & 0.44 \\
@@ -340,16 +340,16 @@ $$
 
 ## Vote Prediction
 
-Suppose you live in a country with three political parties $P$, $Q$, and $R$.
- We use $P_k, Q_k,$ and $R_k$ to denote the percentage of voters voting for that party in election $k$.
+Suppose you live in a country with three political parties $A$, $B$, and $C$.
+ We use $A_k, B_k,$ and $C_k$ to denote the percentage of voters voting for that party in election $k$.
 
 :::: {.columns}
 ::: {.column width="40%"}
 ![](figures/vote_prediction.png){fig-align="center"}
 :::
 ::: {.column width="60%"}
-Suppose that initially 40% of citizens vote for party $P$,
-30% vote for party $Q$, and 30% vote for party $R.$
+Suppose that initially 40% of citizens vote for party $A$,
+30% vote for party $B$, and 30% vote for party $C.$
 
 We will predict the vote distribution in the next two elections.
 :::
@@ -378,7 +378,7 @@ The initial state distribution is $\small{\mathbf{x}_0=\begin{bmatrix} 0.4\\ 0.3
 
 The transition matrix is given by 
 $$
-P = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}.
+T = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}.
 $$
 :::
 
@@ -389,11 +389,11 @@ Let's compute $\mathbf{x}_1$ and $\mathbf{x}_2$.
 ::: {.notes}
 The vote distribution in the next two elections is given by $\mathbf{x}_1$ and $\mathbf{x}_2:$
 $$
-\mathbf{x}_1 = P\mathbf{x}_0 = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}\begin{bmatrix} 0.4\\ 0.3 \\ 0.3\end{bmatrix} = \begin{bmatrix} 0.3\\ 0.4 \\ 0.3\end{bmatrix}.
+\mathbf{x}_1 = T\mathbf{x}_0 = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}\begin{bmatrix} 0.4\\ 0.3 \\ 0.3\end{bmatrix} = \begin{bmatrix} 0.3\\ 0.4 \\ 0.3\end{bmatrix}.
 $$
 
 $$
-\mathbf{x}_{2} = P\mathbf{x}_{1} = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}
+\mathbf{x}_{2} = T\mathbf{x}_{1} = \begin{bmatrix} 0.6 & 0 & 0.2\\ 0.4 & 0.6 & 0.2 \\ 0 & 0.4 & 0.6\end{bmatrix}
 \begin{bmatrix} 0.3\\ 0.4 \\ 0.3\end{bmatrix}
 =
 \begin{bmatrix}0.24 \\ 0.42 \\ 0.34\end{bmatrix}.
@@ -409,7 +409,7 @@ Let's consider the long run behavior of Boston weather.
 We know that the one-step transition matrix for this problem is
 
 $$
-\small P = \begin{bmatrix}0.8 & 0.4\\0.2 & 0.6\end{bmatrix}.
+\small T = \begin{bmatrix}0.8 & 0.4\\0.2 & 0.6\end{bmatrix}.
 $$
 
 What happens to the weather in 100 or 1,000 days?
@@ -419,7 +419,7 @@ Assume that day 0 is sunny, and let the chain run for a while.
 ::: {.notes}
 
 
-We can calculate the probability of a sunny day in 2 days or in 10 days by using the powers of $P$. 
+We can calculate the probability of a sunny day in 2 days or in 10 days by using the powers of $T$. 
 :::
 
 ---
@@ -430,12 +430,12 @@ import numpy as np
 # day 0 is sunny
 x = np.array([1, 0])
 
-# P is one-step transition matrix
-P = np.array([[0.8, 0.4], [0.2, 0.6]])
+# T is one-step transition matrix
+T = np.array([[0.8, 0.4], [0.2, 0.6]])
 
 for i in range(13):
     print (f'On day {i}, state is {x}')
-    x = P @ x
+    x = T @ x
 ```
 
 ## Steady State
@@ -451,7 +451,7 @@ $$
 
 ---
 
-A vector $\mathbf{x}$ for which $P \mathbf{x} = \mathbf{x}$ is called a steady state of the Markov chain corresponding to $P$.
+A vector $\mathbf{x}$ for which $T \mathbf{x} = \mathbf{x}$ is called a steady state of the Markov chain corresponding to $T$.
 
 Have we seen a similar formula before?
 
@@ -461,13 +461,13 @@ Does every Markov chain have a steady state?
 
 
 :::: {.fragment}
-However, if the chain has a finite set of states, then it can be represented by a column stochastic matrix $P$.
+However, if the chain has a finite set of states, then it can be represented by a column stochastic matrix $T$.
 
 Did we see any other examples of column stochastic matrices this semester? What did we learn about their eigenvalues?
 ::::
 
 :::: {.fragment}
-Perron-Frobenius tells us that 1 is always an eigenvalue of $P$. The associated eigenvector $\boldsymbol{\pi}$ is the steady-state probability vector.
+Perron-Frobenius tells us that 1 is always an eigenvalue of $T$. The associated eigenvector $\boldsymbol{\pi}$ is the steady-state probability vector.
 ::::
 
 ::: {.notes}
@@ -481,7 +481,7 @@ In general, no.
 ::: {.notes}
 How would we calculate a steady state?
 
-Solve the linear system $(P-I)\mathbf{x}=0$ or use numpy to find the eigenvalue/eigenvector pairs.
+Solve the linear system $(T-I)\mathbf{x}=0$ or use numpy to find the eigenvalue/eigenvector pairs.
 :::
 
 ## Detailed Balance
@@ -489,7 +489,7 @@ Solve the linear system $(P-I)\mathbf{x}=0$ or use numpy to find the eigenvalue/
 A Markov chain satisfies detailed balance with respect to $\boldsymbol{\pi}$ if
 
 $$ 
-\pi_i P_{ji} = \pi_j P_{ij}\;\;\; \forall i, j. 
+\pi_i T_{ji} = \pi_j T_{ij}\;\;\; \forall i, j. 
 $$
 
 __Remark__: The above equations are called the  __detailed balance equations.__
@@ -516,7 +516,7 @@ __Remark__: The above equations are called the  __detailed balance equations.__
 
 Let's calculate:
 
-1. What is the transition matrix $P$?
+1. What is the transition matrix $T$?
 1. Is the vector $\boldsymbol{\pi}= [6/11, 3/11, 2/11]^{\top}$ a steady state?
 1. Is the chain in detailed balance?
 
@@ -529,7 +529,7 @@ Let's calculate:
 ![](figures/mc-example-4.jpeg){fig-align="center"}
 :::
 ::: {.column width="50%"}
-$P=$
+$T=$
 :::
 ::::
 
@@ -552,7 +552,7 @@ $$
 
 Compute
 
-$P\boldsymbol{\pi}=$
+$T\boldsymbol{\pi}=$
 
 ::: {.notes}
 $$
@@ -564,13 +564,13 @@ $$
 
 ### Detailed Balance
 
-Check that $\pi_i P_{ji} = \pi_j P_{ij}$ for all $i$, $j$ where $\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}$.
+Check that $\pi_i T_{ji} = \pi_j T_{ij}$ for all $i$, $j$ where $\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}$.
 
 ::: {.notes}
-To check if it is in detailed balance, we need to confirm that $\pi_i P_{ji} = \pi_j P_{ij}$ for all $i$, $j$ for
-$\small{P = \begin{bmatrix}0.8&0.2&0.3\\0.1&0.6&0.3\\0.1&0.2&0.4\end{bmatrix}}$ and $\small{\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}}.$
+To check if it is in detailed balance, we need to confirm that $\pi_i T_{ji} = \pi_j T_{ij}$ for all $i$, $j$ for
+$\small{T = \begin{bmatrix}0.8&0.2&0.3\\0.1&0.6&0.3\\0.1&0.2&0.4\end{bmatrix}}$ and $\small{\boldsymbol{\pi} = \begin{bmatrix}\frac{6}{11}\\\frac{3}{11}\\\frac{2}{11}\end{bmatrix}}.$
 
-We do not need to check cases where $i=j.$ For example, for $i=1$ and $j=1,$ the detailed balance equation is $\small{\pi_1 P_{1,1} = \pi_1 P_{1,1}}$ is always true.
+We do not need to check cases where $i=j.$ For example, for $i=1$ and $j=1,$ the detailed balance equation is $\small{\pi_1 T_{1,1} = \pi_1 T_{1,1}}$ is always true.
 
 - $\small{i=1}$ and $\small{j=2}:$ $\small{\frac{6}{11} \cdot 0.1 \stackrel{}{=} \frac{3}{11} \cdot 0.2}$
 - $\small{i=1}$ and $\small{j=3}:$ $\small{\frac{6}{11} \cdot 0.1 = \frac{2}{11} \cdot 0.3}$
@@ -579,7 +579,7 @@ We do not need to check cases where $i=j.$ For example, for $i=1$ and $j=1,$ the
 
 ## Regular Markov Chains
 
-A Markov chain is a *regular* Markov chain if some matrix power of the transition matrix $P^k$ contains only strictly positive entries. 
+A Markov chain is a *regular* Markov chain if some matrix power of the transition matrix $T^k$ contains only strictly positive entries. 
 
 ::: {.notes}
 For a *regular* Markov chain, the steady-state vector is unique.

@@ -57,11 +57,11 @@ Could alternatively consider $X$ being the average of 5 students. The sample spa
 
 ## Notation
 
-What does the notation $\mathbb{P}(X = x)$ and $\mathbb{P}(X\leq x)$ mean?
+What does the notation $P(X = x)$ and $P(X\leq x)$ mean?
 
 :::: {.incremental}
-1. $\mathbb{P}(X = x)$ is the probability that the random variable $X$ takes on the exact value of $x$.
-1. $\mathbb{P}(X \leq x)$ is the probability that the random variable $X$ is less than or equal to the value $x$.
+1. $P(X = x)$ is the probability that the random variable $X$ takes on the exact value of $x$.
+1. $P(X \leq x)$ is the probability that the random variable $X$ is less than or equal to the value $x$.
 ::::
 
 ## Distributions
@@ -84,7 +84,7 @@ $$
 defined by
 
 $$
-F_{X}(x) = \mathbb{P}(X\leq x).
+F_{X}(x) = P(X\leq x).
 $$
 
 The CDF contains all the information about the random variable.
@@ -93,9 +93,9 @@ The CDF contains all the information about the random variable.
 
 Flip a fair coin twice and let $X$ be the number of heads. Then 
 
-- $\mathbb{P}(X=0)= 1/4$, 
-- $\mathbb{P}(X=1) = 1/2$, and 
-- $\mathbb{P}(X=2) = 1/4$. 
+- $P(X=0)= 1/4$, 
+- $P(X=1) = 1/2$, and 
+- $P(X=2) = 1/4$. 
 
 The CDF is
 
@@ -110,14 +110,14 @@ F_{X}(x) =
 $$
 
 ## Probability Mass Function
-For discrete variables, the *probability mass function* (PMF) of $X$ is defined by $f_{X}(x) = \mathbb{P}(X=x)$.
+For discrete variables, the *probability mass function* (PMF) of $X$ is defined by $f_{X}(x) = P(X=x)$.
 
 Thus, $f_{X}(x)\geq 0$ for all $x\in\mathbb{R}$ and $\sum_{i}f_{X}(x_{i})=1$.
 
 The CDF of $X$ is related to $f_{X}$ by
 
 $$
-F_{X}(x) = \mathbb{P}(X\leq x) = \sum_{x_{i}\leq x}f_{X}(x_{i}).
+F_{X}(x) = P(X\leq x) = \sum_{x_{i}\leq x}f_{X}(x_{i}).
 $$
 
 ---
@@ -142,7 +142,7 @@ The PDF is a function that describes the distribution of the continuous random v
 The PDF is a function $f_{X}(x)$ such that $f_{X}(x)\geq 0$ for all $x$, $\int_{-\infty}^{\infty} f_{X}(x) \, dx = 1$, and for every $a\leq b$,
 
 $$
-\mathbb{P}(a < X < b) = \int_{a}^{b} f_{X}(x) \, dx.
+P(a < X < b) = \int_{a}^{b} f_{X}(x) \, dx.
 $$
 
 
@@ -172,7 +172,7 @@ $$
 Given a pair of discrete random variables $X$ and $Y$, the joint mass function is defined as
 
 $$
-f(x, y) = \mathbb{P}(X=x, Y=y).
+f(x, y) = P(X=x, Y=y).
 $$
 
 We can be more specific and write $f_{X,Y}$.
@@ -187,12 +187,12 @@ In the continuous case, a PDF for the random variable $(X, Y)$ is a function $f(
 
 1. $f(x, y) \geq 0$ for all $(x, y)$,
 1. $\int_{-\infty}^{\infty}\int_{-\infty}^{\infty} f(x,y) \, dx \, dy = 1$, and
-1. for any set $A\subset \mathbb{R}\times \mathbb{R}$, $\mathbb{P}((X,Y)\in A) = \iint_{A} f(x,y) \, dx \, dy$.
+1. for any set $A\subset \mathbb{R}\times \mathbb{R}$, $P((X,Y)\in A) = \iint_{A} f(x,y) \, dx \, dy$.
 
 In the discrete or continuous case the joint CDF is
 
 $$
-F_{X,Y}(x,y) = \mathbb{P}(X\leq x, Y\leq y).
+F_{X,Y}(x,y) = P(X\leq x, Y\leq y).
 $$
 
 ## Marginal Distributions
@@ -200,13 +200,13 @@ $$
 If $(X,Y)$ have joint distribution with mass function $f_{X,Y}$, then the *marginal mass function* for $X$ is defined by
 
 $$
-f_{X}(x) = \sum_{y}\mathbb{P}(X=x, Y=y) = \sum_{y} f_{X,Y}(x,y).
+f_{X}(x) = \sum_{y}P(X=x, Y=y) = \sum_{y} f_{X,Y}(x,y).
 $$
 
 and the *marginal mass function* for $Y$ is
 
 $$
-f_{Y}(y) = \sum_{x}\mathbb{P}(X=x, Y=y) = \sum_{x} f_{X,Y}(x,y).
+f_{Y}(y) = \sum_{x}P(X=x, Y=y) = \sum_{x} f_{X,Y}(x,y).
 $$
 
 ::: {.notes}
@@ -230,7 +230,7 @@ $$
 Two random variables $X$ and $Y$ are *independent* if for every $A$ and $B$,
 
 $$
-\mathbb{P}(X\in A, Y\in B) = \mathbb{P}(X\in A)\mathbb{P}(Y\in B).
+P(X\in A, Y\in B) = P(X\in A)P(Y\in B).
 $$
 
 If this condition is not satisfied then $X$ and $Y$ are *dependent*.
@@ -251,7 +251,7 @@ For discrete random variables, the *conditional probability mass function* is
 
 $$
 \small
-f_{X\mid Y}(x\mid y) = \mathbb{P}(X=x\mid Y=y) = \frac{\mathbb{P}(X=x, Y=y)}{\mathbb{P}(Y=y)} = \frac{f_{X,Y}(x,y)}{f_{Y}(y)},
+f_{X\mid Y}(x\mid y) = P(X=x\mid Y=y) = \frac{P(X=x, Y=y)}{P(Y=y)} = \frac{f_{X,Y}(x,y)}{f_{Y}(y)},
 $$
 
 if $f_{Y}(y)>0$.
@@ -267,7 +267,7 @@ $$
 assuming that $f_{Y}(y)>0$. Then,
 
 $$
- \mathbb{P}(X\in A\mid Y=y) = \int_{A} f_{X\mid Y}(x\mid y) \, dx.
+ P(X\in A\mid Y=y) = \int_{A} f_{X\mid Y}(x\mid y) \, dx.
 $$
 
 ## Multivariate Distributions and IID Samples
@@ -308,8 +308,8 @@ To find $f_{Y}$ follow these three steps:
 $$
 \small
 \begin{align}
-F_{Y}(y) &= \mathbb{P}(Y\leq y) =  \mathbb{P}(r(X)\leq y) \\
-&= \mathbb{P}(\{x:~r(x)\leq y\}) \\
+F_{Y}(y) &= P(Y\leq y) =  P(r(X)\leq y) \\
+&= P(\{x:~r(x)\leq y\}) \\
 &= \int_{A_{y}}f_{X}(x)dx.
 \end{align} 
 $$
@@ -332,8 +332,8 @@ Then
 
 $$
 \begin{align}
-F_{Y}(y) &= \mathbb{P}(Y\leq y) = \mathbb{P}(\log(x)\leq y) \\
-&= \mathbb{P}(X\leq e^{y}) = F_{X}(e^{y})= 1- e^{-e^{y}} \\
+F_{Y}(y) &= P(Y\leq y) = P(\log(x)\leq y) \\
+&= P(X\leq e^{y}) = F_{X}(e^{y})= 1- e^{-e^{y}} \\
 \end{align}
 $$
 
@@ -352,7 +352,7 @@ The mean, or expectation, of a random variable $X$ is the average value of $X$.
 The expected value (mean) of $X$ is defined to be
 
 $$
-\mathbb{E}(X) = 
+E(X) = 
 \begin{cases}
 \sum_{x} x f_{X}(x) & \text{if $X$ is discrete}, \\
 \int_{-\infty}^{\infty} x f_{X}(x) \, dx & \text{if $X$ is continuous} \\
@@ -361,13 +361,13 @@ $$
 
 assuming that the sum or integral is well defined.
 
-We will later see that the mean $\mathbb{E}(X) = \mu = \mu_{X}$ is the **first moment**.
+We will later see that the mean $E(X) = \mu = \mu_{X}$ is the **first moment**.
 
 ---
 
 ### Example: Bernoulli Distribution
 
-Let $X\sim\operatorname{Bernoulli}(p)$, what is $\mathbb{E}(X)$?
+Let $X\sim\operatorname{Bernoulli}(p)$, what is $E(X)$?
 
 ::: {.notes}
 Recall that
@@ -375,7 +375,7 @@ $$
 f_{X}(x) = p^{x}(1-p)^{1-x}
 $$
 $$
-\mathbb{E}(X) = \sum_{x=0}^{1}xf(x) = 0\cdot(1-p) + 1\cdot p = p.
+E(X) = \sum_{x=0}^{1}xf(x) = 0\cdot(1-p) + 1\cdot p = p.
 $$
 :::
 
@@ -383,7 +383,7 @@ $$
 
 ### Example: Uniform Distribution
 
-Let $X\sim\operatorname{Uniform}(-1, 3)$, what is $\mathbb{E}(X)$?
+Let $X\sim\operatorname{Uniform}(-1, 3)$, what is $E(X)$?
 
 ::: {.notes}
 Recall 
@@ -396,7 +396,7 @@ f_{X}(x) =
 $$
 
 $$
-\mathbb{E}(X) = \int_{-1}^{3}\frac{1}{4}dx = \frac{1}{4}(3 -(-1))= 1 = (a+b)/2.
+E(X) = \int_{-1}^{3}\frac{1}{4}dx = \frac{1}{4}(3 -(-1))= 1 = (a+b)/2.
 $$
 
 How can we show this in general?
@@ -413,7 +413,7 @@ Recall that a random variable has a Cauchy distribution if it has density $f_{X}
 Let $Y=r(X)$, then
 
 $$
-\mathbb{E}(Y) = \mathbb{E}(r(X)) = \int_{-\infty}^{\infty} r(x) f_{X}(x) \, dx.
+E(Y) = E(r(X)) = \int_{-\infty}^{\infty} r(x) f_{X}(x) \, dx.
 $$
 
 ---
@@ -432,7 +432,7 @@ Observe that
 
 $$
 \small
-\mathbb{E}(I_{A}(X)) = \int I_{A}(x)f_{X}(x)dx = \int_{A}f_{X}(x)dx = \mathbb{P}(X\in A).
+E(I_{A}(X)) = \int I_{A}(x)f_{X}(x)dx = \int_{A}f_{X}(x)dx = P(X\in A).
 $$
 
 :::: {.fragment}
@@ -447,16 +447,16 @@ Unifies probability and expectation under the same mathematical framework.
 
 ### Example
 
-Let $(X, Y)$ have a jointly uniform distribution on the unit square. Let $Z=r(X,Y) = X^{2} + Y^{2}$. Compute $\mathbb{E}(Z)$.
+Let $(X, Y)$ have a jointly uniform distribution on the unit square. Let $Z=r(X,Y) = X^{2} + Y^{2}$. Compute $E(Z)$.
 
 ::: {.notes}
 $$
 \begin{aligned}
 Z &= X^{2} + Y^{2}, \\
-\mathbb{E}[Z] &= \mathbb{E}[X^{2}] + \mathbb{E}[Y^{2}], \\
-\mathbb{E}[X^{2}] &= \int_{0}^{1} x^{2} \, dx = \left.\frac{x^{3}}{3}\right|_{0}^{1} = \frac{1}{3}, \\
-\mathbb{E}[Y^{2}] &= \int_{0}^{1} y^{2} \, dy = \frac{1}{3}, \\
-\therefore \quad \mathbb{E}[Z] &= \frac{1}{3} + \frac{1}{3} = \frac{2}{3}.
+E[Z] &= E[X^{2}] + E[Y^{2}], \\
+E[X^{2}] &= \int_{0}^{1} x^{2} \, dx = \left.\frac{x^{3}}{3}\right|_{0}^{1} = \frac{1}{3}, \\
+E[Y^{2}] &= \int_{0}^{1} y^{2} \, dy = \frac{1}{3}, \\
+\therefore \quad E[Z] &= \frac{1}{3} + \frac{1}{3} = \frac{2}{3}.
 \end{aligned}
 $$
 :::
@@ -468,7 +468,7 @@ $$
 If $X_{1},\ldots, X_{n}$ are random variables and $a_{1},\ldots, a_{n}$ are constants, then
 
 $$
-\mathbb{E}\left(\sum_{i=1}^{n}a_{i}X_{i}\right)= \sum_{i=1}^{n}a_{i}\mathbb{E}(X_{i}).
+E\left(\sum_{i=1}^{n}a_{i}X_{i}\right)= \sum_{i=1}^{n}a_{i}E(X_{i}).
 $$
 
 What kind of operator is the expectation?
@@ -478,7 +478,7 @@ What kind of operator is the expectation?
 Let $X_{1},\ldots, X_{n}$ be independent random variables, then
 
 $$
-\mathbb{E}\left(\prod_{i=1}^{n}X_{i}\right) = \prod_{i=1}^{n}\mathbb{E}(X_{i}).
+E\left(\prod_{i=1}^{n}X_{i}\right) = \prod_{i=1}^{n}E(X_{i}).
 $$
 
 ## Variance
@@ -486,15 +486,15 @@ $$
 The variance measures the *spread* of a distribution.
 
 **Definition**
-Let $X$ be a random variable with mean $\mu$. The variance of $X$, $\mathbb{V}(X)=\sigma^{2}=\sigma_{X}^{2}$, is defined by
+Let $X$ be a random variable with mean $\mu$. The variance of $X$, $V(X)=\sigma^{2}=\sigma_{X}^{2}$, is defined by
 
 $$
-\mathbb{V}(X) = \mathbb{E}\big[(X-\mu)^{2}\big] = \int_{-\infty}^{\infty} (x-\mu)^{2} f_{X}(x) \, dx,
+V(X) = E\big[(X-\mu)^{2}\big] = \int_{-\infty}^{\infty} (x-\mu)^{2} f_{X}(x) \, dx,
 $$
 
 assuming this value exists. 
 
-The **standard deviation** is $\sigma = \sqrt{\mathbb{V}(X)}$.
+The **standard deviation** is $\sigma = \sqrt{V(X)}$.
 
 ---
 
@@ -502,27 +502,27 @@ The **standard deviation** is $\sigma = \sqrt{\mathbb{V}(X)}$.
 
 Assuming the variance is well-defined, it has the following properties
 
-1. $\mathbb{V}(X) = \mathbb{E}(X^{2})-\mu^{2}$.
-1. If $a$ and $b$ are constants, then $\mathbb{V}(aX+b) = a^{2}\mathbb{V}(X)$.
+1. $V(X) = E(X^{2})-\mu^{2}$.
+1. If $a$ and $b$ are constants, then $V(aX+b) = a^{2}V(X)$.
 1. If $X_{1},\ldots, X_{n}$ are independent and $a_{1},\ldots, a_{n}$ are constants, then 
 $$
-\mathbb{V}\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}\mathbb{V}(X_{i}).
+V\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}V(X_{i}).
 $$
 
 ---
 
 ### Example: Binomial
 
-Let $X\sim\operatorname{Binomial}(n,p)$, what is $\mathbb{V}(X)$?
+Let $X\sim\operatorname{Binomial}(n,p)$, what is $V(X)$?
 
 ::: {.notes}
 $$
-\mathbb{E}(X_{i}) = p, \quad \mathbb{E}(X_{i}^{2}) = (p\cdot 1^2) + (1-p)\cdot o^{2} = p
+E(X_{i}) = p, \quad E(X_{i}^{2}) = (p\cdot 1^2) + (1-p)\cdot o^{2} = p
 $$
 
-Then $\mathbb{V}(X_{i}) = p - p^{2} = p(1-p)$.
+Then $V(X_{i}) = p - p^{2} = p(1-p)$.
 
-Sum these up and get $np(1-p)$. $\mathbb{V}=0$ if $p=0,1$.
+Sum these up and get $np(1-p)$. $V=0$ if $p=0,1$.
 :::
 
 ## Sample Mean and Variance
@@ -540,15 +540,15 @@ $$
 S_{n}^{2} = \frac{1}{n-1}\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}.
 $$
 
-The denominator has $n-1$ so that $\mathbb{E}(S_{n}^{2})= \sigma^{2}$.
+The denominator has $n-1$ so that $E(S_{n}^{2})= \sigma^{2}$.
 
 ---
 
 **Theorem**
-Let $X_{1},\ldots, X_{n}$ be IID and let $\mu=\mathbb{E}(X_{i})$, $\sigma^{2}=\mathbb{V}(X_{i})$, then
+Let $X_{1},\ldots, X_{n}$ be IID and let $\mu=E(X_{i})$, $\sigma^{2}=V(X_{i})$, then
 
 $$
-\mathbb{E}(\bar{X}_{n})=\mu,\quad \mathbb{V}(\bar{X}_{n}) = \frac{\sigma^{2}}{n},\quad \mathbb{E}(S_{n}^{2})=\sigma^{2}.
+E(\bar{X}_{n})=\mu,\quad V(\bar{X}_{n}) = \frac{\sigma^{2}}{n},\quad E(S_{n}^{2})=\sigma^{2}.
 $$
 
 ## Covariance
@@ -560,7 +560,7 @@ Let $X$ and $Y$ be random variables with means $\mu_{X}$ and $\mu_{Y}$ and stand
 
 $$
 \small
-\operatorname{Cov}(X,Y)=\mathbb{E}\left((X-\mu_{X})(Y-\mu_{Y})\right).
+\operatorname{Cov}(X,Y)=E\left((X-\mu_{X})(Y-\mu_{Y})\right).
 $$
 
 ## Correlation
@@ -578,7 +578,7 @@ $$
 The covariance satisfies:
 
 $$
-\operatorname{Cov}(X,Y) = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y).
+\operatorname{Cov}(X,Y) = E(XY) - E(X)E(Y).
 $$
 
 The correlation satisfies $-1\leq \rho \leq 1$.
@@ -592,17 +592,17 @@ If $X$ and $Y$ are independent, then $\operatorname{Cov}(X,Y)=0$.
 **Theorem**
 
 $$
-\mathbb{V}(X+Y) =  \mathbb{V}(X) + \mathbb{V}(Y) + 2\operatorname{Cov}(X,Y). 
+V(X+Y) =  V(X) + V(Y) + 2\operatorname{Cov}(X,Y). 
 $$
 More generally for random variables $X_{1},\ldots, X_{n}$, 
 
 $$
-\mathbb{V}\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}\mathbb{V}(X_{i}) + 2 \sum_{i=1}^{n} \sum_{j>i}^{n}\operatorname{Cov}(X_{i},X_{j}).
+V\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}V(X_{i}) + 2 \sum_{i=1}^{n} \sum_{j>i}^{n}\operatorname{Cov}(X_{i},X_{j}).
 $$
 
 ## Expectation and Variance of Important RVs
 
-| Distribution              | Mean $\mathbb{E}[X]$         | Variance $\mathbb{V}(X)$           |
+| Distribution              | Mean $E[X]$         | Variance $V(X)$           |
 |---------------------------|------------------------------|------------------------------------|
 | Bernoulli($p$)        | $p$                          | $p(1 - p)$                         |
 | Binomial($n, p$)      | $np$                         | $np(1 - p)$                        |
@@ -625,9 +625,9 @@ $$
 \end{bmatrix}
 =
 \begin{bmatrix}
-\mathbb{E}(X_{1}) \\
+E(X_{1}) \\
 \vdots \\
-\mathbb{E}(X_{k}).
+E(X_{k}).
 \end{bmatrix}
 $$
 
@@ -637,12 +637,12 @@ The variance-covariance matrix $\Sigma$ of a random vector $X$ is defined as
 
 $$
 \small
-\mathbb{V}(X) = \Sigma =
+V(X) = \Sigma =
 \begin{bmatrix}
-\mathbb{V}(X_{1}) & \operatorname{Cov}(X_{1}, X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
-\operatorname{Cov}(X_{2}, X_{1}) & \mathbb{V}(X_{2}) & \cdots & \operatorname{Cov}(X_{2}, X_{k}) \\
+V(X_{1}) & \operatorname{Cov}(X_{1}, X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
+\operatorname{Cov}(X_{2}, X_{1}) & V(X_{2}) & \cdots & \operatorname{Cov}(X_{2}, X_{k}) \\
 \vdots & \vdots & \vdots & \vdots \\
-\operatorname{Cov}(X_{k}, X_{1})  & \operatorname{Cov}(X_{k}, X_{2}) & \cdots  & \mathbb{V}(X_{k}) \\
+\operatorname{Cov}(X_{k}, X_{1})  & \operatorname{Cov}(X_{k}, X_{2}) & \cdots  & V(X_{k}) \\
 \end{bmatrix}
 $$
 
@@ -650,7 +650,7 @@ What is a property you can immediately identify from this matrix?
 
 <!-- ---
 
-If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $\mathbb{E}(a^{\top}X) = a^{\top}\mu$ and $\mathbb{V}(a^{\top}X) = a^{\top}\Sigma a$. If $A$ is a matrix then $\mathbb{E}(AX) = A\mu$ and $\mathbb{V}(AX) = A\Sigma A^{\top}$ 
+If $a$ is a vector and $X$ is a random vector with mean $\mu$ and variance $\Sigma$, then $E(a^{\top}X) = a^{\top}\mu$ and $V(a^{\top}X) = a^{\top}\Sigma a$. If $A$ is a matrix then $E(AX) = A\mu$ and $V(AX) = A\Sigma A^{\top}$ 
 -->
 
 ## The Multivariate Normal
@@ -723,7 +723,7 @@ Suppose that $X$ and $Y$ are random variables. What is the mean of $Y$ among tho
 The conditional expectation of $Y$ given $X=x$ is 
 
 $$
-\mathbb{E}(Y\mid X=x) = 
+E(Y\mid X=x) = 
 \begin{cases}
 \sum y f_{Y\mid X}(y\mid x) & \text{discrete case},\\
 \int y f_{Y\mid X}(y\mid x) \, dy & \text{continuous case}.
@@ -739,7 +739,7 @@ $$
 For random variables $X$ and $Y$, assuming the expectations exist, we have that
 
 $$
-\mathbb{E}(\mathbb{E}(Y\mid X)) = \mathbb{E}(Y)\quad\text{and}\quad \mathbb{E}(\mathbb{E}(X\mid Y)) = \mathbb{E}(X).
+E(E(Y\mid X)) = E(Y)\quad\text{and}\quad E(E(X\mid Y)) = E(X).
 $$
 
 ## Conditional Variance
@@ -747,16 +747,16 @@ $$
 The conditional variance is defined as
 
 $$
-\mathbb{V}(Y\mid X=x) = \int (y-\mu(x))^{2} f_{Y\mid X}(y\mid x) \, dy,
+V(Y\mid X=x) = \int (y-\mu(x))^{2} f_{Y\mid X}(y\mid x) \, dy,
 $$
-where $\mu(x)=\mathbb{E}(Y\mid X=x)$.
+where $\mu(x)=E(Y\mid X=x)$.
 
 ---
 
 For random variables $X$ and $Y$
 
 $$
-\mathbb{V}(Y) = \mathbb{E}(\mathbb{V}(Y\mid X)) + \mathbb{V}(\mathbb{E}(Y\mid X)).
+V(Y) = E(V(Y\mid X)) + V(E(Y\mid X)).
 $$
 
 :::: {.fragment}
@@ -769,11 +769,11 @@ Draw a county at random from the USA. Then draw $n$ people at random from this c
 
 Given $Q=q$, we have that $X\sim\operatorname{Binomial}(n,q)$.
 
-In this case, what is $\mathbb{E}(X\mid Q=q)$ and $\mathbb{V}(X\mid Q=q)$?
+In this case, what is $E(X\mid Q=q)$ and $V(X\mid Q=q)$?
 
 :::: {.fragment}
 $$
-\mathbb{E}(X\mid Q=q) = nq, \quad \mathbb{V}(X\mid Q=q)=nq(1-q).
+E(X\mid Q=q) = nq, \quad V(X\mid Q=q)=nq(1-q).
 $$
 ::::
 
@@ -788,30 +788,30 @@ X\mid Q=q&\sim\operatorname{Binomial}(n,q).
 \end{align}
 $$
 
-We can now use what we learned in class to compute $\mathbb{E}(X)$ and $\mathbb{V}(X)$.
+We can now use what we learned in class to compute $E(X)$ and $V(X)$.
 
 ---
 
 ::: {.notes}
-$$ \mathbb{E}(X) =  \mathbb{E}(\mathbb{E}(X\mid Q)) = n\mathbb{E}(Q) = n/2$$ 
+$$ E(X) =  E(E(X\mid Q)) = nE(Q) = n/2$$ 
 
 $$
-\mathbb{V}(X) = \mathbb{E}(\mathbb{V}(X\mid Q)) + \mathbb{V}(\mathbb{E}(X\mid Q)) 
-$$
-
-$$
-\mathbb{E}(\mathbb{V}(X\mid Q)) = \mathbb{E}(nQ(1-Q)) = n\int_{0}^{1} q(1-q) \, dq = n/6
+V(X) = E(V(X\mid Q)) + V(E(X\mid Q)) 
 $$
 
 $$
-\mathbb{V}(\mathbb{E}(X\mid Q)) = \mathbb{V}(nQ) = n^{2}\mathbb{V}(Q) = n^{2}\int_{0}^{1}\big(q-\tfrac{1}{2}\big)^{2} \, dq = n^{2}/12.
+E(V(X\mid Q)) = E(nQ(1-Q)) = n\int_{0}^{1} q(1-q) \, dq = n/6
+$$
+
+$$
+V(E(X\mid Q)) = V(nQ) = n^{2}V(Q) = n^{2}\int_{0}^{1}\big(q-\tfrac{1}{2}\big)^{2} \, dq = n^{2}/12.
 $$
 :::
 
 
 ## Moments
 
-The $k$th moment of $X$ is defined to be $\mathbb{E}(X^{k})$ assuming that $\mathbb{E}(\lvert X\rvert^{k})<\infty$.
+The $k$th moment of $X$ is defined to be $E(X^{k})$ assuming that $E(\lvert X\rvert^{k})<\infty$.
 
 :::: {.incremental}
 - What is the first moment? 
@@ -835,7 +835,7 @@ The third and fourth moments are called the skewness and the kurtosis.
 Skewness measures the asymmetry of a distribution about its mean. It is defined as the standardized third central moment:
 
 $$
-\text{skewness} = \gamma_1 = \frac{\mathbb{E}\big[(X-\mu)^3\big]}{\sigma^3}.
+\text{skewness} = \gamma_1 = \frac{E\big[(X-\mu)^3\big]}{\sigma^3}.
 $$
 
 Interpretation: $\gamma_1>0$ indicates right-skew (long right tail), $\gamma_1<0$ indicates left-skew (long left tail), and $\gamma_1\approx 0$ suggests approximate symmetry.
@@ -843,7 +843,7 @@ Interpretation: $\gamma_1>0$ indicates right-skew (long right tail), $\gamma_1<0
 Kurtosis measures the "tailedness" or peakiness of a distribution and is the standardized fourth central moment:
 
 $$
-\text{kurtosis} = \beta_2 = \frac{\mathbb{E}\big[(X-\mu)^4\big]}{\sigma^4}.
+\text{kurtosis} = \beta_2 = \frac{E\big[(X-\mu)^4\big]}{\sigma^4}.
 $$
 
 Excess kurtosis $=\beta_2-3$ is commonly used so that the normal distribution has excess kurtosis 0. Positive excess kurtosis (leptokurtic) implies heavier tails / more extreme outliers; negative excess kurtosis (platykurtic) implies lighter tails / fewer outliers; zero (mesokurtic) matches the normal.
@@ -857,7 +857,7 @@ Moment generating functions are used for finding moments, finding the distributi
 The **moment generating function** (Laplace Transform) of $X$ is defined by
 
 $$
-\psi_{X}(t) = \mathbb{E}(e^{tX}) = \int e^{tx}f_{X}(x)dx.
+\psi_{X}(t) = E(e^{tX}) = \int e^{tx}f_{X}(x)dx.
 $$
 
 ---
@@ -866,10 +866,10 @@ When the MGF is well defined, we can interchange the operations of differentiati
 
 $$
 \small
-\psi^{\prime}(0) = \frac{d}{dt}\mathbb{E}(e^{tX})\bigg\vert_{0} = \mathbb{E}\left(\frac{d}{dt}e^{tX}\right)\bigg\vert_{0}  = \mathbb{E}(Xe^{tX})\bigg\vert_{0}  = \mathbb{E}(X).
+\psi^{\prime}(0) = \frac{d}{dt}E(e^{tX})\bigg\vert_{0} = E\left(\frac{d}{dt}e^{tX}\right)\bigg\vert_{0}  = E(Xe^{tX})\bigg\vert_{0}  = E(X).
 $$
 
-We can similarly conclude that $\psi^{(k)}(0) = \mathbb{E}(X^{k})$.
+We can similarly conclude that $\psi^{(k)}(0) = E(X^{k})$.
 
 ---
 

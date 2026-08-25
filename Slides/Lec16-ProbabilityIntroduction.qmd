@@ -125,15 +125,15 @@ $$
 
 ## Probability
 
-We will assign a real number $\mathbb{P}(A)$ to every $A$. This number is the probability (or probability measure) of $A$. 
+We will assign a real number $P(A)$ to every $A$. This number is the probability (or probability measure) of $A$. 
 
-Such a function $\mathbb{P}$ is a probability measure if it satisfies the following three axioms.
+Such a function $P$ is a probability measure if it satisfies the following three axioms.
 
-1. $\mathbb{P}(A)\geq 0$ for every $A$
-1. $\mathbb{P}(\Omega)=1$
+1. $P(A)\geq 0$ for every $A$
+1. $P(\Omega)=1$
 1. If $A_1, A_2,\ldots$ are disjoint then 
 $$
-\mathbb{P}\left(\bigcup_{i=1}^{\infty}A_{i}\right)= \sum_{i=1}^{\infty}\mathbb{P}(A_i).
+P\left(\bigcup_{i=1}^{\infty}A_{i}\right)= \sum_{i=1}^{\infty}P(A_i).
 $$
 
 ---
@@ -141,7 +141,7 @@ $$
 For any events $A$ and $B$
 
 $$
-\mathbb{P}\left(A\cup B\right) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A\cap B).
+P\left(A\cup B\right) = P(A) + P(B) - P(A\cap B).
 $$
 
 ::: {.notes}
@@ -149,10 +149,10 @@ Write $A\cap B = (A\cap B^{c}) \cup (A\cap B) \cup (A^{c}\cap B)$
 then
 $$
 \begin{align}
-\mathbb{P}\left(A\cup B\right) &= \mathbb{P}((A\cap B^{c}) \cup (A\cap B) \cup (A^{c}\cap B)) \\
-&= \mathbb{P}(A\cap B^{c}) + \mathbb{P}(A\cap B) +  \mathbb{P}(A^{c}\cap B) + \mathbb{P}(A\cap B) - \mathbb{P}(A\cap B) \\
-&= \mathbb{P}((A\cap B^{c})\cup (A\cap B)) + \mathbb{P}((A^{c}\cap B)\cup (A\cap B)) - \mathbb{P}(A\cup B) \\
-&= \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A\cap B).
+P\left(A\cup B\right) &= P((A\cap B^{c}) \cup (A\cap B) \cup (A^{c}\cap B)) \\
+&= P(A\cap B^{c}) + P(A\cap B) +  P(A^{c}\cap B) + P(A\cap B) - P(A\cap B) \\
+&= P((A\cap B^{c})\cup (A\cap B)) + P((A^{c}\cap B)\cup (A\cap B)) - P(A\cup B) \\
+&= P(A) + P(B) - P(A\cap B).
 \end{align}
 $$
 :::
@@ -162,7 +162,7 @@ $$
 If $\Omega$ is finite and if each outcome $\omega$ is equally likely, then
 
 $$
-\mathbb{P}(A) = \frac{\vert A\vert}{\vert\Omega\vert}.
+P(A) = \frac{\vert A\vert}{\vert\Omega\vert}.
 $$
 
 ---
@@ -176,13 +176,13 @@ What is the probability that the sum of the dice is 11?
 Two events $A$ and $B$ are independent if 
 
 $$
-\mathbb{P}(A\cap B) = \mathbb{P}(A)\mathbb{P}(B).
+P(A\cap B) = P(A)P(B).
 $$
 
 A set of events $\{A_{i}:~i\in I\}$ is independent if 
 
 $$
-\mathbb{P}\left(\bigcap_{i\in J}A_{i}\right) = \prod_{i\in J}\mathbb{P}(A_{i}),
+P\left(\bigcap_{i\in J}A_{i}\right) = \prod_{i\in J}P(A_{i}),
 $$
 
 for every finite subset $J$ of $I$.
@@ -190,14 +190,14 @@ for every finite subset $J$ of $I$.
 ---
 
 **Example** 
-Toss a fair coin 10 times. Let $A$ be the event that at least one head occurs. Let $T_{j}$ be the event that tails occurs on the $j$-th toss. What is $\mathbb{P}(A)$?
+Toss a fair coin 10 times. Let $A$ be the event that at least one head occurs. Let $T_{j}$ be the event that tails occurs on the $j$-th toss. What is $P(A)$?
 
 ::: {.notes}
 $$
 \begin{align}
-\mathbb{P}(A) &= 1 - \mathbb{P}(A^{c}) \\
-&= 1 - \mathbb{P}(T_{1}\cap T_{2}\cap\cdots \cap T_{10}) \\
-&= 1 - \mathbb{P}(T_{1})\cdots \mathbb{P}(T_{10}) \\
+P(A) &= 1 - P(A^{c}) \\
+&= 1 - P(T_{1}\cap T_{2}\cap\cdots \cap T_{10}) \\
+&= 1 - P(T_{1})\cdots P(T_{10}) \\
 & = 1 - \left(\frac{1}{2}\right)^{10}\approx 0.999.
 \end{align}
 $$
@@ -213,20 +213,20 @@ Independence can arise by:
 **Disjoint events each with positive probability can never be independent.**
 
 ::: {.notes}
-$\mathbb{P}(A)\mathbb{P}(B) > 0$ but $\mathbb{P}(A\cap B) = \mathbb{P}(\emptyset) = 0$.
+$P(A)P(B) > 0$ but $P(A\cap B) = P(\emptyset) = 0$.
 :::
 
 ## Conditional Probability
 
-If $\mathbb{P}(B)>0$ then the conditional probability of $A$ given $B$ is
+If $P(B)>0$ then the conditional probability of $A$ given $B$ is
 
 $$
-\mathbb{P}(A\vert B) = \frac{\mathbb{P}(A\cap B)}{\mathbb{P}(B)}.
+P(A\vert B) = \frac{P(A\cap B)}{P(B)}.
 $$
 
-If $A$ and $B$ are independent events then $\mathbb{P}(A\vert B) = \mathbb{P}(A)$.
+If $A$ and $B$ are independent events then $P(A\vert B) = P(A)$.
 
-In general $\mathbb{P}(A\vert B) \neq \mathbb{P}(B\vert A)$. 
+In general $P(A\vert B) \neq P(B\vert A)$. 
 
 ---
 
@@ -246,17 +246,17 @@ Suppose you get a positive test result, what is the probability you have the dis
 From the definition of conditional probability
 
 $$
-\mathbb{P}(+\vert D) = \frac{\mathbb{P}(+\cap D)}{\mathbb{P}(D)} = \frac{0.009}{0.009+0.001} = 0.9
+P(+\vert D) = \frac{P(+\cap D)}{P(D)} = \frac{0.009}{0.009+0.001} = 0.9
 $$
 and
 $$
-\mathbb{P}(+\vert D^{c}) = \frac{\mathbb{P}(-\cap D^{c})}{\mathbb{P}(D)} = \frac{0.891}{0.891+0.0.099} \approx 0.9
+P(+\vert D^{c}) = \frac{P(-\cap D^{c})}{P(D)} = \frac{0.891}{0.891+0.0.099} \approx 0.9
 $$
 The test is accurate, sick people yield a positive 90 percent of the time and healthy people yield a negative about 90 percent of the time.
 
 The answer is
 $$
-\mathbb{P}(D\vert +) = \frac{\mathbb{P}(+\cap D)}{\mathbb{P}(+)} = \frac{0.009}{0.009+0.099} \approx 0.08
+P(D\vert +) = \frac{P(+\cap D)}{P(+)} = \frac{0.009}{0.009+0.099} \approx 0.08
 $$
 The lesson here is that you need to compute the answer numerically. Don't trust your intution!
 :::
@@ -267,7 +267,7 @@ The lesson here is that you need to compute the answer numerically. Don't trust 
 Let $A_1, \ldots, A_k$ be a partition of $\Omega$, then for any event $B$
 
 $$
-\mathbb{P}(B) = \sum_{i=1}^{k}\mathbb{P}(B\vert A_{i})\mathbb{P}(A_i).
+P(B) = \sum_{i=1}^{k}P(B\vert A_{i})P(A_i).
 $$
 
 ---
@@ -282,22 +282,22 @@ $$
 Defince $C_{j} = B\cap A_{j}$ and note that $C_{1},\dots, C_{k}$ are disjoint and $B=\cup_{j=1}^{k}C_{j}$, hence
 
 $$
-\mathbb{P}(B) = \sum_{j=1}^{k}\mathbb{P}(C_{j}) = \sum_{j=1}^{k}\mathbb{P}(B\cap A_{j}) = \sum_{j=1}^{k}\mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j}).
+P(B) = \sum_{j=1}^{k}P(C_{j}) = \sum_{j=1}^{k}P(B\cap A_{j}) = \sum_{j=1}^{k}P(B\vert A_{j})P(A_{j}).
 $$
 :::
 
 ## Bayes' Theorem
-Let $A_1,\ldots, A_k$ be a partition of $\Omega$ such that $\mathbb{P}(A_{i})>0$ for each $i$. If $\mathbb{P}(B)>0$ then, for each $i=1,\ldots,k$
+Let $A_1,\ldots, A_k$ be a partition of $\Omega$ such that $P(A_{i})>0$ for each $i$. If $P(B)>0$ then, for each $i=1,\ldots,k$
 
 $$
-\mathbb{P}(A_{i}\vert B) = \frac{\mathbb{P}(B\vert A_i)\mathbb{P}(A_i)}{\sum_{j=1}^{k} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}.
+P(A_{i}\vert B) = \frac{P(B\vert A_i)P(A_i)}{\sum_{j=1}^{k} P(B\vert A_{j})P(A_{j})}.
 $$
 
 ---
 
 If we only consider a single event $A$, then we have 
 $$
-\mathbb{P}(A\vert B) = \frac{\mathbb{P}(B\vert A)\mathbb{P}(A)}{\mathbb{P}(B)}.
+P(A\vert B) = \frac{P(B\vert A)P(A)}{P(B)}.
 $$
 
 :::: {.incremental}
@@ -313,7 +313,7 @@ $$
 We apply the definition of conditional probability twice, followed by the law of total probability:
 
 $$
-\mathbb{P}(A_{i}\vert B) = \frac{\mathbb{P}(A_{i}\cap B)}{\mathbb{P}(B)} = \frac{\mathbb{P}(B\vert A_{i})\mathbb{P}(A_{i})}{\mathbb{P}(B)} = \frac{\mathbb{P}(B\vert A_{i})\mathbb{P}(A_{i})}{\sum_{j=1}^{k} \mathbb{P}(B\vert A_{j})\mathbb{P}(A_{j})}
+P(A_{i}\vert B) = \frac{P(A_{i}\cap B)}{P(B)} = \frac{P(B\vert A_{i})P(A_{i})}{P(B)} = \frac{P(B\vert A_{i})P(A_{i})}{\sum_{j=1}^{k} P(B\vert A_{j})P(A_{j})}
 $$
 :::
 
