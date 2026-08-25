@@ -94,24 +94,40 @@ For every function that is smooth (differentiable) and bounded below you can pro
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Define the function with two local minima
-def f(alpha):
-    return np.sin(alpha) + 0.1 * (alpha - 5)**2
+# phi(alpha) for a search direction that is a genuine descent direction,
+# i.e. phi'(0) < 0.
+def phi(a):
+    return np.sin(a - 1) + 0.1 * (a - 5)**2
 
-# Generate alpha values from 0 to 10
-alpha = np.linspace(0, 10, 400)
-y = f(alpha)
+def dphi(a):
+    return np.cos(a - 1) + 0.2 * (a - 5)
 
-# Plot the function
-plt.figure(figsize=(8, 5))
-plt.plot(alpha, y, label=r'$\phi(\alpha)$')
-plt.xlabel(r'$\alpha$')
-plt.ylabel(r'$\phi(\alpha)$')
-plt.grid(True)
-plt.legend()
+phi0, dphi0 = phi(0.0), dphi(0.0)
+c1, c2 = 0.3, 0.7  # exaggerated for visual clarity; in practice c1 is tiny (e.g. 1e-4)
+
+alpha = np.linspace(0, 10, 1000)
+y = phi(alpha)
+armijo_line = phi0 + c1 * alpha * dphi0
+armijo_ok = y <= armijo_line
+curvature_ok = dphi(alpha) >= c2 * dphi0
+acceptable = armijo_ok & curvature_ok
+
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.plot(alpha, y, lw=2.5, label=r'$\phi(\alpha)$')
+ax.plot(alpha, armijo_line, '--', color='C3',
+        label=r"Armijo line: $\phi(0)+c_1\alpha\phi'(0)$")
+ax.fill_between(alpha, y.min() - 0.3, y.max() + 0.3, where=acceptable,
+                 color='green', alpha=0.15, label='satisfies both Wolfe conditions')
+ax.plot(0, phi0, 'ko', markersize=6)
+ax.set_ylim(y.min() - 0.3, y.max() + 0.3)
+ax.set_xlabel(r'$\alpha$')
+ax.set_ylabel(r'$\phi(\alpha)$')
+ax.legend(fontsize=9)
+plt.tight_layout()
 plt.show()
 ```
 
+Any $\alpha$ in the shaded region simultaneously lies below the Armijo line (sufficient decrease) and has a sufficiently flattened slope (curvature condition) -- these are exactly the step lengths the Wolfe conditions accept.
 
 ## Convergence Theorem (Zoutendijk)
 Assumptions:
@@ -189,7 +205,7 @@ What does this tell us about the convergence?
 
 Consider the objective function $f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=I$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$.
 
-Let's plot the convergence of this with $\alpha=0.99$.
+Let's use the exact line search step length $\alpha_{k} = \frac{\nabla f_{k}^{\top}\nabla f_{k}}{\nabla f_{k}^{\top}Q\nabla f_{k}}$ derived above to plot the convergence. Since $Q=I$, this simplifies to $\alpha_{k}=1$ for every step -- so we should expect convergence in a single step.
 
 ---
 
@@ -212,6 +228,9 @@ def f(x):
 def grad_f(x):
     return np.dot(Q, x) - b
 
+def exact_line_search(Q, grad):
+    return (grad @ grad) / (grad @ Q @ grad)
+
 x = np.array([3.0, 3.0])  # Initial point
 trajectory = [x.copy()]
 
@@ -219,12 +238,12 @@ max_steps=10
 n_steps=0
 for _ in range(max_steps):
     g = grad_f(x)
-    alpha = 0.99 
+    if np.linalg.norm(g) < 1e-10:
+        break
+    alpha = exact_line_search(Q, g)
     x = x - alpha * g
     trajectory.append(x.copy())
     n_steps += 1
-    if np.linalg.norm(g) < 1e-10:
-        break
 
 trajectory = np.array(trajectory)
 
@@ -238,7 +257,7 @@ plt.figure(figsize=(8, 6))
 contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
-plt.title(f'Optimization Trajectory: {n_steps} steps to converge')
+plt.title(f'Optimization Trajectory (Exact Line Search): {n_steps} step{"s" if n_steps != 1 else ""} to converge')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -285,7 +304,7 @@ for i in range(max_iter):
     if grad1_norm < 1e-10:
         break
 
-    alpha = 0.99 #exact_line_search(Q1, x1, grad1)
+    alpha = exact_line_search(Q1, x1, grad1)
     x1 = x1 - alpha * grad1
 
 # Create DataFrame and save to CSV
@@ -298,7 +317,7 @@ print(df1.head(7))
 
 Consider the objective function $f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=\begin{bmatrix} 40 & -1 \\ -1 & 1 \end{bmatrix}$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$. The eigenvalues for this matrix are approximately 40 and 1. The true minimizer is $x^{*} = \begin{bmatrix} \frac{2}{39} \\ \frac{41}{39} \end{bmatrix}$.
 
-Let's plot the convergence of this with $\alpha=0.01$.
+Let's again use the exact line search step length to plot the convergence. Unlike Example 1, $Q\neq I$ here, so $\alpha_{k}$ now changes every iteration -- but convergence should still be much faster than with a small fixed step.
 
 ---
 
@@ -322,6 +341,9 @@ def f(x):
 def grad_f(x):
     return np.dot(Q, x) - b
 
+def exact_line_search(Q, grad):
+    return (grad @ grad) / (grad @ Q @ grad)
+
 x = np.array([3.0, 3.0])  # Initial point
 trajectory = [x.copy()]
 
@@ -329,12 +351,12 @@ max_steps=40
 n_steps=0
 for _ in range(max_steps):
     g = grad_f(x)
-    alpha = 0.01
+    if np.linalg.norm(x-x_min) < 1e-10:
+        break
+    alpha = exact_line_search(Q, g)
     x = x - alpha * g
     trajectory.append(x.copy())
     n_steps += 1
-    if np.linalg.norm(x-x_min) < 1e-10:
-        break
 
 trajectory = np.array(trajectory)
 
@@ -350,7 +372,7 @@ plt.figure(figsize=(8, 6))
 contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
 plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Gradient Descent Path')
-plt.title(f'Optimization Trajectory: {n_steps} steps')
+plt.title(f'Optimization Trajectory (Exact Line Search): {n_steps} steps')
 plt.xlabel('$x_1$')
 plt.ylabel('$x_2$')
 plt.legend()
@@ -397,7 +419,7 @@ for i in range(max_iter):
     if grad2_norm < 1e-6:
         break
 
-    alpha = 0.01  # exact_line_search(Q2, x2, grad2)
+    alpha = exact_line_search(Q2, x2, grad2)
     x2 = x2 - alpha * grad2
 
 # Create DataFrame and save to CSV
@@ -440,6 +462,12 @@ Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
 
 ## Stochastic Gradient Descent
 
+Computing $\nabla f_{k}=\frac{1}{m}\sum_{i=1}^{m}\nabla f_{i}(w_{k})$ exactly requires touching *every* one of the $m$ training examples before taking a single step -- for large $m$ (millions of examples, as is typical in ML) this is expensive and wasteful, since early steps don't need to be precise.
+
+Stochastic gradient descent (SGD) instead estimates the gradient using a single (or small batch of) randomly sampled example, trading exactness for speed: each update is cheap and noisy, but many cheap noisy steps often make more progress per unit time than a few expensive exact ones.
+
+---
+
 Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
 
 1. Given $w_{0}$ and $\alpha>0$,
@@ -480,6 +508,9 @@ Momentum smooths these updates, reducing oscillations and allowing faster moveme
 1. $\quad v_{k+1} = \beta v_{k} + \alpha \nabla f_{k}$
 1. $\quad w_{k+1} = w_{k}-v_{k+1}$
 
+::: {.notes}
+Watch out for a notational subtlety if you inspect PyTorch's source: `torch.optim.SGD` with momentum accumulates the velocity as $v_{k+1}=\beta v_{k} + \nabla f_{k}$ (no $\alpha$ inside the recursion) and only scales by the learning rate at the very last step, $w_{k+1}=w_{k}-\alpha v_{k+1}$. This is a different (but closely related) convention from the one above, where $\alpha$ is baked into $v_{k+1}$ itself. The two agree once $\alpha$ is held constant and the dust settles, but they are not literally the same recursion -- if $\alpha$ changes over time, or during the first few "warm-up" iterations, the two conventions can produce slightly different trajectories. Different libraries (and papers) are not always consistent about which one they mean by "momentum," so it is worth checking when comparing implementations.
+:::
 
 ---
 
@@ -574,14 +605,23 @@ RMSProp (Root Mean Square Propagation) was designed to address a key limitation 
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad E_{k+1} = \gamma E_{k} + (1-\gamma)\nabla f_{k}^{2}$ (element-wise square)
-1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1} + \varepsilon}}\nabla f_{k}$
+1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1} + \varepsilon}}\nabla f_{k}$ (element-wise square root and division)
+
+---
+
+Note that $w_{k}, \nabla f_{k}, E_{k}\in\mathbb{R}^{n}$ all have the *same* shape -- $E_{k}$ keeps one running average **per coordinate** of $w$, not a single scalar. Every operation below (square, square root, division) is applied **element-wise**, coordinate by coordinate.
+
+Written out per coordinate $i=1,\ldots,n$, step 5 is
+
+$$
+\small
+(w_{k+1})_{i} = (w_{k})_{i} - \frac{\alpha}{\sqrt{(E_{k+1})_{i} + \varepsilon}}(\nabla f_{k})_{i}.
+$$
 
 ::: {.notes}
-Think of $E_{k+1}$ as an exponentially weighted moving average  of squared gradients. 
+Think of $E_{k+1}$ as an exponentially weighted moving average of squared gradients -- one such average is tracked independently for *each* coordinate of $w$.
 
-When the gradient has consistently small magnitudes, then the moving average is small, the denominator is small and we can take larger steps when the gradient is consistent.
-
-When the gradient fluctuates or is large, then the weighted moving average is larger and we take smaller steps. Prevents overshooting or divergence.
+Because everything is element-wise, each coordinate gets its own effective step size $\alpha/\sqrt{(E_{k+1})_i+\varepsilon}$: when a coordinate's gradient has consistently small magnitude, its moving average is small, so its denominator is small and that coordinate takes a larger step. When a coordinate's gradient fluctuates or is large, its moving average grows, shrinking that coordinate's step and preventing overshooting or divergence -- independently of what is happening in the other coordinates. This is the key difference from a single global learning rate.
 :::
 
 ---
@@ -618,12 +658,14 @@ def f(x):
 x = torch.nn.Parameter(torch.tensor([3.0, 3.0], dtype=dtype))
 
 # Optimizer: RMSprop
-# alpha is the decay (smoothing) factor for the running average of squared grads
+# NOTE on naming: PyTorch's `alpha` argument is the decay/smoothing factor,
+# i.e. what our pseudocode calls gamma -- NOT our learning rate alpha.
+# The learning rate is PyTorch's `lr`, which matches our pseudocode's alpha.
 optimizer = torch.optim.RMSprop(
     [x],
-    lr=0.1,       
-    alpha=0.9,     # smoothing for squared grads (common: 0.9–0.99)
-    eps=1e-8,
+    lr=0.1,        # our alpha (learning rate)
+    alpha=0.9,     # our gamma (decay/smoothing for E_k, common: 0.9-0.99)
+    eps=1e-8,      # our epsilon
     centered=False # set True to use a centered variance estimate
 )
 
@@ -892,11 +934,13 @@ plt.xlabel(r'$x_{1}$')
 plt.ylabel(r'$x_{2}$')
 plt.legend()
 plt.grid(True)
+plt.show()
 ```
 
 ---
 
 ```{python}
+#| fig-align: center
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
