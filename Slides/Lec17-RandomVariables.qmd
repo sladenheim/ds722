@@ -64,7 +64,7 @@ Flip a coin twice and let $X$ be the number of heads. Let's fill in the followin
 
 :::: {.columns}
 ::: {.column width="60%"}
-| $\omega$ | $P(\omega)$ | $X(\omega)$ |
+| $\omega$ | $P(\{\omega\})$ | $X(\omega)$ |
 |----------|----------------------|-------------|
 :::
 ::: {.column width="40%"}
