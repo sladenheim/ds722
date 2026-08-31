@@ -118,8 +118,8 @@ where the error term $\delta_i^{(l)}$ is computed using the chain rule of calcul
 
 ![](figures/zhang.jpeg){width="210px" fig-align="center"}
 
-* **OH:** TBD
-* **Location:**  TBD
+* **OH:** W 9AM-12PM
+* **Location:**  Check Piazza for location
 * **Email:** yukez &lt;at&gt; bu &lt;dot&gt; edu
 :::
 ::::
