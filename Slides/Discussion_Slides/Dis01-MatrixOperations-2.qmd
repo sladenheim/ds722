@@ -40,7 +40,7 @@ $$
 **A Matrix Times a Vector**
 Let $\mathbf{x}\in\mathbb{R}^{n}$ and let $A\in\mathbb{R}^{m\times n}$. $\mathbf{b}=A\mathbf{x}\in\mathbb{R}^{m}$ is defined as
 $$
-b_{i} = \sum_{j=1}^{n}A_{ij}x_j, \quad i=1,\ldots,m.
+b_{i} = \sum_{j=1}^{n}a_{ij}x_j, \quad i=1,\ldots,m.
 $$
 
 Alternatively,
@@ -52,7 +52,7 @@ $$
 **A Matrix Times a Matrix**
 Let $A\in\mathbb{R}^{m \times n}$, $B\in\mathbb{R}^{n \times p}$, then the matrix-matrix product $C = AB \in\mathbb{R}^{m \times p}$ is defined as
 $$
-C_{ij} = \sum_{k=1}^{n} A_{ik}B_{kj}.
+c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}.
 $$
 
 
