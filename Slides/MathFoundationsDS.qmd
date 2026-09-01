@@ -1,11 +1,11 @@
 ---
-title: "Mathematical Foundations of Data Science"
+title: "Mathematical Foundations of Data Science and Machine Learning"
 jupyter: python3
 ---
 
-## Mathematical Foundations of DS
+## Mathematical Foundations of DS and ML
 
-Welcome to DS722, Mathematical Foundations of DS.
+Welcome to DS722, Mathematical Foundations of DS and ML.
 
 Data science is a multidisciplinary field that combines mathematics, computer science, and domain expertise to extract insights and knowledge from data.
 
@@ -74,11 +74,12 @@ To understand how these models work requires a solid understanding of all three 
 ![Neural Network Architecture](figures/NeuralNetwork.png){fig-align="center"}
 
 ::: {.notes}
-Consider a scenario where we are predicting whether a picture is cute/note cute.
+Consider a scenario where we are predicting whether a picture is cute/not cute.
 
 Formulas to cover:
 
 Forward propagation:
+
 $$
 a_{i}^{(l)} = \sigma\left(\sum_{j} w_{ij}^{(l)} a_{j}^{(l-1)} + b_i^{(l)}\right)
 $$
@@ -88,6 +89,7 @@ Loss function:
 $$
 \mathcal{L}(y, \hat{y}) = -\sum_{i} y_i \log(\hat{y}_i),
 $$
+
 where $y$ is the true label and $\hat{y}$ is the predicted label. This loss is called the cross-entropy loss. It measures the difference between the true label and the predicted label.
 
 Probability/statistics is used to interpret the output of the neural network and understand its uncertainty. For example, we can use Bayesian methods to estimate the uncertainty in the predictions made by the neural network.
@@ -97,6 +99,7 @@ Back propagation:
 $$
 \frac{\partial \mathcal{L}}{\partial w_{ij}^{(l)}} = \delta_i^{(l)} a_j^{(l-1)},
 $$
+
 where the error term $\delta_i^{(l)}$ is computed using the chain rule of calculus and represents how much the loss changes with respect to the weights.
 :::
 
@@ -160,7 +163,7 @@ Your grade is comprised of:
 
 ## Homework
 
-- There are weekly problem sets with roughly 5 questions per assignment.
+- There are weekly problem sets with roughly 5-10 questions per assignment.
 
 - Students are allotted a total of 5 late homework days throughout the semester, with a maximum of 2 days allowed per assignment. Late submissions beyond this policy will not be accepted.
 
@@ -170,18 +173,18 @@ Mention that HW will be more theoretical.
 
 ## Discussions
 
-- There are 12 discussion sections that occur each Thursday. 
+- There are 13 discussion sections that are held on Thursdays. 
 
 - Attendance is recorded. Students may miss up to 3 sessions and still receive full participation credit. 
 
 - If more than 3 discussions are missed, participation credit
 will be prorated based on the percentage of sessions attended.
 
-- During the semester will be 6 discussion quizzes consisting of 4 questions worth 20 points. 2 questions will be based on problems in the problem set. The other 2 questions will be unseen problems. 
+## Discussion Quizzes
+
+- During the semester there will be 6 discussion quizzes consisting of 4 questions worth 10 points. 2 questions will be based on problems in the problem set. The other 2 questions will be unseen problems. 
 
 - Non-quiz discussions sessions will work through computational problems using Jupyter notebooks. 
-
-## Discussion Quizzes
 
 ::: {.notes}
 Mention that discussions will be more computational.
@@ -290,7 +293,7 @@ You will gain more experience doing this during the first discussion.
 
 ## Generative AI Policy
 
-Your are not prevented from using Generative AI tools to help with your homework. However, since you are tested on the material in discussions and exams, it is best practice to work on the problems yourselves first in order to better understand the material.
+You are not prevented from using Generative AI tools to help with your homework. However, since you are tested on the material in discussions and exams, it is best practice to work on the problems yourselves first in order to better understand the material.
 
 ---
 
@@ -345,6 +348,5 @@ We will introduce:
 - Mathematical notation 
 - Logic 
 - Proofs
-- Vectors
 
 Have a nice weekend!

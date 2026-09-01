@@ -1,5 +1,5 @@
 ---
-title: "DS722 — Mathematical Foundations of Data Science"
+title: "DS722 — Mathematical Foundations of Data Science and Machine Learning"
 author: "Scott Ladenheim"
 format:
   html:
@@ -12,9 +12,9 @@ format:
 
 ## Preface {.unnumbered}
 
-Welcome to DS722 _Mathematical Foundations of Data Science_!
+Welcome to DS722 _Mathematical Foundations of Data Science and Machine Learning_!
 
-These are the course lecture notes for DS722, _Mathematical Foundations of Data Science_.
+These are the course lecture notes for DS722, _Mathematical Foundations of Data Science and Machine Learning_.
 
 If you have suggestions, feel free to create a Github issue. If you find typos or
 errors, please create an issue, or better yet, submit a pull request.

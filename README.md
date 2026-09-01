@@ -1,5 +1,5 @@
-# DS722: Mathematical Foundations of Data Science.
+# DS722: Mathematical Foundations of Data Science and Machine Learning.
 
-This is the repository for DS722, Mathematical Foundations of Data Science, lecture slides, syllabus, and discussions notebooks. 
+This is the repository for DS722, Mathematical Foundations of Data Science and Machine Learning, lecture slides, syllabus, and discussions notebooks. 
 
 The slides were created using [Quarto](https://quarto.org/). You can install quarto from this [link](https://quarto.org/docs/get-started/). Follow the instructions in the *Get Started* section for VSCode. For VSCode you need to also install the Quarto extension. This allows you to preview the content you have created in VSCode.
