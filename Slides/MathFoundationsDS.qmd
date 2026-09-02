@@ -117,7 +117,7 @@ where the error term $\delta_i^{(l)}$ is computed using the chain rule of calcul
 :::
 
 ::: {.column width="48%"}
-**Yuke Zhange** 
+**Yuke Zhang** 
 
 ![](figures/zhang.jpeg){width="210px" fig-align="center"}
 
@@ -204,8 +204,8 @@ The SCC is a heterogeneous linux cluster.
 
 The system currently includes:
 
-- $>$12,000 CPU cores
-- $>$400 GPUs
+- $>$ 12,000 CPU cores
+- $>$ 400 GPUs
 - $>$ 14 PB of storage
 
 ---
@@ -237,7 +237,7 @@ The discussion notebooks will become available in `/projectnb/ds722/materials/`.
 
 ### SCC OnDemand
 
-Use the SCC through the [OnDemand](scc-ondemand.bu.edu) interface.
+Use the SCC through the [OnDemand](http://scc-ondemand1.bu.edu/) interface.
 
 ![](figures/SCCOnDemand.png){fig-align="center"}
 
