@@ -50,14 +50,14 @@ The important information to take away from this formula is:
 - The input to the nonlinear function $\sigma$ is a vector of length $m$ and the output is also a vector of length $m$ (this function is applied element-wise). 
 
 :::: {.fragment}
-What does $\sum_{j=1}^{n} w_{ij}x_j$ mean?
+What does $z_{i}= \sum_{j=1}^{n} w_{ij}x_j$ mean?
 ::::
 
 ## Summation Notation
 
 The summation symbol $\sum$ is used to denote the sum of a sequence of numbers. 
 
-The expression $\sum_{j=1}^{n} w_{ij}x_j$ means to sum the products $w_{ij}x_j$ for $j$ ranging from 1 to $n$.
+The expression $z_{i} = \sum_{j=1}^{n} w_{ij}x_j$ means the $i$th entry of $z$ is the sum of the products $w_{ij}x_j$ where $j$ ranges from 1 to $n$.
 
 Given $z=Wx$, where $W=\begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$ and $x=\begin{bmatrix} 5 \\ 6 \end{bmatrix}$, compute 
 
@@ -104,7 +104,7 @@ The following are standard notations used to denote various sets we work with:
 - $\mathbb{Z}=\{\ldots, -2, -1, 0, 1, 2, \ldots\}$: the set of integers
 - $\mathbb{Q}=\{a/b : a, b\in\mathbb{Z}, b\neq 0\}$: the set of rational numbers
 - $\mathbb{R}$: the set of all real numbers
-- $\mathbb{C}= \{ a + bi : a, b \in \mathbb{R}, i^2 = -1 \}$: the set of complex numbers
+- $\mathbb{C}= \{ a + bi : a, b \in \mathbb{R}, i^2 = -1 \}$: the set of complex 
 
 ## Subsets
 
@@ -128,17 +128,78 @@ The union of two sets $A$ and $B$, denoted $A \cup B$, is the set of all element
 
 The intersection of two sets $A$ and $B$, denoted $A \cap B$, is the set of all elements that are in both $A$ and $B$.
 
+Two sets are *disjoint* if they have no elements in common, i.e., $A \cap B = \emptyset$.
+
+## Cardinality
+
+The *cardinality* of a set $A$ is the number of elements it contains, written $\vert A \vert$ (some texts write $\#A$ or $n(A)$).
+
+- $\vert \{1, 2, 3\} \vert = 3$
+- $\vert \emptyset \vert = 0$
+- if $V = \{v_{1}, v_{2}, \ldots, v_{m}\}$ then $\vert V \vert = m$
+
+---
+
+A set is *finite* if $\vert A \vert = n$ for some $n\in\mathbb{N}\cup\{0\}$, and *infinite* otherwise. Sets like $\mathbb{N}$, $\mathbb{Z}$, and $\mathbb{R}$ are infinite, and we write $\vert \mathbb{N} \vert = \infty$.
+
+A useful counting rule for finite sets is the *inclusion-exclusion principle*:
+
+$$
+\vert A \cup B \vert = \vert A \vert + \vert B \vert - \vert A \cap B \vert.
+$$
+
+::: {.notes}
+We subtract $\vert A\cap B\vert$ in inclusion-exclusion because elements in both sets get counted twice by $\vert A\vert + \vert B\vert$. If $A$ and $B$ are disjoint the correction term is zero.
+
+Not all infinite sets are the same size: $\mathbb{N}$, $\mathbb{Z}$, and $\mathbb{Q}$ are *countably* infinite (their elements can be listed), while $\mathbb{R}$ is uncountable. We won't need that distinction much, but it explains why probability treats discrete and continuous random variables separately.
+:::
+
 ## Set Difference
 
 The difference of two sets $A$ and $B$, denoted $A \setminus B$, is the set of all elements that are in $A$ but not in $B$.
 
 A set difference is equivalent to the intersection of a set with the complement of another set, i.e., $A \setminus B = A \cap B^c$.
 
+## De Morgan's Laws
+
+Complements turn unions into intersections and intersections into unions:
+
+$$
+(A \cup B)^{c} = A^{c} \cap B^{c}, \qquad (A \cap B)^{c} = A^{c} \cup B^{c}.
+$$
+
+In words: to *not* be in "$A$ or $B$" you must be outside $A$ **and** outside $B$; to *not* be in "$A$ and $B$" it is enough to be outside one of them.
+
+## De Morgan's Laws: Example
+
+Let $U = \{1, 2, 3, 4, 5, 6\}$, $A = \{1, 2, 3\}$, and $B = \{3, 4\}$.
+
+- $A \cup B = \{1, 2, 3, 4\}$, so $(A \cup B)^{c} = \{5, 6\}$
+- $A^{c} = \{4, 5, 6\}$ and $B^{c} = \{1, 2, 5, 6\}$, so $A^{c} \cap B^{c} = \{5, 6\}$ ✓
+- $A \cap B = \{3\}$, so $(A \cap B)^{c} = \{1, 2, 4, 5, 6\}$
+- $A^{c} \cup B^{c} = \{1, 2, 4, 5, 6\}$ ✓
+
+The laws extend to any number of sets:
+
+$$
+\left(\bigcup_{i=1}^{n} A_{i}\right)^{c} = \bigcap_{i=1}^{n} A_{i}^{c},
+\qquad
+\left(\bigcap_{i=1}^{n} A_{i}\right)^{c} = \bigcup_{i=1}^{n} A_{i}^{c}.
+$$
+
+::: {.notes}
+These come up constantly in probability: the complement of "at least one of the events $A_i$ occurs" is "none of them occur", i.e. $P\left(\bigcup_i A_i\right) = 1 - P\left(\bigcap_i A_i^{c}\right)$. For independent events the right-hand side factors, which is why this is often the easiest route to an "at least one" probability.
+
+We will see these laws again when we get to logic later in this lecture --- they are the same statement with $\cup \to \vee$, $\cap \to \wedge$, and complement $\to$ negation.
+:::
+
 ## Functions
 
 A function $f$ maps elements from a set $X$ (the domain) to elements in a set $Y$ (the co-domain). We write this as $f: X \rightarrow Y$. The **range** of a function is the set $\{f(x) : x\in X\}\subseteq Y$.
 
 Note that for each $x \in X$, there is a unique $y \in Y$ such that $f(x) = y$.
+
+---
 
 A few examples of the types of functions we will encounter:
 
@@ -343,6 +404,31 @@ The last two columns agree in every row, so $P \implies Q$ and its contrapositiv
 The only way an implication is false is when the hypothesis is true and the conclusion is false (row 2). Rows 3 and 4 are the "vacuously true" cases: when $P$ is false, $P \implies Q$ says nothing and is true by default.
 :::
 
+## De Morgan's Laws (Logic)
+
+We saw De Morgan's laws for sets earlier. They are really statements about negation, and the same laws hold for logical statements:
+
+$$
+\neg(P \vee Q) \equiv \neg P \wedge \neg Q,
+\qquad
+\neg(P \wedge Q) \equiv \neg P \vee \neg Q.
+$$
+
+Negating an "or" gives an "and", and negating an "and" gives an "or".
+
+This is the same fact as the set version: a set operation acts on the elements satisfying a statement, with $\cup \leftrightarrow \vee$, $\cap \leftrightarrow \wedge$, and $A^{c} \leftrightarrow \neg$.
+
+## De Morgan's Laws: Example
+
+Let $P$ be "the model converged" and $Q$ be "the loss is below $0.01$".
+
+- $\neg(P \wedge Q)$: "it is *not* the case that the model converged **and** the loss is below $0.01$"
+- equivalently $\neg P \vee \neg Q$: "the model did not converge **or** the loss is not below $0.01$"
+
+::: {.notes}
+This matters for proof by contradiction, coming up next: to disprove a statement you must correctly negate it, and De Morgan's laws tell you how.
+:::
+
 ## Deductive Reasoning
 
 Here is an example of deductive reasoning:
@@ -358,7 +444,7 @@ But is this true?
 ::::
 
 :::: {.fragment}
-For the examples of proofs that we wish to work through, we will generally have statements of the form:
+In many proofs, we work with statements of the form:
 
 If $P$, then $Q$, or equivalently, $P \implies Q$.
 ::::
@@ -373,7 +459,7 @@ We say an argument is valid if the premises cannot all be true without the concl
 
 ## $P \implies Q$
 
-The statement $P \implies Q$ is true if either $P$ is false or $Q$ is true.
+The statement $P \implies Q$ is true if either $P$ is false or $Q$ is true. 
 
 We equivalently have:
 
@@ -396,7 +482,7 @@ $$
 $$
 :::
 
-:::: {.fragment}
+:::: {.fragment .absolute bottom="60" left="0" width="100%"}
 Note that the statement $0<a<b$ is sufficient to guarantee $a^2 < b^2$ and that $a^2 < b^2$ is necessary for $0<a<b$.
 ::::
 
@@ -452,6 +538,8 @@ Example: If a number is divisible by 4, then it is even. Being divisible by 4 gu
 
 ::: {.notes}
 Necessary and sufficient conditions will be important throughout the course, but in particular when we discuss optimization where we are interested in conditions which guarantee that we have found a minimum or maximum of a function.
+
+Note that being divisible by 2 does not guarantee that a number is divisible by 4, so being divisible by 2 is a necessary but not sufficient condition for a number to be divisible by 4. Counterexample: $6$ is divisible by $2$ but not by $4$.
 :::
 
 ---
