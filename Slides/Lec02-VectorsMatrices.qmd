@@ -721,6 +721,93 @@ $$
 
 :::
 
+---
+
+**Example**
+
+For a $2\times 2$ matrix, expanding along the first row gives
+
+$$
+\operatorname{det}
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}
+= (-1)^{1+1}a\operatorname{det}[d] + (-1)^{1+2}b\operatorname{det}[c] = ad - bc.
+$$
+
+Let
+$$
+A = \begin{bmatrix}
+3 & 1 \\
+2 & 4
+\end{bmatrix},
+$$
+then $\operatorname{det}(A) = 3\cdot 4 - 1\cdot 2 = 10$.
+
+::: {.notes}
+The minors of a $2\times2$ matrix are $1\times1$, so the recursion bottoms out immediately.
+
+Point out that $ad-bc$ is exactly the quantity that appears in the denominator of the $2\times2$ inverse formula a few slides from now. The inverse exists precisely when this number is nonzero.
+:::
+
+---
+
+### What does the determinant measure?
+
+The columns of $A$ span a parallelogram, and $\vert\operatorname{det}(A)\vert$ is its area. Equivalently, $A$ maps the unit square to that parallelogram, so $\vert\operatorname{det}(A)\vert$ is the factor by which $A$ scales areas. For $A\in\mathbb{R}^{m\times m}$ it is the factor by which $A$ scales $m$-dimensional volumes.
+
+The sign records orientation: $\operatorname{det}(A) < 0$ means $A$ flips the plane over.
+
+If $\operatorname{det}(A) = 0$ the columns are linearly dependent, the parallelogram is flat, and $A$ collapses $\mathbb{R}^{m}$ onto a lower-dimensional subspace.
+
+::: {.notes}
+This is the geometric reason $\operatorname{det}(A)\neq 0$ shows up in the list of equivalent conditions for invertibility on the next few slides: a map that squashes volume to zero has thrown information away and cannot be undone.
+
+Forward reference: this volume-scaling factor returns as the Jacobian determinant in the change-of-variables formula, which is how probability densities transform under a change of variable.
+:::
+
+---
+
+```{python}
+#| label: fig-determinant-area
+#| fig-cap: 'The unit square and its image under $A$. The parallelogram is spanned by the columns $a_1$ and $a_2$ of $A$ and has area $\vert\operatorname{det}(A)\vert = 10$.'
+import numpy as np
+import matplotlib.pyplot as plt
+
+A = np.array([[3.0, 1.0],
+              [2.0, 4.0]])
+
+# Corners of the unit square, and their images under A
+square = np.array([[0, 1, 1, 0, 0],
+                   [0, 0, 1, 1, 0]])
+image = A @ square
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+titles = ['Unit square, area 1', 'Image under $A$, area 10']
+
+for ax, pts, title in zip(axes, [square, image], titles):
+    ax.fill(pts[0], pts[1], color='grey', alpha=0.5)
+    ax.plot(pts[0], pts[1], color='black')
+    ax.axhline(0, color='black', linewidth=2)
+    ax.axvline(0, color='black', linewidth=2)
+    ax.set_xlim(-0.5, 4.5)
+    ax.set_ylim(-0.5, 6.5)
+    ax.set_aspect('equal')
+    ax.grid(True)
+    ax.set_title(title)
+
+# Draw the columns of A as vectors
+axes[1].quiver([0, 0], [0, 0], A[0, :], A[1, :],
+               color='r', angles='xy', scale_units='xy', scale=1, zorder=3)
+axes[1].text(3.15, 1.55, '$a_1$', size=16, color='r')
+axes[1].text(0.45, 4.25, '$a_2$', size=16, color='r')
+
+plt.tight_layout()
+plt.show()
+```
+
+
 ## Invertible Matrices
 
 A nonsingular or invertible matrix is a square matrix of full rank.
