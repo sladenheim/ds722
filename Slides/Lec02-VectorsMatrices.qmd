@@ -151,7 +151,7 @@ Write an example.
 Let $A, B \in \mathbb{R}^{m \times n}$ be two matrices of the same shape. The sum $A + B$ is defined by adding corresponding entries:
 
 $$
-(A + B)_{ij} = A_{ij} + B_{ij}.
+(A + B)_{ij} = a_{ij} + b_{ij}.
 $$
 
 ---
@@ -192,6 +192,10 @@ Mention that an inner product is a more general idea and can be extended to work
 
 Show a picture of row vector times column vector.
 :::
+
+---
+
+> Consider a company that makes 10 different products and A customer can buy any combination of these products. We can represent their purchase history as a vector $x\in\mathbb{R}^{10}$, where each entry $x_i$ is the number of units of product $i$ purchased. If we denote the price corresponding to each product $i$ as $p_{i}$, how can we represent the total amount spent by the customer using an inner product?
 
 ---
 
@@ -242,6 +246,10 @@ $$
 ::: {.notes}
 Each entry is an inner product between a row of $A$ and the vector $x$.
 :::
+
+---
+
+> Recall the example of a customer purchasing 10 different products. If we have $m$ customers, we can represent their purchase histories as the columns of a matrix $X\in\mathbb{R}^{m\times 10}$. How can we quickly compute the total amount spent by each customer using matrix-vector multiplication if $p\in\mathbb{R}^{10\times 1}$ is the vector of prices?
 
 ---
 
