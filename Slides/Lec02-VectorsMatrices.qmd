@@ -755,13 +755,27 @@ Point out that $ad-bc$ is exactly the quantity that appears in the denominator o
 
 ### What does the determinant measure?
 
-The columns of $A$ span a parallelogram, and $\vert\operatorname{det}(A)\vert$ is its area. Equivalently, $A$ maps the unit square to that parallelogram, so $\vert\operatorname{det}(A)\vert$ is the factor by which $A$ scales areas. For $A\in\mathbb{R}^{m\times m}$ it is the factor by which $A$ scales $m$-dimensional volumes.
+Let $a_1, a_2$ be the columns of $A\in\mathbb{R}^{2\times 2}$. Since $Ae_1 = a_1$ and $Ae_2 = a_2$, linearity says $A$ maps the unit square
+
+$$
+\{c_1e_1 + c_2e_2 : 0\leq c_1, c_2 \leq 1\}
+\quad\text{to}\quad
+\{c_1a_1 + c_2a_2 : 0\leq c_1, c_2 \leq 1\},
+$$
+
+the parallelogram with edges $a_1$ and $a_2$. Its area is $\vert\operatorname{det}(A)\vert$.
+
+So $\vert\operatorname{det}(A)\vert$ is the factor by which $A$ scales areas, and for $A\in\mathbb{R}^{m\times m}$ the factor by which it scales $m$-dimensional volumes.
 
 The sign records orientation: $\operatorname{det}(A) < 0$ means $A$ flips the plane over.
 
 If $\operatorname{det}(A) = 0$ the columns are linearly dependent, the parallelogram is flat, and $A$ collapses $\mathbb{R}^{m}$ onto a lower-dimensional subspace.
 
 ::: {.notes}
+Careful with the word *span*: $\operatorname{span}\{a_1, a_2\}$ is all of $\mathbb{R}^{2}$ when the columns are independent, not a bounded region. The parallelogram is what you get by restricting the coefficients to $[0, 1]$, i.e. it is the *image of the unit square*, not the span of the columns.
+
+Why a parallelogram? The corners $0, e_1, e_2, e_1+e_2$ map to $0, a_1, a_2, a_1+a_2$. The edge from $e_1$ to $e_1+e_2$ maps to the segment from $a_1$ to $a_1+a_2$, which is a translate of the segment from $0$ to $a_2$, so opposite sides are parallel and of equal length.
+
 This is the geometric reason $\operatorname{det}(A)\neq 0$ shows up in the list of equivalent conditions for invertibility on the next few slides: a map that squashes volume to zero has thrown information away and cannot be undone.
 
 Forward reference: this volume-scaling factor returns as the Jacobian determinant in the change-of-variables formula, which is how probability densities transform under a change of variable.
@@ -771,7 +785,7 @@ Forward reference: this volume-scaling factor returns as the Jacobian determinan
 
 ```{python}
 #| label: fig-determinant-area
-#| fig-cap: 'The unit square and its image under $A$. The parallelogram is spanned by the columns $a_1$ and $a_2$ of $A$ and has area $\vert\operatorname{det}(A)\vert = 10$.'
+#| fig-cap: 'The unit square and its image under $A$. The image is the parallelogram with edges $a_1$ and $a_2$, the columns of $A$, and has area $\vert\operatorname{det}(A)\vert = 10$.'
 import numpy as np
 import matplotlib.pyplot as plt
 
