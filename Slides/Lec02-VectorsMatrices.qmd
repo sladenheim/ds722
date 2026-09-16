@@ -891,7 +891,7 @@ d & -b \\
 $$
 provided that $ad - bc \neq 0$.
 
----
+<!-- ---
 
 Note that $(A^{\top})^{-1} = A^{-\top}$. Why?
 
@@ -899,7 +899,7 @@ Note that $(A^{\top})^{-1} = A^{-\top}$. Why?
 $(AA^{-1})^{\top} = (A^{-1})^{\top}A^{\top} = I$
 
 Mention the students will prove $(AB)^{\top} = B^{\top}A^{\top}$ in homework.
-:::
+::: -->
 
 ---
 
