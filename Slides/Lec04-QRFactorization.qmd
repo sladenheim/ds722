@@ -70,7 +70,7 @@ $$
 q_{2}^{\top}q_1 = 0.
 $$
 
-A set of vectors $S = \{q_1, q_2, \ldots, q_n \}$ are orthogonal if every pair of vectors is orthogonal, i.e.,
+A set of vectors $S = \{q_1, q_2, \ldots, q_n \}$ is orthogonal if every pair of vectors is orthogonal, i.e.,
 
 $$
 q_{i}^{\top}q_{j} = 0 \quad \text{for all} \quad i\neq j.
@@ -235,7 +235,7 @@ $$
 ---
 
 Let $A\in\mathbb{R}^{m\times n}$ and $\hat{Q}$ denote the matrix whose columns are $q_{j}$.
-In order for $\hat{Q}$ to span the successive columns spaces of $A$, we must have
+In order for $\hat{Q}$ to span the successive column spaces of $A$, we must have
 
 $$
 \scriptsize
@@ -267,13 +267,13 @@ $$
 The previous slide says
 
 $$
-\begin{align}
+\begin{align*}
 a_{1} &= r_{11}q_1 \\
 a_{2} &= r_{12}q_1 + r_{22}q_2  \\
 a_{3} &= r_{13}q_1 + r_{23}q_2 + r_{33}q_3 \\
 &\vdots \\
 a_{n} &= r_{1n}q_1 + r_{2n}q_2 + \cdots + r_{nn}q_{n}.
-\end{align}
+\end{align*}
 $$
 
 ---
@@ -299,7 +299,7 @@ $$
 v_{j} = a_{j} - (q_{1}^{\top}a_{j})q_{1} - (q_{2}^{\top}a_{j})q_{2} - \cdots - (q_{j-1}^{\top}a_{j})q_{j-1}.
 $$
 
-If we divide $v_{j}$ by $\Vert v_{j}\Vert_2$, then we have an orthonormal $q_{j}$. If we have repeated this process $j$ times, then $q_{j}\in\langle a_{1}\ldots, a_{j} \rangle$ and by construction is orthonormal to $q_1,\ldots q_{j-1}$. 
+If we divide $v_{j}$ by $\Vert v_{j}\Vert_2$, then we have an orthonormal $q_{j}$. If we have repeated this process $j$ times, then $q_{j}\in\langle a_{1},\ldots, a_{j} \rangle$ and by construction is orthogonal to $q_{1},\ldots, q_{j-1}$. 
 
 ---
 
@@ -343,11 +343,11 @@ Let's combine the previous slides into an algorithm
 
 1. for $j=1,\ldots, n$
 1. $\quad v_{j} = a_{j}$
-1. $\quad\quad$ for $i=1,\ldots, j-1$
-1. $\quad\quad\quad r_{ij} = q_{i}^{\top}a_{j}$ 
-1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
-1. $\quad\quad r_{jj} = \Vert v_{j}\Vert_2$ 
-1. $\quad\quad q_{j} = v_{j}/r_{jj}$ 
+1. $\quad$ for $i=1,\ldots, j-1$
+1. $\quad\quad r_{ij} = q_{i}^{\top}a_{j}$ 
+1. $\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
+1. $\quad r_{jj} = \Vert v_{j}\Vert_2$ 
+1. $\quad q_{j} = v_{j}/r_{jj}$ 
 
 
 ## Example
@@ -388,7 +388,7 @@ $$
 
 ---
 
-### Step 2 (j=1)
+### Step 2 ($j=1$)
 
 Set $v_{1}=\begin{bmatrix}2 \\ 1 \\ 0 \end{bmatrix}$.
 
@@ -415,13 +415,17 @@ $$
 
 ---
 
-### Step 3 (j=2, i=1)
+### Step 3 ($j=2$)
 
 Set $v_{2}=\begin{bmatrix}0 \\ 1 \\ 1 \end{bmatrix}$.
+
+Inner loop, $i=1$:
 
 Compute $r_{12} = q_{1}^{\top}a_{2}$
 
 Compute $v_{2} = v_{2} - r_{12}q_{1}$.
+
+After the inner loop:
 
 Compute $r_{22} = \Vert v_{2}\Vert_{2}$
 
@@ -446,7 +450,7 @@ $$
 
 ---
 
-### Step 3 (j=3, i=1)
+### Step 4 ($j=3$), inner loop $i=1$
 
 Set $v_{3}=\begin{bmatrix}1 \\ 0 \\ 2 \end{bmatrix}$.
 
@@ -456,7 +460,7 @@ Compute $v_{3} = v_{3} - r_{13}q_{1}$.
 
 ---
 
-### Step 3 (j=3, i=2)
+### Step 4 ($j=3$), inner loop $i=2$
 
 Compute $r_{23} = q_{2}^{\top}a_{3}$
 
@@ -464,7 +468,7 @@ Compute $v_{3} = v_{3} - r_{23}q_{2}$.
 
 ---
 
-### Step 3 (j=3, i=3)
+### Step 4 ($j=3$), after the inner loop
 
 Compute $r_{33} = \Vert v_{3}\Vert_{2}$
 
@@ -502,7 +506,7 @@ where $Q\in\mathbb{R}^{m\times m}$ is orthogonal and $R\in\mathbb{R}^{m\times n}
 
 The matrix $Q$ is created by appending an additional $m-n$ orthonormal columns to $\hat{Q}$.
 
-The matrix $R$ is created by appending $m$ rows of zeros to $\hat{R}$.
+The matrix $R$ is created by appending $m-n$ rows of zeros to $\hat{R}$.
 
 ## Existence and Uniqueness
 
@@ -518,7 +522,7 @@ Each $A\in\mathbb{R}^{m\times n} (m\geq n)$ of full rank has a unique reduced QR
 
 ## Gram-Schmidt Projections
 
-The CGS method is not numerically stable. However, we can modify this method to produce a numerically stable algorithm.
+The CGS method is not numerically stable. However, we can modify this method to produce a more stable algorithm.
 
 The key idea behind this is projections. 
 
@@ -602,9 +606,9 @@ $$
 1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert v_{i}\Vert_{2}$
 1. $\quad q_{i} = v_{i}/r_{ii}$
-1. $\quad\quad$ for $j=i+1,\ldots, n$
-1. $\quad\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
-1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
+1. $\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
+1. $\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
 
 ---
 
@@ -614,11 +618,11 @@ $$
 
 1. for $j=1,\ldots, n$
 1. $\quad v_{j} = a_{j}$
-1. $\quad\quad$ for $i=1,\ldots, j-1$
-1. $\quad\quad\quad r_{ij} = q_{i}^{\top}a_{j}$ 
-1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
-1. $\quad\quad r_{jj} = \Vert v_{j}\Vert_2$ 
-1. $\quad\quad q_{j} = v_{j}/r_{jj}$ 
+1. $\quad$ for $i=1,\ldots, j-1$
+1. $\quad\quad r_{ij} = q_{i}^{\top}a_{j}$ 
+1. $\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
+1. $\quad r_{jj} = \Vert v_{j}\Vert_2$ 
+1. $\quad q_{j} = v_{j}/r_{jj}$ 
 :::
 ::: {.column width="5%"}
 :::
@@ -630,9 +634,9 @@ $$
 1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert v_{i}\Vert_{2}$
 1. $\quad q_{i} = v_{i}/r_{ii}$
-1. $\quad\quad$ for $j=i+1,\ldots, n$
-1. $\quad\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
-1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
+1. $\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
+1. $\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
 :::
 ::::
 
@@ -643,23 +647,24 @@ $$
 Q^{\top}Q = QQ^{\top} = I.
 $$
 
-In the code cell below I create a random matrix of dimension $1000 \times 1000$ and compute the QR factorizations using the CGS and MGS methods.
+In the code cell below I create a random matrix of dimension $500 \times 500$ and compute the QR factorizations using the CGS and MGS methods.
 
-The 2 norm of $\Vert I - Q^{\top}Q\Vert_{2}$ is printed to the screen.  
+The Frobenius norm $\Vert I - Q^{\top}Q\Vert_{F}$ is printed to the screen.  
 
 ```{python}
 import numpy as np
 
 def classical_gram_schmidt(A):
     """Perform classical Gram-Schmidt orthogonalization on the columns of A."""
+    A = np.array(A, dtype=float)
     n_rows, n_cols = A.shape
     Q = np.zeros_like(A)
 
     for i in range(n_cols):
-        # Start with the original column
-        q = A[:, i]
+        # Start with a copy of the original column, so that A is left unchanged
+        q = A[:, i].copy()
         for j in range(i):
-            # Subtract the projection onto previous orthogonal vectors
+            # Subtract the projection of the ORIGINAL column onto each previous q
             q -= np.dot(Q[:, j], A[:, i]) * Q[:, j]
         # Normalize the vector
         norm = np.linalg.norm(q)
@@ -714,9 +719,9 @@ print("Orthogonality error (Modified Gram-Schmidt):", error_mgs)
 1. for $i=1,\ldots, n$
 1. $\quad r_{ii} = \Vert v_{i}\Vert_{2}$
 1. $\quad q_{i} = v_{i}/r_{ii}$
-1. $\quad\quad$ for $j=i+1,\ldots, n$
-1. $\quad\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
-1. $\quad\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
+1. $\quad$ for $j=i+1,\ldots, n$
+1. $\quad\quad r_{ij} = q_{i}^{\top}v_{j}$ 
+1. $\quad\quad v_{j} = v_{j} - r_{ij}q_{i}$
 :::
 ::: {.column width="50%"}
 Inner loop flops
@@ -740,7 +745,7 @@ $$
 
 We can always count operations algebraically. However, let's consider a geometric approach.
 
-At the first step in the outer loop (Step 6), the MGS algorithm operates on the whole $m\times n$ matrix.
+At the first step in the outer loop (Step 3), the MGS algorithm operates on the whole $m\times n$ matrix.
 
 At the second step, we operate on a submatrix with $m$ rows, but $n-1$ columns.
 
@@ -757,7 +762,7 @@ The operation count is proportional to the volume of this figure. The constant o
 As $m,n\rightarrow\infty$ what shape does this figure approach?
 
 :::: {.fragment}
-A right triangular prism with an area of $mn^{2}/2$.
+A right triangular prism with a volume of $mn^{2}/2$.
 ::::
 
 :::: {.fragment}
@@ -795,7 +800,7 @@ $$
 
 ---
 
-At step $i$ of the MGS algorithm subtracts $r_{ij}/r_{ii}$ times column $i$ of the current A from columns $>i$ and replaces column $i$ by $1/r_{ii}$ times itself. These operations define the upper-triangular matrices $R_{i}$. 
+Step $i$ of the MGS algorithm subtracts $r_{ij}/r_{ii}$ times column $i$ of the current $A$ from columns $>i$ and replaces column $i$ by $1/r_{ii}$ times itself. These operations define the upper-triangular matrices $R_{i}$. 
 
 Shown below are the matrices when $i=2,3$
 $$
@@ -832,7 +837,9 @@ This shows that the Gram-Schmidt algorithm is a method of triangular orthogonali
 Today we learned about two approaches for generating the QR factorization
 
 - Classical Gram-Schmidt (numerically unstable)
-- Modified Gram-Schmidt (numerically stable)
+- Modified Gram-Schmidt (more stable)
+
+<!-- For MGS the loss of orthogonality grows like $\kappa(A)$, whereas for CGS it grows like $\kappa(A)^{2}$. -->
 
 The importance of projection matrices was fundamental to the MGS approach.
 
