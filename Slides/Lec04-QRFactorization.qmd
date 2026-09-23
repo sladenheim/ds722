@@ -21,47 +21,6 @@ This lecture will provide an understanding of how to compute the QR factorizatio
 - Classical and modified Gram-Schmidt algorithms
 - Computational complexity of QR factorization
 
-## Proof by Mathematical Induction
-
-Suppose that we want to prove a claim or observation that starts with  *For all $n \in \mathbb{N}$*, (or equivalent).
-
-We can approach such proof as follows: 
-
-- first we check that the claim holds for 0,
-- then we show that for all $n \in \mathbb{N}$ that if the proposition is true for $n$, then it is also true for $n+1$.
-
-## Mathematical Induction Steps
-
-Every proof by induction contains the following three steps:
-
-1. Base case
-1. Induction hypothesis
-1. Induction Step
-
----
-
-**Example**
-
-We are going to prove that for all $n \in \mathbb{N}$,
-$$
-\sum_{k=0}^{n} 2k = 0 + 2 + 4 + \dots + 2n = n(n+1).
-$$
-
-::: {.notes}
-Base case: $n=0.$
-
-Induction hypothesis: Let $n \in \mathbb{N}$ be arbitrary and fixed. Suppose $0 + 2 + 4 + \dots + 2n = n(n+1)$ holds.
-
-Induction step: For $n+1$ we obtain
-$$
-\begin{align*}
-    & 0 + 2 + 4 + \dots + 2n + 2(n+1) \\
-    & = \left( 0 + 2 + 4 + \dots + 2n \right) + 2(n+1) \\
-    & = n(n+1) + 2(n+1) = (n+1)(n+2).
-\end{align*}
-$$
-:::
-
 ## Orthogonal
 
 Two vectors $q_1$ and $q_2$ are orthogonal when
