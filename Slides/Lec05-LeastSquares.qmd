@@ -5,7 +5,7 @@ jupyter: python3
 
 ## Lecture Overview
 
-Least squares data-fitting is an indispensable tool for data-scientists.
+Least squares data-fitting is an indispensable tool for data scientists.
 
 We will formulate this problem as the solution of an overdetermined system of equations
 
@@ -13,7 +13,7 @@ $$
 Ax=b,
 $$
 
-where $A\in\mathbb{R}^{m\times n}$ and $m>n$.
+where $A\in\mathbb{R}^{m\times n}$ and $m\geq n$.
 
 We will solve this problem by minimizing $\Vert b-Ax\Vert_{2}$.
 
@@ -162,7 +162,7 @@ A = np.vstack([np.ones_like(a), a]).T
 x_ls, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
 intercept_ls, slope_ls = x_ls
 
-# Create a grid of intercepts and slopes
+# Fix the intercept at its least squares value and animate over slopes
 intercepts = np.array([intercept_ls])
 # Ensure the first slope is the starting value (e.g., 0.5)
 starting_slope = 0.5
@@ -223,7 +223,6 @@ fig = go.Figure(
   ),
   frames=frames
 )
-## Remove sorting and duplicate logic, as grid now starts/ends at best
 fig.show()
 ```
 
@@ -271,17 +270,18 @@ $$
 ::::
 
 ---
+
 ```{python}
 #| fig-align: center
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# Define the vector v and matrix A
+# Define the vector b and matrix A
 b = np.array([2, -1, 3])
 A = np.array([[1, -1], [1, 0], [1, 1]])
 
-# Compute the projection of v onto the column space of A
+# Compute the projection of b onto the column space of A
 A_T = A.T
 proj_matrix = A @ np.linalg.inv(A_T @ A) @ A_T
 proj_b = proj_matrix @ b
@@ -293,15 +293,15 @@ basis_vectors = A.T
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-# Plot the original vector v
+# Plot the original vector b
 ax.quiver(0, 0, 0, b[0], b[1], b[2], color='r', label=r'b')
 
-# Plot the projection of v onto the column space of A
+# Plot the projection of b onto the column space of A
 ax.quiver(0, 0, 0, proj_b[0], proj_b[1], proj_b[2], color='b', label=r'$\hat b= Ax=A(A^{\top}A)^{-1}A^{\top}b$')
 
 # Plot the basis vectors of the column space of A
 for i, vec in enumerate(basis_vectors):
-    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=fr'${{a}}_{{{i+1}}}$')
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='g', label=f'$A[:, {i}]$')
 
 # Plot the plane spanned by the column space of A
 u = A[:, 0]
@@ -349,11 +349,11 @@ $$
 Ax = b,
 $$
 
-where $A\in\mathbb{R}^{m\times n}$, $m>n$ and $b\in\mathbb{R}^{m}$.
+where $A\in\mathbb{R}^{m\times n}$, $m\geq n$ and $b\in\mathbb{R}^{m}$.
 
-This is an *overdetermined* system of equations.
+When $m>n$ this is an *overdetermined* system of equations, and in general no exact solution exists.
 
-The goal is to minimize the *residual* vector
+The goal is to minimize the norm of the *residual* vector
 
 $$
 r = b-Ax.
@@ -371,7 +371,7 @@ Geometrically we are searching for the vector $x\in\mathbb{R}^{n}$ such that $Ax
 
 ### Interpolation
 
-Let's first consider linear interpolation. Suppose we have $m$ distinct points, $x_{1},\ldots, x_{m}\in\mathbb{R}$ and data $y_{1},\ldots, y_{m}\in\mathbb{R}$ at these points.
+Let's first consider polynomial interpolation. Suppose we have $m$ distinct points, $x_{1},\ldots, x_{m}\in\mathbb{R}$ and data $y_{1},\ldots, y_{m}\in\mathbb{R}$ at these points.
 
 We aim to find the unique polynomial of degree at most $m-1$
 
@@ -547,7 +547,7 @@ projection_point = line_point1 + projection_scalar * line_direction
 
 # Plotting
 plt.figure(figsize=(8, 6))
-plt.plot([line_point1[0], line_point2[0]], [line_point1[1], line_point2[1]], 'k-', label='Line')
+plt.plot([line_point1[0], line_point2[0]], [line_point1[1], line_point2[1]], 'k-')
 plt.plot(original_point[0], original_point[1], 'ro')
 plt.plot(projection_point[0], projection_point[1], 'bo')
 plt.plot([original_point[0], projection_point[0]], [original_point[1], projection_point[1]], 'r--')
@@ -574,7 +574,7 @@ Let $A\in\mathbb{R}^{m\times n}~(m\geq n)$ and $b\in\mathbb{R}^{m}$ be given. A 
 $$
 A^{\top}r = 0 \Leftrightarrow A^{\top}Ax = A^{\top}b \Leftrightarrow Pb = Ax,
 $$
-where $P=A(A^{\top}A)^{-1}A^{\top}\in\mathbb{R}^{m\times m}$ is the orthogonal projector onto $\operatorname{range}(A)$ &mdash; the same projector derived from an arbitrary basis in Lecture 3.
+where $P=A(A^{\top}A)^{-1}A^{\top}\in\mathbb{R}^{m\times m}$ is the orthogonal projector onto $\operatorname{range}(A)$ &mdash; the same projector derived from an arbitrary basis in our lecture on orthogonality and projectors.
 
 ## Normal Equations
 
@@ -590,7 +590,7 @@ $$
 
 This matrix maps vectors $b\in\mathbb{R}^{m}$ to vectors $x\in\mathbb{R}^{n}$.
 
-## Normal Equations
+## Solving the Normal Equations
 
 The normal equations are
 
@@ -614,7 +614,7 @@ A = np.array([[-1.42382504, -1.4238264 ],
               [-0.87066174, -0.87066138]])
 b = A @ np.array([1, 1])
 
-# Pseudoinverse
+# Normal equations (explicit inverse of A^T A)
 x1 = np.linalg.inv(A.T @ A) @ A.T @ b
 # QR
 [Q, R] = np.linalg.qr(A)
@@ -641,7 +641,7 @@ $$
 A^{\top}b = \hat{R}^{\top}\hat{Q}^{\top}b.
 $$
 
-As a result,
+If $A$ has full rank, then $\hat{R}$ is nonsingular, so we can cancel $\hat{R}^{\top}$ from both sides. As a result,
 
 $$
 \hat{R}x = \hat{Q}^{\top}b.
@@ -751,5 +751,5 @@ We learned:
 - Formal definition of the least squares problem
 - How it is used in data-fitting
 - How to solve the least squares problem using projection
-- The normal equations
-- Numerically stable solution of the normal equations
+- The normal equations and the pseudoinverse
+- Numerically stable solution of the least squares problem via QR
