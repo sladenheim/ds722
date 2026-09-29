@@ -7,7 +7,7 @@ jupyter: python3
 
 Solving linear systems of equations is fundamental to the study of linear algebra. 
 
-The problem of solving a linear system of equations is given $A\in\mathbb{R}^{m\times m}, \mathbf{b}\in\mathbb{R}^{m}$ find the vector $\mathbf{x}\in\mathbb{R}^{m}$ satisfying:
+The problem of solving a linear system of equations is: given $A\in\mathbb{R}^{m\times m}, \mathbf{b}\in\mathbb{R}^{m}$ find the vector $\mathbf{x}\in\mathbb{R}^{m}$ satisfying:
 
 $$
 A\mathbf{x} = \mathbf{b}.
@@ -31,7 +31,7 @@ Consider the following system of equations with two unknowns $x_{1}$ and $x_{2}$
 $$
 \begin{cases}
 2x_{1} + 3x_{2} = 8, \\
-x_{1} - 4x_{2} = -2.
+x_{1} - 4x_{2} = -7.
 \end{cases}
 $$
 
@@ -49,7 +49,7 @@ x_{2}
 =
 \begin{bmatrix}
 8 \\
--2
+-7
 \end{bmatrix}.
 $$
 
@@ -86,7 +86,7 @@ $$
 
 ## Example
 
-Imagine we start with a $4\times 4$ matrix, then this procedure works as follows
+Starting with a $4\times 4$ matrix, this procedure works as follows:
 
 $$
 \scriptsize
@@ -119,7 +119,7 @@ x & x & x & x \\
 \end{bmatrix}.
 $$
 
-At the $k$th step, $L_{k}$ introduces zeros below the diagonal in the column $k$ by subtracting multiples of row $k$ from rows $k+1,\dots,m$.
+At the $k$th step, $L_{k}$ introduces zeros below the diagonal in column $k$ by subtracting multiples of row $k$ from rows $k+1,\dots,m$.
 
 ---
 
@@ -501,7 +501,7 @@ The method for solving linear systems by QR factorization is
 :::: {.incremental}
 1. Compute $A=QR$.
 1. Compute $\mathbf{y} = Q^{\top}\mathbf{b}$.
-1. Solve $R\mathbf{x}=\mathbf{y}$ using backward substitution.
+1. Solve $R\mathbf{x}=\mathbf{y}$ using back substitution.
 ::::
 
 ## Pivots
@@ -556,14 +556,14 @@ x & x & x & x \\
 0 & x_{ik} & x & x \\
 0 & x & x & x \\
 \end{bmatrix}
-\underrightarrow{P_{1}}
+\underrightarrow{P_{k}}
 \begin{bmatrix}
 x & x & x & x \\
 0 & x_{ik} & x & x \\
 0 & x & x & x \\
 0 & x & x & x \\
 \end{bmatrix}
-\underrightarrow{L_{1}}
+\underrightarrow{L_{k}}
 \begin{bmatrix}
 x & x & x & x \\
 0 & x_{ik} & x & x \\
@@ -589,7 +589,7 @@ $$
 
 ---
 
-The first operation is to multiply by the matrix pivot matrix $P_{1}$
+The first operation is to multiply by the permutation matrix $P_{1}$
 
 $$
 \small
@@ -779,7 +779,7 @@ $$
 & \frac{7}{4} & \frac{9}{4} & \frac{17}{4} \\
 &  & -\frac{6}{7} & -\frac{2}{7} \\
 & &  & \frac{2}{3} \\
-\end{bmatrix}
+\end{bmatrix}.
 $$
  
 
@@ -810,10 +810,10 @@ $$
 L_{3}^{\prime} = L_{3}, \quad L_{2}^{\prime} = P_{3}L_{2}P_{3}^{-1}, \quad L_{1}^{\prime} = P_{3}P_{2}L_{1}P_{2}^{-1}P_{3}^{-1}.
 $$
 
-Note that $L_{2}^{\prime}$ has the same structure of $L_{2}$. Why?
+Note that $L_{2}^{\prime}$ has the same structure as $L_{2}$. Why?
 
 :::: {.fragment}
-The permutation $P_{3}$ only swaps rows that are below row 3, preserving the structure of $L_{2}$.
+The permutation $P_{3}$ only permutes rows and columns with index $\geq 3$, so it just reorders the multipliers below the diagonal in column 2, preserving the structure of $L_{2}$.
 ::::
 
 ---
@@ -855,7 +855,7 @@ In complete pivoting, we not only permute rows of the matrix, but also the colum
 $$
 PAQ = LU,
 $$
-where $P$ and $Q$ are pivot matrices for the rows and columns, respectively.
+where $P$ and $Q$ are permutation matrices for the rows and columns, respectively.
 
 ## Summary
 
