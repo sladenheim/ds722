@@ -64,6 +64,38 @@ To solve the previous equation we would:
 
 **Elimination**
 
+::: {.notes}
+Subtract $\ell_{21} = \frac{1}{2}$ times equation 1 from equation 2:
+
+$$
+\left(x_{1} - 4x_{2}\right) - \frac{1}{2}\left(2x_{1} + 3x_{2}\right) = -7 - \frac{1}{2}(8)
+\quad\Longrightarrow\quad
+-\frac{11}{2}x_{2} = -11.
+$$
+
+In matrix form this is
+
+$$
+\begin{bmatrix}
+2 & 3 \\
+0 & -\frac{11}{2}
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+8 \\
+-11
+\end{bmatrix}.
+$$
+
+**Back-substitution.** From the second equation $x_{2} = 2$. Substituting into the first equation, $2x_{1} + 3(2) = 8$, so $x_{1} = 1$.
+
+Check: $1 - 4(2) = -7$.
+:::
+
 ---
 
 The elimination of $x_{1}$ from the second equation is equivalent to transforming $A$ to an upper triangular matrix $U$.
@@ -358,6 +390,46 @@ then $L_{k} = I-\ell_{k}e_{k}^{\top}$, where $e_{k}$ is the column vector with 1
 
 Let's compute $L_{1}$ using this formula from our example.
 
+::: {.notes}
+From the first step of the example, $\ell_{21} = 4/2 = 2$, $\ell_{31} = 8/2 = 4$, $\ell_{41} = 6/2 = 3$, so
+
+$$
+\ell_{1} =
+\begin{bmatrix}
+0 \\ 2 \\ 4 \\ 3
+\end{bmatrix},
+\qquad
+\ell_{1}e_{1}^{\top} =
+\begin{bmatrix}
+0 \\ 2 \\ 4 \\ 3
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+2 & 0 & 0 & 0 \\
+4 & 0 & 0 & 0 \\
+3 & 0 & 0 & 0
+\end{bmatrix}.
+$$
+
+Then
+
+$$
+L_{1} = I - \ell_{1}e_{1}^{\top} =
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+-2 & 1 & 0 & 0 \\
+-4 & 0 & 1 & 0 \\
+-3 & 0 & 0 & 1
+\end{bmatrix},
+$$
+
+which matches $L_{1}$ from the example.
+:::
+
 
 ---
 
@@ -384,6 +456,45 @@ This shows that the product $L_{k}^{-1}L_{k+1}^{-1}$ is just the unit lower-tria
 ---
 
 Let's compute $L_{1}^{-1}L_{2}^{-1}$ from our example.
+
+::: {.notes}
+From the example, $\ell_{1} = \begin{bmatrix} 0 & 2 & 4 & 3\end{bmatrix}^{\top}$ and $\ell_{2} = \begin{bmatrix} 0 & 0 & 3 & 4\end{bmatrix}^{\top}$. Since $e_{1}^{\top}\ell_{2} = 0$,
+
+$$
+L_{1}^{-1}L_{2}^{-1} = I + \ell_{1}e_{1}^{\top} + \ell_{2}e_{2}^{\top}
+=
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+2 & 1 & 0 & 0 \\
+4 & 3 & 1 & 0 \\
+3 & 4 & 0 & 1
+\end{bmatrix}.
+$$
+
+Multiplying the matrices directly gives the same result:
+
+$$
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+2 & 1 & 0 & 0 \\
+4 & 0 & 1 & 0 \\
+3 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 3 & 1 & 0 \\
+0 & 4 & 0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+2 & 1 & 0 & 0 \\
+4 & 3 & 1 & 0 \\
+3 & 4 & 0 & 1
+\end{bmatrix}.
+$$
+:::
 
 
 ---
@@ -432,6 +543,14 @@ The work for this procedure corresponds to one layer of the following solid
 As $m\rightarrow\infty$ this solid converges to a pyramid with volume $\frac{1}{3}m^{3}$. 
 
 At 2 flops per unit volume Gaussian elimination requires $\frac{2}{3}m^{3}$ flops.
+
+::: {.notes}
+**Reading the figure.** Each unit cube is one entry $u_{ji}$ updated by the inner loop, which costs 2 flops (one multiply, one subtract).
+
+**One layer = one step $k$.** At step $k$ we update rows $k+1,\ldots,m$ ($m-k$ rows), and in each row we update columns $k,\ldots,m$ ($m-k+1$ entries). So layer $k$ is a slab of roughly $(m-k)\times(m-k)$ cubes, one unit thick. The bottom layer ($k=1$) is about $m\times m$.
+
+**Why the layers shrink.** After step $k$, row $k$ of $U$ and column $k$ of $L$ are finished and never touched again. The active submatrix loses one row and one column at every step, so each layer is a slightly smaller square stacked on the previous one. After $m-1$ steps the stack is $m$ high.
+:::
 
 
 ## Solution of Ax=b by LU Factorization
