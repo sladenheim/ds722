@@ -67,7 +67,6 @@ The set of all eigenvalues $\Lambda(A)$ of a matrix $A$ is the *spectrum* of $A$
 #| fig-align: center
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 # Define the matrix
 A = np.array([[4, -1], [2, 1]])
@@ -147,13 +146,13 @@ Let $A=\begin{bmatrix} 4 & -1 \\ 2 & 1 \end{bmatrix}$. Compute $\det(A)$.
 
 ### $m\times m$ matrix
 
-Let $A\in\mathbb{R}^{m\times m}$, then
+Let $A\in\mathbb{C}^{m\times m}$, then for any fixed row $i$,
 
 $$
 \det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M_{ij}),
 $$
 
-where $M_{ij}$ is the $(m-1)\times(m-1)$ *minor* formed by deleting row $i$ and column $j$ from $A$.
+where $M_{ij}$ is the $(m-1)\times(m-1)$ submatrix formed by deleting row $i$ and column $j$ from $A$. The determinant $\det(M_{ij})$ is called a *minor*.
 
 ---
 
@@ -195,13 +194,37 @@ $$
 
 What is $\det(A^{-1})$?
 
+## Characteristic Polynomial
+
+$\lambda$ is an eigenvalue of $A$ when $Ax = \lambda x$ for some $x\neq 0$, i.e.,
+
+$$
+(\lambda I - A)x = 0 \text{ has a nonzero solution} \iff \lambda I - A \text{ is singular} \iff \det(\lambda I - A) = 0.
+$$
+
+The *characteristic polynomial* of $A\in\mathbb{C}^{m\times m}$, denoted $p_{A}$, is the degree $m$ polynomial
+
+$$
+p_{A}(z) = \det(zI-A).
+$$
+
+---
+
+**Theorem**
+
+$\lambda$ is an eigenvalue of $A$ if and only if $p_{A}(\lambda)=0$.
+
+::: {.callout-note}
+You will also see $\det(A-\lambda I)$. Since $\det(A-zI) = (-1)^{m}p_{A}(z)$, it has the same roots. We use $zI-A$ because then $p_{A}$ is *monic*: the coefficient of $z^{m}$ is 1.
+:::
+
 ## Computing Eigenvalues and Eigenvectors
 
-Let's review the steps to compute an $2\times 2$ eigenvalue.
+Let's review the steps to compute the eigenvalues and eigenvectors of a $2\times 2$ matrix.
 
-1. Compute the *characteristic polynomial* $\det(A-\lambda I)=0$.
-1. Solve for the eigenvalues $\lambda$.
-1. For each eigenvalue, compute the eigenvector as the solution of $(A-\lambda I)v = 0$.
+1. Compute the characteristic polynomial $p_{A}(\lambda) = \det(\lambda I - A)$.
+1. Solve $p_{A}(\lambda) = 0$ for the eigenvalues $\lambda$.
+1. For each eigenvalue, compute the eigenvector as a nonzero solution of $(A-\lambda I)v = 0$.
 
 ---
 
@@ -297,29 +320,13 @@ The eigenspace is invariant under the action of $A$. This means that $AE_{\lambd
 
 The dimension of $E_{\lambda}$ is the maximum number of linearly independent eigenvectors corresponding to the eigenvalue $\lambda$. 
 
-This number is the *geometric multiplicity* of the eigenvalue
-
-## Characteristic Polynomial
-
-The *characteristic polynomial* of $A\in\mathbb{C}^{m\times m}$, denotes $p_{A}$ is the degree $m$ polynomial defined by
-
-$$
-p_{A}(z) = \det(zI-A).
-$$
-
-The characteristic polynomial $p_{A}(z)$ is a monic polynomial, meaning the coefficient of the degree $m$ term is 1.
-
----
-
-**Theorem**
-
-$\lambda$ is an eigenvalue of $A$ if and only if $p_{A}(\lambda)=0$.
+This number is the *geometric multiplicity* of the eigenvalue.
 
 ## Two Theorems
 
 **Fundamental Theorem of Algebra**
 
-A polynomial of degree $m$ has $m$ roots.
+A polynomial of degree $m$ has exactly $m$ complex roots, counted with multiplicity.
 
 **Complex Conjugate Root Theorem**
 
@@ -328,7 +335,7 @@ If a complex number $z$ is a root of a polynomial with real coefficients, then $
 
 ## Algebraic Multiplicity
 
-The characteristic polynomial can always be factored as
+Since $p_{A}$ is monic, it can always be factored as
 
 $$
 p_{A}(z) = (z-\lambda_1)(z-\lambda_2)\cdots(z-\lambda_{m})
@@ -371,7 +378,7 @@ If $X$ is nonsingular, then $A$ and $X^{-1}AX$ have the same characteristic poly
 
 **Theorem**
 
-The algebraic multiplicity of an eigenvalue $\lambda$ is at least as great as it's geometric multiplicity. 
+The algebraic multiplicity of an eigenvalue $\lambda$ is at least as great as its geometric multiplicity. 
 
 ::: {.notes}
 algebraic multiplicity $\geq$ geometric multiplicity
@@ -383,10 +390,10 @@ algebraic multiplicity $\geq$ geometric multiplicity
 An eigenvalue whose algebraic multiplicity exceeds its geometric multiplicity is a *defective eigenvalue*. A matrix that has at least one defective eigenvalue is a *defective matrix*.
 
 ::: {.notes}
-Nondefective means full set of linearly independent eigenvectors. Defective means that there is not a complete basis of eigenvectors (doesn't span $\mathbb{R}^{m}$). 
+Nondefective means full set of linearly independent eigenvectors. Defective means that there is not a complete basis of eigenvectors (doesn't span $\mathbb{C}^{m}$).
 :::
 
-What kind of matrix is nondefective?
+What is an example of a nondefective matrix?
 
 :::: {.fragment}
 A diagonal matrix.
@@ -429,7 +436,7 @@ Recall from before that $\det(A) = \sum_{j=1}^{m} (-1)^{i+j} a_{ij} \cdot \det(M
 
 **Theorem**
 
-The determinant $\det(A)$ and $\operatorname{tr}(A)$ are equal to the product and the sum of the eigenvalues of $A$, respectively, counted with algebra multiplicity:
+The determinant $\det(A)$ and $\operatorname{tr}(A)$ are equal to the product and the sum of the eigenvalues of $A$, respectively, counted with algebraic multiplicity:
 
 $$
 \det(A)=\prod_{j=1}^{m}\lambda_{j}, \quad \operatorname{tr}(A) = \sum_{j=1}^{m} \lambda_{j}.
@@ -443,18 +450,22 @@ $$
 A = Q\Lambda Q^{*},
 $$
 
-where $Q$ is a unitary (orthogonal) matrix.
+where $Q$ is a unitary (orthogonal) matrix and $\Lambda$ is diagonal.
 
 
-This means that the matrix $A\in\mathbb{C}^{m\times m}$ has $m$ linearly independent eigenvectors, but these can be chosen to be orthogonal. 
+This means that the matrix $A\in\mathbb{C}^{m\times m}$ has $m$ linearly independent eigenvectors, and these can be chosen to be orthonormal.
 
 ---
 
-A symmetric matrix $A$ has the property $A=A^{\top}$. 
+A real symmetric matrix $A\in\mathbb{R}^{m\times m}$ has the property $A=A^{\top}$.
 
 **Theorem**
 
-A symmetric matrix is unitarily diagonalizable and its eigenvalues are real.
+A real symmetric matrix is unitarily diagonalizable and its eigenvalues are real. The eigenvectors can be chosen to be real, so $A = Q\Lambda Q^{\top}$ with $Q$ a real orthogonal matrix.
+
+::: {.notes}
+The complex analogue is a Hermitian matrix, $A = A^{*}$. A complex matrix with $A=A^{\top}$ need not be diagonalizable, e.g., $\begin{bmatrix} 1 & i \\ i & -1\end{bmatrix}$.
+:::
 
 ---
 
@@ -475,19 +486,40 @@ A matrix is unitarily diagonalizable if and only if it is *normal*, i.e., $AA^{*
 A graph is an ordered pair $G=(V,E)$ comprising
 
 - $V$, a set of vertices (nodes)
-- $E = \{(x,y) | x,y\in V~\text{and}~x\neq y \}$, a set of edges (links) between vertices.
+- $E \subseteq \{(x,y) | x,y\in V~\text{and}~x\neq y \}$, a set of edges (links) between vertices.
 
-A graph can be represented with an adjacency matrix $A$, where $a_{ij}=1$ if node $i$ has a link to node $j$. 
+A graph can be represented with an adjacency matrix $A$, where $a_{ij}=1$ if node $j$ has a link to node $i$, and $a_{ij}=0$ otherwise.
+
+Column $j$ of $A$ records the outgoing links of node $j$.
 
 If the graph is undirected, then $A=A^{\top}$.
 
+::: {.notes}
+Many texts use the transpose convention ($a_{ij}=1$ if $i$ links to $j$). We use columns for outgoing links so that the Google matrix below is just $A$ with each column rescaled.
+:::
+
 ## PageRank and Eigenvalues
 
-- The web can be represented as a **directed graph** with an **adjacency matrix** $G$.
-- PageRank is the **principal eigenvector** (eigenvector corresponding to largest eigenvalue) of $G$.
+- The web can be represented as a **directed graph** with an **adjacency matrix** $A$.
+- From $A$ we form the **Google matrix** $G$.
+- PageRank is the **principal eigenvector** (eigenvector corresponding to the eigenvalue of largest modulus) of $G$.
 
 :::: {.fragment}
 How do we form $G$?
+::::
+
+:::: {.fragment}
+Divide each column of $A$ by the number of outgoing links of that node:
+
+$$
+g_{ij} = \frac{a_{ij}}{d_{j}}, \quad d_{j} = \sum_{i=1}^{m} a_{ij}.
+$$
+::::
+
+:::: {.fragment}
+::: {.callout-note}
+We assume every page has at least one outgoing link ($d_{j}\geq 1$), i.e., there are no *dangling nodes*. Then every column of $G$ sums to 1.
+:::
 ::::
 
 ## Google Matrix
@@ -528,12 +560,16 @@ The PageRank vector $x$ is the eigenvector corresponding to eigenvalue 1 of the 
 
 ---
 
-- To ensure no dangling nodes a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{m}$ and $0<d <1$.
-- The matrix $\tilde{G}$ is **column stochastic**. 
-- The **Perron-Frobenius Theorem** guarantees that for the modified google matrix:
+- To guarantee a unique PageRank, a damping factor is added $\tilde{G} = dG + (1-d)E$ where $E_{ij} = \frac{1}{m}$ and $0<d <1$.
+- The matrix $\tilde{G}$ is **column stochastic** and all of its entries are positive.
+- The **Perron-Frobenius Theorem** guarantees that for the modified Google matrix:
     - 1 is an eigenvalue of multiplicity 1 and all other eigenvalues have modulus less than 1.
     - The eigenvector has all positive entries.
-- The power method, i.e., $G^{k}z\rightarrow x$ as $k\rightarrow\infty$ can be used to approximate the PageRank.
+- The power method, i.e., $\tilde{G}^{k}z\rightarrow x$ as $k\rightarrow\infty$ for a starting vector $z$ with positive entries summing to 1, can be used to approximate the PageRank.
+
+::: {.notes}
+Damping models a surfer who follows a link with probability $d$ (typically $0.85$) and jumps to a random page otherwise.
+:::
 
 
 ## Summary
