@@ -82,9 +82,9 @@ axes[0].legend(handles=[right_handle])
 # Plot transformed circle and left singular vectors
 axes[1].plot(transformed_circle[0], transformed_circle[1])
 for i in range(2):
-    axes[1].arrow(0, 0, -left_singular_vectors[0, i], -left_singular_vectors[1, i],
+    axes[1].arrow(0, 0, left_singular_vectors[0, i], left_singular_vectors[1, i],
                   color='red', width=0.01, head_width=0.05)
-    axes[1].text(-left_singular_vectors[0, i]*1.08, -left_singular_vectors[1, i]*1.08,
+    axes[1].text(left_singular_vectors[0, i]*1.08, left_singular_vectors[1, i]*1.08,
                  f'$u_{i+1}$', color='red', fontsize=12)
 
 axes[1].axis('equal')
@@ -108,7 +108,7 @@ The $n$ left singular vectors of $A$ are the unit vectors $\{u_{1}, u_{2},\dots,
 ::::
 
 :::: {.fragment .fade-in-then-out}
-The $n$ right singular vectors of $A$ are the unit vectors $\{v_{1}, v_{2},\dots, v_{n}\}\in S$. These are the preimages of the principal semiaxes of $AS$ and satisfy $Av_{j}=\sigma_{j}u_{j}$.
+The $n$ right singular vectors of $A$ are the unit vectors $\{v_{1}, v_{2},\dots, v_{n}\}\subset S$. These are the preimages of the principal semiaxes of $AS$ and satisfy $Av_{j}=\sigma_{j}u_{j}$.
 ::::
 ::::
 
@@ -167,7 +167,7 @@ $$
 
 where $U\in\mathbb{C}^{m \times m}$ is unitary, $V\in\mathbb{C}^{n\times n}$ is unitary, and $\Sigma\in\mathbb{R}^{m\times n}$.
 
-The matrix $U$ is created by adjoining $\hat{U}$ with $m-n$ orthonormal columns.
+The matrix $U$ is created by adjoining $\hat{U}$ with $m-n$ additional orthonormal columns that are orthogonal to the columns of $\hat{U}$.
 
 The matrix $\Sigma$ is created by adjoining $\hat{\Sigma}$ with $m-n$ rows of zeros.
 
@@ -183,7 +183,7 @@ where
 
 - $U\in\mathbb{C}^{m\times m}$ is unitary,
 - $V\in\mathbb{C}^{n\times n}$ is unitary,
-- $\Sigma\in\mathbb{R}^{m\times n}$ is diagonal.
+- $\Sigma\in\mathbb{R}^{m\times n}$ is diagonal with nonnegative diagonal entries $\sigma_{1}\geq\sigma_{2}\geq\cdots\geq\sigma_{p}\geq 0$, where $p=\min\{m,n\}$.
 
 
 ## Existence and Uniqueness
@@ -295,6 +295,8 @@ The procedure to compute the SVD by hand for these small-scale matrices is given
 
 ### 1. Compute $A^{\top} A$
 
+Let $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$ be a real matrix. Then
+
 $$
 A^{\top} A = \begin{bmatrix} a & c \\ b & d \end{bmatrix} \begin{bmatrix} a & b \\ c & d \end{bmatrix} = \begin{bmatrix} a^2 + c^2 & ab + cd \\ ab + cd & b^2 + d^2 \end{bmatrix}.
 $$
@@ -322,8 +324,8 @@ These are the squares of the singular values:
 
 ### 4. Compute Left Singular Vectors (Columns of $U$)
 
-- Use: $u_i = \frac{1}{\sigma_i} A v_i$.
-- Normalize each $u_i$ to ensure orthonormality.
+- For each $\sigma_i \neq 0$, use: $u_i = \frac{1}{\sigma_i} A v_i$ (these are automatically unit vectors).
+- If $\sigma_i = 0$, choose $u_i$ to be a unit vector orthogonal to the other $u_j$.
 
 --- 
 
@@ -350,7 +352,6 @@ $$
 **Step 2**
 
 ::: {.notes}
-$$
 Solve the characteristic equation:  
 $$
 \det(A^\top A - \lambda I) = \det\left( \begin{bmatrix} 2-\lambda & 2 \\ 2 & 2-\lambda \end{bmatrix} \right) = (2-\lambda)^2 - 4 = \lambda^2 - 4\lambda
@@ -359,6 +360,7 @@ $$
 Eigenvalues:  
 $$
 \lambda_1 = 4, \quad \lambda_2 = 0
+$$
 $$
 \sigma_1 = \sqrt{4} = 2, \quad \sigma_2 = \sqrt{0} = 0
 $$
@@ -371,6 +373,7 @@ $$
 
 ::: {.notes}
 Eigenvectors of $A^\top A$:  
+
 - For $\lambda = 4$:  
   $$
   v_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}
@@ -451,14 +454,14 @@ if $\nu=p=\min\{m,n\}$ define $\sigma_{p+1}=0$. Then
 
 $$
 \small
-\Vert A-A_{\nu}\Vert_{2} = \inf_{B\in\mathbb{C}^{m\times n} \\ \operatorname{rank}(B)\leq \nu} \Vert A-B\Vert_{2} = \sigma_{\nu+1}.
+\Vert A-A_{\nu}\Vert_{2} = \inf_{\substack{B\in\mathbb{C}^{m\times n} \\ \operatorname{rank}(B)\leq \nu}} \Vert A-B\Vert_{2} = \sigma_{\nu+1}.
 $$
 
 ## Image Compression
 
-Low rank approximation via SVD can be used to compress images. Consider the following image consisting of $480\times 480$ pixels.
+Low rank approximation via SVD can be used to compress images. Consider the following image consisting of $1800\times 2400$ pixels (height $\times$ width).
 
-![](figures/CityScape.jpeg){fig-align="center"}
+![](figures/fluffy_puppy_madness.png){fig-align="center"}
 
 ---
 
@@ -468,15 +471,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-image = Image.open("figures/CityScape.jpeg")
+image = Image.open("figures/fluffy_puppy_madness.png")
 image = image.convert("L")
-city_scape = np.array(image)
+puppy = np.array(image)
 
-u, s, vt = np.linalg.svd(city_scape, full_matrices=False)
+u, s, vt = np.linalg.svd(puppy, full_matrices=False)
 plt.plot(s)
 plt.xlabel('$k$', size=16)
 plt.ylabel(r'$\sigma_k$', size=16)
-plt.title('Singular Values of City Scape Image', size=16)
+plt.title('Singular Values of Fluffy Puppy Image', size=16)
 plt.show()
 ```
 
@@ -490,23 +493,23 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 from PIL import Image
 
-image = Image.open("figures/CityScape.jpeg")
+image = Image.open("figures/fluffy_puppy_madness.png")
 image = image.convert("L")
-city_scape = np.array(image)
+puppy = np.array(image)
 
-u, s, vt = np.linalg.svd(city_scape, full_matrices=False)
+u, s, vt = np.linalg.svd(puppy, full_matrices=False)
 s[50:]=0
-city_scape_lr = u @ np.diag(s) @ vt
+puppy_lr = u @ np.diag(s) @ vt
 
 plt.figure(figsize=(9, 6))
 plt.subplot(1, 2, 1)
-plt.imshow(city_scape_lr, cmap=cm.Greys_r)
+plt.imshow(puppy_lr, cmap=cm.Greys_r)
 plt.axis('off')
-plt.title('Rank 50 City Scape')
+plt.title('Rank 50 Fluffy Puppies')
 plt.subplot(1, 2, 2)
-plt.imshow(city_scape, cmap=cm.Greys_r)
+plt.imshow(puppy, cmap=cm.Greys_r)
 plt.axis('off')
-plt.title('Full Rank City Scape')
+plt.title('Full Rank Fluffy Puppies')
 plt.show()
 ```
 
@@ -516,7 +519,7 @@ PCA is a statistical technique used to reduce the dimensionality of your data wh
 
 Given a mean-centered and standardized matrix of data $A\in\mathbb{R}^{m\times n}$ with $m$ samples and $n$ features the steps of PCA are
 
-1. Form the correlation matrix $S=A^{\top}A$
+1. Form the correlation matrix $S=\frac{1}{m-1}A^{\top}A$
 1. Compute the eigenvectors (principal components) and eigenvalues (explained variance) $S=V\Lambda V^{\top}$
 
 ---
@@ -537,18 +540,18 @@ How is this related to the SVD?
 Let $A=U\Sigma V^{\top}$, then recall that
 
 $$
-A^{\top}A = (U\Sigma V^{\top})^{\top}U\Sigma V^{\top} = V\Sigma^{\top} U^{\top}U \Sigma V^{\top} = V\Sigma^{2}V^{\top}.
+A^{\top}A = (U\Sigma V^{\top})^{\top}U\Sigma V^{\top} = V\Sigma^{\top} U^{\top}U \Sigma V^{\top} = V\Sigma^{\top}\Sigma V^{\top}.
 $$
 
-The eigenvalues $\lambda_{i}$ equal the squares of the singular values $\sigma_{i}^{2}$.
+The eigenvalues of $S$ are $\lambda_{i}=\sigma_{i}^{2}/(m-1)$, and its eigenvectors are the right singular vectors $v_{i}$.
 
-The vectors $\{v_{i}\}$ can be used to compute the principal component directions $Av_{i}=\sigma_{i}u_{i}$.
+The vectors $\{v_{i}\}$ are the principal component directions, and $Av_{i}=\sigma_{i}u_{i}$ are the projections of the data onto them (the principal component scores).
 
 In practice, PCA is done by computing the SVD of your data matrix because it is more numerically stable.
 
-## MNIST Digits
+## Handwritten Digits
 
-Let's consider an example using the MNIST dataset.
+Let's consider an example using the scikit-learn digits dataset, which consists of 1797 handwritten digits, each an $8\times 8$ grayscale image.
 
 ```{python}
 #| fig-align: center
@@ -566,11 +569,11 @@ plt.show()
 
 ---
 
-To create the data matrix, the columns of each digit are vectorized to create a 64-D representation of the digits. 
+To create the data matrix, each $8\times 8$ image is flattened (row by row) to create a 64-D representation of the digits. 
 
 Each digit becomes a row (sample) with 64 entries in the data matrix.
 
-We perform PCA and plot the explained variance ratio and the total (cumulative) explained variance ratio.
+We perform PCA (scikit-learn's `PCA` mean-centers the data but does not standardize it) and plot the explained variance ratio and the total (cumulative) explained variance ratio.
 
 ---
 
@@ -614,14 +617,14 @@ Below is a plot of the first two principal component directions using digit labe
 ```{python}
 #| fig-align: center
 plt.figure(figsize=(7, 7))
-scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='tab20', edgecolor='k', s=50)
+scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='tab10', edgecolor='k', s=50)
 plt.title('Digits in PC1 and PC2 Space')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
 
 # Create a legend with discrete labels
 legend_labels = np.unique(y)
-handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=plt.cm.tab20(i / 9), markersize=10) for i in legend_labels]
+handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=plt.cm.tab10(i), markersize=10) for i in legend_labels]
 plt.legend(handles, legend_labels, title="Digit Label", loc="best")
 
 plt.show()
