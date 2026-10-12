@@ -12,8 +12,8 @@ project:
     - Lec06-LinearSystems.qmd
     - Lec07-Eigenvalues.qmd
     - Lec08-SVD.qmd
-    - Lec09-Derivatives1.qmd
-    - Lec10-Derivatives2.qmd
+    - Lec09-Derivatives.qmd
+    # - Lec10-Derivatives2.qmd   # retired; content merged into Lec09-Derivatives.qmd
     - Lec11-Integration.qmd
     - Lec12-Optimization1.qmd
     - Lec13-Optimization2.qmd
@@ -52,8 +52,7 @@ website:
           - { href: Lec08-SVD.qmd,                     text: "Singular Value Decomposition" }
       - text: "Calculus"
         menu:
-          - { href: Lec09-Derivatives1.qmd, text: "Derivatives I" }
-          - { href: Lec10-Derivatives2.qmd, text: "Derivatives II" }
+          - { href: Lec09-Derivatives.qmd,  text: "Derivatives" }
           - { href: Lec11-Integration.qmd,  text: "Integration" }
       - text: "Optimization"
         menu:

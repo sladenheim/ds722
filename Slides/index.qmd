@@ -38,8 +38,7 @@ source pages are in Quarto markdown files. Each link below opens a reveal.js dec
 
 ## Calculus
 
-- [Derivatives I](Lec09-Derivatives1.html)
-- [Derivatives II](Lec10-Derivatives2.html)
+- [Derivatives](Lec09-Derivatives.html)
 - [Integration](Lec11-Integration.html)
 
 ## Optimization
