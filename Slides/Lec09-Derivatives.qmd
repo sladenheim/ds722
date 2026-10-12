@@ -178,20 +178,8 @@ $$
 \frac{d}{dx}f(g(x)) = \frac{df}{dg}\frac{dg}{dx}.
 $$
 
----
-
-Why does the chain rule hold? Compose the two linear approximations:
-
-$$
-\begin{align}
-g(x+h) &\approx g(x) + \underbrace{g^{\prime}(x)h}_{\Delta}, \\
-f(g(x)+\Delta) &\approx f(g(x)) + f^{\prime}(g(x))\Delta \\
-&= f(g(x)) + f^{\prime}(g(x))g^{\prime}(x)h.
-\end{align}
-$$
-
 :::: {.fragment}
-**Key idea:** the derivative of a composition is the *product* of the derivatives of its pieces. A neural network is a long composition of simple functions, so its derivative is a long product.
+**Key idea:** the derivative of a composition is the *product* of the derivatives of its pieces. A neural network is a composition of simple functions, so its derivative is a product.
 ::::
 
 ---
@@ -490,7 +478,7 @@ $$
 
 ---
 
-For example, if $g(x) = (g_{1}(x), g_{2}(x))$ and $h(x) = f(g_{1}(x), g_{2}(x))$, then
+For example, if $x\in\mathbb{R}$, $g(x) = (g_{1}(x), g_{2}(x))$, and $h(x) = f(g_{1}(x), g_{2}(x))$, then
 
 $$
 \frac{dh}{dx} = \frac{\partial f}{\partial g_{1}}\frac{dg_{1}}{dx} + \frac{\partial f}{\partial g_{2}}\frac{dg_{2}}{dx}.
@@ -501,12 +489,12 @@ $$
 
 $$
 \begin{align}
-\frac{\partial Ax}{\partial x} &= A, \quad
-\frac{\partial x^{\top}A}{\partial x} = A^{\top}, \\
-\frac{\partial x^{\top}a}{\partial x} &= a, \quad
-\frac{\partial a^{\top}x}{\partial x} = a, \\
-\frac{\partial a^{\top}Xb}{\partial X} &= ab^{\top}, \quad
-\frac{\partial x^{\top}Ax}{\partial x} = (A + A^{\top})x. \\
+\frac{d(Ax)}{dx} &= A, \quad
+\frac{d(x^{\top}A)}{dx} = A^{\top}, \\
+\frac{d(x^{\top}a)}{dx} &= a, \quad
+\frac{d(a^{\top}x)}{dx} = a, \\
+\frac{d(a^{\top}Xb)}{dX} &= ab^{\top}, \quad
+\frac{d(x^{\top}Ax)}{dx} = (A + A^{\top})x. \\
 \end{align}
 $$
 
@@ -570,7 +558,7 @@ The vector $\tilde{B}$ can be *unflattened* into a matrix of size $p\times q$.
 
 ---
 
-Let $A\in\mathbb{R}^{m\times n}$ depend on $B\in\mathbb{R}^{p\times q}$. How can we compute the derivative $\frac{\partial A}{\partial B}$?
+Let $A\in\mathbb{R}^{m\times n}$ depend on $B\in\mathbb{R}^{p\times q}$. How can we compute the derivative $\frac{dA}{dB}$?
 
 The result of this operation is a $4$-dimensional tensor
 
@@ -588,10 +576,10 @@ $$
 \frac{df}{dA}
 =
 \begin{bmatrix}
-\frac{\partial f_{1}}{\partial A}\\
-\frac{\partial f_{2}}{\partial A}\\
+\frac{df_{1}}{dA}\\
+\frac{df_{2}}{dA}\\
 \vdots \\
-\frac{\partial f_{m}}{\partial A}\\
+\frac{df_{m}}{dA}\\
 \end{bmatrix}
 $$
 
