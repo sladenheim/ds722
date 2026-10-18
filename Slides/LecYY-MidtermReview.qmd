@@ -5,6 +5,7 @@ jupyter: python3
 
 ## Lecture Overview
 
+- Proofs (Lecture 1)
 - Vectors and Matrices (Lectures 1, 2)
 - Orthogonality and Projections (Lecture 3)
 - QR Factorization (Lecture 4)
@@ -12,7 +13,63 @@ jupyter: python3
 - Linear Systems (Lecture 6)
 - Eigenvalues (Lecture 7)
 - SVD (Lecture 8)
-- Derivatives (Lecture 9, 10) and Integration (Lecture 11)
+- Derivatives (Lecture 9)
+
+## Exam Advice
+
+- The exam is closed book (no cheat sheets or calculators) and 105 minutes. A page of differentiation rules and the gradient/Hessian definitions is provided.
+- Focus on core concepts and common problem types; know key definitions and when to apply them.
+- At the exam: skim all questions, allocate time, and do easy problems first to secure points.
+- Show clear steps and reasoning for partial credit.
+- Check your answers when possible (e.g., multiply $LU$, verify $P^{2}=P$).
+- If stuck, try special cases, simpler versions, or write what you know to earn partial credit.
+- Rest and hydrate before the test; avoid last-minute cramming that increases stress.
+
+::: {.notes}
+You've learned a lot so far. This is an attempt to show what you have learned!
+:::
+
+## Proofs
+
+Important to know:
+
+- direct proofs using known identities
+- proof by contradiction
+- proof by induction (base case + inductive step)
+
+---
+
+**Example**
+
+Let $A,B\in\mathbb{R}^{n\times n}$ be invertible. Using the fact that $(AB)^{\top}=B^{\top}A^{\top}$, prove that $(A^{-1})^{\top}=(A^{\top})^{-1}$.
+
+::: {.notes}
+It suffices to show that $(A^{-1})^{\top}$ multiplied by $A^{\top}$ gives the identity:
+$$
+A^{\top}(A^{-1})^{\top} = (A^{-1}A)^{\top} = I^{\top} = I.
+$$
+Similarly $(A^{-1})^{\top}A^{\top} = (AA^{-1})^{\top} = I$. Hence $(A^{-1})^{\top}$ is the inverse of $A^{\top}$, i.e., $(A^{-1})^{\top}=(A^{\top})^{-1}$.
+:::
+
+---
+
+**Example**
+
+Let $A\in\mathbb{R}^{n\times n}$ be invertible. Using the fact that $(AB)^{-1}=B^{-1}A^{-1}$, prove by induction that for all $n\geq 1$,
+$$
+(A^{n})^{-1} = (A^{-1})^{n}.
+$$
+
+::: {.notes}
+**Base case** ($n=1$): $(A^{1})^{-1} = A^{-1} = (A^{-1})^{1}$.
+
+**Inductive step:** Assume $(A^{k})^{-1} = (A^{-1})^{k}$ for some $k\geq 1$. Then
+$$
+(A^{k+1})^{-1} = (A^{k}A)^{-1} = A^{-1}(A^{k})^{-1} = A^{-1}(A^{-1})^{k} = (A^{-1})^{k+1}.
+$$
+By induction the statement holds for all $n\geq 1$.
+:::
+
 
 ## Vectors and Matrices
 
@@ -79,6 +136,13 @@ $$
 
 Compute the product $Ax$.
 
+::: {.notes}
+$$
+Ax = \begin{bmatrix} 2(3) + (-1)(-1) + 3(2) \\ 0(3) + 4(-1) + (-2)(2) \\ 1(3) + 1(-1) + 1(2) \end{bmatrix}
+= \begin{bmatrix} 13 \\ -8 \\ 4 \end{bmatrix}.
+$$
+:::
+
 ---
 
 **Example**
@@ -125,8 +189,26 @@ Important to know:
 
 **Example**
 
-Determine whether the two vectors $x=\begin{bmatrix}1 \\ 2 \\ 3 \\ 4 \end{bmatrix}$ and $y=\begin{bmatrix}-1 \\ -2 \\ -4 \\ -3 \end{bmatrix}$ are orthogonal?
+Determine whether the two vectors $x=\begin{bmatrix}1 \\ 2 \\ 3 \\ 4 \end{bmatrix}$ and $y=\begin{bmatrix}-1 \\ -2 \\ -4 \\ -3 \end{bmatrix}$ are orthogonal.
 
+::: {.notes}
+$$
+x^{\top}y = -1 - 4 - 12 - 12 = -29 \neq 0,
+$$
+so $x$ and $y$ are not orthogonal.
+:::
+
+---
+
+**Example**
+
+Find all values of $c$ for which $x=\begin{bmatrix}1 \\ c \\ 2\end{bmatrix}$ and $y=\begin{bmatrix}c \\ 3 \\ -1\end{bmatrix}$ are orthogonal.
+
+::: {.notes}
+$$
+x^{\top}y = c + 3c - 2 = 4c - 2 = 0 \quad\Rightarrow\quad c = \tfrac{1}{2}.
+$$
+:::
 
 ---
 
@@ -143,6 +225,14 @@ Q=\begin{bmatrix}
 $$
 
 Verify that $Q^{\top}Q=I$ (equivalently, its columns are orthonormal).
+
+::: {.notes}
+Each column has norm 1: $\tfrac{1}{2}+\tfrac{1}{2}=1$, $\tfrac{1}{2}+\tfrac{1}{2}=1$, and $1$.
+
+The columns are mutually orthogonal: $q_1^{\top}q_2 = -\tfrac{1}{2}+\tfrac{1}{2} = 0$, and $q_1^{\top}q_3 = q_2^{\top}q_3 = 0$.
+
+Hence $Q^{\top}Q = I$.
+:::
 
 
 ## Projections
@@ -177,30 +267,44 @@ A projector $P$ is orthogonal iff it is symmetric as well: $P = P^{\top}$ and $P
 
 **Example**
 
+For each matrix, determine whether it is a projector. If so, is it an orthogonal projector?
+
+$$
+P_1 = \begin{bmatrix} 1 & 0 \\ 1 & 0 \end{bmatrix}, \qquad
+P_2 = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}, \qquad
+P_3 = \frac{1}{2}\begin{bmatrix} 1 & -1 \\ -1 & 1 \end{bmatrix}.
+$$
+
+::: {.notes}
+$P_1^{2} = \begin{bmatrix} 1 & 0 \\ 1 & 0 \end{bmatrix} = P_1$, so $P_1$ is a projector. $P_1\neq P_1^{\top}$, so it is an oblique (not orthogonal) projector.
+
+$P_2^{2} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} \neq P_2$, so $P_2$ is not a projector.
+
+$P_3^{2} = \frac{1}{4}\begin{bmatrix} 2 & -2 \\ -2 & 2 \end{bmatrix} = P_3$ and $P_3 = P_3^{\top}$, so $P_3$ is an orthogonal projector (onto $\operatorname{span}\{[1,-1]^{\top}\}$).
+:::
+
+---
+
+**Example**
+
 If $A\in\mathbb{R}^{m\times m}$ has full rank and $A^{2}=A$, prove that $A=I$.
+
+::: {.notes}
+Since $A$ has full rank it is invertible. Multiplying $A^{2}=A$ on the left by $A^{-1}$ gives
+$$
+A^{-1}A A = A^{-1}A \quad\Rightarrow\quad A = I.
+$$
+:::
 
 
 ## QR Factorization
 
 Important to know:
 
+:::: {.incremental}
 - Definition of QR factorization (reduced and full)
-- Gram-Schmidt orthogonalization
-- Difference between classical and modified Gram-Schmidt algorithms
-
----
-
-### CGS Algorithm
-Let $A\in\mathbb{R}^{m\times n}$
-
-1. for $j=1,\ldots, n$
-1. $\quad\mathbf{v}_{j} = \mathbf{a}_{j}$
-1. $\quad\quad$ for $i=1,\ldots, j-1$
-1. $\quad\quad\quad r_{ij} = \mathbf{q}_{i}^{\top}\mathbf{a}_{j}$ 
-1. $\quad\quad\quad \mathbf{v}_{j} = \mathbf{v}_{j} - r_{ij}q_{i}$
-1. $\quad\quad r_{jj} = \Vert \mathbf{v}_{j}\Vert_2$ 
-1. $\quad\quad \mathbf{q}_{j} = \mathbf{v}_{j}/r_{jj}$ 
-
+- Not on exam!
+::::
 
 ## Least Squares
 
@@ -258,6 +362,39 @@ r = b - A\hat{x} = \begin{bmatrix}0 \\ 0 \\ 0\end{bmatrix}, \qquad
 $$
 :::
 
+---
+
+**Example**
+
+Let
+$$
+\small
+A=\begin{bmatrix}
+1 \\ 1 \\ 1
+\end{bmatrix}, \qquad
+b=\begin{bmatrix}
+1 \\ 2 \\ 6
+\end{bmatrix}.
+$$
+
+Compute the least squares solution $\hat{x}$ and the residual $r=b-A\hat{x}$. Verify that $r$ is orthogonal to the column space of $A$.
+
+::: {.notes}
+Normal equations:
+$$
+A^{\top}A = 3, \qquad A^{\top}b = 9 \quad\Rightarrow\quad \hat{x} = 3.
+$$
+The least squares solution is the mean of the entries of $b$.
+
+Residual:
+$$
+r = b - A\hat{x} = \begin{bmatrix}1 \\ 2 \\ 6\end{bmatrix} - \begin{bmatrix}3 \\ 3 \\ 3\end{bmatrix} = \begin{bmatrix}-2 \\ -1 \\ 3\end{bmatrix}.
+$$
+Then $A^{\top}r = -2 - 1 + 3 = 0$, so $r$ is orthogonal to the column space of $A$.
+
+Any other $x$ gives $A^{\top}(b - Ax) = 9 - 3x \neq 0$, so it is not a minimizer.
+:::
+
 
 ## Linear Systems
 
@@ -266,6 +403,44 @@ Important to know:
 - How to solve a linear system of equations
 - LU decomposition
 - Pivoting
+
+---
+
+**Example**
+
+Compute the LU decomposition of
+$$
+A = \begin{bmatrix} 1 & 2 & 0 \\ 3 & 4 & 1 \\ -1 & 0 & 2 \end{bmatrix}.
+$$
+
+::: {.notes}
+Column 1: $\ell_{21} = 3$, $\ell_{31} = -1$.
+$$
+\begin{bmatrix} 1 & 2 & 0 \\ 0 & -2 & 1 \\ 0 & 2 & 2 \end{bmatrix}
+$$
+Column 2: $\ell_{32} = 2/(-2) = -1$.
+$$
+U = \begin{bmatrix} 1 & 2 & 0 \\ 0 & -2 & 1 \\ 0 & 0 & 3 \end{bmatrix}, \qquad
+L = \begin{bmatrix} 1 & 0 & 0 \\ 3 & 1 & 0 \\ -1 & -1 & 1 \end{bmatrix}.
+$$
+Check: multiplying $LU$ recovers $A$.
+:::
+
+---
+
+**Example**
+
+Explain why $A = \begin{bmatrix} 0 & 1 \\ 2 & 3 \end{bmatrix}$ has no LU factorization without pivoting. Find a permutation $P$ so that $PA = LU$.
+
+::: {.notes}
+The first pivot is $a_{11} = 0$, so the multiplier $\ell_{21} = a_{21}/a_{11}$ is undefined.
+
+Swapping the rows with $P = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$ gives
+$$
+PA = \begin{bmatrix} 2 & 3 \\ 0 & 1 \end{bmatrix},
+$$
+which is already upper triangular, so $L = I$ and $U = PA$.
+:::
 
 
 ## Eigenvalues
@@ -323,7 +498,25 @@ Important to know:
 
 - Definition of SVD (reduced vs. full)
 - Geometric interpretation
+- Singular values are the square roots of the eigenvalues of $A^{\top}A$
 - Computing SVD for 2x2 matrices
+
+---
+
+**Example**
+
+Compute the singular values of
+
+$$
+\text{(a)}\;\; A = \begin{bmatrix} 3 & 0 \\ 0 & -2 \end{bmatrix}, \qquad
+\text{(b)}\;\; B = \begin{bmatrix} 1 & 1 \\ 1 & 1 \\ 0 & 0 \end{bmatrix}.
+$$
+
+::: {.notes}
+(a) $A^{\top}A = \begin{bmatrix} 9 & 0 \\ 0 & 4 \end{bmatrix}$, so $\sigma_1 = 3$, $\sigma_2 = 2$. Singular values are nonnegative even though $A$ has a negative eigenvalue.
+
+(b) $B^{\top}B = \begin{bmatrix} 2 & 2 \\ 2 & 2 \end{bmatrix}$, with characteristic polynomial $(2-\lambda)^{2} - 4 = \lambda(\lambda - 4)$. The eigenvalues are $4$ and $0$, so $\sigma_1 = 2$, $\sigma_2 = 0$. Since $B$ has rank 1, it has one nonzero singular value.
+:::
 
 
 ## Derivatives
@@ -345,41 +538,21 @@ Draw the computational graph and use automatic differentiation to calculate the 
 
 **Solution**
 
-
-## Integration
-
-Important to know:
-
-- Simple integrals
-- Definite vs. Indefinite integrals
-- Fundamental theorem of calculus
-
----
-
-**Example**
-
-Compute $\int_{0}^{1}\int_{-1}^{1}x^{2}\frac{\cos{\pi y}}{\pi}dxdy$.
-
 ::: {.notes}
-Compute the inner integral first:
+Computational graph:
 $$
-\int_{-1}^{1} x^{2}\frac{\cos(\pi y)}{\pi}\,dx
-= \frac{\cos(\pi y)}{\pi}\int_{-1}^{1} x^{2}\,dx
-= \frac{\cos(\pi y)}{\pi}\cdot\frac{2}{3}
-= \frac{2\cos(\pi y)}{3\pi}.
+a = x^{2}, \quad b = 3y, \quad c = a + b, \quad f = \cos(c).
 $$
 
-Now integrate in $y$ from 0 to 1:
+Backward pass, starting from $\bar{f} = 1$:
 $$
-\int_{0}^{1}\frac{2\cos(\pi y)}{3\pi}\,dy
-= \frac{2}{3\pi}\int_{0}^{1}\cos(\pi y)\,dy
-= \frac{2}{3\pi}\cdot\frac{1}{\pi}\big[\sin(\pi y)\big]_{0}^{1}
-= \frac{2}{3\pi^{2}}(\sin\pi-\sin 0)=0.
-$$
-
-Hence
-$$
-\int_{0}^{1}\int_{-1}^{1} x^{2}\frac{\cos(\pi y)}{\pi}\,dx\,dy=0.
+\begin{aligned}
+\bar{c} &= \bar{f}\,\frac{\partial f}{\partial c} = -\sin(c), \\
+\bar{a} &= \bar{c}\,\frac{\partial c}{\partial a} = -\sin(c), \qquad
+\bar{b} = \bar{c}\,\frac{\partial c}{\partial b} = -\sin(c), \\
+\bar{x} &= \bar{a}\,\frac{\partial a}{\partial x} = -2x\sin(x^{2}+3y), \qquad
+\bar{y} = \bar{b}\,\frac{\partial b}{\partial y} = -3\sin(x^{2}+3y).
+\end{aligned}
 $$
 :::
 
@@ -387,33 +560,25 @@ $$
 
 **Example**
 
-Compute $\int\int x^{2}\frac{\cos{\pi y}}{\pi}dxdy$.
+Let $x\in\mathbb{R}^{2}$ and
+$$
+f(x) = x^{\top}Ax + c^{\top}x, \qquad A = \begin{bmatrix} 1 & 2 \\ 0 & 3 \end{bmatrix}, \quad c = \begin{bmatrix} 1 \\ 0 \end{bmatrix}.
+$$
+Compute $\nabla f(x)$ and the Hessian. Find the point where $\nabla f(x) = 0$.
 
 ::: {.notes}
-Compute the inner integral with respect to $x$:
+Note that $A$ is not symmetric. Using the identities,
 $$
-\int x^{2}\frac{\cos(\pi y)}{\pi}\,dx
-=\frac{\cos(\pi y)}{\pi}\int x^{2}\,dx
-=\frac{\cos(\pi y)}{\pi}\cdot\left(\frac{x^{3}}{3} + C_{1}\right)
+\nabla f(x) = (A + A^{\top})x + c = \begin{bmatrix} 2 & 2 \\ 2 & 6 \end{bmatrix}x + \begin{bmatrix} 1 \\ 0 \end{bmatrix}
+= \begin{bmatrix} 2x_1 + 2x_2 + 1 \\ 2x_1 + 6x_2 \end{bmatrix}.
+$$
+Check by expanding: $f(x) = x_1^{2} + 2x_1x_2 + 3x_2^{2} + x_1$.
+
+Hessian:
+$$
+H_f = A + A^{\top} = \begin{bmatrix} 2 & 2 \\ 2 & 6 \end{bmatrix}.
 $$
 
-Now integrate with respect to $y$:
-$$
-\int\frac{\cos(\pi y)}{\pi}\cdot\,dy
-=\left(\frac{x^{3}}{3} + C_{1}\right)\frac{1}{\pi}\int\cos(\pi y)\,dy
-=\left(\frac{x^{3}}{3} + C_{1}\right)\cdot\left(\frac{\sin(\pi y)}{\pi^{2}} + C_{2}\right)
-=\frac{x^{3}}{3}\frac{\sin(\pi y)}{\pi^{2}} + C_{1}f(y) + C_{2}f(x) + C_{1}C_{2}.
-$$
+Setting $\nabla f = 0$: subtracting the equations gives $4x_2 = 1$, so $x_2 = \tfrac{1}{4}$ and $x_1 = -\tfrac{3}{4}$.
 :::
 
-## Exam Advice
-
-- Focus on core concepts and common problem types; know key definitions and when to apply them.
-- At the exam: skim all questions, allocate time, and do easy problems first to secure points.
-- Show clear steps and reasoning for partial credit.
-- If stuck, try special cases, simpler versions, or write what you know to earn partial credit.
-- Rest and hydrate before the test; avoid last-minute cramming that increases stress.
-
-::: {.notes}
-You've learned a lot so far. This is an attempt to show what you have learned!
-:::

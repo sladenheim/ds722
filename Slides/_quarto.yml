@@ -29,7 +29,7 @@ project:
     - Lec23-MarkovChains.qmd
     # - Lec24-HiddenMarkovModels.qmd   # empty file; re-add once it has content
     # - Lec25-SamplingAlgorithms.qmd   # empty file; re-add once it has content
-    # - LecYY-MidtermReview.qmd
+    - LecYY-MidtermReview.qmd
 
 website:
   title: "DS722"
@@ -70,10 +70,9 @@ website:
           - { href: Lec21-BayesianStatistics1.qmd,       text: "Bayesian Statistics I" }
           - { href: Lec22-BayesianStatistics2.qmd,       text: "Bayesian Statistics II" }
           - { href: Lec23-MarkovChains.qmd,              text: "Markov Chains" }
-      # - text: "Stochastic & Review"
-      #   menu:
-      #     
-      #     - { href: LecYY-MidtermReview.qmd,  text: "Midterm Review" }
+      - text: "Review"
+        menu:
+          - { href: LecYY-MidtermReview.qmd,  text: "Midterm Review" }
     right:
       - icon: github
         href: https://github.com/sladenheim/ds722
