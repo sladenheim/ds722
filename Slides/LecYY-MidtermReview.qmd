@@ -154,7 +154,7 @@ $$
 A^{k} = (X\Lambda X^{-1})(X\Lambda X^{-1})\cdots(X\Lambda X^{-1})(X\Lambda X^{-1}) = X\Lambda^{k}X^{-1}.
 $$
 :::
----
+<!-- ---
 
 **Example**
 
@@ -176,7 +176,7 @@ hence
 $$
 U=L^{\top}.
 $$
-:::
+::: -->
 
 ## Orthogonality
 
