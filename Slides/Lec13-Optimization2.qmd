@@ -84,7 +84,7 @@ For $0 < c_{1} < c_{2} < 1$, the Wolfe conditions are:
 ::: {.notes}
 Condition 1 is the sufficient decrease (Armijo) condition and Condition 2 is the curvature condition.
 
-For every function that is smooth (differentiable) and bounded below you can prove that there are step lengths $\alpha_{k}$ that satisfy the Wolfe conditions.
+For every function that is smooth (differentiable) and bounded below, and any descent direction $p_{k}$, you can prove that there are step lengths $\alpha_{k}$ that satisfy the Wolfe conditions.
 :::
 
 ---
@@ -132,7 +132,7 @@ Any $\alpha$ in the shaded region simultaneously lies below the Armijo line (suf
 ## Convergence Theorem (Zoutendijk)
 Assumptions:
 
-- $x_{k+1} = x_{k} +\alpha_{k} p_{k}$.
+- $x_{k+1} = x_{k} +\alpha_{k} p_{k}$, where $p_{k}$ is a descent direction.
 - $\alpha_{k}$ satisfies the Wolfe conditions.
 - $f$ is bounded below in $\mathbb{R}^{n}$ and continuously differentiable in an open set $\mathcal{N}$ containing the level set $\mathcal{L} = \{x : f(x)\leq f(x_{0})\}$. 
 - Assume $\nabla f$ is Lipschitz continuous on $\mathcal{N}$, i.e., there exists $L>0$ such that
@@ -167,10 +167,10 @@ Note that the gradient is $\nabla f(x) = Qx -b$. What is the unique minimizer $x
 
 ---
 
-We can also compute the ideal step length that minimizes $f(x_{k} + \alpha\nabla f_{k})$. We compute
+We can also compute the ideal step length that minimizes $f(x_{k} - \alpha\nabla f_{k})$. We compute
 
 $$
-\frac{d}{d\alpha} f(x_{k} + \alpha\nabla f_{k})
+\frac{d}{d\alpha} f(x_{k} - \alpha\nabla f_{k})
 $$
 
 :::: {.fragment}
@@ -307,7 +307,7 @@ for i in range(max_iter):
     alpha = exact_line_search(Q1, x1, grad1)
     x1 = x1 - alpha * grad1
 
-# Create DataFrame and save to CSV
+# Create DataFrame
 df1 = pd.DataFrame(results1, columns=["Iteration", "x1", "x2", "Gradient Norm", "f(x) Value"])
 print(df1.head(7))
 ```
@@ -317,7 +317,7 @@ print(df1.head(7))
 
 Consider the objective function $f(x) = \frac{1}{2}x^{\top}Qx - b^{\top}x$ where $x=\begin{bmatrix} x_{1} \\ x_{2}\end{bmatrix}$, $Q=\begin{bmatrix} 40 & -1 \\ -1 & 1 \end{bmatrix}$, and $b=\begin{bmatrix} 1 \\ 1\end{bmatrix}$. The eigenvalues for this matrix are approximately 40 and 1. The true minimizer is $x^{*} = \begin{bmatrix} \frac{2}{39} \\ \frac{41}{39} \end{bmatrix}$.
 
-Let's again use the exact line search step length to plot the convergence. Unlike Example 1, $Q\neq I$ here, so $\alpha_{k}$ now changes every iteration -- but convergence should still be much faster than with a small fixed step.
+Let's again use the exact line search step length to plot the convergence. Unlike Example 1, $Q\neq I$ here, so $\alpha_{k}$ now changes every iteration. The eigenvalues of $Q$ are far apart, so the theorem predicts slower convergence than in Example 1.
 
 ---
 
@@ -384,7 +384,6 @@ plt.show()
 
 ---
 
-**Example 2**
 ```{python}
 import numpy as np
 import pandas as pd
@@ -422,7 +421,7 @@ for i in range(max_iter):
     alpha = exact_line_search(Q2, x2, grad2)
     x2 = x2 - alpha * grad2
 
-# Create DataFrame and save to CSV
+# Create DataFrame
 df2 = pd.DataFrame(results2, columns=["Iteration", "x1", "x2", "Gradient Norm", "f(x) Value"])
 print(df2.head(10))
 ```
@@ -464,7 +463,7 @@ Let $f(w)=\frac{1}{m}\sum_{i=1}^{m}f_{i}(w)$.
 
 Computing $\nabla f_{k}=\frac{1}{m}\sum_{i=1}^{m}\nabla f_{i}(w_{k})$ exactly requires touching *every* one of the $m$ training examples before taking a single step -- for large $m$ (millions of examples, as is typical in ML) this is expensive and wasteful, since early steps don't need to be precise.
 
-Stochastic gradient descent (SGD) instead estimates the gradient using a single (or small batch of) randomly sampled example, trading exactness for speed: each update is cheap and noisy, but many cheap noisy steps often make more progress per unit time than a few expensive exact ones.
+Stochastic gradient descent (SGD) instead estimates the gradient using a single randomly sampled example (or a small batch of examples), trading exactness for speed: each update is cheap and noisy, but many cheap noisy steps often make more progress per unit time than a few expensive exact ones.
 
 ---
 
@@ -509,7 +508,7 @@ Momentum smooths these updates, reducing oscillations and allowing faster moveme
 1. $\quad w_{k+1} = w_{k}-v_{k+1}$
 
 ::: {.notes}
-Watch out for a notational subtlety if you inspect PyTorch's source: `torch.optim.SGD` with momentum accumulates the velocity as $v_{k+1}=\beta v_{k} + \nabla f_{k}$ (no $\alpha$ inside the recursion) and only scales by the learning rate at the very last step, $w_{k+1}=w_{k}-\alpha v_{k+1}$. This is a different (but closely related) convention from the one above, where $\alpha$ is baked into $v_{k+1}$ itself. The two agree once $\alpha$ is held constant and the dust settles, but they are not literally the same recursion -- if $\alpha$ changes over time, or during the first few "warm-up" iterations, the two conventions can produce slightly different trajectories. Different libraries (and papers) are not always consistent about which one they mean by "momentum," so it is worth checking when comparing implementations.
+Watch out for a notational subtlety if you inspect PyTorch's source: `torch.optim.SGD` with momentum accumulates the velocity as $v_{k+1}=\beta v_{k} + \nabla f_{k}$ (no $\alpha$ inside the recursion) and only scales by the learning rate at the very last step, $w_{k+1}=w_{k}-\alpha v_{k+1}$. This is a different (but closely related) convention from the one above, where $\alpha$ is baked into $v_{k+1}$ itself. With a constant $\alpha$ and $v_{0}=0$ the two produce identical iterates (our $v_{k}$ is just $\alpha$ times PyTorch's), but if $\alpha$ changes over time (e.g., a learning rate schedule) the two conventions produce different trajectories. Different libraries (and papers) are not always consistent about which one they mean by "momentum," so it is worth checking when comparing implementations.
 :::
 
 ---
@@ -580,7 +579,7 @@ Z = 0.5 * (Q_np[0,0]*X**2 + 2*Q_np[0,1]*X*Y + Q_np[1,1]*Y**2) - b_np[0]*X - b_np
 plt.figure(figsize=(8, 6))
 contour = plt.contour(X, Y, Z, levels=30, cmap='viridis')
 plt.clabel(contour, inline=True, fontsize=8)
-plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Momentum SGD Path')
+plt.plot(trajectory[:, 0], trajectory[:, 1], marker='o', color='red', label='Momentum Path')
 plt.scatter([x_min[0].item()], [x_min[1].item()], c='black', s=60, marker='*', label='Optimum')
 plt.title(f'Optimization Trajectory (Momentum): {n_steps} steps')
 plt.xlabel('$x_1$')
@@ -605,7 +604,7 @@ RMSProp (Root Mean Square Propagation) was designed to address a key limitation 
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad E_{k+1} = \gamma E_{k} + (1-\gamma)\nabla f_{k}^{2}$ (element-wise square)
-1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1} + \varepsilon}}\nabla f_{k}$ (element-wise square root and division)
+1. $\quad w_{k+1} = w_{k}-\frac{\alpha}{\sqrt{E_{k+1}} + \varepsilon}\nabla f_{k}$ (element-wise square root and division)
 
 ---
 
@@ -615,13 +614,13 @@ Written out per coordinate $i=1,\ldots,n$, step 5 is
 
 $$
 \small
-(w_{k+1})_{i} = (w_{k})_{i} - \frac{\alpha}{\sqrt{(E_{k+1})_{i} + \varepsilon}}(\nabla f_{k})_{i}.
+(w_{k+1})_{i} = (w_{k})_{i} - \frac{\alpha}{\sqrt{(E_{k+1})_{i}} + \varepsilon}(\nabla f_{k})_{i}.
 $$
 
 ::: {.notes}
 Think of $E_{k+1}$ as an exponentially weighted moving average of squared gradients -- one such average is tracked independently for *each* coordinate of $w$.
 
-Because everything is element-wise, each coordinate gets its own effective step size $\alpha/\sqrt{(E_{k+1})_i+\varepsilon}$: when a coordinate's gradient has consistently small magnitude, its moving average is small, so its denominator is small and that coordinate takes a larger step. When a coordinate's gradient fluctuates or is large, its moving average grows, shrinking that coordinate's step and preventing overshooting or divergence -- independently of what is happening in the other coordinates. This is the key difference from a single global learning rate.
+Because everything is element-wise, each coordinate gets its own effective step size $\alpha/(\sqrt{(E_{k+1})_i}+\varepsilon)$: when a coordinate's gradient has consistently small magnitude, its moving average is small, so its denominator is small and that coordinate takes a larger step. When a coordinate's gradient fluctuates or is large, its moving average grows, shrinking that coordinate's step and preventing overshooting or divergence -- independently of what is happening in the other coordinates. This is the key difference from a single global learning rate.
 :::
 
 ---
@@ -726,7 +725,7 @@ The Adam optimizer combines both. It is a smart navigator that remembers both th
 
 **Adam**
 
-1. Given $w_{0}$, $\alpha>0$, $\beta_{1},\beta_{2}\in[0, 1)$, $\varepsilon >0$, $m_{0}$, and $v_{0}$
+1. Given $w_{0}$, $\alpha>0$, $\beta_{1},\beta_{2}\in[0, 1)$, $\varepsilon >0$, and $m_{0}=v_{0}=0$
 1. For $k=0,1,2,\ldots$
 1. $\quad\text{Compute}~\nabla f_{k} = \nabla f(w_{k})$
 1. $\quad m_{k+1} = \beta_{1} m_{k} + (1-\beta_{1})\nabla f_{k}$
@@ -735,7 +734,7 @@ The Adam optimizer combines both. It is a smart navigator that remembers both th
 1. $\quad w_{k+1} = w_{k}-\alpha \frac{\hat{m}_{k+1}}{\sqrt{\hat{v}_{k+1}} + \varepsilon}$ (element-wise division)
 
 ::: {.notes}
-The $1-\beta^{k+1}$ term corrects for the fact that the moving average started at zero (bias fades over time). For warming up the training. Without this you understimate the true gradient information.
+The $1-\beta^{k+1}$ term corrects for the fact that the moving average started at zero (bias fades over time). This matters most early in training: without it you underestimate the true gradient information.
 :::
 
 ---
@@ -958,14 +957,14 @@ def optimize(optimizer_class, lr, steps=2000):
     x = torch.tensor([-1.5, 1.5], dtype=torch.float32, requires_grad=True)
     optimizer = optimizer_class([x], lr=lr)
     trajectory = [x.detach().numpy().copy()]
-    losses = [rosenbrock(x.detach().numpy())]
+    losses = [rosenbrock(x.detach().numpy()).item()]
     for _ in range(steps):
         optimizer.zero_grad()
         loss = rosenbrock(x)
         loss.backward()
         optimizer.step()
         trajectory.append(x.detach().numpy().copy())
-        losses.append(loss.item())
+        losses.append(rosenbrock(x.detach()).item())
     return np.array(trajectory), losses
 
 # Run optimizers
