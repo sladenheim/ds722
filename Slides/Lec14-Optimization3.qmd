@@ -31,7 +31,7 @@ $$
 x_{k+1} = x_{k} - \alpha_{k}(\nabla^{2}f_{k})^{-1}\nabla f_{k}. 
 $$
 
-Here $\nabla f_{k} = \nabla f(x_{k})$ and $\nabla^{2}f_{k}^{-1}$ is the inverse Hessian.
+Here $\nabla f_{k} = \nabla f(x_{k})$ and $(\nabla^{2}f_{k})^{-1}$ is the inverse Hessian.
 
 
 ## Example 1
@@ -91,7 +91,7 @@ $$
 
 ---
 
-We will now compute 10 steps of the Newton Method for the starting points $x_{0} = \{ 1.0, 0.25, 0.1, 0.01 \}$ with $\alpha_{k}=1$.
+We will now compute 10 steps of the Newton Method for the starting points $x_{0} \in \{ 1.0, 0.25, 0.1, 0.01 \}$ with $\alpha_{k}=1$.
 
 ```{python}
 import numpy as np
@@ -123,6 +123,59 @@ results_df = pd.DataFrame(results_dict)
 
 # Display the DataFrame
 print(results_df)
+```
+
+---
+
+```{python}
+#| fig-align: center
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define the function f(x) = 7x - ln(x)
+def f(x):
+    return 7 * x - np.log(x)
+
+# Define the Newton update direction: f'(x)/f''(x) simplified
+def update_direction(x):
+    return 7 * x**2 - x
+
+# Newton's method implementation with overflow handling
+def newton_method(x0, alpha=1, n_iter=10):
+    x = x0
+    iterations = [x]
+    for _ in range(n_iter):
+        try:
+            x = x - alpha * update_direction(x)
+        except OverflowError:
+            x = float('nan')
+        iterations.append(x)
+    return iterations
+
+# Initial guesses
+initial_guesses = [0.25]
+trajectories = [newton_method(x0) for x0 in initial_guesses]
+
+# Define the domain, avoiding x <= 0 due to log(x)
+x = np.linspace(0.001, 1.5, 400)
+y = f(x)
+
+# Plot the function and Newton's method trajectories
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
+
+colors = ['red']
+for i, traj in enumerate(trajectories):
+    y_traj = f(np.array(traj))
+    plt.plot(traj, y_traj, 'o-', color=colors[i], label=f"Start at x0 = {initial_guesses[i]}")
+
+plt.title("Newton's Method Trajectories on f(x) = 7x - ln(x)")
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
 ```
 
 ---
@@ -231,59 +284,6 @@ plt.tight_layout()
 plt.show()
 ```
 
----
-
-```{python}
-#| fig-align: center
-import matplotlib.pyplot as plt
-import numpy as np
-
-# Define the function f(x) = 7x - ln(x)
-def f(x):
-    return 7 * x - np.log(x)
-
-# Define the Newton update direction: f'(x)/f''(x) simplified
-def update_direction(x):
-    return 7 * x**2 - x
-
-# Newton's method implementation with overflow handling
-def newton_method(x0, alpha=1, n_iter=10):
-    x = x0
-    iterations = [x]
-    for _ in range(n_iter):
-        try:
-            x = x - alpha * update_direction(x)
-        except OverflowError:
-            x = float('nan')
-        iterations.append(x)
-    return iterations
-
-# Initial guesses
-initial_guesses = [0.25]
-trajectories = [newton_method(x0) for x0 in initial_guesses]
-
-# Define the domain, avoiding x <= 0 due to log(x)
-x = np.linspace(0.001, 1.5, 400)
-y = f(x)
-
-# Plot the function and Newton's method trajectories
-plt.figure(figsize=(10, 6))
-plt.plot(x, y, label='f(x) = 7x - ln(x)', color='blue')
-
-colors = ['red']
-for i, traj in enumerate(trajectories):
-    y_traj = f(np.array(traj))
-    plt.plot(traj, y_traj, 'o-', color=colors[i], label=f"Start at x0 = {initial_guesses[i]}")
-
-plt.title("Newton's Method Trajectories on f(x) = 7x - ln(x)")
-plt.xlabel('x')
-plt.ylabel('f(x)')
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-```
-
 ## Example 2
 
 Consider the 2-D objective function $f(x_{1},x_{2}) = -\ln(1-x_{1}-x_{2}) - \ln(x_{1}) - \ln(x_{2})$.
@@ -315,8 +315,8 @@ plt.figure(figsize=(8, 6))
 plt.contour(X1, X2, Z, levels=50, cmap='plasma')
 plt.gca().set_facecolor('white')
 plt.title(r"Contour lines of $f(x_1, x_2) = -\ln(1 - x_1 - x_2) - \ln(x_1) - \ln(x_2)$")
-plt.xlabel("x1")
-plt.ylabel("x2")
+plt.xlabel(r"$x_1$")
+plt.ylabel(r"$x_2$")
 plt.grid(True)
 plt.tight_layout()
 plt.show()
@@ -470,8 +470,8 @@ contour = plt.contour(X1, X2, Z, levels=50, cmap='plasma')
 plt.plot(newton_path[:, 0], newton_path[:, 1], 'o-', label='Newton\'s Method', color='blue')
 plt.plot(gd_path[:, 0], gd_path[:, 1], 's--', label='Gradient Descent', color='red')
 plt.scatter([1/3], [1/3], color='green', label='Minimizer (1/3, 1/3)')
-plt.xlabel("x1")
-plt.ylabel("x2")
+plt.xlabel(r"$x_1$")
+plt.ylabel(r"$x_2$")
 plt.title("Trajectories of Newton's Method and Gradient Descent")
 plt.legend()
 plt.grid(True)
@@ -498,7 +498,7 @@ Suppose that $\nabla^{2}f$ is continuous in an open neighborhood of $x^{*}$ and 
 
 ---
 
-Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is Lipschitz continuous in a neighborhood of a solution $x^{*}$ at which the sufficient conditions are satisfied. Consider the iteration $x_{k+1} = x_{k} + p_{k}$, where $p_{k}=-\nabla^{2}f_{k}^{-1}\nabla f_{k}$, then
+Suppose that $f$ is twice differentiable and that the Hessian $\nabla^{2}f$ is Lipschitz continuous in a neighborhood of a solution $x^{*}$ at which the sufficient conditions are satisfied. Consider the iteration $x_{k+1} = x_{k} + p_{k}$, where $p_{k}=-(\nabla^{2}f_{k})^{-1}\nabla f_{k}$, then
 
 1. if the starting point $x_{0}$ is sufficiently close to $x^{*}$, the sequence of iterates converges to $x^{*}$,
 1. the rate of convergence of $\{x_{k}\}$ is quadratic,
@@ -513,7 +513,7 @@ The computational costs of Newton's method:
 
 1. Compute and store the gradient $\nabla f_{k}\in\mathbb{R}^{n}$
 1. Compute and store the Hessian $\nabla^{2}f_{k}\in\mathbb{R}^{n\times n}$
-1. Invert the Hessian $\nabla^{2}f_{k}^{-1}$
+1. Solve the linear system $\nabla^{2}f_{k}\,p_{k} = -\nabla f_{k}$
 ::::
 
 ## First vs. Second Order Methods 
@@ -557,7 +557,7 @@ Importantly, these methods do not require 2nd derivatives and can be more effici
 
 The development of Quasi-Newton methods began in the mid-1950s.
 
-The physicist, [W.C. Davidon](https://en.wikipedia.org/wiki/William_C._Davidon), working at Argonne National Laboratory was performing long optimization calculations.
+The physicist [W.C. Davidon](https://en.wikipedia.org/wiki/William_C._Davidon), working at Argonne National Laboratory, was performing long optimization calculations.
 
 Davidon developed a way to accelerate the convergence which Roger Fletcher and Michael J. D. Powell demonstrated was much faster and more reliable than existing methods.
 
@@ -571,10 +571,7 @@ $$
 B_{k}\approx \nabla^{2}f_{k}.
 $$
 
-The BFGS method provides:
-
-- a simple (and efficient) way to update $B_{k}$
-- while still achieving superlinear convergence
+The BFGS method provides a simple (and efficient) way to update $B_{k}$ while still achieving superlinear convergence.
 
 ## Quasi-Newton Derivation
 
@@ -646,7 +643,7 @@ $$
 
 For strictly convex problems this is always true.
 
-For non-convex problems, we have to enforce this by imposing conditions on $\alpha$.
+For non-convex problems, we have to enforce this by choosing $\alpha_{k}$ to satisfy the Wolfe conditions.
 
 ## Determining $B_{k+1}$
 
@@ -684,7 +681,7 @@ B_{k+1} = (I-\rho_{k}y_{k}s_{k}^{\top})B_{k}(I-\rho_{k}s_{k}y_{k}^{\top}) + \rho
 $$
 where $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
 
-The inverse of $B_{k}$, denoted $H_{k}=B_{k}^{-1}$ can be determined using the Sherman-Morrison-Woodbury formula to obtain
+The inverse of $B_{k}$, denoted $H_{k}=B_{k}^{-1}$, can be determined using the Sherman-Morrison-Woodbury formula to obtain
 
 $$
 H_{k+1} = H_{k} - \frac{H_{k}y_{k}y_{k}^{\top}H_{k}}{y_{k}^{\top}H_{k}y_{k}} + \frac{s_{k}s_{k}^{\top}}{y_{k}^{\top}s_{k}}.
@@ -707,9 +704,9 @@ Given starting point $x_{0}$, $\varepsilon>0$, and $H_{0}$.
 
 1. $k\leftarrow0$
 1. while $\Vert \nabla f_{k} \Vert > \varepsilon$
-1. $\quad$ Compute $p_{k} = -H_{k}\nabla f_{k}$ and $x_{k+1} = x_{k} + \alpha_{k}p_{k}$
+1. $\quad$ Compute $p_{k} = -H_{k}\nabla f_{k}$ and $x_{k+1} = x_{k} + \alpha_{k}p_{k}$, where $\alpha_{k}$ satisfies the Wolfe conditions
 1. $\quad$ Compute $s_{k} = x_{k+1}-x_{k}$ and $y_{k} = \nabla f_{k+1}-\nabla f_{k}$
-1. $\quad$ $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$.
+1. $\quad$ $\rho_{k} = \frac{1}{y_{k}^{\top}s_{k}}$
 1. $\quad$ $H_{k+1} = (I-\rho_{k}s_{k}y_{k}^{\top})H_{k}(I-\rho_{k}y_{k}s_{k}^{\top})+\rho_{k}s_{k}s_{k}^{\top}$
 1. $\quad k\leftarrow k+1$
 
@@ -888,6 +885,8 @@ print("Final 5 Error Norms ||x_k - x*|| for Each Method:")
 print(df)
 
 ```
+
+Gradient descent stops at the 6000 iteration cap without reaching the gradient tolerance.
 
 ## BFGS Convergence
 
