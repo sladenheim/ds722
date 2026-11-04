@@ -241,7 +241,7 @@ Find the derivative of the function $g(x)=\int_{0}^{x}\sqrt{1+t^{2}}dt$.
 By the FTC, the derivative of $g(x)$ is simply the integrand evaluated at $x$:
 
 $$
-g'(x) = \sqrt{1 + x^2}
+g^{\prime}(x) = \sqrt{1 + x^2}
 $$
 :::
 
