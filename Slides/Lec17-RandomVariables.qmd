@@ -321,7 +321,7 @@ $$
 
 ---
 
-Let's show a simulation of 1000 Steph Curry free throws.
+Let's simulate Steph shooting 4 free throws, repeated 10,000 times.
 
 ```{python}
 #| fig-align: center
@@ -331,28 +331,30 @@ import matplotlib.pyplot as plt
 from scipy.stats import binom
 
 # Parameters
-n = 1000
-p = 0.92
+n = 4                  # free throws per set
+p = 0.92               # chance of making each one
 num_simulations = 10000
 
-# Create a random number generator instance
 rng = np.random.default_rng(12345)
 
-# Simulate binomial trials using the RNG
+# Number of makes in each set of 4 shots
 data = rng.binomial(n=n, p=p, size=num_simulations)
 
-# Exact binomial PMF
-x = np.arange(binom.ppf(0.01, n, p),
-              binom.ppf(0.99, n, p))
-pmf = binom.pmf(x, n, p)
+# Fraction of sets with 0, 1, 2, 3, 4 makes
+x = np.arange(n + 1)
+simulated = np.array([np.mean(data == k) for k in x])
+exact = binom.pmf(x, n, p)
 
-# Plot histogram and true distribution
+print(f"Simulated P(X=3): {simulated[3]:.4f}")
+print(f"Exact     P(X=3): {exact[3]:.4f}")
+
 plt.figure(figsize=(10, 6))
-plt.hist(data, bins=30, edgecolor='black', density=True)
-plt.plot(x, pmf, 'o', color='r', label='Exact Binomial PMF')
-plt.title(f'Histogram of Binomial Trials (n={n}, p={p})')
-plt.xlabel('Number of Successes')
-plt.ylabel('Frequency (Normalized)')
+plt.bar(x, simulated, edgecolor='black', label='Simulated')
+plt.plot(x, exact, 'o', color='r', markersize=10, label='Exact Binomial PMF')
+plt.title(f'Makes out of {n} free throws (p={p}, {num_simulations} simulations)')
+plt.xlabel('Number of free throws made')
+plt.ylabel('Probability')
+plt.xticks(x)
 plt.grid(True)
 plt.legend()
 plt.show()
@@ -399,21 +401,24 @@ num_simulations = 10000
 # Create a random number generator instance
 rng = np.random.default_rng(12345)
 
-# Simulate geometric trials using the RNG
+# Number of rolls until the first 9, repeated many times
 data = rng.geometric(p=p, size=num_simulations)
 
-# Exact geometric PMF
-x = np.arange(geom.ppf(0.01, p),
-              geom.ppf(0.99, p))
-pmf = geom.pmf(x, p)
+print(f"Simulated P(X>10): {np.mean(data > 10):.4f}")
+print(f"Exact     P(X>10): {geom.sf(10, p):.4f}")
 
-# Plot histogram and true distribution
+# Fraction of simulations needing exactly k rolls
+x = np.arange(1, 41)
+simulated = np.array([np.mean(data == k) for k in x])
+exact = geom.pmf(x, p)
+
 plt.figure(figsize=(10, 6))
-plt.hist(data, bins=30, edgecolor='black', density=True)
-plt.plot(x, pmf, 'o', color='r', label='Exact Geometric PMF')
-plt.title(f'Histogram of Trials (p={p:0.2f})')
+plt.bar(x, simulated, edgecolor='black',
+        color=['tab:blue' if k <= 10 else 'tab:orange' for k in x])
+plt.plot(x, exact, 'o', color='r', label='Exact Geometric PMF')
+plt.title(f'Rolls until first 9 (p={p:0.2f}); orange = more than 10 rolls')
 plt.xlabel('Number of rolls until success')
-plt.ylabel('Frequency (Normalized)')
+plt.ylabel('Probability')
 plt.grid(True)
 plt.legend()
 plt.show()
@@ -478,7 +483,7 @@ A pizza restaurant receives an average of 20 delivery orders per hour. Assume th
 ::: {.notes}
 $$
 \begin{align}
-P(X>25) P(X=15) &= e^{-20}\frac{20^{15}}{15!} \approx 0.052 \\
+P(X=15) &= e^{-20}\frac{20^{15}}{15!} \approx 0.052 \\
 P(X>25) &= 1 - P(X\leq 25) \\
 &= 1 - \sum_{k=0}^{25}P(X=k) \\
 &= 1 - \sum_{k=0}^{25}e^{-20}20^{k}/(k!) \approx 1-0.888 \approx 0.112
@@ -504,21 +509,23 @@ num_simulations = 10000
 # Create a random number generator instance
 rng = np.random.default_rng(12345)
 
-# Simulate Poisson trials using the RNG
+# Number of orders in each simulated hour
 data = rng.poisson(lam=lam, size=num_simulations)
 
-# Exact Poisson PMF
-x = np.arange(poisson.ppf(0.01, lam),
-              poisson.ppf(0.99, lam))
-pmf = poisson.pmf(x, lam)
+print(f"Simulated P(X=15): {np.mean(data == 15):.4f}   Exact: {poisson.pmf(15, lam):.4f}")
+print(f"Simulated P(X>25): {np.mean(data > 25):.4f}   Exact: {poisson.sf(25, lam):.4f}")
 
-# Plot histogram and true distribution
+# Fraction of simulated hours with exactly k orders
+x = np.arange(0, 41)
+simulated = np.array([np.mean(data == k) for k in x])
+exact = poisson.pmf(x, lam)
+
 plt.figure(figsize=(10, 6))
-plt.hist(data, bins=30, edgecolor='black', density=True)
-plt.plot(x, pmf, 'o', color='r', label='Exact Poisson PMF')
-plt.title(f'Histogram of Trials ($\\lambda$ = {lam:.2f})')
+plt.bar(x, simulated, edgecolor='black', label='Simulated')
+plt.plot(x, exact, 'o', color='r', label='Exact Poisson PMF')
+plt.title(f'Orders per hour ($\\lambda$ = {lam})')
 plt.xlabel('Number of orders per hour')
-plt.ylabel('Frequency (Normalized)')
+plt.ylabel('Probability')
 plt.grid(True)
 plt.legend()
 plt.show()
@@ -710,21 +717,23 @@ num_simulations = 100000
 # Create a random number generator instance
 rng = np.random.default_rng(12345)
 
-# Simulate exponential lifetimes using the RNG
+# Simulated lifetimes (in years) of many parts
 data = rng.exponential(scale=beta, size=num_simulations)
 
+print(f"Simulated P(T>5): {np.mean(data > 5):.4f}")
+print(f"Exact     P(T>5): {expon.sf(5, scale=beta):.4f}")
+
 # Exact exponential PDF
-x = np.arange(expon.ppf(0.01, scale=beta),
-              expon.ppf(0.99, scale=beta))
+x = np.linspace(0, 50, 500)
 pdf = expon.pdf(x, scale=beta)
 
-# Plot histogram and true distribution
 plt.figure(figsize=(10, 6))
-plt.hist(data, bins=30, edgecolor='black', density=True)
-plt.plot(x, pdf, 'o', color='r', label='Exact Exponential PDF')
-plt.title(f'Histogram of Trials ($\\beta$ = {beta:.2f})')
-plt.xlabel('Simulations of part failure')
-plt.ylabel('Frequency (Normalized)')
+plt.hist(data, bins=np.arange(0, 51, 1), edgecolor='black', density=True, label='Simulated')
+plt.plot(x, pdf, color='r', linewidth=2, label='Exact Exponential PDF')
+plt.axvline(5, color='k', linestyle='--', label='5 years')
+plt.title(f'Part lifetimes ($\\beta$ = {beta})')
+plt.xlabel('Years until failure')
+plt.ylabel('Probability Density')
 plt.grid(True)
 plt.legend()
 plt.show()
