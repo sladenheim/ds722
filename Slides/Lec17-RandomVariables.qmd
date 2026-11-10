@@ -730,7 +730,8 @@ plt.legend()
 plt.show()
 ```
 
----
+<!-- 
+***
 
 ### Gamma Distribution
 
@@ -748,7 +749,7 @@ $$
 
 The exponential distribution is a $\operatorname{Gamma}(1,\beta)$ distribution.
 
----
+***
 
 ### t Distribution
 
@@ -760,7 +761,7 @@ $$
 
 The $t$-distribution is similar to the Normal but has thicker tails at the end of the distribution.
 
----
+***
 
 ```{python}
 #| fig-align: center
@@ -791,7 +792,7 @@ plt.tight_layout()
 plt.show()
 ```
 
----
+***
 
 ### Cauchy Distribution
 
@@ -800,7 +801,7 @@ The Cauchy distribution is a $t$ distribution with $\nu=1$. The density is given
 $$
 f(x) = \frac{1}{\pi(1+x^{2})}.
 $$
-
+ -->
 
 ## Bivariate Distributions
 
