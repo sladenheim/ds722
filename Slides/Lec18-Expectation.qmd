@@ -740,6 +740,27 @@ $$
 E(E(Y\mid X)) = E(Y)\quad\text{and}\quad E(E(X\mid Y)) = E(X).
 $$
 
+::: {.notes}
+Key point: $E(Y\mid X)$ is a function of $X$, so it is a random variable. Call it $r(X)$ where $r(x) = E(Y\mid X=x)$.
+
+Proof (continuous case):
+
+$$
+\begin{aligned}
+E(E(Y\mid X)) &= \int r(x) f_X(x)\,dx \\
+&= \int \left(\int y\, f_{Y\mid X}(y\mid x)\,dy\right) f_X(x)\,dx \\
+&= \iint y\, f_{Y\mid X}(y\mid x) f_X(x)\,dy\,dx \\
+&= \iint y\, f_{X,Y}(x,y)\,dy\,dx \\
+&= \int y \left(\int f_{X,Y}(x,y)\,dx\right) dy \\
+&= \int y\, f_Y(y)\,dy = E(Y).
+\end{aligned}
+$$
+
+Uses $f_{Y\mid X}(y\mid x) f_X(x) = f_{X,Y}(x,y)$, then integrate out $x$ to get the marginal $f_Y$. Discrete case is identical with sums.
+
+Intuition: average $Y$ within each group $X=x$, then average those group means weighted by how often each group occurs. You get the overall mean.
+:::
+
 ## Conditional Variance
 
 The conditional variance is defined as
@@ -756,6 +777,30 @@ For random variables $X$ and $Y$
 $$
 V(Y) = E(V(Y\mid X)) + V(E(Y\mid X)).
 $$
+
+::: {.notes}
+Proof: use $V(Z) = E(Z^2) - (E(Z))^2$ and iterated expectation.
+
+First term. Since $V(Y\mid X) = E(Y^2\mid X) - (E(Y\mid X))^2$,
+
+$$
+E(V(Y\mid X)) = E(E(Y^2\mid X)) - E\big((E(Y\mid X))^2\big) = E(Y^2) - E\big((E(Y\mid X))^2\big).
+$$
+
+Second term. Since $E(E(Y\mid X)) = E(Y)$,
+
+$$
+V(E(Y\mid X)) = E\big((E(Y\mid X))^2\big) - (E(Y))^2.
+$$
+
+Add them: the $E\big((E(Y\mid X))^2\big)$ terms cancel, leaving
+
+$$
+E(Y^2) - (E(Y))^2 = V(Y).
+$$
+
+Intuition: total variance = average spread within groups + spread between group means.
+:::
 
 :::: {.fragment}
 How can we use this formula in a meaningful way?
