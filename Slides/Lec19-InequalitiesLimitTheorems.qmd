@@ -35,15 +35,15 @@ We cover:
 Let $X$ be a nonnegative random variable and suppose that $E(X)<\infty$. For any $t>0$,
 
 $$
-P(X > t) \leq \frac{E(X)}{t}.
+P(X \geq t) \leq \frac{E(X)}{t}.
 $$
 
 ::: {.notes}
-Since $X>0$
+Since $X\geq 0$
 $$
 \begin{align}
 E(X) &= \int_{0}^{\infty}xf(x)dx = \int_{0}^{t}xf(x) dx + \int_{t}^{\infty} xf(x) dx \\
-&\geq \int_{t}^{\infty}xf(x)dx\geq t\int_{t}^{\infty}f(x)dx = tP(X>t).
+&\geq \int_{t}^{\infty}xf(x)dx\geq t\int_{t}^{\infty}f(x)dx = tP(X\geq t).
 \end{align}
 $$
 :::
@@ -52,7 +52,7 @@ $$
 
 **Example**
 
-The score distribution of an exam is modelled by a random variable $X$ with range $\Omega_{X}=[0, 110]$ (with 10 points for extra credit). Given an upper bound on the proportion of students who score at lest 100 when the average is 50? What happens if the average is 25?
+The score distribution of an exam is modelled by a random variable $X$ with range $\Omega_{X}=[0, 110]$ (with 10 points for extra credit). Give an upper bound on the proportion of students who score at least 100 when the average is 50? What happens if the average is 25?
 
 :::: {.fragment}
 
@@ -62,7 +62,7 @@ $P(X \geq 100) =$
 
 
 ::: {.notes}
-If the average is $E(X) = 50$, an upper bound on the proportion of students who score at least 100 should be 50\%, right? If more than 50\% of students scored 100 (or higher), the average would already be at least 50, since all scores must be nonnegative $\geq 0$. Mathematically, we just argued that:
+If the average is $E(X) = 50$, an upper bound on the proportion of students who score at least 100 should be 50\%, right? If more than 50\% of students scored 100 (or higher), the average would already be at least 50, since all scores must be nonnegative. Mathematically, we just argued that:
 
 $$
 P(X \geq 100) \leq \frac{E[X]}{100} = \frac{50}{100} = \frac{1}{2}
@@ -97,7 +97,7 @@ P(\vert X-\mu\vert \geq t) = P(\vert X-\mu\vert^{2} \geq t^{2}) \leq \frac{E\lef
 $$
 The second part follows by setting $t=k\sigma$.
 
-The set of random values where $\vert X-\mu\vert \geq t$ is the same as $\vert X-\mu\vert^{2} \geq t^{2}$, $\vert a \vert \geq t$ iff $\vert a\vert^{2}\geq t$.
+The set of random values where $\vert X-\mu\vert \geq t$ is the same as $\vert X-\mu\vert^{2} \geq t^{2}$, $\vert a \vert \geq t$ iff $\vert a\vert^{2}\geq t^{2}$.
 :::
 
 ---
@@ -123,13 +123,13 @@ $P(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq$
 
 ::: {.notes}
 $$
-\smallP(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq V(\bar{X}_{n}){\varepsilon^{2}} = \frac{np(1-p)}{n^{2}\varepsilon^{2}}\leq \frac{1}{4n\varepsilon^{2}}
+P(\vert\bar{X}_{n} - p\vert > \varepsilon) \leq \frac{V(\bar{X}_{n})}{\varepsilon^{2}} = \frac{p(1-p)}{n\varepsilon^{2}}\leq \frac{1}{4n\varepsilon^{2}}
 $$
 :::
 
 <!-- ## Hoeffding's Inequality
 
-Hoeffdings's inequalityt is similar to Markov's inequality, but is a *sharper* inequality.
+Hoeffding's inequality is similar in spirit to Chebyshev's inequality, but is a *sharper* inequality.
 
 **Theorem**
 Let $X_{1},\ldots,X_{n}$ be independent observations such that $E(X_{i})=0$ and $a_{i}\leq X_{i}\leq b_{i}$. Let $\varepsilon>0$. Then, for any $t>0$,
@@ -143,19 +143,19 @@ $$
 Using Hoeffding's inequality, we can derive the following bound for $X_{1},\ldots,X_{n}\sim\operatorname{Bernoulli}(p)$. Let $\varepsilon>0$, then
 
 $$
-P(\vert \bar{X}_{n}-p\vert > \varepsilon) \leq 2\varepsilon e^{-2ne^{2}},
+P(\vert \bar{X}_{n}-p\vert > \varepsilon) \leq 2e^{-2n\varepsilon^{2}},
 $$
 
 where $\bar{X}_{n}=n^{-1}\sum_{i=1}^{n}X_{i}$.
 
 ---
 
-Recall that the Chebyshev' bound  $P(\vert \bar{X}_{n}-p\vert > \varepsilon)$ when $n=100$ and $\varepsilon=0.2$ was 0.0625.
+Recall that the Chebyshev bound on $P(\vert \bar{X}_{n}-p\vert > \varepsilon)$ when $n=100$ and $\varepsilon=0.2$ was 0.0625.
 
 Using the Hoeffding bound, we obtain
 
 $$
-P(\vert \bar{X}_{n}-p\vert > 0.2) \leq 2e^{-2(100)/(0.2)^{2}} = 0.00067.
+P(\vert \bar{X}_{n}-p\vert > 0.2) \leq 2e^{-2(100)(0.2)^{2}} = 0.00067.
 $$ -->
 
 
@@ -167,7 +167,7 @@ Mill's inequality is useful for bounding probability statements about Normal ran
 Let $Z\sim\mathcal{N}(0,1)$, then
 
 $$
-P(\vert Z\vert > t)\leq \sqrt{\frac{2}{\pi}}\frac{e^{-t^{2}}}{t}.
+P(\vert Z\vert > t)\leq \sqrt{\frac{2}{\pi}}\frac{e^{-t^{2}/2}}{t}.
 $$
 
 ---
@@ -178,31 +178,23 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm
 
 # Define range of t values
-t_values = np.linspace(0.3, 2, 500)
-mill_values = np.linspace(0.3,2,500)
-cheb_values = np.linspace(0.3,2,500)
+t_values = np.linspace(0.3, 3, 500)
 
 # True probability P(|Z| > t) for Z ~ N(0,1)
 p_true = 2 * (1 - norm.cdf(t_values))
 
+# Mill's inequality bound: P(|Z| > t) <= sqrt(2/pi) * exp(-t^2/2) / t
+mills_bound = np.sqrt(2 / np.pi) * np.exp(-t_values**2 / 2) / t_values
 
-# Mill's inequality bound: P(Z > t) < (1/sqrt(2*pi)) * (1/t) * exp(-t^2/2)
-mills_bound = np.sqrt(2 / np.pi) * (1 / mill_values) * np.exp(-mill_values**2 / 2)
-
-# Chebyshev's inequality bounds for k = 1 to 5
-chebyshev_bounds = {}
-for k in range(1,3):
-    chebyshev_bounds[k] = 1/cheb_values**k
-
+# Chebyshev's inequality bound: P(|Z| >= t) <= 1/t^2
+chebyshev_bound = 1 / t_values**2
 
 # Plot using matplotlib
 plt.figure(figsize=(10, 6))
 plt.plot(t_values, p_true, label='P(|Z| > t)', color='blue')
-plt.plot(mill_values, mills_bound, label="Mill's Inequality Bound", color='red', linestyle='--')
-
-for k in chebyshev_bounds:
-    plt.plot(cheb_values, chebyshev_bounds[k], label=f"Chebyshev Bound k={k}",linestyle=":")
-
+plt.plot(t_values, mills_bound, label="Mill's Inequality Bound", color='red', linestyle='--')
+plt.plot(t_values, chebyshev_bound, label="Chebyshev Bound", color='green', linestyle=':')
+plt.ylim(0, 1.1)
 
 plt.title('Probability P(|Z| > t) for Z ~ N(0,1)')
 plt.xlabel('t')
@@ -224,7 +216,7 @@ E(XY) \leq \sqrt{E(X^{2})E(Y^{2})}.
 $$
 
 :::: {.fragment}
-You can prove this by expanding out $E((X-\alpha Y)^{2})$ and setting $\alpha = \frac{E(XY)^{2}}{E(Y^{2})}$
+You can prove this by expanding out $E((X-\alpha Y)^{2})$ and setting $\alpha = \frac{E(XY)}{E(Y^{2})}$
 ::::
 
 
@@ -243,14 +235,14 @@ If $g$ is concave, then $E(g(X))\leq g(E(X))$.
 **Proof**
 
 ::: {.notes}
-Let $L(x) = a+bx$ be the line, tangent to $g(x)$ at the point $E(X)$. Since $G$ is convex, it lies above the line $L(x)$, so
+Let $L(x) = a+bx$ be the line, tangent to $g(x)$ at the point $E(X)$. Since $g$ is convex, it lies above the line $L(x)$, so
 
 $$
-E(g(X))\geqE(L(x)) = E(a+bX) = a + bE(X) = L(\mathbb{E(X)}) = g(E(X)).
+E(g(X))\geq E(L(X)) = E(a+bX) = a + bE(X) = L(E(X)) = g(E(X)).
 $$
 ::: -->
 
-## Limit Theories
+## Limit Theorems
 
 There are two main ideas we will cover 
 
@@ -259,7 +251,7 @@ There are two main ideas we will cover
 
 ## Types of Convergence
 
-There are two main types of convergence that we will need to understand in order to introduce our limit theories. They are:
+There are two main types of convergence that we will need to understand in order to introduce our limit theorems. They are:
 
 1. Convergence in probability
 1. Convergence in distribution
@@ -270,7 +262,7 @@ This will make rigorous the notion of convergence for random variables.
 
 Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. 
 
-We say that $X_{n}$ converges to $X$ in probability, written $X\overset{P}\longrightarrow X$ if, for every $\varepsilon>0$,
+We say that $X_{n}$ converges to $X$ in probability, written $X_{n}\overset{P}\longrightarrow X$ if, for every $\varepsilon>0$,
 
 $$
 P(\vert X_{n}-X\vert >\varepsilon) \rightarrow 0,
@@ -280,9 +272,9 @@ as $n\rightarrow\infty$.
 
 ## Convergence in Distribution
 
-Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. Let $F_{n}$ denote the CDF of $X_{n}$ and left $F$ denote the CDF of $X$.
+Let $X_{1},\ldots,X_{n}$ be a sequence of random variables and let $X$ be another random variable. Let $F_{n}$ denote the CDF of $X_{n}$ and let $F$ denote the CDF of $X$.
 
-We say that $X_{n}$ converges to $X$ in distribution, written $X\leadsto X$ if
+We say that $X_{n}$ converges to $X$ in distribution, written $X_{n}\leadsto X$ if
 
 $$
 \lim_{n\rightarrow\infty}F_{n}(t)=F(t),
@@ -304,11 +296,11 @@ as $n\rightarrow\infty$. -->
 
 ## Law of Large Numbers
 
-If $X_{1},\ldots,X_{n}$ are IID, then $\bar{X}_{n}\overset{P}\longrightarrow\mu$.
+If $X_{1},\ldots,X_{n}$ are IID with mean $\mu=E(X_{i})$, then $\bar{X}_{n}\overset{P}\longrightarrow\mu$.
 
 This is the weak law of large numbers.
 
-The interpretation of the WLLN is that the distribution of $X_{n}$ becomes more concentrated around the mean $\mu$ as $n$ gets large.
+The interpretation of the WLLN is that the distribution of $\bar{X}_{n}$ becomes more concentrated around the mean $\mu$ as $n$ gets large.
 
 ## Brain Cancer in South Dakota
 
@@ -321,7 +313,7 @@ _Which parts of the USA have the biggest brain cancer problem?_
 Is something in South Dakota causing brain cancer?
 
 :::: {.notes}
-No! This is can all be explained by the law of large numbers. 
+No! This can all be explained by the law of large numbers. 
 
 The law of large numbers implies that larger populations approach the true mean. 
 
@@ -344,7 +336,7 @@ $$
 where $Z\sim\mathcal{N}(0,1)$. In other words
 
 $$
-\lim_{n\rightarrow\infty}P(Z_{n}\leq z) = \Phi(z) = \int_{-\infty}^{z}\frac{1}{2\pi}e^{-x^{2}/2}dx.
+\lim_{n\rightarrow\infty}P(Z_{n}\leq z) = \Phi(z) = \int_{-\infty}^{z}\frac{1}{\sqrt{2\pi}}e^{-x^{2}/2}dx.
 $$
 
 ::: {.notes}
@@ -353,7 +345,7 @@ Probability statements about $\bar{X}_{n}$ can be approximated using a normal di
 
 ## Errors in a Computer Program
 
-Suppose that the number of errors per compute program has a Poisson distribution with mean $5$. 
+Suppose that the number of errors per computer program has a Poisson distribution with mean $5$. 
 
 We have 125 programs. Let $X_{1},\ldots,X_{125}$ be the number of errors in each of the programs.
 
@@ -386,28 +378,36 @@ $$
 
 ```{python}
 import numpy as np
-import plotly.express as px
+import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 # Parameters
 lambda_poisson = 5
 n_programs = 125
+n_trials = 10000
 
 # Create a random number generator
 rng = np.random.default_rng(12345)
 
-# Simulate one trial of Poisson-distributed error counts using rng
-error_counts = rng.poisson(lambda_poisson, n_programs)
+# Each row is one batch of 125 programs; compute the average errors per batch
+error_counts = rng.poisson(lambda_poisson, size=(n_trials, n_programs))
+sample_means = error_counts.mean(axis=1)
 
-# Plot histogram of error counts
-fig = px.histogram(x=error_counts, nbins=20, title="Histogram of Error Counts",
-                   labels={'x': 'Number of Errors', 'y': 'Frequency'})
+print(f"Simulated P(mean < 5.5): {np.mean(sample_means < 5.5):.4f}")
+print(f"CLT approximation:       {norm.cdf(2.5):.4f}")
 
-fig.show()
+# Histogram of sample means with the CLT normal approximation
+x = np.linspace(4.2, 5.8, 400)
+clt_pdf = norm.pdf(x, loc=lambda_poisson, scale=np.sqrt(lambda_poisson / n_programs))
 
-# Print summary statistics
-mean_errors = np.mean(error_counts)
-print(f"Mean number of errors: {mean_errors}")
-
+plt.figure(figsize=(10, 6))
+plt.hist(sample_means, bins=40, density=True, edgecolor='black', label='Simulated sample means')
+plt.plot(x, clt_pdf, color='r', linewidth=2, label='CLT normal approximation')
+plt.axvline(5.5, color='k', linestyle='--', label='5.5')
+plt.xlabel('Average number of errors')
+plt.ylabel('Probability Density')
+plt.legend()
+plt.show()
 ```
 
 
