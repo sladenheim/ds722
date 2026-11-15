@@ -24,7 +24,7 @@ These foundational tools enable us to describe and characterize the shapes of pr
 
 Random variables and distributions are the mathematical formulations that we use to understand probability.
 
-A *random variable* $X$ is just a function that maps elements of the sample space $\Omega$ to a real number $\mathbb{R}$.
+A *random variable* $X$ is just a function that maps elements of the sample space $\Omega$ to the real numbers $\mathbb{R}$.
 
 A random variable can be:
 
@@ -37,7 +37,7 @@ A random variable can be:
 Flip a coin 2 times, $\Omega = \{HH,HT,TH,TT\}$. Define a function $X(\omega)$ which counts the number of heads. This is a random variable.
 
 :::: {.fragment}
-What is another random variable you define based on this sample space?
+What is another random variable you could define based on this sample space?
 ::::
 
 ::: {.notes}
@@ -47,7 +47,7 @@ Count the number of tails, count the number of times heads appears twice.
 ---
 
 **Continuous Example**
-The height of a student at BU is a continuous random variable. The *population* is the set of students. The sample space $\Omega$ is the range of possible heights. The random variable $X(\omega)$ is the height of a particular student.
+The height of a student at BU is a continuous random variable. The *population* is the set of students. The sample space $\Omega$ is the set of students. The random variable $X(\omega)$ is the height of student $\omega$.
 
 ::: {.notes}
 In this case $X$ is the identity mapping.
@@ -122,7 +122,7 @@ $$
 
 ---
 
-For the coin flipping example
+For the coin flipping example, what is the PMF?
 
 ::: {.notes}
 $$
@@ -156,7 +156,6 @@ $$
 | Geometric      | $P(X = x) = (1 - p)^{x - 1} p$                                           | $p \in (0,1]$: success probability | $x = 1, 2, 3, \dots$     |
 | Poisson        | $P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}$                          | $\lambda > 0$: average rate     | $x = 0, 1, 2, \dots$     |
 
----
 
 ## PDFs of Common Continuous Distributions
 
@@ -200,7 +199,7 @@ $$
 If $(X,Y)$ have joint distribution with mass function $f_{X,Y}$, then the *marginal mass function* for $X$ is defined by
 
 $$
-f_{X}(x) = \sum_{y}P(X=x, Y=y) = \sum_{y} f_{X,Y}(x,y).
+f_{X}(x) = \sum_{y}P(X=x, Y=y) = \sum_{y} f_{X,Y}(x,y),
 $$
 
 and the *marginal mass function* for $Y$ is
@@ -332,7 +331,7 @@ Then
 
 $$
 \begin{align}
-F_{Y}(y) &= P(Y\leq y) = P(\log(x)\leq y) \\
+F_{Y}(y) &= P(Y\leq y) = P(\log(X)\leq y) \\
 &= P(X\leq e^{y}) = F_{X}(e^{y})= 1- e^{-e^{y}} \\
 \end{align}
 $$
@@ -396,7 +395,7 @@ f_{X}(x) =
 $$
 
 $$
-E(X) = \int_{-1}^{3}\frac{1}{4}dx = \frac{1}{4}(3 -(-1))= 1 = (a+b)/2.
+E(X) = \int_{-1}^{3}\frac{x}{4}dx = \frac{1}{8}\left(3^{2} -(-1)^{2}\right)= 1 = (a+b)/2.
 $$
 
 How can we show this in general?
@@ -406,7 +405,7 @@ How can we show this in general?
 
 ### Example: Cauchy Distribution
 
-Recall that a random variable has a Cauchy distribution if it has density $f_{X}(x) = \frac{\pi}{1+x^{2}}$. What is the mean of the Cauchy distribution? -->
+Recall that a random variable has a Cauchy distribution if it has density $f_{X}(x) = \frac{1}{\pi(1+x^{2})}$. What is the mean of the Cauchy distribution? -->
 
 ## The Rule of the Lazy Statistician
 
@@ -461,7 +460,6 @@ E[Y^{2}] &= \int_{0}^{1} y^{2} \, dy = \frac{1}{3}, \\
 $$
 :::
 
----
 
 ## Properties of Expectations
 
@@ -517,7 +515,7 @@ Let $X\sim\operatorname{Binomial}(n,p)$, what is $V(X)$?
 
 ::: {.notes}
 $$
-E(X_{i}) = p, \quad E(X_{i}^{2}) = (p\cdot 1^2) + (1-p)\cdot o^{2} = p
+E(X_{i}) = p, \quad E(X_{i}^{2}) = (p\cdot 1^2) + (1-p)\cdot 0^{2} = p
 $$
 
 Then $V(X_{i}) = p - p^{2} = p(1-p)$.
@@ -597,7 +595,7 @@ $$
 More generally for random variables $X_{1},\ldots, X_{n}$, 
 
 $$
-V\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}V(X_{i}) + 2 \sum_{i=1}^{n} \sum_{j>i}^{n}\operatorname{Cov}(X_{i},X_{j}).
+V\left(\sum_{i=1}^{n}a_{i}X_{i}\right) = \sum_{i=1}^{n}a_{i}^{2}V(X_{i}) + 2 \sum_{i=1}^{n} \sum_{j>i}^{n}a_{i}a_{j}\operatorname{Cov}(X_{i},X_{j}).
 $$
 
 ## Expectation and Variance of Important RVs
@@ -610,7 +608,7 @@ $$
 | Poisson($\lambda$)    | $\lambda$                    | $\lambda$  |
 | Uniform($a, b$)       | $\frac{a + b}{2}$            | $\frac{(b - a)^2}{12}$             |
 | Normal($\mu, \sigma^2$) | $\mu$                      | $\sigma^2$                         |
-| Exponential($\beta$) | $\beta$         | $\beta^2$              |                       
+| Exponential($\beta$) | $\frac{1}{\beta}$         | $\frac{1}{\beta^2}$              |                       
 
 ## Random Vectors
 
@@ -627,8 +625,8 @@ $$
 \begin{bmatrix}
 E(X_{1}) \\
 \vdots \\
-E(X_{k}).
-\end{bmatrix}
+E(X_{k})
+\end{bmatrix}.
 $$
 
 ## Covariance Matrix
@@ -641,7 +639,7 @@ V(X) = \Sigma =
 \begin{bmatrix}
 V(X_{1}) & \operatorname{Cov}(X_{1}, X_{2}) & \cdots & \operatorname{Cov}(X_{1}, X_{k}) \\
 \operatorname{Cov}(X_{2}, X_{1}) & V(X_{2}) & \cdots & \operatorname{Cov}(X_{2}, X_{k}) \\
-\vdots & \vdots & \vdots & \vdots \\
+\vdots & \vdots & \ddots & \vdots \\
 \operatorname{Cov}(X_{k}, X_{1})  & \operatorname{Cov}(X_{k}, X_{2}) & \cdots  & V(X_{k}) \\
 \end{bmatrix}
 $$
@@ -692,7 +690,6 @@ Z = rv.pdf(pos)
 
 # Create figure and subplots
 fig = plt.figure(figsize=(14, 6))
-fig.tight_layout(pad=0.5)
 
 
 # 2D Contour plot
@@ -712,6 +709,7 @@ ax2.set_xlabel('X')
 ax2.set_ylabel('Y')
 ax2.set_zlabel('Probability Density')
 
+fig.tight_layout(pad=0.5)
 plt.show()
 ```
 
@@ -828,7 +826,7 @@ The variance + mean squared.
 ::::
 
 :::: {.fragment}
-The third and fourth moments are called the skewness and the kurtosis.
+The standardized third and fourth central moments are called the skewness and the kurtosis.
 ::::
 
 ::: {.notes}
@@ -840,7 +838,7 @@ $$
 
 Interpretation: $\gamma_1>0$ indicates right-skew (long right tail), $\gamma_1<0$ indicates left-skew (long left tail), and $\gamma_1\approx 0$ suggests approximate symmetry.
 
-Kurtosis measures the "tailedness" or peakiness of a distribution and is the standardized fourth central moment:
+Kurtosis measures the "tailedness" of a distribution and is the standardized fourth central moment:
 
 $$
 \text{kurtosis} = \beta_2 = \frac{E\big[(X-\mu)^4\big]}{\sigma^4}.
@@ -854,7 +852,7 @@ Excess kurtosis $=\beta_2-3$ is commonly used so that the normal distribution ha
 Moment generating functions are used for finding moments, finding the distributions of sums of random variables, and are used in proofs of some theorems.
 
 **Definition**
-The **moment generating function** (Laplace Transform) of $X$ is defined by
+The **moment generating function** (closely related to the Laplace transform) of $X$ is defined by
 
 $$
 \psi_{X}(t) = E(e^{tX}) = \int e^{tx}f_{X}(x)dx.
