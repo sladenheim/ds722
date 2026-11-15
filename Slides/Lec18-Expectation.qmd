@@ -163,7 +163,7 @@ $$
 |----------------|------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------|
 | Uniform        | $f(x) = \frac{1}{b - a}$                                                 | $a < b$: interval bounds                    | $x \in [a, b]$             |
 | Gaussian (Normal) | $f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{ -\frac{(x - \mu)^2}{2\sigma^2} }$ | $\mu$: mean, $\sigma > 0$: std. dev.     | $x \in (-\infty, \infty)$  |
-| Exponential    | $f(x) = \beta e^{ -\beta x }$                                       | $\beta > 0$: rate parameter               | $x \in [0, \infty)$        |
+| Exponential    | $f(x) = \frac{1}{\beta} e^{-x/\beta}$                                     | $\beta > 0$: scale (mean)                 | $x \in [0, \infty)$        |
 
 
 ## Bivariate Distributions
@@ -608,7 +608,7 @@ $$
 | Poisson($\lambda$)    | $\lambda$                    | $\lambda$  |
 | Uniform($a, b$)       | $\frac{a + b}{2}$            | $\frac{(b - a)^2}{12}$             |
 | Normal($\mu, \sigma^2$) | $\mu$                      | $\sigma^2$                         |
-| Exponential($\beta$) | $\frac{1}{\beta}$         | $\frac{1}{\beta^2}$              |                       
+| Exponential($\beta$) | $\beta$                    | $\beta^2$                         |                       
 
 ## Random Vectors
 
