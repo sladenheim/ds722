@@ -549,6 +549,30 @@ $$
 E(\bar{X}_{n})=\mu,\quad V(\bar{X}_{n}) = \frac{\sigma^{2}}{n},\quad E(S_{n}^{2})=\sigma^{2}.
 $$
 
+::: {.notes}
+**Mean.** Expectation is linear:
+
+$$
+E(\bar{X}_{n}) = \frac{1}{n}\sum_{i=1}^{n}E(X_{i}) = \frac{1}{n}\cdot n\mu = \mu.
+$$
+
+**Variance.** Constants come out squared, and variances of independent variables add:
+
+$$
+V(\bar{X}_{n}) = \frac{1}{n^{2}}V\left(\sum_{i=1}^{n}X_{i}\right) = \frac{1}{n^{2}}\sum_{i=1}^{n}V(X_{i}) = \frac{1}{n^{2}}\cdot n\sigma^{2} = \frac{\sigma^{2}}{n}.
+$$
+
+**Sample variance.** Expanding the square gives $\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2} = \sum_{i=1}^{n}X_{i}^{2} - n\bar{X}_{n}^{2}$.
+
+From $V(Z) = E(Z^{2}) - (E(Z))^{2}$: $E(X_{i}^{2}) = \sigma^{2}+\mu^{2}$ and $E(\bar{X}_{n}^{2}) = \frac{\sigma^{2}}{n}+\mu^{2}$. So
+
+$$
+E\left(\sum_{i=1}^{n}(X_{i}-\bar{X}_{n})^{2}\right) = n(\sigma^{2}+\mu^{2}) - n\left(\frac{\sigma^{2}}{n}+\mu^{2}\right) = (n-1)\sigma^{2}.
+$$
+
+Dividing by $n-1$ gives $E(S_{n}^{2}) = \sigma^{2}$. This is why the denominator is $n-1$, not $n$.
+:::
+
 ## Covariance
 
 If $X$ and $Y$ are random variables, the covariance (and correlation) between $X$ and $Y$ measure how strong the linear relationship is between $X$ and $Y$.
