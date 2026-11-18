@@ -933,7 +933,7 @@ When the MGF is well defined, we can interchange the operations of differentiati
 
 $$
 \small
-\psi^{\prime}(0) = \frac{d}{dt}E(e^{tX})\bigg\vert_{0} = E\left(\frac{d}{dt}e^{tX}\right)\bigg\vert_{0}  = E(Xe^{tX})\bigg\vert_{0}  = E(X).
+\psi^{\prime}(0) = \frac{d}{dt}E(e^{tX})\bigg\vert_{t=0} = E\left(\frac{d}{dt}e^{tX}\right)\bigg\vert_{t=0}  = E(Xe^{tX})\bigg\vert_{t=0}  = E(X).
 $$
 
 We can similarly conclude that $\psi^{(k)}(0) = E(X^{k})$.
