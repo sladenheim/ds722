@@ -111,9 +111,9 @@ for spine in ax1.spines.values():
 
 ---
 
-Given data $\{x^{(1)}, \dots, x^{(n)}\}$, a point estimator can be any function $g$ of the data:
+Given data $\{X_1, \dots, X_n\}$, a point estimator can be any function $g$ of the data:
 
-$$ \hat{\theta}_n = g\left(x^{(1)}, \dots, x^{(n)}\right). $$
+$$ \hat{\theta}_n = g\left(X_1, \dots, X_n\right). $$
 
 The hat notation ($\hat{\theta}$) indicates a point estimator of $\theta$.
 
@@ -511,9 +511,9 @@ $$
 The variance of an estimator is
 
 $$
-V(\hat{\theta}) = V(g(x^{(1)},x^{(2)},\ldots, x^{(n)})),
+V(\hat{\theta}) = V(g(X_1,X_2,\ldots, X_n)),
 $$
-where $g(x^{(1)},x^{(2)},\ldots, x^{(n)})$ is a function of the data.
+where $g(X_1,X_2,\ldots, X_n)$ is a function of the data.
 
 ---
 
