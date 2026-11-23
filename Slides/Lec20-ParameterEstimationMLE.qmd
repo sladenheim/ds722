@@ -35,7 +35,7 @@ A *statistic* is a numerical value calculated from the sample data. It is used t
 
 **Example**
 
-We are studying the variance of height among male students at BU. A sample size of 30 is shown below. 
+We are studying the distribution of height among male students at BU. A sample size of 30 is shown below. 
 
 ```{python}
 from scipy.stats import norm
@@ -170,7 +170,7 @@ fig, ax = plt.subplots(figsize=(10, 6))
 
 for (mu, sigma), color in zip(params, colors):
     y = (1/(sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu)/sigma)**2)
-    ax.plot(x, y, label=f"$\mu={mu},\ \sigma={sigma}$", color=color, linewidth=2)
+    ax.plot(x, y, label=rf"$\mu={mu},\ \sigma={sigma}$", color=color, linewidth=2)
 
 ax.set_title("Normal Distributions with Different Parameters")
 ax.set_xlabel("x")
@@ -207,8 +207,8 @@ We have that
 
 $$
 \begin{align*}
-\tau &= P(X>1) = 1 - P(X\leq 1) = 1-P\left( \frac{X-\mu}{\sigma}<\frac{1-\mu}{\sigma}\right) \\
-&=  1-P\left( Z<\frac{1-\mu}{\sigma}\right) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)
+\tau &= P(X>1) = 1 - P(X\leq 1) = 1-P\left( \frac{X-\mu}{\sigma}\leq\frac{1-\mu}{\sigma}\right) \\
+&=  1-P\left( Z\leq\frac{1-\mu}{\sigma}\right) = 1 - \Phi\left(\frac{1-\mu}{\sigma}\right)
 \end{align*}
 $$
 
@@ -290,8 +290,8 @@ Recall that $\alpha_{1} = E_{\theta}(X_{1})=\mu$ and  $\alpha_{2} = E_{\theta}(X
 
 $$
 \begin{align*}
-\hat{\mu} = \frac{1}{n}\sum_{i=1}^{n}X_{i},
-\hat{\sigma}^{2} + \hat{\mu}^{2} = \frac{1}{n}\sum_{i=1}^{n}X_{i}^{2}.
+\hat{\mu} &= \frac{1}{n}\sum_{i=1}^{n}X_{i}, \\
+\hat{\sigma}^{2} + \hat{\mu}^{2} &= \frac{1}{n}\sum_{i=1}^{n}X_{i}^{2}.
 \end{align*}
 $$
 
@@ -321,8 +321,10 @@ The **maximum likelihood estimator** (MLE) $\hat{\theta}_{n}$ is the value of $\
 Recall the following properties of the logarithm function:
 
 1. $\log(ab) = \log(a) + \log(b)$
-1. $\log(a/b) = \log(a) - \log(b)~(b\neq 0)$
+1. $\log(a/b) = \log(a) - \log(b)$
 1. $\log(a^{p}) = p\log(a)$
+
+Here $a, b > 0$.
 
 ## Log Likelihood
 
@@ -372,7 +374,7 @@ $$
 ## MLE Linear Regression
 The goal in the regression problem is to make predictions for the target variable $y$ given some input variable $x$ by using training data $\{(x_{i}, y_{i})\}_{i=1}^{n}$.
 
-We assume a linear model $y_{i} = f(x;\beta_{0},\beta_{1}) =  \beta_{0} + \beta_{1}x_{i}$.
+We assume a linear model $f(x_{i};\beta_{0},\beta_{1}) =  \beta_{0} + \beta_{1}x_{i}$.
 
 We express the uncertainty of the target values $y$ by assuming that given $x$, the corresponding value of $y$ has a mean value equal to $f(x;\beta_{0},\beta_{1})$ and variance $\sigma^{2}$.
 
@@ -407,7 +409,7 @@ The likelihood is the product of the probability density functions for the train
 
 $$
 \begin{align}
-\mathcal{L}_{\beta_{0},\beta_{1}, \sigma^{2}} &= \prod_{i=1}^{n}p(y_{i}|X=x_{i};\beta_{0},\beta_{1},\sigma^{2}) \\
+\mathcal{L}_{n}(\beta_{0},\beta_{1}, \sigma^{2}) &= \prod_{i=1}^{n}p(y_{i}\,|\,X=x_{i}, \beta_{0},\beta_{1},\sigma^{2}) \\
 \end{align}
 $$
 ::::
@@ -436,23 +438,27 @@ $$
 :::
 
 ## Linear Regression Log-Likelihood Gradient
-What is the gradient of $\ell_{n}(\beta_{0}, \beta_{1})$?
+What is the gradient of $\ell_{n}$ with respect to $\beta = (\beta_{0}, \beta_{1})$?
 
 ::: {.notes}
-
-The term we care about is
-$$
-\Vert y - X\beta \Vert_{2}^{2},
-$$
-which we know the gradient is
+Stack the data into the matrix $A$ with rows $[1,\ x_{i}]$ and the vector $y$. Then
 
 $$
--2X^{\top}(y-X\beta).
+\ell_{n}(\beta,\sigma^{2}) = -\frac{1}{2\sigma^{2}}\Vert y - A\beta \Vert_{2}^{2} + \text{(terms without } \beta).
 $$
-When this is zero we obtain the familiar LSQ solution
+
+So maximizing $\ell_{n}$ is the same as minimizing the squared error $\Vert y - A\beta \Vert_{2}^{2}$.
+
+The gradient is
 
 $$
-\beta = (X^{\top}X)^{-1}X^{\top}y.
+\nabla_{\beta}\,\ell_{n} = \frac{1}{\sigma^{2}}A^{\top}(y-A\beta).
+$$
+
+Setting it to zero gives the familiar least squares solution
+
+$$
+\hat{\beta} = (A^{\top}A)^{-1}A^{\top}y.
 $$
 :::
 
@@ -598,7 +604,7 @@ Let $\hat{\theta}_{n}$ denote the method of moments estimator. We have the follo
 1. The estimate $\hat{\theta}_{n}$ exists with probability tending to $1$.
 1. The estimate is consistent: $\hat{\theta}_{n}\overset{P}\longrightarrow \theta$.
 
-## Properties of MLE Estimators
+## Properties of MLEs
 
 Let $\hat{\theta}_{n}$ denote the maximum likelihood estimator. We have the following properties
 
@@ -636,7 +642,6 @@ for _ in range(num_simulations):
     estimated_theta = np.mean(swipes)
     estimated_thetas.append(estimated_theta)
 
-#| fig-align: center
 # Plot histogram of estimated thetas
 plt.figure(figsize=(8, 6))
 plt.hist(estimated_thetas, bins=30, color='cyan', edgecolor='black')
@@ -717,7 +722,11 @@ For MLE, we need to formulate the likelihood. What is the likelihood?
 
 :::: {.fragment}
 $$
-f(X; N) = \frac{1}{N}, \quad \text{for } N \geq 9.
+\mathcal{L}(N) =
+\begin{cases}
+1/N & \text{for } N \geq 9, \\
+0 & \text{for } N < 9.
+\end{cases}
 $$
 ::::
 
@@ -726,7 +735,7 @@ What is the MLE? Do you need to take the log-likelihood?
 ::::
 
 ::: {.notes}
-Answer: NO. The likelihood is maximized at $\hat{N}=9$.
+Answer: NO. $1/N$ decreases in $N$, so the likelihood is maximized at the smallest allowed value, $\hat{N}=9$.
 :::
 
 
@@ -734,7 +743,7 @@ Answer: NO. The likelihood is maximized at $\hat{N}=9$.
 
 In this lecture we learned:
 
-- defined population, sample, statistic, estimators
+- population, sample, statistic, estimators
 - method of moments 
 - maximum likelihood estimation
 - bias and variance of estimators
